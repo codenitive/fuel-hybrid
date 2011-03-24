@@ -25,6 +25,7 @@ Autoloader::add_classes(array (
 	'Hybrid\\Controller_Template'       => __DIR__.'/classes/controller/template.php',
 	'Hybrid\\Controller_Rest'           => __DIR__.'/classes/controller/rest.php',
 	
+	'Hybrid\\Html'                      => __DIR__.'/classes/html.php',
 	'Hybrid\\View'                      => __DIR__.'/classes/view.php',
 	
 	'Hybrid\\Chart'                     => __DIR__.'/classes/chart.php',
