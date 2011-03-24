@@ -15,10 +15,29 @@
 
 namespace Hybrid;
 
+/**
+ * Hybrid 
+ * 
+ * A set of class that extends the functionality of FuelPHP without 
+ * affecting the standard workflow when the application doesn't actually 
+ * utilize Hybrid feature.
+ * 
+ * @package     Fuel
+ * @subpackage  Hybrid
+ * @category    View
+ * @author      Mior Muhammad Zaki <crynobone@gmail.com>
+ */
 class View extends \Fuel\Core\View {
 
-	protected static $_path = 'views';
+	protected static $_path = '';
 
+	/**
+	 * Set the global path.
+	 * 
+	 *     \Hybrid\View::set_path($path);
+	 * 
+	 * @param string $path 
+	 */
 	public static function set_path($path) {
 		static::$_path = $path;
 	}
@@ -34,9 +53,9 @@ class View extends \Fuel\Core\View {
 	 */
 	public function set_filename($file) {
 		switch (true) {
-			case ($path = $this->_find_file($file)) :
+			case ($path = $this->_find_file($file) !== false) :
 				break;
-			case ($path = \Fuel::find_file('views', $file, '.php', false, false)) :
+			case ($path = \Fuel::find_file('views', $file, '.php', false, false) !== false) :
 				break;
 			default :
 				throw new \View_Exception('The requested view could not be found: ' . \Fuel::clean_path($file));
@@ -48,7 +67,18 @@ class View extends \Fuel\Core\View {
 		return $this;
 	}
 
+	/**
+	 * Use custom view path if available, eitherwise just return false so we can use 
+	 * \Fuel::find_file()
+	 *
+	 * @param string $file
+	 * @return mixed
+	 */
 	private function _find_file($file) {
+		if (empty(static::$_path)) {
+			return false;
+		}
+
 		if (\is_file(static::$_path . $file . '.php')) {
 			return static::$_path . $file . '.php';
 		}

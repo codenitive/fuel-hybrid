@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Fuel
  *
@@ -14,6 +15,18 @@
 
 namespace Hybrid;
 
+/**
+ * Hybrid 
+ * 
+ * A set of class that extends the functionality of FuelPHP without 
+ * affecting the standard workflow when the application doesn't actually 
+ * utilize Hybrid feature.
+ * 
+ * @package     Fuel
+ * @subpackage  Hybrid
+ * @category    Controller_Frontend
+ * @author      Mior Muhammad Zaki <crynobone@gmail.com>
+ */
 abstract class Controller_Frontend extends \Hybrid\Controller {
 
 	/**

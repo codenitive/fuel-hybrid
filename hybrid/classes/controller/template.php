@@ -16,9 +16,16 @@
 namespace Hybrid;
 
 /**
- * Hybrid is a set of class that extends the functionality of FuelPHP without 
+ * Hybrid 
+ * 
+ * A set of class that extends the functionality of FuelPHP without 
  * affecting the standard workflow when the application doesn't actually 
  * utilize Hybrid feature.
+ * 
+ * @package     Fuel
+ * @subpackage  Hybrid
+ * @category    Controller_Template
+ * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 

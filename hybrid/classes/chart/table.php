@@ -16,12 +16,16 @@
 namespace Hybrid;
 
 /**
- * Google APIs Visualization Library Class
+ * Hybrid 
  * 
- * @package FuelPHP
- * @subpackage Google APIs Visualization
- * @category Chart
- * @author Mior Muhammad Zaki <crynobone@gmail.com>
+ * A set of class that extends the functionality of FuelPHP without 
+ * affecting the standard workflow when the application doesn't actually 
+ * utilize Hybrid feature.
+ * 
+ * @package     Fuel
+ * @subpackage  Hybrid
+ * @category    Chart_Table
+ * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 class Chart_Table extends Table {
 
