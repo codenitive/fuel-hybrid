@@ -24,7 +24,7 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Utility
+ * @category    Chart_Utility
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 class Chart_Utility {
