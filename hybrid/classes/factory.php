@@ -95,23 +95,6 @@ class Factory {
 		return static::$_language;
 	}
 
-	/**
-	 * Format page title
-	 *
-	 * @access public
-	 * @param string $title
-	 * @return string
-	 */
-	public static function title($title) {
-		$site = \Config::get('app.site_name');
-
-		if (!empty($title) && is_string($title)) {
-			$site = sprintf('%s &mdash; %s', $title, $site);
-		}
-
-		return $site;
-	}
-
 	public static function view($file, $data = null, $encode = false) {
 		return \View::factory(static::$_language . DS . $file, $data, $encode)->render();
 	}
