@@ -27,7 +27,7 @@ namespace Hybrid;
  * @category    Utility
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
-class Utility {
+class Chart_Utility {
 
 	public static function js() {
 		return '<script type="text/javascript" src="https://www.google.com/jsapi"></script>';
