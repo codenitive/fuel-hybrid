@@ -48,13 +48,13 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 
 		\Hybrid\View::set_path($theme_path);
 
-		if ($this->auto_render === true) {
-			$this->template = \Hybrid\View::factory();
-		}
-
 		\Asset::add_path($theme_path . 'assets/');
 
-		$this->template->set_filename('index');
+		if (true === $this->auto_render) {
+			$this->template = \Hybrid\View::factory();
+			$this->template->auto_encode(false);
+			$this->template->set_filename('index');
+		}
 
 		return parent::before();
 	}

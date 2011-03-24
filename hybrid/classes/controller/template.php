@@ -53,7 +53,13 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 			$this->template = 'themes/' . $file;
 		}
 
-		return parent::before();
+		$parent = parent::before();
+
+		if (true === $this->auto_render) {
+			$this->template->auto_encode(false);
+		}
+
+		return $parent;
 	}
 
 	public function after() {

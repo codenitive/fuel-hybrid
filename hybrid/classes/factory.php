@@ -95,8 +95,8 @@ class Factory {
 		return static::$_language;
 	}
 
-	public static function view($file, $data = null, $encode = false) {
-		return \View::factory(static::$_language . DS . $file, $data, $encode)->render();
+	public static function view($file, $data = null, $encode = null) {
+		return \View::factory(static::$_language . DS . $file, $data, $encode);
 	}
 
 }
