@@ -35,10 +35,20 @@ namespace Hybrid;
  */
 class Acl {
 
-	private static $roles = array(),
-	$resources = array(),
-	$acl = array(),
-	$type = array('deny', 'view', 'create', 'edit', 'delete', 'all');
+	private static $_roles = array();
+	private static $_resources = array();
+	private static $_acl = array();
+	private static $_type = array('deny', 'view', 'create', 'edit', 'delete', 'all');
+
+	/**
+	 * Only called once 
+	 * 
+	 * @static 
+	 * @access public
+	 */
+	public static function _init() {
+		\Event::trigger('init_acl');
+	}
 
 	/**
 	 * Construct and initiate static::_init method as an object
@@ -49,21 +59,9 @@ class Acl {
 	 * $role->add_resources('hello-world');</code>
 	 * 
 	 * @access public
-	 * @see \Hybrid\Acl::_init()
 	 */
 	public function __construct() {
 		
-	}
-
-	/**
-	 * Debug \Hybrid\Acl private property in case of any problem, will be removed once 
-	 * everything running great
-	 * 
-	 * @static
-	 * @access public
-	 */
-	public static function debug() {
-		\Debug::dump(static::$roles, static::$acl, static::$resources);
 	}
 
 	/**
@@ -77,9 +75,9 @@ class Acl {
 	 * @return boolean
 	 */
 	public static function access($resource, $type = 'view') {
-		$types = static::$type;
+		$types = static::$_type;
 
-		if (!in_array($resource, static::$resources)) {
+		if (!in_array($resource, static::$_resources)) {
 			return true;
 		}
 
@@ -89,16 +87,16 @@ class Acl {
 		$length = count($types);
 
 		foreach ($user->roles as $role) {
-			if (!isset(static::$acl[$role . '/' . $resource])) {
+			if (!isset(static::$_acl[$role . '/' . $resource])) {
 				continue;
 			}
 
-			if (static::$acl[$role . '/' . $resource] == $type) {
+			if (static::$_acl[$role . '/' . $resource] == $type) {
 				return true;
 			}
 
 			for ($i = ($type_id + 1); $i < $length; $i++) {
-				if (static::$acl[$role . '/' . $resource] == $types[$i]) {
+				if (static::$_acl[$role . '/' . $resource] == $types[$i]) {
 					return true;
 				}
 			}
@@ -174,12 +172,12 @@ class Acl {
 		}
 
 		if (is_array($roles)) {
-			static::$roles = static::$roles + $roles;
+			static::$_roles = static::$_roles + $roles;
 			return true;
 		}
 
 		if (is_string($roles)) {
-			array_push(static::$roles, trim(\Inflector::friendly_title($roles, '-', true)));
+			array_push(static::$_roles, trim(\Inflector::friendly_title($roles, '-', true)));
 			return true;
 		}
 
@@ -200,12 +198,12 @@ class Acl {
 		}
 
 		if (is_array($resources)) {
-			static::$resources = static::$resources + $resources;
+			static::$_resources = static::$_resources + $resources;
 			return true;
 		}
 
 		if (is_string($resources)) {
-			array_push(static::$resources, trim(\Inflector::friendly_title($resources, '-', true)));
+			array_push(static::$_resources, trim(\Inflector::friendly_title($resources, '-', true)));
 			return true;
 		}
 
@@ -221,7 +219,7 @@ class Acl {
 	 * @return boolean 
 	 */
 	public static function allow($roles, $resources, $type = 'view') {
-		if (!in_array($type, static::$type)) {
+		if (!in_array($type, static::$_type)) {
 			return false;
 		}
 
@@ -236,7 +234,7 @@ class Acl {
 		foreach ($roles as $role) {
 			$role = \Inflector::friendly_title($role, '-', true);
 
-			if (!in_array($role, static::$roles)) {
+			if (!in_array($role, static::$_roles)) {
 				throw new \Fuel_Exception("Role {$role} does not exist.");
 				continue;
 			}
@@ -244,14 +242,14 @@ class Acl {
 			foreach ($resources as $resource) {
 				$resource = \Inflector::friendly_title($resource, '-', true);
 
-				if (!in_array($resource, static::$resources)) {
+				if (!in_array($resource, static::$_resources)) {
 					throw new \Fuel_Exception("Resource {$resource} does not exist.");
 					continue;
 				}
 
 				$id = $role . '/' . $resource;
 
-				static::$acl[$id] = $type;
+				static::$_acl[$id] = $type;
 			}
 		}
 
