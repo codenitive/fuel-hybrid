@@ -35,7 +35,7 @@ class Html extends \Fuel\Core\Html {
      * @param string $content page title
      * @return string
      */
-	public static function title($content) {
+	public static function title($content = '') {
 		$title = \Config::get('app.site_name');
 
 		if (!empty($content) && is_string($content)) {
