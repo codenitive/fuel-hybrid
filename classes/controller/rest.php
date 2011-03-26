@@ -32,9 +32,9 @@ abstract class Controller_Rest extends \Fuel\Core\Controller_Rest {
 	protected $set_content_type = true; // set the default content type using PHP Header
 
 	final protected function _acl($resource, $type = null) {
-		\Hybrid\Acl::access_status($resource, $type);
+		$status = \Hybrid\Acl::access_status($resource, $type);
 
-		switch (\Output::$status) {
+		switch ($status) {
 			case 401 :
 				$this->response(array('text' => 'You doesn\'t have privilege to do this action'), 401);
 				print $this->output;
@@ -97,25 +97,25 @@ abstract class Controller_Rest extends \Fuel\Core\Controller_Rest {
 
 	protected function response($data = array(), $http_code = 200) {
 		if (empty($data)) {
-			\Output::$status = 404;
+			$this->response->status = 404;
 			return;
 		}
 
-		\Output::$status = $http_code;
+		$this->response->status = $http_code;
 
 		// If the format method exists, call and return the output in that format
 		if (method_exists('Controller_Rest', '_format_' . $this->request->format)) {
 			if ($this->set_content_type === true) {
 				// Set the correct format header
-				\Output::set_header('Content-Type', $this->_supported_formats[$this->request->format]);
+				$this->response->set_header('Content-Type', $this->_supported_formats[$this->request->format]);
 			}
 
-			$this->output = $this->{'_format_' . $this->request->format}($data);
+			$this->response->body($this->{'_format_' . $this->request->format}($data));
 		}
 
 		// Format not supported, output directly
 		else {
-			$this->output = (string) $data;
+			$this->response->body((string) $data);
 		}
 	}
 

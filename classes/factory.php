@@ -72,12 +72,10 @@ class Factory {
 
 
 		if (\Config::get('routes._maintenance_mode_') === null) {
-			$output = \View::factory('maintenance_mode');
-			\Output::send_headers();
-			exit($output);
+			throw new \Fuel_Exception('It appears your _maintenance_mode_ route is null.');
 		} else {
 			$request = \Request::factory(\Config::get('routes._maintenance_mode_'))->execute();
-			exit($request->send_headers()->output());
+			exit($request->send_headers()->response());
 		}
 	}
 

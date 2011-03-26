@@ -95,7 +95,7 @@ class Request extends \Fuel\Core\Request {
 		static::$_request_method = $type;
 		static::$_request_data = $dataset;
 
-		$this->output = NULL;
+		$this->response = NULL;
 	}
 
 	/**
@@ -115,18 +115,7 @@ class Request extends \Fuel\Core\Request {
 		// request method and data available in the connection.
 		\Hybrid\Input::connect(static::$_request_method, static::$_request_data);
 
-		// Keep a copy or current HTTP Response status
-		$status = \Output::$status;
-
-		$execute = new stdClass();
-
-		$execute->response = parent::execute();
-
-		$execute->status = \Output::$status;
-
-		// Revert HTTP Response status to that value before this connection. 
-		// Sub-request response status shouldn't affect the original request.
-		\Output::$status = $status;
+		$execute = parent::execute();
 
 		// We need to clean-up any request object transfered to \Hybrid\Input so that
 		// any following request to \Hybrid\Input will redirected to \Fuel\Core\Input

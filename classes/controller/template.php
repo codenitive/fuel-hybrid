@@ -32,9 +32,9 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 	public $template = 'themes/default';
 
 	final protected function _acl($resource, $type = null) {
-		\Hybrid\Acl::access_status($resource, $type);
+		$status = \Hybrid\Acl::access_status($resource, $type);
 
-		switch (\Output::$status) {
+		switch ($status) {
 			case 401 :
 				\Request::show_404();
 				break;

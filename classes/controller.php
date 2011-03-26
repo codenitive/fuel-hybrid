@@ -30,9 +30,9 @@ namespace Hybrid;
 abstract class Controller extends \Fuel\Core\Controller {
 
 	final protected function _acl($resource, $type = null) {
-		\Hybrid\Acl::access_status($resource, $type);
+		$status = \Hybrid\Acl::access_status($resource, $type);
 
-		switch (\Output::$status) {
+		switch ($status) {
 			case 401 :
 				\Request::show_404();
 				break;

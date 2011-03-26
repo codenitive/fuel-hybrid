@@ -120,12 +120,10 @@ class Acl {
 
 		switch (static::access($resource, $type)) {
 			case true :
-				\Output::$status = 200;
-				return true;
+				return 200;
 				break;
 			case false :
-				\Output::$status = 401;
-				return false;
+				return 401;
 				break;
 		}
 	}
