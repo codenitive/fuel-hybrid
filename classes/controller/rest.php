@@ -37,7 +37,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller_Rest {
 		switch ($status) {
 			case 401 :
 				$this->response(array('text' => 'You doesn\'t have privilege to do this action'), 401);
-				print $this->output;
+				print $this->response;
 				exit();
 				break;
 		}
@@ -85,8 +85,14 @@ abstract class Controller_Rest extends \Fuel\Core\Controller_Rest {
 
 		// If they call user, go to $this->post_user();
 		$controller_method = strtolower(\Hybrid\Input::method()) . '_' . $resource;
-
-		call_user_func(array($this, $controller_method));
+		
+		if (method_exists($this, $controller_method)) {
+			call_user_func(array($this, $controller_method));
+		}
+		else {
+			$this->response->status = 404;
+			return;
+		}
 	}
 
 	/*

@@ -267,7 +267,7 @@ class Acl_User {
 		static::_unregister(true);
 
 		if (true === $redirect) {
-			\Output::redirect('site/index');
+			\Response::redirect('site/index');
 		}
 
 		return true;
