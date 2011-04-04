@@ -16,6 +16,7 @@ Autoloader::add_classes(array (
 	'Hybrid\\Factory'                   => __DIR__.'/classes/factory.php',
 	'Hybrid\\Request'                   => __DIR__.'/classes/request.php',
 	'Hybrid\\Input'                     => __DIR__.'/classes/input.php',
+	'Hybrid\\Pagination'                => __DIR__.'/classes/pagination.php',
 	
 	'Hybrid\\Acl'                       => __DIR__.'/classes/acl.php',
 	'Hybrid\\Acl_User'                  => __DIR__.'/classes/acl/user.php',
