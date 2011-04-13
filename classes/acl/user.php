@@ -112,7 +112,7 @@ class Acl_User {
 				 * INNER JOIN `users_auths` ON (`users_auths`.`user_id`=`users`.`id`) 
 				 * LEFT JOIN `users_twitters` ON (`users_twitters`.`user_id`=`users`.`id`)   
 				 * WHERE `users`.`id`=%d  */
-				$result = \DB::select('users.*', 'users_auths.password', array('users_twitters.id', 'twitter_id'), 'users_meta.gender', 'users_meta.birthdate')
+				$result = \DB::select('users.*', 'users_auths.password', array('users_twitters.id', 'twitter_id'), 'users_meta.*')
 						->from('users')
 						->join('users_auths')
 						->on('users_auths.user_id', '=', 'users.id')
@@ -168,8 +168,14 @@ class Acl_User {
 			static::$items['status'] = $user->status;
 			static::$items['roles'] = $users->roles;
 			static::$items['password'] = $user->password;
-			static::$items['gender'] = $user->gender;
-			static::$items['age'] = (int) date('Y') - (int) date('Y', strtotime($user->birthdate));
+			
+			if (property_exists($user, 'gender')) {
+				static::$items['gender'] = $user->gender;
+			}
+			
+			if (property_exists($user, 'birthdate')) {
+				static::$items['age'] = (int) date('Y') - (int) date('Y', strtotime($user->birthdate));
+			}
 
 			// if user already link their account with twitter, map the relationship
 			if (!is_null($user->twitter_id)) {
