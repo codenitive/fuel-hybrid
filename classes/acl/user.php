@@ -422,11 +422,13 @@ class Acl_User {
 	 */
 	public static function get($name = null) 
 	{
-		if (!is_string($name)) {
+		if (!is_string($name)) 
+		{
 			return (object) static::$items;
 		}
 
-		if (!\array_key_exists($name, static::$items)) {
+		if (!\array_key_exists($name, static::$items)) 
+		{
 			return false;
 		}
 
