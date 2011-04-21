@@ -53,9 +53,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 			$this->template = 'themes/' . $file;
 		}
 
-		$parent = parent::before();
-
-		return $parent;
+		return parent::before();
 	}
 
 	public function after() {
