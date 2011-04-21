@@ -38,10 +38,12 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 	 * */
 	public $auto_render = true;
 
-	public function before() {
+	public function before() 
+	{
 		$theme_path = \Config::get('app.frontend.template');
 
-		if (null === $theme_path) {
+		if (null === $theme_path) 
+		{
 			$theme_path = DOCROOT . 'themes/default/';
 			\Config::set('app.frontend.template', $theme_path);
 		}
@@ -50,7 +52,8 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 
 		\Asset::add_path($theme_path . 'assets/');
 
-		if (true === $this->auto_render) {
+		if (true === $this->auto_render) 
+		{
 			$this->template = \Hybrid\View::factory();
 			$this->template->auto_encode(false);
 			$this->template->set_filename('index');
@@ -59,8 +62,10 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 		return parent::before();
 	}
 
-	public function after() {
-		if ($this->auto_render === true) {
+	public function after() 
+	{
+		if ($this->auto_render === true) 
+		{
 			$this->output = $this->template->render();
 		}
 

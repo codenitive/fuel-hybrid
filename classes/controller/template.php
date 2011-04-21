@@ -31,17 +31,20 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 
 	public $template = 'themes/default';
 
-	final protected function _acl($resource, $type = null) {
+	final protected function _acl($resource, $type = null) 
+	{
 		$status = \Hybrid\Acl::access_status($resource, $type);
 
-		switch ($status) {
+		switch ($status) 
+		{
 			case 401 :
 				\Request::show_404();
 				break;
 		}
 	}
 
-	public function before() {
+	public function before() 
+	{
 		$this->language = \Hybrid\Factory::get_language();
 		$this->user = \Hybrid\Acl_User::get();
 
@@ -49,14 +52,16 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 
 		$file = \Config::get('app.template');
 
-		if (is_file(APPPATH . 'views/themes/' . $file . '.php')) {
+		if (is_file(APPPATH . 'views/themes/' . $file . '.php')) 
+		{
 			$this->template = 'themes/' . $file;
 		}
 
 		return parent::before();
 	}
 
-	public function after() {
+	public function after() 
+	{
 		//we dont want to accidentally change our site_name
 		$this->template->site_name = \Config::get('app.site_name');
 

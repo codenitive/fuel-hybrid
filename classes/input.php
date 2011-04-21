@@ -31,37 +31,45 @@ class Input {
 
 	protected static $request = null;
 
-	public static function connect($method = '', $data = array()) {
-		if (!empty($method)) {
+	public static function connect($method = '', $data = array()) 
+	{
+		if (!empty($method)) 
+		{
 			static::$request = (object) array('method' => $method, 'data' => $data);
 		}
 	}
 
-	public static function disconnect() {
+	public static function disconnect() 
+	{
 		static::$request = null;
 	}
 
-	public static function __callStatic($name, $args) {
+	public static function __callStatic($name, $args) 
+	{
 		// If $request is null, it's a request from \Fuel\Core\Request so use it instead
-		if (in_array(strtolower($name), array('is_ajax', 'user_agent', 'real_ip', 'referrer', 'server'))) {
+		if (in_array(strtolower($name), array('is_ajax', 'user_agent', 'real_ip', 'referrer', 'server'))) 
+		{
 			return call_user_func(array('\\Input', $name));
 		}
 		
 		// Check whether this request is from \Fuel\Core\Request or \Hybrid\Request
 		$using_hybrid = false;
 		
-		if (!is_null(static::$request) && static::$request->method !== '') {
+		if (!is_null(static::$request) && static::$request->method !== '') 
+		{
 			$using_hybrid = true;
 		}
 
-		if (!$using_hybrid && $name == 'method') {
+		if (!$using_hybrid && $name == 'method') 
+		{
 			return call_user_func(array('\\Input', 'method'));
 		}
 
 		$default = null;
 		$index = null;
 
-		switch (true) {
+		switch (true) 
+		{
 			case count($args) > 1 :
 				$default = $args[1];
 			case count($args) > 0 :
@@ -69,23 +77,29 @@ class Input {
 				break;
 		}
 
-		if ($name === 'method') {
+		if ($name === 'method') 
+		{
 			return static::$request->method;
 		}
 
 		// Reach this point but $index is null (which isn't be so we should just return the default value) 
-		if (is_null($index)) {
+		if (is_null($index)) 
+		{
 			return $default;
 		}
 
-		if (false === $using_hybrid) {
+		if (false === $using_hybrid) 
+		{
 			// Not using \Hybrid\Request, it has to be from \Fuel\Core\Input.
 			return call_user_func_array(array('\\Input', $name), array($index, $default));
 		}
 
-		if ((strtoupper($name) === static::$request->method)) {
+		if ((strtoupper($name) === static::$request->method)) 
+		{
 			return isset(static::$request->data[$index]) ? static::$request->data[$index] : $default;
-		} else {
+		} 
+		else 
+		{
 			return $default;
 		}
 	}

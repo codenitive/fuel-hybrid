@@ -44,11 +44,13 @@ class Request extends \Fuel\Core\Request {
 	 * @param array $dataset	Set a dataset for GET, POST, PUT or DELETE
 	 * @return object			The new request
 	 */
-	public static function connector($uri, $dataset = array()) {
+	public static function connector($uri, $dataset = array()) 
+	{
 		$uri_segments = explode(' ', $uri);
 		$type = 'GET';
 
-		if (in_array(strtoupper($uri_segments[0]), array('DELETE', 'POST', 'PUT', 'GET'))) {
+		if (in_array(strtoupper($uri_segments[0]), array('DELETE', 'POST', 'PUT', 'GET'))) 
+		{
 			$uri = $uri_segments[1];
 			$type = $uri_segments[0];
 		}
@@ -56,7 +58,8 @@ class Request extends \Fuel\Core\Request {
 		$query_dataset = array();
 		$query_string = parse_url($uri);
 
-		if (isset($query_string['query'])) {
+		if (isset($query_string['query'])) 
+		{
 			$uri = $query_string['path'];
 			parse_str($query_string['query'], $query_dataset);
 		}
@@ -67,7 +70,8 @@ class Request extends \Fuel\Core\Request {
 
 		static::$active = new static($uri, true, $type, $dataset);
 
-		if (!static::$main) {
+		if (!static::$main) 
+		{
 			logger(\Fuel::L_INFO, 'Setting main Request', __METHOD__);
 			static::$main = static::$active;
 		}
@@ -88,7 +92,8 @@ class Request extends \Fuel\Core\Request {
 	 * @param string $type		GET|POST|PUT|DELETE
 	 * @param array $dataset 
 	 */
-	public function __construct($uri, $route, $type = 'GET', $dataset = array()) {
+	public function __construct($uri, $route, $type = 'GET', $dataset = array()) 
+	{
 		parent::__construct($uri, $route);
 
 		// store this construct method and data staticly
@@ -110,7 +115,8 @@ class Request extends \Fuel\Core\Request {
 	 * @return object	containing $data and HTTP Response $status
 	 * @see \Request::execute()
 	 */
-	public function execute() {
+	public function execute() 
+	{
 		// Since this just a imitation of curl request, \Hybrid\Input need to know the 
 		// request method and data available in the connection.
 		\Hybrid\Input::connect(static::$_request_method, static::$_request_data);

@@ -38,7 +38,8 @@ class View extends \Fuel\Core\View {
 	 * 
 	 * @param string $path 
 	 */
-	public static function set_path($path) {
+	public static function set_path($path) 
+	{
 		static::$_path = $path;
 	}
 
@@ -51,8 +52,10 @@ class View extends \Fuel\Core\View {
 	 * @return  View
 	 * @throws  View_Exception
 	 */
-	public function set_filename($file) {
-		switch (true) {
+	public function set_filename($file) 
+	{
+		switch (true) 
+		{
 			case ($path = $this->_find_file($file)) :
 				break;
 			case ($path = \Fuel::find_file('views', $file, '.php', false, false)) :
@@ -74,16 +77,14 @@ class View extends \Fuel\Core\View {
 	 * @param string $file
 	 * @return mixed
 	 */
-	private function _find_file($file) {
-		if (empty(static::$_path)) {
+	private function _find_file($file) 
+	{
+		if (empty(static::$_path) || !\is_file(static::$_path . $file . '.php'))
+		{
 			return null;
 		}
-
-		if (\is_file(static::$_path . $file . '.php')) {
-			return static::$_path . $file . '.php';
-		}
-
-		return null;
+ 
+		return static::$_path . $file . '.php';
 	}
 
 }

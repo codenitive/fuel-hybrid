@@ -29,13 +29,15 @@ namespace Hybrid;
  */
 class Chart_Area extends Chart {
 
-	public function __construct() {
+	public function __construct() 
+	{
 		parent::__construct();
 
 		$this->set_options(\Config::get('visualization.chart.area', array()));
 	}
 
-	public function generate($width = '100%', $height = '300px') {
+	public function generate($width = '100%', $height = '300px') 
+	{
 		$columns = $this->columns;
 		$rows = $this->rows;
 

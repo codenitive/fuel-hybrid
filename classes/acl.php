@@ -46,7 +46,8 @@ class Acl {
 	 * @static 
 	 * @access public
 	 */
-	public static function _init() {
+	public static function _init() 
+	{
 		\Event::trigger('init_acl');
 	}
 
@@ -60,9 +61,7 @@ class Acl {
 	 * 
 	 * @access public
 	 */
-	public function __construct() {
-		
-	}
+	public function __construct() {}
 
 	/**
 	 * Verify is current user has sufficient roles to access the resources based 
@@ -74,10 +73,12 @@ class Acl {
 	 * @param string $type need to be any one of deny, view, create, edit, delete or all
 	 * @return boolean
 	 */
-	public static function access($resource, $type = 'view') {
+	public static function access($resource, $type = 'view') 
+	{
 		$types = static::$_type;
 
-		if (!in_array($resource, static::$_resources)) {
+		if (!in_array($resource, static::$_resources)) 
+		{
 			return true;
 		}
 
@@ -86,17 +87,22 @@ class Acl {
 		$type_id = array_search($type, $types);
 		$length = count($types);
 
-		foreach ($user->roles as $role) {
-			if (!isset(static::$_acl[$role . '/' . $resource])) {
+		foreach ($user->roles as $role) 
+		{
+			if (!isset(static::$_acl[$role . '/' . $resource])) 
+			{
 				continue;
 			}
 
-			if (static::$_acl[$role . '/' . $resource] == $type) {
+			if (static::$_acl[$role . '/' . $resource] == $type) 
+			{
 				return true;
 			}
 
-			for ($i = ($type_id + 1); $i < $length; $i++) {
-				if (static::$_acl[$role . '/' . $resource] == $types[$i]) {
+			for ($i = ($type_id + 1); $i < $length; $i++) 
+			{
+				if (static::$_acl[$role . '/' . $resource] == $types[$i]) 
+				{
 					return true;
 				}
 			}
@@ -116,9 +122,11 @@ class Acl {
 	 * @return boolean
 	 * @see \Hybrid\Acl::access()
 	 */
-	public static function access_status($resource, $type = 'view') {
+	public static function access_status($resource, $type = 'view') 
+	{
 
-		switch (static::access($resource, $type)) {
+		switch (static::access($resource, $type)) 
+		{
 			case true :
 				return 200;
 				break;
@@ -136,18 +144,23 @@ class Acl {
 	 * @param mixed $check_roles
 	 * @return boolean 
 	 */
-	public static function has_roles($check_roles) {
+	public static function has_roles($check_roles) 
+	{
 		$user = \Hybrid\Acl_User::get();
 
-		if (!is_array($check_roles)) {
+		if (!is_array($check_roles)) 
+		{
 			$check_roles = array($check_roles);
 		}
 
-		foreach ($user->roles as $role) {
+		foreach ($user->roles as $role) 
+		{
 			$role = \Inflector::friendly_title($role, '-', TRUE);
 
-			foreach ($check_roles as $check_against) {
-				if ($role == $check_against) {
+			foreach ($check_roles as $check_against) 
+			{
+				if ($role == $check_against) 
+				{
 					return true;
 				}
 			}
@@ -164,17 +177,21 @@ class Acl {
 	 * @param mixed $roles
 	 * @return boolean
 	 */
-	public static function add_roles($roles = NULL) {
-		if (is_null($roles)) {
+	public static function add_roles($roles = NULL) 
+	{
+		if (is_null($roles)) 
+		{
 			return false;
 		}
 
-		if (is_array($roles)) {
+		if (is_array($roles)) 
+		{
 			static::$_roles = static::$_roles + $roles;
 			return true;
 		}
 
-		if (is_string($roles)) {
+		if (is_string($roles)) 
+		{
 			array_push(static::$_roles, trim(\Inflector::friendly_title($roles, '-', true)));
 			return true;
 		}
@@ -190,12 +207,15 @@ class Acl {
 	 * @param mixed $resources
 	 * @return boolean
 	 */
-	public static function add_resources($resources = NULL) {
-		if (is_null($resources)) {
+	public static function add_resources($resources = NULL) 
+	{
+		if (is_null($resources)) 
+		{
 			return false;
 		}
 
-		if (is_array($resources)) {
+		if (is_array($resources)) 
+		{
 			static::$_resources = static::$_resources + $resources;
 			return true;
 		}
@@ -216,31 +236,39 @@ class Acl {
 	 * @param string $type
 	 * @return boolean 
 	 */
-	public static function allow($roles, $resources, $type = 'view') {
-		if (!in_array($type, static::$_type)) {
+	public static function allow($roles, $resources, $type = 'view') 
+	{
+		if (!in_array($type, static::$_type)) 
+		{
 			return false;
 		}
 
-		if (!is_array($roles)) {
+		if (!is_array($roles)) 
+		{
 			$roles = array($roles);
 		}
 
-		if (!is_array($resources)) {
+		if (!is_array($resources)) 
+		{
 			$resources = array($resources);
 		}
 
-		foreach ($roles as $role) {
+		foreach ($roles as $role) 
+		{
 			$role = \Inflector::friendly_title($role, '-', true);
 
-			if (!in_array($role, static::$_roles)) {
+			if (!in_array($role, static::$_roles)) 
+			{
 				throw new \Fuel_Exception("Role {$role} does not exist.");
 				continue;
 			}
 
-			foreach ($resources as $resource) {
+			foreach ($resources as $resource) 
+			{
 				$resource = \Inflector::friendly_title($resource, '-', true);
 
-				if (!in_array($resource, static::$_resources)) {
+				if (!in_array($resource, static::$_resources)) 
+				{
 					throw new \Fuel_Exception("Resource {$resource} does not exist.");
 					continue;
 				}
@@ -263,7 +291,8 @@ class Acl {
 	 * @param mixed $resources
 	 * @return boolean
 	 */
-	public static function deny($roles, $resources) {
+	public static function deny($roles, $resources) 
+	{
 		return static::allow($roles, $resources, 'deny');
 	}
 

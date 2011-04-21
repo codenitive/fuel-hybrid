@@ -39,7 +39,8 @@ class Acl_User {
 	 * @access private
 	 * @return boolean
 	 */
-	private static function _set_default() {
+	private static function _set_default() 
+	{
 		$twitter = 0;
 
 		static::$items = array(
@@ -73,7 +74,8 @@ class Acl_User {
 	 * @access public
 	 * @return object
 	 */
-	public static function acl() {
+	public static function acl() 
+	{
 		return static::$acl;
 	}
 
@@ -89,22 +91,27 @@ class Acl_User {
 	 * @access private
 	 * @return boolean
 	 */
-	public static function _init() {
+	public static function _init() 
+	{
 		\Config::load('crypt', true);
 
 		$users = \Cookie::get('_users');
 
-		if (!is_null($users)) {
+		if (!is_null($users)) 
+		{
 			$users = unserialize(\Crypt::decode($users));
 			static::$items = (array) $users;
-		} else {
+		} 
+		else 
+		{
 			static::_unregister();
 			return true;
 		}
 
 		static::$acl = new \Hybrid\Acl;
 
-		switch ($users->method) {
+		switch ($users->method) 
+		{
 			case 'normal' :
 				/*
 				 * SELECT `users`.*, `users_auths`.`password`, `users_twitter`.`id` AS `twitter_id` 
@@ -141,13 +148,17 @@ class Acl_User {
 				break;
 		}
 
-		if ($result->count() < 1) {
+		if ($result->count() < 1) 
+		{
 			static::_unregister(true);
 			return true;
-		} else {
+		} 
+		else 
+		{
 			$user = $result->current();
 
-			if ($user->status !== 'verified') {
+			if ($user->status !== 'verified') 
+			{
 				// only verified user can login to this application
 				static::_unregister();
 				return true;
@@ -156,7 +167,8 @@ class Acl_User {
 			// we validate the hash to add security to this application
 			$hash = $user->user_name . $user->password;
 
-			if (static::$items['hash'] !== static::add_salt($hash)) {
+			if (static::$items['hash'] !== static::add_salt($hash)) 
+			{
 				static::_unregister();
 				return true;
 			}
@@ -169,16 +181,19 @@ class Acl_User {
 			static::$items['roles'] = $users->roles;
 			static::$items['password'] = $user->password;
 			
-			if (property_exists($user, 'gender')) {
+			if (property_exists($user, 'gender')) 
+			{
 				static::$items['gender'] = $user->gender;
 			}
 			
-			if (property_exists($user, 'birthdate')) {
+			if (property_exists($user, 'birthdate')) 
+			{
 				static::$items['age'] = (int) date('Y') - (int) date('Y', strtotime($user->birthdate));
 			}
 
 			// if user already link their account with twitter, map the relationship
-			if (!is_null($user->twitter_id)) {
+			if (!is_null($user->twitter_id)) 
+			{
 				static::$items['twitter'] = $user->twitter_id;
 			}
 		}
@@ -199,7 +214,8 @@ class Acl_User {
 	 * @param string $password
 	 * @return boolean
 	 */
-	public static function login($username, $password) {
+	public static function login($username, $password) 
+	{
 		/*
 		 * SELECT `users`.*, `users_auths`.`password`, `users_twitter`.`id` AS `twitter_id` 
 		 * FROM `users` 
@@ -223,16 +239,21 @@ class Acl_User {
 				->as_object()
 				->execute();
 
-		if ($users->count() < 1) {
+		if ($users->count() < 1) 
+		{
 			return false;
-		} else {
+		} 
+		else 
+		{
 			$user = $users->current();
 
-			if ($user->password !== static::add_salt($password)) {
+			if ($user->password !== static::add_salt($password)) 
+			{
 				return false;
 			}
 
-			if ($user->status !== 'verified') {
+			if ($user->status !== 'verified') 
+			{
 				return false;
 			}
 
@@ -244,7 +265,8 @@ class Acl_User {
 			static::$items['method'] = 'normal';
 			static::$items['password'] = $user->password;
 
-			if (!is_null($user->twitter_id)) {
+			if (!is_null($user->twitter_id)) 
+			{
 				static::$items['twitter'] = $user->twitter_id;
 			}
 
@@ -269,10 +291,12 @@ class Acl_User {
 	 * @param boolean $redirect
 	 * @return boolean
 	 */
-	public static function logout($redirect = true) {
+	public static function logout($redirect = true) 
+	{
 		static::_unregister(true);
 
-		if (true === $redirect) {
+		if (true === $redirect) 
+		{
 			\Response::redirect('site/index');
 		}
 
@@ -288,7 +312,8 @@ class Acl_User {
 	 * @access private
 	 * @return boolean
 	 */
-	private static function _get_roles() {
+	private static function _get_roles() 
+	{
 		$data = array();
 
 		/* SELECT `roles`.* 
@@ -305,7 +330,8 @@ class Acl_User {
 				->as_object()
 				->execute();
 
-		foreach ($roles as $role) {
+		foreach ($roles as $role) 
+		{
 			$data['' . $role->id] = \Inflector::friendly_title($role->name, '-', TRUE);
 		}
 
@@ -322,7 +348,8 @@ class Acl_User {
 	 * @access private
 	 * @return boolean
 	 */
-	private static function _register() {
+	private static function _register() 
+	{
 		$values = static::$items;
 		$values['hash'] = static::add_salt(static::$items['user_name'] . static::$items['password']);
 
@@ -339,10 +366,12 @@ class Acl_User {
 	 * @param boolean $delete set to true to delete session, only when login out
 	 * @return boolean
 	 */
-	private static function _unregister($delete = false) {
+	private static function _unregister($delete = false) 
+	{
 		static::_set_default();
 
-		if (true == $delete) {
+		if (true == $delete) 
+		{
 			\Cookie::delete('_users');
 		}
 
@@ -360,7 +389,8 @@ class Acl_User {
 	 * @access public
 	 * @return boolean
 	 */
-	public static function is_logged() {
+	public static function is_logged() 
+	{
 		return (static::$items['id'] > 0 ? true : false);
 	}
 
@@ -372,7 +402,8 @@ class Acl_User {
 	 * @param string $password
 	 * @return string
 	 */
-	public static function add_salt($password = '') {
+	public static function add_salt($password = '') 
+	{
 		$salt = \Config::get('crypt.salt');
 
 		return sha1($salt . $password);
@@ -389,7 +420,8 @@ class Acl_User {
 	 * @access public
 	 * @return object
 	 */
-	public static function get($name = null) {
+	public static function get($name = null) 
+	{
 		if (!is_string($name)) {
 			return (object) static::$items;
 		}
