@@ -55,10 +55,6 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 
 		$parent = parent::before();
 
-		if (true === $this->auto_render) {
-			$this->template->auto_encode(false);
-		}
-
 		return $parent;
 	}
 
