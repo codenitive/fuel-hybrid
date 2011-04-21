@@ -76,14 +76,14 @@ class View extends \Fuel\Core\View {
 	 */
 	private function _find_file($file) {
 		if (empty(static::$_path)) {
-			return false;
+			return null;
 		}
 
 		if (\is_file(static::$_path . $file . '.php')) {
 			return static::$_path . $file . '.php';
 		}
 
-		return false;
+		return null;
 	}
 
 }
