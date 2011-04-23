@@ -83,11 +83,11 @@ class Restful {
 	{
 		if (\Config::get('rest.auth') == 'basic')
 		{
-			$this->_prepare_basic_auth();
+			static::_prepare_basic_auth();
 		}
 		elseif (\Config::get('rest.auth') == 'digest')
 		{
-			$this->_prepare_digest_auth();
+			static::_prepare_digest_auth();
 		}
 	}
 	
@@ -182,7 +182,7 @@ class Restful {
 		return true;
 	}
 	
-	protected function _prepare_basic_auth()
+	protected static function _prepare_basic_auth()
 	{
 		$username = null;
 		$password = null;
@@ -209,7 +209,7 @@ class Restful {
 		}
 	}
 
-	protected function _prepare_digest_auth()
+	protected static function _prepare_digest_auth()
 	{
 		$uniqid = uniqid(""); // Empty argument for backward compatibility
 		// We need to test which server authentication variable to use
