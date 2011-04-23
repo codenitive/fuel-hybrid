@@ -268,7 +268,7 @@ class Restful {
 	protected static function _detect_format()
 	{
 		// A format has been passed as an argument in the URL and it is supported
-		if (\Input::get_post('format') && static::$_supported_formats[\Hybrid\Input::get_post('format')])
+		if (\Hybrid\Input::get_post('format') && static::$_supported_formats[\Hybrid\Input::get_post('format')])
 		{
 			return \Hybrid\Input::get_post('format');
 		}
