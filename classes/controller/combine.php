@@ -27,10 +27,15 @@ namespace Hybrid;
  * @category    Controller_Rest
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
-abstract class Controller_Rest extends \Fuel\Core\Controller {
+abstract class Controller_Combine extends \Fuel\Core\Controller {
+	
+	private $_is_restful = true;
 	
 	protected $rest_format = null;
 	protected $set_content_type = true; // set the default content type using PHP Header
+	
+	public $template = 'themes/default';
+	public $auto_render = true;
 
 	final protected function _acl($resource, $type = null) 
 	{
@@ -39,9 +44,16 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 		switch ($status) 
 		{
 			case 401 :
-				$this->response(array('text' => 'You doesn\'t have privilege to do this action'), 401);
-				print $this->response->body;
-				exit();
+				if ($this->_is_restful === true)
+				{
+					$this->response(array('text' => 'You doesn\'t have privilege to do this action'), 401);
+					print $this->response->body;
+					exit();
+				}
+				else
+				{
+					\Request::show_404();
+				}
 			break;
 		}
 	}
@@ -53,12 +65,15 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 
 		\Event::trigger('controller_before');
 		
-		if (\Hybrid\Request::main() !== \Hybrid\Request::active()) 
+		$this->_is_restful = \Hybrid\Restful::is_rest();
+
+		if ($this->_is_restful === false)
 		{
-			$this->set_content_type = false;
+			$this->_prepare_template();
 		}
-		
-		\Hybrid\Restful::auth();
+		else {
+			$this->_prepare_restful();
+		}
 
 		return parent::before();
 	}
@@ -67,22 +82,23 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 	{
 		\Event::trigger('controller_after');
 		
-		if ($this->set_content_type === true) 
+		if ($this->_is_restful === false)
 		{
-			// Set the correct format header
-			$this->response->set_header('Content-Type', \Hybrid\Restful::content_type($restful->format));
+			$this->_render_template();
 		}
-		
+		else {
+			$this->_render_restful();
+		}
+
 		return parent::after();
 	}
 
-	/*
+	/**
 	 * Remap
 	 *
 	 * Requests are not made to methods directly The request will be for an "object".
 	 * this simply maps the object and method to the correct Controller method.
 	 */
-
 	public function router($resource, $arguments) 
 	{
 		$pattern = \Hybrid\Restful::$pattern;
@@ -95,7 +111,13 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 		
 		if (method_exists($this, $controller_method)) 
 		{
+			$this->_is_restful = true;
 			call_user_func(array($this, $controller_method));
+		}
+		elseif (method_exists($this, 'action_'.$resource)) 
+		{
+			$this->_is_restful = false;
+			call_user_func(array($this, 'action_'.$resource), $arguments);
 		}
 		else 
 		{
@@ -104,16 +126,62 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 		}
 	}
 
-	/*
+	/*8
 	 * response
 	 *
 	 * Takes pure data and optionally a status code, then creates the response
 	 */
-
 	protected function response($data = array(), $http_code = 200) 
 	{
 		$restful = \Hybrid\Restful::factory($data, $http_code)->format($this->rest_format)->execute();
 		$this->response->body($restful->body);
 		$this->response->status = $restful->status;
 	}
+	
+	protected function _prepare_template()
+	{
+		$file = \Config::get('app.template');
+
+		if (is_file(APPPATH . 'views/themes/' . $file . '.php')) 
+		{
+			$this->template = 'themes/' . $file;
+		}
+		
+		if ($this->auto_render === true)
+		{
+			// Load the template
+			$this->template = \View::factory($this->template);
+		}
+	}
+	
+	protected function _render_template()
+	{
+		//we dont want to accidentally change our site_name
+		$this->template->site_name = \Config::get('app.site_name');
+		
+		if ($this->auto_render === true)
+		{
+			$this->response->body($this->template);
+		}
+	}
+	
+	protected function _prepare_restful()
+	{
+		if (\Hybrid\Request::main() !== \Hybrid\Request::active()) 
+		{
+			$this->set_content_type = false;
+		}
+
+		\Hybrid\Restful::auth();
+	}
+	
+	protected function _render_restful()
+	{
+		if ($this->set_content_type === true) 
+		{
+			// Set the correct format header
+			$this->response->set_header('Content-Type', \Hybrid\Restful::content_type($restful->format));
+		}
+	}
+	
 }

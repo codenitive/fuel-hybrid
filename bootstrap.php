@@ -25,6 +25,7 @@ Autoloader::add_classes(array (
 	'Hybrid\\Controller_Frontend'       => __DIR__.'/classes/controller/frontend.php',
 	'Hybrid\\Controller_Template'       => __DIR__.'/classes/controller/template.php',
 	'Hybrid\\Controller_Rest'           => __DIR__.'/classes/controller/rest.php',
+	'Hybrid\\Controller_Combine'        => __DIR__.'/classes/controller/combine.php',
 	
 	'Hybrid\\Html'                      => __DIR__.'/classes/html.php',
 	'Hybrid\\Restful'                   => __DIR__.'/classes/restful.php',

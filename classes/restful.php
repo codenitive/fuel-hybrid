@@ -79,7 +79,7 @@ class Restful {
 		return static::$_supported_formats[$format];
 	}
 	
-	public function __construct($data = array(), $http_code = 200)
+	public static function auth()
 	{
 		if (\Config::get('rest.auth') == 'basic')
 		{
@@ -89,7 +89,10 @@ class Restful {
 		{
 			$this->_prepare_digest_auth();
 		}
-		
+	}
+	
+	public function __construct($data = array(), $http_code = 200)
+	{
 		$this->_data = $data;
 		$this->_http_status = $http_code;
 	}
@@ -121,7 +124,7 @@ class Restful {
 		$resource = \Request::active()->action;
 		
 		$format = $this->rest_format;
-		$response = new stdClass();
+		$response = new \stdClass();
 		$response->status = $this->_http_status;
 		
 		// Check if a file extension is used
