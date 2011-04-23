@@ -40,11 +40,11 @@ class Restful {
 		'csv' => 'application/csv'
 	);
 	
-	protected static $_pattern = '/\.(%s)$/';
-
+	public static $pattern = '';
 
 	public static function _init()
 	{
+		static::$pattern = sprintf('/\.(%s)$/', implode('|', array_keys(static::$_supported_formats)));
 		\Config::load('rest', true);
 	}
 	
@@ -55,7 +55,7 @@ class Restful {
 	
 	public static function is_rest()
 	{
-		$pattern = sprintf(static::$_pattern, implode('|', array_keys(static::$_supported_formats)));
+		$pattern = static::$pattern;
 		$resource = \Request::active()->action;
 
 		// Check if a file extension is used
@@ -67,6 +67,16 @@ class Restful {
 		{
 			return false;
 		}
+	}
+	
+	public static function content_type($format)
+	{
+		if (!array_key_exists($format, static::$_supported_formats))
+		{
+			$format = 'html';
+		}
+		
+		return static::$_supported_formats[$format];
 	}
 	
 	public function __construct($data = array(), $http_code = 200)
@@ -107,7 +117,7 @@ class Restful {
 			$this->_http_status = 404;
 		}
 		
-		$pattern = sprintf(static::$_pattern, implode('|', array_keys(static::$_supported_formats)));
+		$pattern = static::$pattern;
 		$resource = \Request::active()->action;
 		
 		$format = $this->rest_format;
@@ -293,9 +303,6 @@ class Restful {
 				}
 			}
 		} // End HTTP_ACCEPT checking
-		
-		// Just use the default format
-		return \Config::get('rest.default_format');
 	}
 	
 	/**

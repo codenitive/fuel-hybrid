@@ -76,6 +76,11 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 
 	public function router($resource, $arguments) 
 	{
+		$pattern = \Hybrid\Restful::$pattern;
+		
+		// Remove the extension from arguments too
+		$resource = preg_replace($pattern, '', $resource);
+		
 		// If they call user, go to $this->post_user();
 		$controller_method = strtolower(\Hybrid\Input::method()) . '_' . $resource;
 		
@@ -105,7 +110,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 		if ($this->set_content_type === true) 
 		{
 			// Set the correct format header
-			$this->response->set_header('Content-Type', \Hybrid\Restful::$_supported_formats[$restful->format]);
+			$this->response->set_header('Content-Type', \Hybrid\Restful::content_type($restful->format));
 		}
 	}
 }

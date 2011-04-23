@@ -31,6 +31,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 
 	public $template = 'themes/default';
 	protected $format = 'template';
+	protected $rest_format = null;
 	protected $set_content_type = true; // set the default content type using PHP Header
 
 	final protected function _acl($resource, $type = null) 
@@ -47,7 +48,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 				else
 				{
 					$this->response(array('text' => 'You doesn\'t have privilege to do this action'), 401);
-					print $this->response;
+					print $this->response->body;
 					exit();
 				}
 			break;
@@ -103,12 +104,21 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 
 	public function router($resource, $arguments) 
 	{
+		$pattern = \Hybrid\Restful::$pattern;
+		
+		// Remove the extension from arguments too
+		$resource = preg_replace($pattern, '', $resource);
+		
 		// If they call user, go to $this->post_user();
 		$controller_method = strtolower(\Hybrid\Input::method()) . '_' . $resource;
 		
 		if (method_exists($this, $controller_method)) 
 		{
 			call_user_func(array($this, $controller_method));
+		}
+		elseif (method_exists($this, 'action_'.$resource)) 
+		{
+			call_user_func(array($this, 'action_'.$resource), $arguments);
 		}
 		else 
 		{
@@ -132,7 +142,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 		if ($this->set_content_type === true) 
 		{
 			// Set the correct format header
-			$this->response->set_header('Content-Type', \Hybrid\Restful::$_supported_formats[$restful->format]);
+			$this->response->set_header('Content-Type', \Hybrid\Restful::content_type($restful->format));
 		}
 	}
 
