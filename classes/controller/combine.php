@@ -136,6 +136,12 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 		$restful = \Hybrid\Restful::factory($data, $http_code)->format($this->rest_format)->execute();
 		$this->response->body($restful->body);
 		$this->response->status = $restful->status;
+		
+		if ($this->set_content_type === true) 
+		{
+			// Set the correct format header
+			$this->response->set_header('Content-Type', \Hybrid\Restful::content_type($restful->format));
+		}
 	}
 	
 	protected function _prepare_template()
@@ -177,11 +183,7 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 	
 	protected function _render_restful()
 	{
-		if ($this->set_content_type === true) 
-		{
-			// Set the correct format header
-			$this->response->set_header('Content-Type', \Hybrid\Restful::content_type($restful->format));
-		}
+		
 	}
 	
 }

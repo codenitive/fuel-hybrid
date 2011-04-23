@@ -67,12 +67,6 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 	{
 		\Event::trigger('controller_after');
 		
-		if ($this->set_content_type === true) 
-		{
-			// Set the correct format header
-			$this->response->set_header('Content-Type', \Hybrid\Restful::content_type($restful->format));
-		}
-		
 		return parent::after();
 	}
 
@@ -115,5 +109,11 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 		$restful = \Hybrid\Restful::factory($data, $http_code)->format($this->rest_format)->execute();
 		$this->response->body($restful->body);
 		$this->response->status = $restful->status;
+		
+		if ($this->set_content_type === true) 
+		{
+			// Set the correct format header
+			$this->response->set_header('Content-Type', \Hybrid\Restful::content_type($restful->format));
+		}
 	}
 }
