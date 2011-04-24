@@ -20,4 +20,6 @@ return array(
 	'available_language' => array(
 		'en',
 	),
+	
+	'salt' => 's8g5MgO5kVtEEmc_o0rP0UfI',
 );
