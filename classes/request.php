@@ -37,14 +37,14 @@ class Request extends \Fuel\Core\Request {
 	 *
 	 * Usage:
 	 *
-	 * <code>\Hybrid\Request::connector('GET controller/method?hello=world');</code>
+	 * <code>\Hybrid\Request::connect('GET controller/method?hello=world');</code>
 	 *
 	 * @access	public
 	 * @param string $uri		The URI of the request
 	 * @param array $dataset	Set a dataset for GET, POST, PUT or DELETE
 	 * @return object			The new request
 	 */
-	public static function connector($uri, $dataset = array()) 
+	public static function connect($uri, $dataset = array()) 
 	{
 		$uri_segments = explode(' ', $uri);
 		$type = 'GET';
