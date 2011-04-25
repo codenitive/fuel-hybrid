@@ -404,7 +404,7 @@ class Acl_User {
 	 */
 	public static function add_salt($password = '') 
 	{
-		$salt = \Config::get('crypt.crypto_key', \Config::get('app.salt'));
+		$salt =  \Config::get('app.salt', \Config::get('crypt.crypto_key'));
 
 		return sha1($salt . $password);
 	}
