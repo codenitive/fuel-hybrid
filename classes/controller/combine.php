@@ -133,14 +133,30 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 	 */
 	protected function response($data = array(), $http_code = 200) 
 	{
-		$restful = \Hybrid\Restful::factory($data, $http_code)->format($this->rest_format)->execute();
-		$this->response->body($restful->body);
-		$this->response->status = $restful->status;
-		
-		if ($this->set_content_type === true) 
+		if ($this->_is_restful === true)
 		{
-			// Set the correct format header
-			$this->response->set_header('Content-Type', \Hybrid\Restful::content_type($restful->format));
+			$restful = \Hybrid\Restful::factory($data, $http_code)->format($this->rest_format)->execute();
+			$this->response->body($restful->body);
+			$this->response->status = $restful->status;
+
+			if ($this->set_content_type === true) 
+			{
+				// Set the correct format header
+				$this->response->set_header('Content-Type', \Hybrid\Restful::content_type($restful->format));
+			}
+		}
+		else 
+		{
+			$this->response->status = $http_code;
+			
+			if (is_array($data) && count($data) > 0)
+			{
+				foreach ($data as $key => $value)
+				{
+					$this->template->set($key, $value);
+				}
+			}
+			
 		}
 	}
 	
