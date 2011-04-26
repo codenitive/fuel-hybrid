@@ -122,8 +122,15 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 		}
 		else 
 		{
-			$this->response->status = 404;
-			return;
+			if ($this->_is_restful === true)
+			{
+				$this->response->status = 404;
+				return;
+			}
+			else
+			{
+				\Request::show_404();
+			}
 		}
 	}
 
