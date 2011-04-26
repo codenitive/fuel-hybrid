@@ -70,13 +70,13 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 		return parent::after();
 	}
 
-	/*
-	 * Remap
-	 *
+	/**
 	 * Requests are not made to methods directly The request will be for an "object".
 	 * this simply maps the object and method to the correct Controller method.
+	 * 
+	 * @param	Request		$resource
+	 * @param	array		$arguments
 	 */
-
 	public function router($resource, $arguments) 
 	{
 		$pattern = \Hybrid\Restful::$pattern;
@@ -98,12 +98,12 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 		}
 	}
 
-	/*
-	 * response
-	 *
+	/**
 	 * Takes pure data and optionally a status code, then creates the response
+	 * 
+	 * @param	array		$data
+	 * @param	int			$http_code
 	 */
-
 	protected function response($data = array(), $http_code = 200) 
 	{
 		$restful = \Hybrid\Restful::factory($data, $http_code)->format($this->rest_format)->execute();

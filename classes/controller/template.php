@@ -64,6 +64,25 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 		return parent::after();
 	}
 	
+	/**
+	 * Takes pure data and optionally a status code, then creates the response
+	 * 
+	 * @param	array		$data
+	 * @param	int			$http_code
+	 */
+	protected function response($data = array(), $http_code = 200) 
+	{
+		$this->response->status = $http_code;
+
+		if (is_array($data) && count($data) > 0)
+		{
+			foreach ($data as $key => $value)
+			{
+				$this->template->set($key, $value);
+			}
+		}
+	}
+	
 	protected function _prepare_template()
 	{
 		$file = \Config::get('app.template');
