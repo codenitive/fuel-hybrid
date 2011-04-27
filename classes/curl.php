@@ -108,6 +108,8 @@ class Curl {
 		{
 			curl_setopt($this->_instance, $option, $value);
 		}
+		
+		return $this;
 	}
 	
 	public function execute()
