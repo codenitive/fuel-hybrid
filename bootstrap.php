@@ -13,10 +13,14 @@
  */
 
 Autoloader::add_classes(array (
+	'Hybrid\\Curl'                      => __DIR__.'/classes/curl.php',
 	'Hybrid\\Factory'                   => __DIR__.'/classes/factory.php',
-	'Hybrid\\Request'                   => __DIR__.'/classes/request.php',
 	'Hybrid\\Input'                     => __DIR__.'/classes/input.php',
+	'Hybrid\\Html'                      => __DIR__.'/classes/html.php',
 	'Hybrid\\Pagination'                => __DIR__.'/classes/pagination.php',
+	'Hybrid\\Request'                   => __DIR__.'/classes/request.php',
+	'Hybrid\\Restful'                   => __DIR__.'/classes/restful.php',
+	'Hybrid\\View'                      => __DIR__.'/classes/view.php',
 	
 	'Hybrid\\Acl'                       => __DIR__.'/classes/acl.php',
 	'Hybrid\\Acl_User'                  => __DIR__.'/classes/acl/user.php',
@@ -26,10 +30,6 @@ Autoloader::add_classes(array (
 	'Hybrid\\Controller_Template'       => __DIR__.'/classes/controller/template.php',
 	'Hybrid\\Controller_Rest'           => __DIR__.'/classes/controller/rest.php',
 	'Hybrid\\Controller_Combine'        => __DIR__.'/classes/controller/combine.php',
-	
-	'Hybrid\\Html'                      => __DIR__.'/classes/html.php',
-	'Hybrid\\Restful'                   => __DIR__.'/classes/restful.php',
-	'Hybrid\\View'                      => __DIR__.'/classes/view.php',
 	
 	'Hybrid\\Chart'                     => __DIR__.'/classes/chart.php',
 	'Hybrid\\Chart_Utility'             => __DIR__.'/classes/chart/utility.php',

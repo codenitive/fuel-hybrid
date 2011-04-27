@@ -117,9 +117,15 @@ class Curl {
 		$response = new \stdClass();
 		
 		curl_setopt($this->_instance, CURLOPT_URL, $this->_request_uri.'?'.http_build_query($this->_request_data, '', '&')); 
+		$info = curl_getinfo($this->_instance);
+		
+		$response->body = curl_exec($this->_instance);
+		$response->status = $info['http_code'];
 		
 		// clean up curl session
 		curl_close($this->_instance);
+		
+		return $response;
 	}
 	
 }
