@@ -68,7 +68,7 @@ class Request extends \Fuel\Core\Request {
 
 		logger(\Fuel::L_INFO, 'Creating a new Request with URI = "' . $uri . '"', __METHOD__);
 
-		static::$active = new static($uri, true, $type, $dataset);
+		static::$active = new static($uri, true, $dataset, $type);
 
 		if (!static::$main) 
 		{
@@ -79,8 +79,8 @@ class Request extends \Fuel\Core\Request {
 		return static::$active;
 	}
 
-	private static $_request_data = array();
-	private static $_request_method = '';
+	protected $_request_data = array();
+	protected $_request_method = '';
 
 	/**
 	 * Creates the new Request object by getting a new URI object, then parsing
@@ -92,13 +92,13 @@ class Request extends \Fuel\Core\Request {
 	 * @param string $type		GET|POST|PUT|DELETE
 	 * @param array $dataset 
 	 */
-	public function __construct($uri, $route, $type = 'GET', $dataset = array()) 
+	public function __construct($uri, $route, $dataset = array(), $type = 'GET') 
 	{
 		parent::__construct($uri, $route);
 
 		// store this construct method and data staticly
-		static::$_request_method = $type;
-		static::$_request_data = $dataset;
+		$this->_request_method = $type;
+		$this->_request_data = $dataset;
 
 		$this->response = NULL;
 	}
@@ -119,15 +119,15 @@ class Request extends \Fuel\Core\Request {
 	{
 		// Since this just a imitation of curl request, \Hybrid\Input need to know the 
 		// request method and data available in the connection.
-		\Hybrid\Input::connect(static::$_request_method, static::$_request_data);
+		\Hybrid\Input::connect($this->_request_method, $this->_request_data);
 
 		$execute = parent::execute();
 
 		// We need to clean-up any request object transfered to \Hybrid\Input so that
 		// any following request to \Hybrid\Input will redirected to \Fuel\Core\Input
 		\Hybrid\Input::disconnect();
-		static::$_request_method = '';
-		static::$_request_data = array();
+		$this->_request_method = '';
+		$this->_request_data = array();
 
 		return $execute;
 	}
