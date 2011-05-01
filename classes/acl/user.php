@@ -132,7 +132,7 @@ class Acl_User {
 						->as_object()
 						->execute();
 
-				break;
+			break;
 
 			case 'twitter_oauth' :
 				/**
@@ -145,7 +145,7 @@ class Acl_User {
 				  ->on('users.id', '=', 'twitters.user_id')
 				  ->where('twitters.id', '=', $twitter_oauth->id)
 				  ->execute(); */
-				break;
+			break;
 		}
 
 		if ($result->count() < 1) 

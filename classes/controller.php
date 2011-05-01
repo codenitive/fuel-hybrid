@@ -37,7 +37,7 @@ abstract class Controller extends \Fuel\Core\Controller {
 		{
 			case 401 :
 				\Request::show_404();
-				break;
+			break;
 		}
 	}
 

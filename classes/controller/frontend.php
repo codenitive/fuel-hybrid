@@ -40,6 +40,39 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 
 	public function before() 
 	{
+		$this->_prepare_template();
+
+		return parent::before();
+	}
+	
+	/**
+	 * Takes pure data and optionally a status code, then creates the response
+	 * 
+	 * @param	array		$data
+	 * @param	int			$http_code
+	 */
+	protected function response($data = array(), $http_code = 200) 
+	{
+		$this->response->status = $http_code;
+
+		if (is_array($data) and count($data) > 0)
+		{
+			foreach ($data as $key => $value)
+			{
+				$this->template->set($key, $value);
+			}
+		}
+	}
+
+	public function after() 
+	{
+		$this->_render_template();
+		
+		return parent::after();
+	}
+	
+	protected function _prepare_template()
+	{
 		$theme_path = \Config::get('app.frontend.template');
 
 		if (null === $theme_path) 
@@ -58,37 +91,17 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 			$this->template->auto_encode(false);
 			$this->template->set_filename('index');
 		}
-
-		return parent::before();
 	}
 	
-	/**
-	 * Takes pure data and optionally a status code, then creates the response
-	 * 
-	 * @param	array		$data
-	 * @param	int			$http_code
-	 */
-	protected function response($data = array(), $http_code = 200) 
+	protected function _render_template()
 	{
-		$this->response->status = $http_code;
-
-		if (is_array($data) && count($data) > 0)
-		{
-			foreach ($data as $key => $value)
-			{
-				$this->template->set($key, $value);
-			}
-		}
-	}
-
-	public function after() 
-	{
+		//we dont want to accidentally change our site_name
+		$this->template->site_name = \Config::get('app.site_name');
+		
 		if ($this->auto_render === true) 
 		{
 			$this->output = $this->template->render();
 		}
-
-		return parent::after();
 	}
 
 }

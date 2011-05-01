@@ -79,7 +79,7 @@ class View extends \Fuel\Core\View {
 	 */
 	private function _find_file($file) 
 	{
-		if (empty(static::$_path) || !\is_file(static::$_path . $file . '.php'))
+		if (empty(static::$_path) or !\is_file(static::$_path . $file . '.php'))
 		{
 			return null;
 		}

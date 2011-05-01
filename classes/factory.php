@@ -39,32 +39,34 @@ class Factory {
 	 */
 	public static function _init() 
 	{
-		if (is_null(static::$_identity)) 
+		if (!is_null(static::$_identity)) 
 		{
-			\Config::load('app', true);
-
-			static::$_identity = \Config::get('app.identity');
-
-			if (\Config::get('app.maintenance_mode') == true) 
-			{
-				static::_maintenance_mode();
-			}
-
-			$lang = \Session::get(static::$_identity . '_lang');
-
-			if (!is_null($lang)) 
-			{
-				\Config::set('language', $lang);
-				static::$_language = $lang;
-			} 
-			else 
-			{
-				static::$_language = \Config::get('language');
-			}
-
-			\Event::trigger('load_language');
-			\Event::trigger('load_acl');
+			return;
 		}
+		
+		\Config::load('app', true);
+
+		static::$_identity = \Config::get('app.identity');
+
+		if (\Config::get('app.maintenance_mode') == true) 
+		{
+			static::_maintenance_mode();
+		}
+
+		$lang = \Session::get(static::$_identity . '_lang');
+
+		if (!is_null($lang)) 
+		{
+			\Config::set('language', $lang);
+			static::$_language = $lang;
+		} 
+		else 
+		{
+			static::$_language = \Config::get('language');
+		}
+
+		\Event::trigger('load_language');
+		\Event::trigger('load_acl');
 	}
 
 	private static function _maintenance_mode() 

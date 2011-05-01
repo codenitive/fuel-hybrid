@@ -55,12 +55,12 @@ class Input {
 		// Check whether this request is from \Fuel\Core\Request or \Hybrid\Request
 		$using_hybrid = false;
 		
-		if (!is_null(static::$request) && static::$request->method !== '') 
+		if (!is_null(static::$request) and static::$request->method !== '') 
 		{
 			$using_hybrid = true;
 		}
 
-		if (!$using_hybrid && $name == 'method') 
+		if (!$using_hybrid and $name == 'method') 
 		{
 			return call_user_func(array('\\Input', 'method'));
 		}
@@ -74,7 +74,7 @@ class Input {
 				$default = $args[1];
 			case count($args) > 0 :
 				$index = $args[0];
-				break;
+			break;
 		}
 
 		if ($name === 'method') 

@@ -59,7 +59,7 @@ class Restful {
 		$resource = \Request::active()->action;
 
 		// Check if a file extension is used
-		if (preg_match($pattern, $resource, $matches) || static::_detect_format() != '')
+		if (preg_match($pattern, $resource, $matches) or static::_detect_format() != '')
 		{
 			return true;
 		}
@@ -174,7 +174,7 @@ class Restful {
 		}
 
 		// If actually null (not empty string) then do not check it
-		if ($password !== null && $valid_logins[$username] != $password)
+		if ($password !== null and $valid_logins[$username] != $password)
 		{
 			return false;
 		}
@@ -239,7 +239,7 @@ class Restful {
 		preg_match_all('@(username|nonce|uri|nc|cnonce|qop|response)=[\'"]?([^\'",]+)@', $digest_string, $matches);
 		$digest = array_combine($matches[1], $matches[2]);
 
-		if (!array_key_exists('username', $digest) || !static::_check_login($digest['username']))
+		if (!array_key_exists('username', $digest) or !static::_check_login($digest['username']))
 		{
 			static::_force_login($uniqid);
 		}
@@ -268,13 +268,13 @@ class Restful {
 	protected static function _detect_format()
 	{
 		// A format has been passed as an argument in the URL and it is supported
-		if (\Hybrid\Input::get_post('format') && static::$_supported_formats[\Hybrid\Input::get_post('format')])
+		if (\Hybrid\Input::get_post('format') and static::$_supported_formats[\Hybrid\Input::get_post('format')])
 		{
 			return \Hybrid\Input::get_post('format');
 		}
 
 		// Otherwise, check the HTTP_ACCEPT (if it exists and we are allowed)
-		if (\Config::get('rest.ignore_http_accept') === false && \Hybrid\Input::server('HTTP_ACCEPT'))
+		if (\Config::get('rest.ignore_http_accept') === false and \Hybrid\Input::server('HTTP_ACCEPT'))
 		{
 			// Check all formats against the HTTP_ACCEPT header
 			foreach (array_keys(static::$_supported_formats) as $format)
@@ -283,7 +283,7 @@ class Restful {
 				if (strpos(\Hybrid\Input::server('HTTP_ACCEPT'), $format) !== false)
 				{
 					// If not HTML or XML assume its right and send it on its way
-					if ($format != 'html' && $format != 'xml')
+					if ($format != 'html' and $format != 'xml')
 					{
 						return $format;
 					}
@@ -292,13 +292,13 @@ class Restful {
 					else
 					{
 						// If it is truely HTML, it wont want any XML
-						if ($format == 'html' && strpos(\Hybrid\Input::server('HTTP_ACCEPT'), 'xml') === false)
+						if ($format == 'html' and strpos(\Hybrid\Input::server('HTTP_ACCEPT'), 'xml') === false)
 						{
 							return $format;
 						}
 
 						// If it is truely XML, it wont want any HTML
-						elseif ($format == 'xml' && strpos(\Hybrid\Input::server('HTTP_ACCEPT'), 'html') === false)
+						elseif ($format == 'xml' and strpos(\Hybrid\Input::server('HTTP_ACCEPT'), 'html') === false)
 						{
 							return $format;
 						}

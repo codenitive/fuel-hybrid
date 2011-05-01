@@ -158,7 +158,7 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 		{
 			$this->response->status = $http_code;
 			
-			if (is_array($data) && count($data) > 0)
+			if (is_array($data) and count($data) > 0)
 			{
 				foreach ($data as $key => $value)
 				{
@@ -206,9 +206,6 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 		\Hybrid\Restful::auth();
 	}
 	
-	protected function _render_restful()
-	{
-		
-	}
+	protected function _render_restful() {}
 	
 }

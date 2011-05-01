@@ -39,7 +39,7 @@ class Html extends \Fuel\Core\Html {
 	{
 		$title = \Config::get('app.site_name');
 
-		if (!empty($content) && is_string($content)) 
+		if (!empty($content) and is_string($content)) 
 		{
 			$title = sprintf('%s &mdash; %s', $content, $title);
 		}

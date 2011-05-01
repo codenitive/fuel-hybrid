@@ -129,10 +129,10 @@ class Acl {
 		{
 			case true :
 				return 200;
-				break;
+			break;
 			case false :
 				return 401;
-				break;
+			break;
 		}
 	}
 
@@ -177,7 +177,7 @@ class Acl {
 	 * @param mixed $roles
 	 * @return boolean
 	 */
-	public static function add_roles($roles = NULL) 
+	public static function add_roles($roles = null) 
 	{
 		if (is_null($roles)) 
 		{
@@ -207,7 +207,7 @@ class Acl {
 	 * @param mixed $resources
 	 * @return boolean
 	 */
-	public static function add_resources($resources = NULL) 
+	public static function add_resources($resources = null) 
 	{
 		if (is_null($resources)) 
 		{

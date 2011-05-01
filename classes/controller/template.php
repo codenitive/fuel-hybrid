@@ -74,7 +74,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 	{
 		$this->response->status = $http_code;
 
-		if (is_array($data) && count($data) > 0)
+		if (is_array($data) and count($data) > 0)
 		{
 			foreach ($data as $key => $value)
 			{
