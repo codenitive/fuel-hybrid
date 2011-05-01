@@ -34,10 +34,10 @@ class Acl_User {
 	 * Default value for user data
 	 * 
 	 * @static
-	 * @access private
-	 * @return boolean
+	 * @access	protected
+	 * @return	bool
 	 */
-	private static function _set_default() 
+	protected static function _set_default() 
 	{
 		$twitter = 0;
 
@@ -69,8 +69,8 @@ class Acl_User {
 	 * $role->add_recources('monkeys');</code>
 	 * 
 	 * @static
-	 * @access public
-	 * @return object
+	 * @access	public
+	 * @return	object
 	 */
 	public static function acl() 
 	{
@@ -86,8 +86,8 @@ class Acl_User {
 	 * @TODO need to use User-Agent as one of the hash value 
 	 * 
 	 * @static
-	 * @access private
-	 * @return boolean
+	 * @access	private
+	 * @return	bool
 	 */
 	public static function _init() 
 	{
@@ -207,10 +207,10 @@ class Acl_User {
 	 * <code>$login = \Hybrid\Acl_User::login('someone', 'password');</code>
 	 * 
 	 * @static
-	 * @access public
-	 * @param string $username
-	 * @param string $password
-	 * @return boolean
+	 * @access	public
+	 * @param	string	$username
+	 * @param	string	$password
+	 * @return	bool
 	 */
 	public static function login($username, $password) 
 	{
@@ -285,9 +285,9 @@ class Acl_User {
 	 * <code>\Hybrid\Acl_User::logout(false);</code>
 	 * 
 	 * @static
-	 * @access public
-	 * @param boolean $redirect
-	 * @return boolean
+	 * @access	public
+	 * @param	bool	$redirect
+	 * @return	bool
 	 */
 	public static function logout($redirect = true) 
 	{
@@ -303,14 +303,12 @@ class Acl_User {
 
 	/**
 	 * Get user's roles
-	 *
-	 * @TODO: not using ActiveRecord
 	 * 
 	 * @static
-	 * @access private
-	 * @return boolean
+	 * @access	protected
+	 * @return	bool
 	 */
-	private static function _get_roles() 
+	protected static function _get_roles() 
 	{
 		$data = array();
 
@@ -342,11 +340,10 @@ class Acl_User {
 	 * Register user's authentication to Session
 	 *
 	 * @static
-	 * @access private
-	 * @access private
-	 * @return boolean
+	 * @access	protected
+	 * @return	bool
 	 */
-	private static function _register() 
+	protected static function _register() 
 	{
 		$values = static::$items;
 		$values['hash'] = static::add_salt(static::$items['user_name'] . static::$items['password']);
@@ -360,11 +357,11 @@ class Acl_User {
 	 * Delete user's authentication
 	 *
 	 * @static
-	 * @access public
-	 * @param boolean $delete set to true to delete session, only when login out
-	 * @return boolean
+	 * @access	protected
+	 * @param	bool	$delete set to true to delete session, only when login out
+	 * @return	bool
 	 */
-	private static function _unregister($delete = false) 
+	protected static function _unregister($delete = false) 
 	{
 		static::_set_default();
 
@@ -384,8 +381,8 @@ class Acl_User {
 	 * <code>false === \Hybrid\Acl_User::is_logged()</code>
 	 *
 	 * @static
-	 * @access public
-	 * @return boolean
+	 * @access	public
+	 * @return	bool
 	 */
 	public static function is_logged() 
 	{
@@ -396,9 +393,9 @@ class Acl_User {
 	 * Enable to add salt to increase the security of the system
 	 *
 	 * @static
-	 * @access public
-	 * @param string $password
-	 * @return string
+	 * @access	public
+	 * @param	string	$password
+	 * @return	string
 	 */
 	public static function add_salt($password = '') 
 	{
@@ -415,8 +412,8 @@ class Acl_User {
 	 * <code>$user = \Hybrid\Acl_User::get();</code>
 	 *
 	 * @static
-	 * @access public
-	 * @return object
+	 * @access	public
+	 * @return	object
 	 */
 	public static function get($name = null) 
 	{

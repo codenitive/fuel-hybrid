@@ -31,10 +31,10 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 	/**
 	 * Set whether the request is either rest or template
 	 * 
-	 * @access	private
+	 * @access	protected
 	 * @var		bool
 	 */
-	private $_is_restful = true;
+	protected $_is_restful = true;
 	
 	/**
 	 * Rest format to be used

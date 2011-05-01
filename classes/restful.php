@@ -157,23 +157,23 @@ class Restful {
 	 * @access	protected
 	 * @var		string
 	 */
-	protected $rest_format = null;
+	protected $_rest_format = null;
 	
 	/**
 	 * Dataset for output
 	 * 
-	 * @access	private
+	 * @access	protected
 	 * @var		array 
 	 */
-	private $_data = array();
+	protected $_data = array();
 	
 	/**
 	 * HTTP Response status
 	 * 
-	 * @access	private
+	 * @access	protected
 	 * @var		int
 	 */
-	private $_http_status = 200;
+	protected $_http_status = 200;
 	
 	/**
 	 * Set the rest format
@@ -187,7 +187,7 @@ class Restful {
 		
 		if (in_array($rest_format, static::$_supported_formats))
 		{
-			$this->rest_format = $rest_format;
+			$this->_rest_format = $rest_format;
 		}
 		
 		return $this;
@@ -208,7 +208,7 @@ class Restful {
 		$pattern = static::$pattern;
 		$resource = \Request::active()->action;
 		
-		$format = $this->rest_format;
+		$format = $this->_rest_format;
 		$response = new \stdClass();
 		$response->status = $this->_http_status;
 		

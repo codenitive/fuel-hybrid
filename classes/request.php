@@ -77,7 +77,20 @@ class Request extends \Fuel\Core\Request {
 		return static::$active;
 	}
 
+	/**
+	 * Request dataset
+	 * 
+	 * @access	protected
+	 * @var		array
+	 */
 	protected $_request_data = array();
+	
+	/**
+	 * Request method
+	 * 
+	 * @access	protected
+	 * @var		string
+	 */
 	protected $_request_method = '';
 
 	/**

@@ -31,7 +31,7 @@ namespace Hybrid;
 abstract class Chart {
 
 	/**
-	 * Only called once...
+	 * Load config file
 	 * 
 	 * @static
 	 * @access	public
@@ -200,6 +200,8 @@ abstract class Chart {
 	 * 
 	 * @abstract
 	 * @access	public
+	 * @param	int		$width
+	 * @param	int		$height
 	 */
 	public abstract function generate($width, $height);
 }

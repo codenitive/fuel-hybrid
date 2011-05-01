@@ -31,6 +31,7 @@ abstract class Controller extends \Fuel\Core\Controller {
 	/**
 	 * Run ACL check and redirect user automatically if user doesn't have the privilege
 	 * 
+	 * @final
 	 * @access	public
 	 * @param	mixed	$resource
 	 * @param	string	$type 

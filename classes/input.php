@@ -27,8 +27,22 @@ namespace Hybrid;
  */
 class Input {
 
+	/**
+	 * Store \Hybrid\Request object (if available)
+	 * 
+	 * @access		protected
+	 * @staticvar	mixed 
+	 */
 	protected static $request = null;
 
+	/**
+	 * Receive \Hybrid\Request connection information
+	 * 
+	 * @static
+	 * @access	public
+	 * @param	string	$method
+	 * @param	array	$data
+	 */
 	public static function connect($method = '', $data = array()) 
 	{
 		if (!empty($method)) 
@@ -37,6 +51,12 @@ class Input {
 		}
 	}
 
+	/**
+	 * Disconnect current \Hybrid\Request connection
+	 * 
+	 * @static
+	 * @access	public
+	 */
 	public static function disconnect() 
 	{
 		static::$request = null;

@@ -72,11 +72,10 @@ class Factory {
 	 * Check for maintenance mode
 	 * 
 	 * @static
-	 * @access	private
-	 * @staticvar	int		$call_count
-	 * @throws		\Fuel_Exception
+	 * @access	protected
+	 * @throws	\Fuel_Exception
 	 */
-	private static function _maintenance_mode() 
+	protected static function _maintenance_mode() 
 	{
 		// This ensures that show_404 is only called once.
 		static $call_count = 0;

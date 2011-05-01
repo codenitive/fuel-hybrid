@@ -15,47 +15,74 @@ namespace Hybrid;
 class Pagination {
 
 	/**
-	 * @var	integer	The current page
+	 * The current page
+	 * 
+	 * @access		public
+	 * @staticvar	int
 	 */
 	public static $current_page = null;
 
 	/**
-	 * @var	integer	The offset that the current page starts at
+	 * The offset that the current page starts at
+	 * 
+	 * @access		public
+	 * @staticvar	int
 	 */
 	public static $offset = 0;
 
 	/**
-	 * @var	integer	The number of items per page
+	 * The number of items per page
+	 * 
+	 * @access		public
+	 * @staticvar	int
 	 */
 	public static $per_page = 10;
 
 	/**
-	 * @var	integer	The number of total pages
+	 * The number of total pages
+	 * 
+	 * @access		public
+	 * @staticvar	int
 	 */
 	public static $total_pages = 0;
 
 	/**
-	 * @var	integer	The total number of items
+	 * The total number of items
+	 * 
+	 * @access		protected
+	 * @staticvar	int
 	 */
 	protected static $total_items = 0;
 
 	/**
-	 * @var	integer	The total number of links to show
+	 * The total number of links to show
+	 * 
+	 * @access		protected
+	 * @staticvar	int
 	 */
 	protected static $num_links = 5;
 
 	/**
-	 * @var	integer	The URI segment containg page number
+	 * The URI segment containg page number
+	 * 
+	 * @access		protected
+	 * @staticvar	int
 	 */
 	protected static $uri_segment = 3;
 
 	/**
-	 * @var	mixed	The pagination URL
+	 * The pagination URL
+	 * 
+	 * @access		protected
+	 * @staticvar	mixed
 	 */
 	protected static $pagination_url;
 	
 	/**
-	 * @var	mixed	The pagination URL (after the page number URI segment)
+	 * The pagination URL (after the page number URI segment)
+	 * 
+	 * @access		protected
+	 * @staticvar	mixed
 	 */
 	protected static $suffix_url;
 
@@ -74,16 +101,14 @@ class Pagination {
 		static::set_config($config);
 	}
 
-	// --------------------------------------------------------------------
-
 	/**
 	 * Set Config
 	 *
 	 * Sets the configuration for pagination
 	 *
-	 * @access public
-	 * @param array   $config The configuration array
-	 * @return void
+	 * @access	public
+	 * @param	array	$config The configuration array
+	 * @return	void
 	 */
 	public static function set_config(array $config)
 	{
@@ -96,13 +121,11 @@ class Pagination {
 		static::initialize();
 	}
 
-	// --------------------------------------------------------------------
-
 	/**
 	 * Prepares vars for creating links
 	 *
-	 * @access public
-	 * @return array    The pagination variables
+	 * @access	public
+	 * @return	array    The pagination variables
 	 */
 	protected static function initialize()
 	{
@@ -124,8 +147,6 @@ class Pagination {
 		static::$offset = (static::$current_page - 1) * static::$per_page;
 	}
 
-	// --------------------------------------------------------------------
-
 	/**
 	 * Creates the pagination links
 	 *
@@ -146,14 +167,12 @@ class Pagination {
 
 		return $pagination;
 	}
-	
-	// --------------------------------------------------------------------
 
 	/**
 	 * Pagination Page Number links
 	 *
-	 * @access public
-	 * @return mixed    Markup for page number links
+	 * @access	public
+	 * @return	mixed	Markup for page number links
 	 */
 	public static function page_links()
 	{
@@ -186,14 +205,13 @@ class Pagination {
 		return $pagination;
 	}
 
-	// --------------------------------------------------------------------
-
 	/**
 	 * Pagination "Next" link
 	 *
-	 * @access public
-	 * @param string $value The text displayed in link
-	 * @return mixed    The next link
+	 * @static
+	 * @access	public
+	 * @param	string	$value The text displayed in link
+	 * @return	mixed	The next link
 	 */
 	public static function next_link($value)
 	{
@@ -213,14 +231,13 @@ class Pagination {
 		}
 	}
 
-	// --------------------------------------------------------------------
-
 	/**
 	 * Pagination "Previous" link
 	 *
-	 * @access public
-	 * @param string $value The text displayed in link
-	 * @return mixed    The previous link
+	 * @static
+	 * @access	public
+	 * @param	string	$value The text displayed in link
+	 * @return	mixed	The previous link
 	 */
 	public static function prev_link($value)
 	{
@@ -241,6 +258,14 @@ class Pagination {
 		}
 	}
 	
+	/**
+	 * Build query string
+	 * 
+	 * @static
+	 * @access	public
+	 * @param	mixed	$values
+	 * @return	string 
+	 */
 	public static function build_get_query($values) 
 	{
 		$dataset = array ();

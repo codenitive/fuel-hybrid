@@ -36,38 +36,34 @@ class Acl {
 	/**
 	 * List of roles
 	 * 
-	 * @static
-	 * @access	private
-	 * @var		array
+	 * @access		protected
+	 * @staticvar	array
 	 */
-	private static $_roles = array();
+	protected static $_roles = array();
 	
 	/**
 	 * List of resources
 	 * 
-	 * @static
-	 * @access	private
-	 * @var		array
+	 * @access		protected
+	 * @staticvar	array
 	 */
-	private static $_resources = array();
+	protected static $_resources = array();
 	
 	/**
 	 * List of types
 	 * 
-	 * @static
-	 * @access	private
-	 * @var		array
+	 * @access		protected
+	 * @staticvar	array
 	 */
-	private static $_types = array('deny', 'view', 'create', 'edit', 'delete', 'all');
+	protected static $_types = array('deny', 'view', 'create', 'edit', 'delete', 'all');
 	
 	/**
 	 * List of ACL map between roles, resources and types
 	 * 
-	 * @static
-	 * @access	private
-	 * @var		array
+	 * @access		protected
+	 * @staticvar	array
 	 */
-	private static $_acl = array();
+	protected static $_acl = array();
 
 	/**
 	 * Only called once 
@@ -278,6 +274,7 @@ class Acl {
 	 * @param	mixed	$resources
 	 * @param	string	$type
 	 * @return	bool
+	 * @throws	\Fuel_Exception
 	 */
 	public static function allow($roles, $resources, $type = 'view') 
 	{
