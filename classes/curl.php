@@ -28,10 +28,13 @@ namespace Hybrid;
 class Curl {
 	
 	/**
-	 *
-	 * @param string $uri
-	 * @param array $dataset
-	 * @return static 
+	 * A shortcode to initiate this class as a new object
+	 * 
+	 * @static
+	 * @access	public
+	 * @param	string	$uri
+	 * @param	array	$dataset
+	 * @return	static 
 	 */
 	public static function factory($uri, $dataset = array())
 	{
@@ -50,10 +53,13 @@ class Curl {
 	}
 	
 	/**
-	 *
-	 * @param type $uri
-	 * @param type $dataset
-	 * @return static 
+	 * A shortcode to initiate this class as a new object using GET
+	 * 
+	 * @static
+	 * @access	public
+	 * @param	string	$uri
+	 * @param	array	$dataset
+	 * @return	static 
 	 */
 	public static function get($uri, $dataset)
 	{
@@ -63,10 +69,13 @@ class Curl {
 	}
 	
 	/**
-	 *
-	 * @param type $uri
-	 * @param type $dataset
-	 * @return static 
+	 * A shortcode to initiate this class as a new object using POST
+	 * 
+	 * @static
+	 * @access	public
+	 * @param	string	$uri
+	 * @param	array	$dataset
+	 * @return	static 
 	 */
 	public static function post($uri, $dataset)
 	{
@@ -74,10 +83,13 @@ class Curl {
 	}
 	
 	/**
-	 *
-	 * @param type $url
-	 * @param type $dataset
-	 * @return static 
+	 * A shortcode to initiate this class as a new object using PUT
+	 * 
+	 * @static
+	 * @access	public
+	 * @param	string	$uri
+	 * @param	array	$dataset
+	 * @return	static 
 	 */
 	public static function put($url, $dataset)
 	{
@@ -85,10 +97,13 @@ class Curl {
 	}
 	
 	/**
-	 *
-	 * @param type $url
-	 * @param type $dataset
-	 * @return static 
+	 * A shortcode to initiate this class as a new object using DELETE
+	 * 
+	 * @static
+	 * @access	public
+	 * @param	string	$uri
+	 * @param	array	$dataset
+	 * @return	static 
 	 */
 	public static function delete($url, $dataset)
 	{
@@ -96,9 +111,12 @@ class Curl {
 	}
 	
 	/**
-	 *
-	 * @param type $uri
-	 * @return array 
+	 * Generate query string
+	 * 
+	 * @static
+	 * @access	protected
+	 * @param	string	$uri
+	 * @return	array 
 	 */
 	protected static function _query_string($uri)
 	{
@@ -120,12 +138,14 @@ class Curl {
 	protected $_request_method = '';
 	
 	/**
-	 *
-	 * @param type $uri
-	 * @param type $dataset
-	 * @param type $type 
+	 * Construct a new object
+	 * 
+	 * @access	public
+	 * @param	string	$uri
+	 * @param	array	$dataset
+	 * @param	string	$type 
 	 */
-	public function __construct($uri, $dataset = array(), $type = array())
+	public function __construct($uri, $dataset = array(), $type = 'GET')
 	{
 		$this->_request_uri = $uri;
 		$this->_request_method = $type;
@@ -134,10 +154,12 @@ class Curl {
 	}
 	
 	/**
-	 *
-	 * @param type $option
-	 * @param type $value
-	 * @return Curl 
+	 * Set curl options
+	 * 
+	 * @access	public
+	 * @param	mixed	$option
+	 * @param	string	$value
+	 * @return	Curl 
 	 */
 	public function setopt($option, $value)
 	{
@@ -158,8 +180,9 @@ class Curl {
 	}
 	
 	/**
-	 *
-	 * @return object
+	 * Execute the Curl request and return the output
+	 * 
+	 * @return	object
 	 */
 	public function execute()
 	{

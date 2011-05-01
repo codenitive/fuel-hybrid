@@ -27,7 +27,13 @@ namespace Hybrid;
  */
 class Restful {
 	
-	// List all supported methods, the first will be the default format
+	/** 
+	 * List all supported methods, the first will be the default format
+	 * 
+	 * @static
+	 * @access	protected
+	 * @var		array 
+	 */
 	protected static $_supported_formats = array(
 		'xml' => 'application/xml',
 		'rawxml' => 'application/xml',
@@ -38,19 +44,48 @@ class Restful {
 		'csv' => 'application/csv'
 	);
 	
+	/**
+	 * Regular Expression pattern to detect based on file extension
+	 * 
+	 * @static
+	 * @access	public
+	 * @var		string 
+	 */
 	public static $pattern = '';
 
+	/**
+	 * Only called once 
+	 * 
+	 * @static
+	 * @access	public
+	 */
 	public static function _init()
 	{
 		static::$pattern = sprintf('/\.(%s)$/', implode('|', array_keys(static::$_supported_formats)));
 		\Config::load('rest', true);
 	}
 	
+	/**
+	 * A shortcode to initiate this class as a new object
+	 * 
+	 * @static
+	 * @access	public
+	 * @param	array	$data
+	 * @param	int		$http_code
+	 * @return	static 
+	 */
 	public static function factory($data = array(), $http_code = 200)
 	{
 		return new static($data, $http_code);
 	}
 	
+	/**
+	 * Check whether current request is rest
+	 * 
+	 * @static
+	 * @access	public
+	 * @return	bool
+	 */
 	public static function is_rest()
 	{
 		$pattern = static::$pattern;
@@ -67,6 +102,14 @@ class Restful {
 		}
 	}
 	
+	/**
+	 * Get content-type
+	 * 
+	 * @static
+	 * @access	public
+	 * @param	string $format
+	 * @return	string
+	 */
 	public static function content_type($format)
 	{
 		if (!array_key_exists($format, static::$_supported_formats))
@@ -77,6 +120,12 @@ class Restful {
 		return static::$_supported_formats[$format];
 	}
 	
+	/**
+	 * Run authentication
+	 * 
+	 * @static
+	 * @access	public
+	 */
 	public static function auth()
 	{
 		if (\Config::get('rest.auth') == 'basic')
@@ -89,16 +138,49 @@ class Restful {
 		}
 	}
 	
+	/**
+	 * Initiate a new object
+	 * 
+	 * @access	public
+	 * @param	array	$data
+	 * @param	int		$http_code
+	 */
 	public function __construct($data = array(), $http_code = 200)
 	{
 		$this->_data = $data;
 		$this->_http_status = $http_code;
 	}
 	
-	protected $rest_format = null; // Set this in a controller to use a default format
+	/**
+	 * Rest format to be used
+	 * 
+	 * @access	protected
+	 * @var		string
+	 */
+	protected $rest_format = null;
+	
+	/**
+	 * Dataset for output
+	 * 
+	 * @access	private
+	 * @var		array 
+	 */
 	private $_data = array();
+	
+	/**
+	 * HTTP Response status
+	 * 
+	 * @access	private
+	 * @var		int
+	 */
 	private $_http_status = 200;
 	
+	/**
+	 * Set the rest format
+	 * 
+	 * @param	string	$rest_format
+	 * @return	Restful 
+	 */
 	public function format($rest_format = '')
 	{
 		$rest_format = trim(strtolower($rest_format));
@@ -111,6 +193,11 @@ class Restful {
 		return $this;
 	}
 	
+	/**
+	 * Execute the Rest request and return the output
+	 * 
+	 * @return	object
+	 */
 	public function execute()
 	{
 		if (empty($this->_data))
@@ -157,6 +244,13 @@ class Restful {
 		return $response;
 	}
 	
+	/**
+	 * Check user login
+	 * 
+	 * @param	string	$username
+	 * @param	mixed	$password
+	 * @return	bool 
+	 */
 	protected static function _check_login($username = '', $password = null)
 	{
 		if (empty($username))
@@ -180,6 +274,12 @@ class Restful {
 		return true;
 	}
 	
+	/**
+	 * Prepare authentication to use Basic auth
+	 * 
+	 * @static
+	 * @access	protected
+	 */
 	protected static function _prepare_basic_auth()
 	{
 		$username = null;
@@ -207,6 +307,12 @@ class Restful {
 		}
 	}
 
+	/**
+	 * Prepare authentication to use Digest auth
+	 * 
+	 * @static
+	 * @access	protected
+	 */
 	protected static function _prepare_digest_auth()
 	{
 		$uniqid = uniqid(""); // Empty argument for backward compatibility
@@ -261,7 +367,9 @@ class Restful {
 	/**
 	 * Detect which format should be used to output the data
 	 * 
-	 * @return string
+	 * @static
+	 * @access	protected
+	 * @return	string
 	 */
 	protected static function _detect_format()
 	{
@@ -309,7 +417,9 @@ class Restful {
 	/**
 	 * Detect language(s) should be used to output the data
 	 * 
-	 * @return string
+	 * @static
+	 * @access	protected
+	 * @return	string
 	 */
 	protected static function _detect_lang()
 	{
@@ -340,8 +450,11 @@ class Restful {
 	}
 	
 	/**
+	 * Force user login
 	 * 
-	 * @param string $nonce 
+	 * @static
+	 * @access	protected
+	 * @param	string	$nonce 
 	 */
 	protected static function _force_login($nonce = '')
 	{

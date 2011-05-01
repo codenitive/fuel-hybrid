@@ -30,8 +30,10 @@ class Html extends \Fuel\Core\Html {
 	/**
      * Generates a html title tag
      *
-     * @param string $content page title
-     * @return string
+	 * @static
+	 * @access	public
+     * @param	string	$content page title
+     * @return	string
      */
 	public static function title($content = '') 
 	{

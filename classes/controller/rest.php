@@ -27,9 +27,29 @@ namespace Hybrid;
  */
 abstract class Controller_Rest extends \Fuel\Core\Controller {
 	
+	/**
+	 * Rest format to be used
+	 * 
+	 * @access	protected
+	 * @var		string
+	 */
 	protected $rest_format = null;
-	protected $set_content_type = true; // set the default content type using PHP Header
+	
+	/**
+	 * Set the default content type using PHP Header
+	 * 
+	 * @access	protected
+	 * @var		bool
+	 */
+	protected $set_content_type = true;
 
+	/**
+	 * Run ACL check and redirect user automatically if user doesn't have the privilege
+	 * 
+	 * @access	public
+	 * @param	mixed	$resource
+	 * @param	string	$type 
+	 */
 	final protected function _acl($resource, $type = null) 
 	{
 		$status = \Hybrid\Acl::access_status($resource, $type);
@@ -44,6 +64,11 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 		}
 	}
 
+	/**
+	 * This method will be called after we route to the destinated method
+	 * 
+	 * @access	public
+	 */
 	public function before() 
 	{
 		$this->language = \Hybrid\Factory::get_language();
@@ -61,6 +86,11 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 		return parent::before();
 	}
 
+	/**
+	 * This method will be called after we route to the destinated method
+	 * 
+	 * @access	public
+	 */
 	public function after() 
 	{
 		\Event::trigger('controller_after');
@@ -72,8 +102,8 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 	 * Requests are not made to methods directly The request will be for an "object".
 	 * this simply maps the object and method to the correct Controller method.
 	 * 
-	 * @param	Request		$resource
-	 * @param	array		$arguments
+	 * @param	Request	$resource
+	 * @param	array	$arguments
 	 */
 	public function router($resource, $arguments) 
 	{
@@ -99,12 +129,13 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 	/**
 	 * Takes pure data and optionally a status code, then creates the response
 	 * 
-	 * @param	array		$data
-	 * @param	int			$http_code
+	 * @param	array	$data
+	 * @param	int		$http_code
 	 */
 	protected function response($data = array(), $http_code = 200) 
 	{
 		$restful = \Hybrid\Restful::factory($data, $http_code)->format($this->rest_format)->execute();
+		
 		$this->response->body($restful->body);
 		$this->response->status = $restful->status;
 		

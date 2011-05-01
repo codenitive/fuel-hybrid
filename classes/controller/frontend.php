@@ -23,19 +23,32 @@ namespace Hybrid;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Controller_Frontend
+ * @abstract
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 abstract class Controller_Frontend extends \Hybrid\Controller {
 
 	/**
-	 * @var string page template
+	 * Page template
+	 * 
+	 * @access	public
+	 * @var		string
 	 */
 	public $template = null;
+	
 	/**
-	 * @var boolean auto render template
-	 * */
+	 * Auto render template
+	 * 
+	 * @access	public
+	 * @var		bool	
+	 */
 	public $auto_render = true;
 
+	/**
+	 * This method will be called after we route to the destinated method
+	 * 
+	 * @access	public
+	 */
 	public function before() 
 	{
 		$this->_prepare_template();
@@ -46,8 +59,8 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 	/**
 	 * Takes pure data and optionally a status code, then creates the response
 	 * 
-	 * @param	array		$data
-	 * @param	int			$http_code
+	 * @param	array	$data
+	 * @param	int		$http_code
 	 */
 	protected function response($data = array(), $http_code = 200) 
 	{
@@ -62,6 +75,11 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 		}
 	}
 
+	/**
+	 * This method will be called after we route to the destinated method
+	 * 
+	 * @access	public
+	 */
 	public function after() 
 	{
 		$this->_render_template();
@@ -69,6 +87,11 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 		return parent::after();
 	}
 	
+	/**
+	 * Prepare template
+	 * 
+	 * @access	protected
+	 */
 	protected function _prepare_template()
 	{
 		$theme_path = \Config::get('app.frontend.template');
@@ -91,6 +114,11 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 		}
 	}
 	
+	/**
+	 * Render template
+	 * 
+	 * @access	protected
+	 */
 	protected function _render_template()
 	{
 		//we dont want to accidentally change our site_name

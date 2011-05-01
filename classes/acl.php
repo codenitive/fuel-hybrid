@@ -33,20 +33,63 @@ namespace Hybrid;
  */
 class Acl {
 
+	/**
+	 * List of roles
+	 * 
+	 * @static
+	 * @access	private
+	 * @var		array
+	 */
 	private static $_roles = array();
+	
+	/**
+	 * List of resources
+	 * 
+	 * @static
+	 * @access	private
+	 * @var		array
+	 */
 	private static $_resources = array();
+	
+	/**
+	 * List of types
+	 * 
+	 * @static
+	 * @access	private
+	 * @var		array
+	 */
+	private static $_types = array('deny', 'view', 'create', 'edit', 'delete', 'all');
+	
+	/**
+	 * List of ACL map between roles, resources and types
+	 * 
+	 * @static
+	 * @access	private
+	 * @var		array
+	 */
 	private static $_acl = array();
-	private static $_type = array('deny', 'view', 'create', 'edit', 'delete', 'all');
 
 	/**
 	 * Only called once 
 	 * 
 	 * @static 
-	 * @access public
+	 * @access	public
 	 */
 	public static function _init() 
 	{
 		\Event::trigger('init_acl');
+	}
+	
+	/**
+	 * A shortcode to initiate this class as a new object
+	 * 
+	 * @static
+	 * @access	public
+	 * @return	static 
+	 */
+	public static function factory()
+	{
+		return new static();
 	}
 
 	/**
@@ -57,7 +100,7 @@ class Acl {
 	 * <code>$role = new \Hybrid\Acl;
 	 * $role->add_resources('hello-world');</code>
 	 * 
-	 * @access public
+	 * @access	public
 	 */
 	public function __construct() {}
 
@@ -66,14 +109,14 @@ class Acl {
 	 * on available type of access.
 	 *
 	 * @static
-	 * @access public
-	 * @param mixed $resource
-	 * @param string $type need to be any one of deny, view, create, edit, delete or all
-	 * @return boolean
+	 * @access	public
+	 * @param	mixed	$resource
+	 * @param	string	$type need to be any one of deny, view, create, edit, delete or all
+	 * @return	bool
 	 */
 	public static function access($resource, $type = 'view') 
 	{
-		$types = static::$_type;
+		$types = static::$_types;
 
 		if (!in_array($resource, static::$_resources)) 
 		{
@@ -114,11 +157,11 @@ class Acl {
 	 * on available type of access.
 	 *
 	 * @static
-	 * @access public
-	 * @param mixed $resource
-	 * @param string $type need to be any one of static::$type
-	 * @return boolean
-	 * @see \Hybrid\Acl::access()
+	 * @access	public
+	 * @param	mixed	$resource
+	 * @param	string	$type need to be any one of static::$type
+	 * @return	bool
+	 * @see		\Hybrid\Acl::access()
 	 */
 	public static function access_status($resource, $type = 'view') 
 	{
@@ -138,9 +181,9 @@ class Acl {
 	 * Check if user has any of provided roles (however this should be in \Hybrid\User IMHO)
 	 * 
 	 * @static
-	 * @access public
-	 * @param mixed $check_roles
-	 * @return boolean 
+	 * @access	public
+	 * @param	mixed	$check_roles
+	 * @return	bool 
 	 */
 	public static function has_roles($check_roles) 
 	{
@@ -171,9 +214,9 @@ class Acl {
 	 * Add new user roles to the this instance
 	 * 
 	 * @static
-	 * @access public
-	 * @param mixed $roles
-	 * @return boolean
+	 * @access	public
+	 * @param	mixed $roles
+	 * @return	bool
 	 */
 	public static function add_roles($roles = null) 
 	{
@@ -201,9 +244,9 @@ class Acl {
 	 * Add new resource to this instance
 	 * 
 	 * @static
-	 * @access public
-	 * @param mixed $resources
-	 * @return boolean
+	 * @access	public
+	 * @param	mixed	$resources
+	 * @return	bool
 	 */
 	public static function add_resources($resources = null) 
 	{
@@ -229,14 +272,16 @@ class Acl {
 	/**
 	 * Assign single or multiple $roles + $resources to have $type access
 	 * 
-	 * @param mixed $roles
-	 * @param mixed $resources
-	 * @param string $type
-	 * @return boolean 
+	 * @static
+	 * @access	public
+	 * @param	mixed	$roles
+	 * @param	mixed	$resources
+	 * @param	string	$type
+	 * @return	bool
 	 */
 	public static function allow($roles, $resources, $type = 'view') 
 	{
-		if (!in_array($type, static::$_type)) 
+		if (!in_array($type, static::$_types)) 
 		{
 			return false;
 		}
@@ -284,10 +329,10 @@ class Acl {
 	 * Shorthand function to deny access for single or multiple $roles and $resouces
 	 * 
 	 * @static
-	 * @access public
-	 * @param mixed $roles
-	 * @param mixed $resources
-	 * @return boolean
+	 * @access	public
+	 * @param	mixed	$roles
+	 * @param	mixed	$resources
+	 * @return	bool
 	 */
 	public static function deny($roles, $resources) 
 	{

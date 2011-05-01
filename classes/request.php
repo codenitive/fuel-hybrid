@@ -38,9 +38,9 @@ class Request extends \Fuel\Core\Request {
 	 * <code>\Hybrid\Request::connect('GET controller/method?hello=world');</code>
 	 *
 	 * @access	public
-	 * @param string $uri		The URI of the request
-	 * @param array $dataset	Set a dataset for GET, POST, PUT or DELETE
-	 * @return object			The new request
+	 * @param	string	$uri - The URI of the request
+	 * @param	array	$dataset - Set a dataset for GET, POST, PUT or DELETE
+	 * @return	object	The new request
 	 */
 	public static function connect($uri, $dataset = array()) 
 	{
@@ -85,10 +85,10 @@ class Request extends \Fuel\Core\Request {
 	 * the uri with the Route class. Once constructed we need to save the method 
 	 * and GET/POST/PUT or DELETE dataset
 	 * 
-	 * @param string $uri		The URI of the request
-	 * @param boolean $route	if true use routes to process the URI
-	 * @param string $type		GET|POST|PUT|DELETE
-	 * @param array $dataset 
+	 * @param	string	$uri - The URI of the request
+	 * @param	bool	$route -if true use routes to process the URI
+	 * @param	string	$type - GET|POST|PUT|DELETE
+	 * @param	array	$dataset 
 	 */
 	public function __construct($uri, $route, $dataset = array(), $type = 'GET') 
 	{
@@ -110,8 +110,8 @@ class Request extends \Fuel\Core\Request {
 	 * <code>$exec = \Hybrid\Request::connector('PUT controller/model?hello=world')->execute();
 	 * \Debug::dump($exec);</code>
 	 * 
-	 * @return object	containing $data and HTTP Response $status
-	 * @see \Request::execute()
+	 * @return	object	containing $data and HTTP Response $status
+	 * @see		\Request::execute()
 	 */
 	public function execute() 
 	{

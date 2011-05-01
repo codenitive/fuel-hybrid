@@ -32,9 +32,14 @@ class View extends \Fuel\Core\View {
 	/**
 	 * Set the global path.
 	 * 
+	 * example:
+	 * <code>
 	 *     \Hybrid\View::set_path($path);
+	 * </code>
 	 * 
-	 * @param string $path 
+	 * @static
+	 * @access	public
+	 * @param	string	$path 
 	 */
 	public static function set_path($path) 
 	{
@@ -44,11 +49,16 @@ class View extends \Fuel\Core\View {
 	/**
 	 * Sets the view filename.
 	 *
+	 * example:
+	 * <code>
 	 *     $view->set_filename($file);
-	 *
-	 * @param   string  view filename
-	 * @return  View
-	 * @throws  View_Exception
+	 * </code>
+	 * 
+	 * @static
+	 * @access	public
+	 * @param	string	$file view filename
+	 * @return	View
+	 * @throws	View_Exception
 	 */
 	public function set_filename($file) 
 	{
@@ -70,8 +80,9 @@ class View extends \Fuel\Core\View {
 	 * Use custom view path if available, eitherwise just return false so we can use 
 	 * \Fuel::find_file()
 	 *
-	 * @param string $file
-	 * @return mixed
+	 * @access	private
+	 * @param	string	$file
+	 * @return	mixed
 	 */
 	private function _find_file($file) 
 	{

@@ -25,10 +25,17 @@ namespace Hybrid;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Chart
+ * @abstract
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 abstract class Chart {
 
+	/**
+	 * Only called once...
+	 * 
+	 * @static
+	 * @access	public
+	 */
 	public static function _init() 
 	{
 		\Config::load('visualization', true);
@@ -38,8 +45,8 @@ abstract class Chart {
 	 * A shortcode to initiate this class as a new object
 	 * 
 	 * @static
-	 * @access public
-	 * @return static 
+	 * @access	public
+	 * @return	static 
 	 */
 	public static function factory() 
 	{
@@ -54,7 +61,7 @@ abstract class Chart {
 	/**
 	 * Clean-up private property on new object
 	 * 
-	 * @access public
+	 * @access	public
 	 */
 	public function __construct() 
 	{
@@ -64,8 +71,8 @@ abstract class Chart {
 	/**
 	 * Run the clean-up
 	 * 
-	 * @access public
-	 * @return boolean
+	 * @access	public
+	 * @return	bool
 	 */
 	public function clear() 
 	{
@@ -79,7 +86,8 @@ abstract class Chart {
 	/**
 	 * Set columns information
 	 * 
-	 * @param array $data 
+	 * @access	public
+	 * @param	array	$data 
 	 */
 	public function set_columns($data = array()) 
 	{
@@ -105,9 +113,10 @@ abstract class Chart {
 	/**
 	 * Set chart options
 	 * 
-	 * @param mixed $name
-	 * @param mixed $value
-	 * @return boolean 
+	 * @access	public
+	 * @param	mixed	$name
+	 * @param	mixed	$value
+	 * @return	bool
 	 */
 	public function set_options($name, $value = '') 
 	{
@@ -134,7 +143,8 @@ abstract class Chart {
 	/**
 	 * Set rows information
 	 * 
-	 * @param array $data 
+	 * @access	public
+	 * @param	array	$data 
 	 */
 	public function set_rows($data = array()) 
 	{
@@ -175,9 +185,9 @@ abstract class Chart {
 	/**
 	 * Parse PHP Date Object into JavaScript new Date() format
 	 * 
-	 * @access protected
-	 * @param date $date
-	 * @return string 
+	 * @access	protected
+	 * @param	date	$date
+	 * @return	string 
 	 */
 	protected function parse_date($date) 
 	{
@@ -189,7 +199,7 @@ abstract class Chart {
 	 * Generate the chart
 	 * 
 	 * @abstract
-	 * @access public
+	 * @access	public
 	 */
 	public abstract function generate($width, $height);
 }

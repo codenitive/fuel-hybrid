@@ -23,18 +23,58 @@ namespace Hybrid;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Controller_Rest
+ * @abstract
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 abstract class Controller_Combine extends \Fuel\Core\Controller {
 	
+	/**
+	 * Set whether the request is either rest or template
+	 * 
+	 * @access	private
+	 * @var		bool
+	 */
 	private $_is_restful = true;
 	
+	/**
+	 * Rest format to be used
+	 * 
+	 * @access	protected
+	 * @var		string
+	 */
 	protected $rest_format = null;
-	protected $set_content_type = true; // set the default content type using PHP Header
 	
-	public $template = 'themes/default';
+	/**
+	 * Set the default content type using PHP Header
+	 * 
+	 * @access	protected
+	 * @var		bool
+	 */
+	protected $set_content_type = true;
+	
+	/**
+	 * Page template
+	 * 
+	 * @access	public
+	 * @var		string
+	 */
+	public $template = null;
+	
+	/**
+	 * Auto render template
+	 * 
+	 * @access	public
+	 * @var		bool	
+	 */
 	public $auto_render = true;
 
+	/**
+	 * Run ACL check and redirect user automatically if user doesn't have the privilege
+	 * 
+	 * @access	public
+	 * @param	mixed	$resource
+	 * @param	string	$type 
+	 */
 	final protected function _acl($resource, $type = null) 
 	{
 		$status = \Hybrid\Acl::access_status($resource, $type);
@@ -56,6 +96,11 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 		}
 	}
 
+	/**
+	 * This method will be called before we route to the destinated method
+	 * 
+	 * @access public
+	 */
 	public function before() 
 	{
 		$this->language = \Hybrid\Factory::get_language();
@@ -69,13 +114,19 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 		{
 			$this->_prepare_template();
 		}
-		else {
+		else 
+		{
 			$this->_prepare_restful();
 		}
 
 		return parent::before();
 	}
 
+	/**
+	 * This method will be called after we route to the destinated method
+	 * 
+	 * @access	public
+	 */
 	public function after() 
 	{
 		\Event::trigger('controller_after');
@@ -95,8 +146,9 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 	 * Requests are not made to methods directly The request will be for an "object".
 	 * this simply maps the object and method to the correct Controller method.
 	 * 
-	 * @param	Request		$resource
-	 * @param	array		$arguments
+	 * @access	public
+	 * @param	Request	$resource
+	 * @param	array	$arguments
 	 */
 	public function router($resource, $arguments) 
 	{
@@ -135,8 +187,9 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 	/**
 	 * Takes pure data and optionally a status code, then creates the response
 	 * 
-	 * @param	array		$data
-	 * @param	int			$http_code
+	 * @access	protected
+	 * @param	array	$data
+	 * @param	int		$http_code
 	 */
 	protected function response($data = array(), $http_code = 200) 
 	{
@@ -167,10 +220,22 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 		}
 	}
 	
+	/**
+	 * Prepare template
+	 * 
+	 * @access	protected
+	 */
 	protected function _prepare_template()
 	{
-		$file = \Config::get('app.template');
-
+		if (!is_null($this->template))
+		{
+			$file = $this->template;
+		}
+		else 
+		{
+			$file = \Config::get('app.template');
+		}
+		
 		if (is_file(APPPATH . 'views/themes/' . $file . '.php')) 
 		{
 			$this->template = 'themes/' . $file;
@@ -183,6 +248,11 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 		}
 	}
 	
+	/**
+	 * Render the template
+	 * 
+	 * @access	protected
+	 */
 	protected function _render_template()
 	{
 		//we dont want to accidentally change our site_name
@@ -194,6 +264,11 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 		}
 	}
 	
+	/**
+	 * Prepare Restful
+	 * 
+	 * @access	protected
+	 */
 	protected function _prepare_restful()
 	{
 		if (\Hybrid\Request::main() !== \Hybrid\Request::active()) 
@@ -204,6 +279,11 @@ abstract class Controller_Combine extends \Fuel\Core\Controller {
 		\Hybrid\Restful::auth();
 	}
 	
+	/**
+	 * Render Restful
+	 * 
+	 * @access	protected
+	 */
 	protected function _render_restful() {}
 	
 }

@@ -27,8 +27,21 @@ namespace Hybrid;
  */
 abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 
-	public $template = 'themes/default';
+	/**
+	 * Page template
+	 * 
+	 * @access	public
+	 * @var		string
+	 */
+	public $template = null;
 
+	/**
+	 * Run ACL check and redirect user automatically if user doesn't have the privilege
+	 * 
+	 * @access	public
+	 * @param	mixed	$resource
+	 * @param	string	$type 
+	 */
 	final protected function _acl($resource, $type = null) 
 	{
 		$status = \Hybrid\Acl::access_status($resource, $type);
@@ -41,6 +54,11 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 		}
 	}
 
+	/**
+	 * This method will be called after we route to the destinated method
+	 * 
+	 * @access	public
+	 */
 	public function before() 
 	{
 		$this->language = \Hybrid\Factory::get_language();
@@ -53,6 +71,11 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 		return parent::before();
 	}
 
+	/**
+	 * This method will be called after we route to the destinated method
+	 * 
+	 * @access	public
+	 */
 	public function after() 
 	{
 		\Event::trigger('controller_after');
@@ -81,9 +104,21 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 		}
 	}
 	
+	/**
+	 * Prepare template
+	 * 
+	 * @access	protected
+	 */
 	protected function _prepare_template()
 	{
-		$file = \Config::get('app.template');
+		if (!is_null($this->template))
+		{
+			$file = 'themes/default';
+		}
+		else
+		{
+			$file = \Config::get('app.template');
+		}
 
 		if (is_file(APPPATH . 'views/themes/' . $file . '.php')) 
 		{
@@ -91,6 +126,11 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 		}
 	}
 	
+	/**
+	 * Render template
+	 * 
+	 * @access	protected
+	 */
 	protected function _render_template()
 	{
 		//we dont want to accidentally change our site_name
