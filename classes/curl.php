@@ -27,7 +27,13 @@ namespace Hybrid;
  */
 class Curl {
 	
-	public static function factory($uri, $dataset)
+	/**
+	 *
+	 * @param string $uri
+	 * @param array $dataset
+	 * @return static 
+	 */
+	public static function factory($uri, $dataset = array())
 	{
 		$uri_segments = explode(' ', $uri);
 		$type = 'GET';
@@ -43,6 +49,12 @@ class Curl {
 		return new static($uri, $dataset, $type);
 	}
 	
+	/**
+	 *
+	 * @param type $uri
+	 * @param type $dataset
+	 * @return static 
+	 */
 	public static function get($uri, $dataset)
 	{
 		$dataset = array_merge(static::_query_string($uri), $dataset);
@@ -50,21 +62,44 @@ class Curl {
 		return new static($uri, $dataset, 'GET');
 	}
 	
+	/**
+	 *
+	 * @param type $uri
+	 * @param type $dataset
+	 * @return static 
+	 */
 	public static function post($uri, $dataset)
 	{
 		return new static($uri, $dataset, 'POST');
 	}
 	
+	/**
+	 *
+	 * @param type $url
+	 * @param type $dataset
+	 * @return static 
+	 */
 	public static function put($url, $dataset)
 	{
 		return new static($uri, $dataset, 'PUT');
 	}
 	
+	/**
+	 *
+	 * @param type $url
+	 * @param type $dataset
+	 * @return static 
+	 */
 	public static function delete($url, $dataset)
 	{
 		return new static($uri, $dataset, 'DELETE');
 	}
 	
+	/**
+	 *
+	 * @param type $uri
+	 * @return array 
+	 */
 	protected static function _query_string($uri)
 	{
 		$query_dataset = array();
@@ -84,6 +119,12 @@ class Curl {
 	protected $_request_data = array();
 	protected $_request_method = '';
 	
+	/**
+	 *
+	 * @param type $uri
+	 * @param type $dataset
+	 * @param type $type 
+	 */
 	public function __construct($uri, $dataset = array(), $type = array())
 	{
 		$this->_request_uri = $uri;
@@ -92,6 +133,12 @@ class Curl {
 		$this->_instance = curl_init();
 	}
 	
+	/**
+	 *
+	 * @param type $option
+	 * @param type $value
+	 * @return Curl 
+	 */
 	public function setopt($option, $value)
 	{
 		if (is_array($option))
@@ -110,6 +157,10 @@ class Curl {
 		return $this;
 	}
 	
+	/**
+	 *
+	 * @return object
+	 */
 	public function execute()
 	{
 		$response = new \stdClass();
