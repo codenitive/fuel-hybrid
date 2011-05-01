@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Fuel
- *
  * Fuel is a fast, lightweight, community driven PHP5 framework.
  *
  * @package    Fuel
@@ -56,10 +54,8 @@ class View extends \Fuel\Core\View {
 	{
 		switch (true) 
 		{
-			case ($path = $this->_find_file($file)) :
-				break;
-			case ($path = \Fuel::find_file('views', $file, '.php', false, false)) :
-				break;
+			case ($path = $this->_find_file($file)) : break;
+			case ($path = \Fuel::find_file('views', $file, '.php', false, false)) : break;
 			default :
 				throw new \View_Exception('The requested view could not be found: ' . \Fuel::clean_path($file));
 		}
