@@ -47,17 +47,21 @@ class Acl_User {
 			'full_name' => '',
 			'email' => '',
 			'roles' => array('guest'),
-			'hash' => '',
+			'_hash' => '',
 			'password' => '',
 			'method' => 'normal',
 			'gender' => '',
-			'age' => 0,
 			'status' => 1,
 			'twitter' => $twitter
 		);
 
 		return true;
 	}
+	
+	protected static $_optionals = array('email', 'status', 'full_name', 'gender', 'birthdate');
+	protected static $_use_meta = true;
+	protected static $_use_auth = true;
+	protected static $_use_twitter = false;
 
 	/**
 	 * Get Acl\Role object, it's a quick way of get and use \Acl\Role without having to 
@@ -91,7 +95,13 @@ class Acl_User {
 	 */
 	public static function _init() 
 	{
+		\Config::load('app', true);
 		\Config::load('crypt', true);
+		
+		if (!is_null(static::$acl))
+		{
+			return;
+		}
 
 		$users = \Cookie::get('_users');
 
@@ -107,6 +117,14 @@ class Acl_User {
 		}
 
 		static::$acl = new \Hybrid\Acl;
+		
+		$config = \Config::get('app.user_table', array());
+		
+		foreach ($config as $key => $value)
+		{
+			static::$_{$key} = $value;
+			\Config::set("app.user_table.{$key}", $value);
+		}
 
 		switch ($users->method) 
 		{
@@ -117,18 +135,32 @@ class Acl_User {
 				 * INNER JOIN `users_auths` ON (`users_auths`.`user_id`=`users`.`id`) 
 				 * LEFT JOIN `users_twitters` ON (`users_twitters`.`user_id`=`users`.`id`)   
 				 * WHERE `users`.`id`=%d  */
-				$result = \DB::select('users.*', 'users_auths.password', array('users_twitters.id', 'twitter_id'), 'users_meta.*')
-						->from('users')
+				$result = \DB::select('users.*')
+					->from('users')
+					->where('users.id', '=', static::$items['id'])->limit(1);
+				
+				if (static::$_use_auth === true)
+				{
+					$result->select('users_auth.password')
 						->join('users_auths')
-						->on('users_auths.user_id', '=', 'users.id')
+						->on('users_auths.user_id', '=', 'users.id');
+				}
+				
+				if (static::$_use_meta === true)
+				{
+					$result->select('users_meta.*')
 						->join('users_meta')
-						->on('users_meta.user_id', '=', 'users.id')
+						->on('users_meta.user_id', '=', 'users.id');	
+				}
+				
+				if (static::$_use_twitter === true)
+				{
+					$result->select(array('users_twitters.id', 'twitter_id'))
 						->join('users_twitters', 'left')
-						->on('users_twitters.user_id', '=', 'users.id')
-						->where('users.id', '=', static::$items['id'])
-						->limit(1)
-						->as_object()
-						->execute();
+						->on('users_twitters.user_id', '=', 'users.id');
+				}
+				
+				$result->as_object()->execute();
 
 			break;
 
@@ -165,7 +197,7 @@ class Acl_User {
 			// we validate the hash to add security to this application
 			$hash = $user->user_name . $user->password;
 
-			if (static::$items['hash'] !== static::add_salt($hash)) 
+			if (static::$items['_hash'] !== static::add_salt($hash)) 
 			{
 				static::_unregister();
 				return true;
@@ -173,24 +205,19 @@ class Acl_User {
 
 			static::$items['id'] = $user->id;
 			static::$items['user_name'] = $user->user_name;
-			static::$items['full_name'] = $user->full_name;
-			static::$items['email'] = $user->email;
-			static::$items['status'] = $user->status;
 			static::$items['roles'] = $users->roles;
 			static::$items['password'] = $user->password;
 			
-			if (property_exists($user, 'gender')) 
+			foreach (static::$_optionals as $property)
 			{
-				static::$items['gender'] = $user->gender;
-			}
-			
-			if (property_exists($user, 'birthdate')) 
-			{
-				static::$items['age'] = (int) date('Y') - (int) date('Y', strtotime($user->birthdate));
+				if (\property_exists($user, $property))
+				{
+					static::$items[$property] = $user->{$property};
+				}
 			}
 
 			// if user already link their account with twitter, map the relationship
-			if (!is_null($user->twitter_id)) 
+			if (property_exists($user, 'twitter_id')) 
 			{
 				static::$items['twitter'] = $user->twitter_id;
 			}
@@ -223,19 +250,36 @@ class Acl_User {
 		 * AND `users_auth`.`password`=''  */
 		/* $user = \Model_User::find_by_user_name_or_email($username, $username, array('limit' => 1, 'include' => array('users_auths', 'users_twitters'))); */
 
-		$users = \DB::select('users.*', 'users_auths.password', array('users_twitters.id', 'twitter_id'))
+		$users = \DB::select('users.*')
 				->from('users')
-				->join('users_auths')
-				->on('users_auths.user_id', '=', 'users.id')
-				->join('users_twitters', 'left')
-				->on('users_twitters.user_id', '=', 'users.id')
 				->where_open()
 				->where('users.user_name', '=', $username)
 				->or_where('users.email', '=', $username)
 				->where_close()
-				->limit(1)
-				->as_object()
-				->execute();
+				->limit(1);
+				
+		if (static::$_use_auth === true)
+		{
+			$users->select('users_auth.password')
+				->join('users_auths')
+				->on('users_auths.user_id', '=', 'users.id');
+		}
+
+		if (static::$_use_meta === true)
+		{
+			$users->select('users_meta.*')
+				->join('users_meta')
+				->on('users_meta.user_id', '=', 'users.id');	
+		}
+
+		if (static::$_use_twitter === true)
+		{
+			$users->select(array('users_twitters.id', 'twitter_id'))
+				->join('users_twitters', 'left')
+				->on('users_twitters.user_id', '=', 'users.id');
+		}
+
+		$users->as_object()->execute();
 
 		if ($users->count() < 1) 
 		{
@@ -257,13 +301,18 @@ class Acl_User {
 
 			static::$items['id'] = $user->id;
 			static::$items['user_name'] = $user->user_name;
-			static::$items['full_name'] = $user->full_name;
-			static::$items['email'] = $user->email;
-			static::$items['status'] = $user->status;
 			static::$items['method'] = 'normal';
 			static::$items['password'] = $user->password;
+			
+			foreach (static::$_optionals as $property)
+			{
+				if (\property_exists($user, $property))
+				{
+					static::$items[$property] = $user->{$property};
+				}
+			}
 
-			if (!is_null($user->twitter_id)) 
+			if (property_exists($user, 'twitter_id')) 
 			{
 				static::$items['twitter'] = $user->twitter_id;
 			}
@@ -346,7 +395,7 @@ class Acl_User {
 	protected static function _register() 
 	{
 		$values = static::$items;
-		$values['hash'] = static::add_salt(static::$items['user_name'] . static::$items['password']);
+		$values['_hash'] = static::add_salt(static::$items['user_name'] . static::$items['password']);
 
 		\Cookie::set('_users', \Crypt::encode(serialize((object) $values)));
 
