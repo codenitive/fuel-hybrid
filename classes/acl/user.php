@@ -51,7 +51,6 @@ class Acl_User {
 			'password' => '',
 			'method' => 'normal',
 			'gender' => '',
-			'age' => 0,
 			'status' => 1,
 			'twitter' => $twitter
 		);
@@ -123,6 +122,7 @@ class Acl_User {
 		foreach ($config as $key => $value)
 		{
 			static::$_{$key} = $value;
+			\Config::set("app.user_table.{$key}", $value);
 		}
 
 		switch ($users->method) 
@@ -204,20 +204,17 @@ class Acl_User {
 
 			static::$items['id'] = $user->id;
 			static::$items['user_name'] = $user->user_name;
-			static::$items['full_name'] = $user->full_name;
-			static::$items['email'] = $user->email;
-			static::$items['status'] = $user->status;
 			static::$items['roles'] = $users->roles;
 			static::$items['password'] = $user->password;
 			
-			if (property_exists($user, 'gender')) 
-			{
-				static::$items['gender'] = $user->gender;
-			}
+			$optionals = array('email', 'status', 'full_name', 'gender', 'birthdate');
 			
-			if (property_exists($user, 'birthdate')) 
+			foreach ($optionals as $property)
 			{
-				static::$items['age'] = (int) date('Y') - (int) date('Y', strtotime($user->birthdate));
+				if (\property_exists($user, $property))
+				{
+					static::$items[$property] = $user->{$property};
+				}
 			}
 
 			// if user already link their account with twitter, map the relationship
@@ -305,11 +302,18 @@ class Acl_User {
 
 			static::$items['id'] = $user->id;
 			static::$items['user_name'] = $user->user_name;
-			static::$items['full_name'] = $user->full_name;
-			static::$items['email'] = $user->email;
-			static::$items['status'] = $user->status;
 			static::$items['method'] = 'normal';
 			static::$items['password'] = $user->password;
+			
+			$optionals = array('email', 'status', 'full_name', 'gender', 'birthdate');
+			
+			foreach ($optionals as $property)
+			{
+				if (\property_exists($user, $property))
+				{
+					static::$items[$property] = $user->{$property};
+				}
+			}
 
 			if (property_exists($user, 'twitter_id')) 
 			{
