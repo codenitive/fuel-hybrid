@@ -122,8 +122,22 @@ class Acl_User {
 		
 		foreach ($config as $key => $value)
 		{
-			static::$_{$key} = $value;
-			\Config::set("app.user_table.{$key}", $value);
+			if (!!property_exists('\\Hybrid\\Acl_User', "_{$key}"))
+			{
+				$property = '_'.$key;
+				static::$$property = $value;
+				\Config::set("app.user_table.{$key}", $value);
+			}
+		}
+		
+		static::$_optionals = \Config::get('app.user_table.optionals', static::$_optionals);
+		
+		foreach (static::$_optionals as $field)
+		{
+			if (is_string($field) and !isset(static::$items[$field]))
+			{
+				static::$items[$field] = '';
+			}
 		}
 
 		switch ($users->method) 
@@ -135,32 +149,32 @@ class Acl_User {
 				 * INNER JOIN `users_auths` ON (`users_auths`.`user_id`=`users`.`id`) 
 				 * LEFT JOIN `users_twitters` ON (`users_twitters`.`user_id`=`users`.`id`)   
 				 * WHERE `users`.`id`=%d  */
-				$result = \DB::select('users.*')
+				$results = \DB::select('users.*')
 					->from('users')
 					->where('users.id', '=', static::$items['id'])->limit(1);
 				
 				if (static::$_use_auth === true)
 				{
-					$result->select('users_auth.password')
+					$results->select('users_auths.password')
 						->join('users_auths')
 						->on('users_auths.user_id', '=', 'users.id');
 				}
 				
 				if (static::$_use_meta === true)
 				{
-					$result->select('users_meta.*')
+					$results->select('users_meta.*')
 						->join('users_meta')
 						->on('users_meta.user_id', '=', 'users.id');	
 				}
 				
 				if (static::$_use_twitter === true)
 				{
-					$result->select(array('users_twitters.id', 'twitter_id'))
+					$results->select(array('users_twitters.id', 'twitter_id'))
 						->join('users_twitters', 'left')
 						->on('users_twitters.user_id', '=', 'users.id');
 				}
 				
-				$result->as_object()->execute();
+				$result = $results->as_object()->execute();
 
 			break;
 
@@ -250,36 +264,35 @@ class Acl_User {
 		 * AND `users_auth`.`password`=''  */
 		/* $user = \Model_User::find_by_user_name_or_email($username, $username, array('limit' => 1, 'include' => array('users_auths', 'users_twitters'))); */
 
-		$users = \DB::select('users.*')
-				->from('users')
-				->where_open()
-				->where('users.user_name', '=', $username)
-				->or_where('users.email', '=', $username)
-				->where_close()
-				->limit(1);
-				
+		$result = \DB::select('users.*')
+				->from('users');
+		
 		if (static::$_use_auth === true)
 		{
-			$users->select('users_auth.password')
+			$result->select('users_auths.password')
 				->join('users_auths')
 				->on('users_auths.user_id', '=', 'users.id');
 		}
 
 		if (static::$_use_meta === true)
 		{
-			$users->select('users_meta.*')
+			$result->select('users_meta.*')
 				->join('users_meta')
 				->on('users_meta.user_id', '=', 'users.id');	
 		}
 
 		if (static::$_use_twitter === true)
 		{
-			$users->select(array('users_twitters.id', 'twitter_id'))
+			$result->select(array('users_twitters.id', 'twitter_id'))
 				->join('users_twitters', 'left')
 				->on('users_twitters.user_id', '=', 'users.id');
 		}
 
-		$users->as_object()->execute();
+		$users = $result->where_open()
+			->where('users.user_name', '=', $username)
+			->or_where('users.email', '=', $username)
+			->where_close()
+			->limit(1)->as_object()->execute();
 
 		if ($users->count() < 1) 
 		{
