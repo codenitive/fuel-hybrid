@@ -58,6 +58,10 @@ class Acl_User {
 
 		return true;
 	}
+	
+	protected static $_use_meta = true;
+	protected static $_use_auth = true;
+	protected static $_use_twitter = false;
 
 	/**
 	 * Get Acl\Role object, it's a quick way of get and use \Acl\Role without having to 
@@ -91,7 +95,13 @@ class Acl_User {
 	 */
 	public static function _init() 
 	{
+		\Config::load('app', true);
 		\Config::load('crypt', true);
+		
+		if (!is_null(static::$acl))
+		{
+			return;
+		}
 
 		$users = \Cookie::get('_users');
 
@@ -107,6 +117,13 @@ class Acl_User {
 		}
 
 		static::$acl = new \Hybrid\Acl;
+		
+		$config = \Config::get('app.user_table', array());
+		
+		foreach ($config as $key => $value)
+		{
+			static::$_{$key} = $value;
+		}
 
 		switch ($users->method) 
 		{
@@ -117,18 +134,32 @@ class Acl_User {
 				 * INNER JOIN `users_auths` ON (`users_auths`.`user_id`=`users`.`id`) 
 				 * LEFT JOIN `users_twitters` ON (`users_twitters`.`user_id`=`users`.`id`)   
 				 * WHERE `users`.`id`=%d  */
-				$result = \DB::select('users.*', 'users_auths.password', array('users_twitters.id', 'twitter_id'), 'users_meta.*')
-						->from('users')
+				$result = \DB::select('users.*')
+					->from('users')
+					->where('users.id', '=', static::$items['id'])->limit(1);
+				
+				if (static::$_use_auth === true)
+				{
+					$result->select('users_auth.password')
 						->join('users_auths')
-						->on('users_auths.user_id', '=', 'users.id')
+						->on('users_auths.user_id', '=', 'users.id');
+				}
+				
+				if (static::$_use_meta === true)
+				{
+					$result->select('users_meta.*')
 						->join('users_meta')
-						->on('users_meta.user_id', '=', 'users.id')
+						->on('users_meta.user_id', '=', 'users.id');	
+				}
+				
+				if (static::$_use_twitter === true)
+				{
+					$result->select(array('users_twitters.id', 'twitter_id'))
 						->join('users_twitters', 'left')
-						->on('users_twitters.user_id', '=', 'users.id')
-						->where('users.id', '=', static::$items['id'])
-						->limit(1)
-						->as_object()
-						->execute();
+						->on('users_twitters.user_id', '=', 'users.id');
+				}
+				
+				$result->as_object()->execute();
 
 			break;
 
@@ -190,7 +221,7 @@ class Acl_User {
 			}
 
 			// if user already link their account with twitter, map the relationship
-			if (!is_null($user->twitter_id)) 
+			if (property_exists($user, 'twitter_id')) 
 			{
 				static::$items['twitter'] = $user->twitter_id;
 			}
@@ -223,19 +254,36 @@ class Acl_User {
 		 * AND `users_auth`.`password`=''  */
 		/* $user = \Model_User::find_by_user_name_or_email($username, $username, array('limit' => 1, 'include' => array('users_auths', 'users_twitters'))); */
 
-		$users = \DB::select('users.*', 'users_auths.password', array('users_twitters.id', 'twitter_id'))
+		$users = \DB::select('users.*')
 				->from('users')
-				->join('users_auths')
-				->on('users_auths.user_id', '=', 'users.id')
-				->join('users_twitters', 'left')
-				->on('users_twitters.user_id', '=', 'users.id')
 				->where_open()
 				->where('users.user_name', '=', $username)
 				->or_where('users.email', '=', $username)
 				->where_close()
-				->limit(1)
-				->as_object()
-				->execute();
+				->limit(1);
+				
+		if (static::$_use_auth === true)
+		{
+			$users->select('users_auth.password')
+				->join('users_auths')
+				->on('users_auths.user_id', '=', 'users.id');
+		}
+
+		if (static::$_use_meta === true)
+		{
+			$users->select('users_meta.*')
+				->join('users_meta')
+				->on('users_meta.user_id', '=', 'users.id');	
+		}
+
+		if (static::$_use_twitter === true)
+		{
+			$users->select(array('users_twitters.id', 'twitter_id'))
+				->join('users_twitters', 'left')
+				->on('users_twitters.user_id', '=', 'users.id');
+		}
+
+		$users->as_object()->execute();
 
 		if ($users->count() < 1) 
 		{
@@ -263,7 +311,7 @@ class Acl_User {
 			static::$items['method'] = 'normal';
 			static::$items['password'] = $user->password;
 
-			if (!is_null($user->twitter_id)) 
+			if (property_exists($user, 'twitter_id')) 
 			{
 				static::$items['twitter'] = $user->twitter_id;
 			}
