@@ -260,7 +260,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
 		
 		if ($this->auto_render === true)
 		{
-			$this->response->body($this->template);
+			$this->response->body($this->template->render());
 		}
 	}
 	

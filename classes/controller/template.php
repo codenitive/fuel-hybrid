@@ -25,7 +25,7 @@ namespace Hybrid;
  * @category    Controller_Template
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
-abstract class Controller_Template extends \Fuel\Core\Controller_Template {
+abstract class Controller_Template extends \Fuel\Core\Controller {
 
 	/**
 	 * Page template
@@ -34,6 +34,14 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 	 * @var		string
 	 */
 	public $template = null;
+	
+	/**
+	 * Auto render template
+	 * 
+	 * @access	public
+	 * @var		bool	
+	 */
+	public $auto_render = true;
 
 	/**
 	 * Run ACL check and redirect user automatically if user doesn't have the privilege
@@ -124,6 +132,12 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 		{
 			$this->template = 'themes/' . $file;
 		}
+		
+		if ($this->auto_render === true)
+		{
+			// Load the template
+			$this->template = \View::factory($this->template);
+		}
 	}
 	
 	/**
@@ -135,6 +149,11 @@ abstract class Controller_Template extends \Fuel\Core\Controller_Template {
 	{
 		//we dont want to accidentally change our site_name
 		$this->template->site_name = \Config::get('app.site_name');
+		
+		if ($this->auto_render === true)
+		{
+			$this->response->body($this->template);
+		}
 	}
 
 }
