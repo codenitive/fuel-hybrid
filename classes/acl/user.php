@@ -47,7 +47,7 @@ class Acl_User {
 			'full_name' => '',
 			'email' => '',
 			'roles' => array('guest'),
-			'hash' => '',
+			'_hash' => '',
 			'password' => '',
 			'method' => 'normal',
 			'gender' => '',
@@ -58,6 +58,7 @@ class Acl_User {
 		return true;
 	}
 	
+	protected static $_optionals = array('email', 'status', 'full_name', 'gender', 'birthdate');
 	protected static $_use_meta = true;
 	protected static $_use_auth = true;
 	protected static $_use_twitter = false;
@@ -196,7 +197,7 @@ class Acl_User {
 			// we validate the hash to add security to this application
 			$hash = $user->user_name . $user->password;
 
-			if (static::$items['hash'] !== static::add_salt($hash)) 
+			if (static::$items['_hash'] !== static::add_salt($hash)) 
 			{
 				static::_unregister();
 				return true;
@@ -207,9 +208,7 @@ class Acl_User {
 			static::$items['roles'] = $users->roles;
 			static::$items['password'] = $user->password;
 			
-			$optionals = array('email', 'status', 'full_name', 'gender', 'birthdate');
-			
-			foreach ($optionals as $property)
+			foreach (static::$_optionals as $property)
 			{
 				if (\property_exists($user, $property))
 				{
@@ -305,9 +304,7 @@ class Acl_User {
 			static::$items['method'] = 'normal';
 			static::$items['password'] = $user->password;
 			
-			$optionals = array('email', 'status', 'full_name', 'gender', 'birthdate');
-			
-			foreach ($optionals as $property)
+			foreach (static::$_optionals as $property)
 			{
 				if (\property_exists($user, $property))
 				{
@@ -398,7 +395,7 @@ class Acl_User {
 	protected static function _register() 
 	{
 		$values = static::$items;
-		$values['hash'] = static::add_salt(static::$items['user_name'] . static::$items['password']);
+		$values['_hash'] = static::add_salt(static::$items['user_name'] . static::$items['password']);
 
 		\Cookie::set('_users', \Crypt::encode(serialize((object) $values)));
 
