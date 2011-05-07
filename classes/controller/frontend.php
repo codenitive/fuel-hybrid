@@ -126,7 +126,7 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 		
 		if ($this->auto_render === true) 
 		{
-			$this->output = $this->template->render();
+			$this->response->body($this->template->render());
 		}
 	}
 
