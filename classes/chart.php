@@ -103,7 +103,12 @@ abstract class Chart {
 				{
 					$this->hAxis = $value;
 				}
-
+				
+				if (is_numeric($key))
+				{
+					$key = 'string';
+				}
+				
 				$this->columns .= "data.addColumn('{$value}', '{$key}');\r\n";
 				$count++;
 			}

@@ -44,7 +44,7 @@ class Chart_Line extends Chart {
 
 		$options = json_encode($this->options);
 
-		$id = 'linechart_' . md5($columns . $rows . time());
+		$id = 'linechart_' . md5($columns . $rows . time() . microtime());
 
 		return <<<SCRIPT
 <div id="{$id}"></div>

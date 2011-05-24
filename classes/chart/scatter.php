@@ -44,7 +44,7 @@ class Chart_Scatter extends Table {
 
 		$options = json_encode($this->options);
 
-		$id = 'scatter_' . md5($columns . $rows . time());
+		$id = 'scatter_' . md5($columns . $rows . time() . microtime());
 
 		return <<<SCRIPT
 <div id="{$id}" style="width:{$width}; height:{$height};"></div>

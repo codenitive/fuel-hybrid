@@ -44,7 +44,7 @@ class Chart_GeoMap extends Chart {
 
 		$options = json_encode($this->options);
 
-		$id = 'geomap_' . md5($columns . $rows . time());
+		$id = 'geomap_' . md5($columns . $rows . time() . microtime());
 
 		return <<<SCRIPT
 <div id="{$id}" style="width:{$width}px; height:{$height}px;"></div>

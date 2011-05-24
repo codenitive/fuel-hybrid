@@ -44,7 +44,7 @@ class Chart_Timeline extends Chart {
 
 		$options = json_encode($this->options);
 
-		$id = 'timeline_' . md5($columns . $rows . time());
+		$id = 'timeline_' . md5($columns . $rows . time() . microtime());
 
 		return <<<SCRIPT
 <div id="{$id}" style="width:{$width}px; height:{$height}px;"></div>
