@@ -44,7 +44,7 @@ class Chart_Bar extends Chart {
 
 		$options = json_encode($this->options);
 
-		$id = 'barchart_' . md5($columns . $rows . time());
+		$id = 'barchart_' . md5($columns . $rows . time() . microtime());
 
 		return <<<SCRIPT
 <div id="{$id}"></div>
