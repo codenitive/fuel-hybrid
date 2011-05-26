@@ -217,7 +217,7 @@ class Acl_User {
 				return true;
 			}
 
-			static::$items['id'] = $user->id;
+			static::$items['id'] = $user->user_id;
 			static::$items['user_name'] = $user->user_name;
 			static::$items['roles'] = $users->roles;
 			static::$items['password'] = $user->password;
@@ -312,7 +312,7 @@ class Acl_User {
 				return false;
 			}
 
-			static::$items['id'] = $user->id;
+			static::$items['id'] = $user->user_id;
 			static::$items['user_name'] = $user->user_name;
 			static::$items['method'] = 'normal';
 			static::$items['password'] = $user->password;
