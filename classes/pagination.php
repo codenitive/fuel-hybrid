@@ -112,7 +112,8 @@ class Pagination {
 	 */
 	public static function set_config(array $config)
 	{
-
+		static::$current_page = null;
+		
 		foreach ($config as $key => $value)
 		{
 			static::${$key} = $value;
