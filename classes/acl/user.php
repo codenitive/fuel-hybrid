@@ -62,6 +62,7 @@ class Acl_User {
 	protected static $_use_meta = true;
 	protected static $_use_auth = true;
 	protected static $_use_twitter = false;
+	protected static $_use_facebook = false;
 
 	/**
 	 * Get Acl\Role object, it's a quick way of get and use \Acl\Role without having to 
@@ -400,7 +401,7 @@ class Acl_User {
 
 		if (true === $redirect) 
 		{
-			\Response::redirect('site/index');
+			\Response::redirect(\Config::get('app.api._route.after_logout', '/'));
 		}
 
 		return true;
@@ -473,6 +474,16 @@ class Acl_User {
 		if (true == $delete) 
 		{
 			\Cookie::delete('_users');
+
+			if (static::$_use_twitter === true)
+			{
+				\Hybrid\Acl_Twitter::logout();
+			}
+
+			if (static::$_use_facebook === true)
+			{
+				\Hybrid\Acl_Facebook::logout();
+			}
 		}
 
 		return true;

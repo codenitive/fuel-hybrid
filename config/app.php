@@ -25,6 +25,25 @@ return array(
 		'use_meta' => true,
 		'use_auth' => true,
 		'use_twitter' => false,
+		'use_facebook' => false,
+	),
+
+	'api' => array(
+		'twitter' => array(
+			'consumer_key' => '',
+			'consumer_secret' => '',
+			'user_token' => '',
+			'user_secret' => '',
+		),
+		'facebook' => array(
+			'app_id' => '',
+			'secret' => '',
+		),
+		'_redirect' => array(
+			'registration' => 'register',
+			'after_login' => '/',
+			'after_logout' => '/',
+		),
 	),
 	
 	'salt' => 's8g5MgO5kVtEEmc_o0rP0UfI',
