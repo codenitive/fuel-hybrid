@@ -62,6 +62,7 @@ class Acl_User {
 	protected static $_use_meta = true;
 	protected static $_use_auth = true;
 	protected static $_use_twitter = false;
+	protected static $_use_facebook = false;
 
 	/**
 	 * Get Acl\Role object, it's a quick way of get and use \Acl\Role without having to 
@@ -179,9 +180,12 @@ class Acl_User {
 			break;
 
 			case 'twitter_oauth' :
-				/**
-				 * @todo: Twitter OAuth integration
-				 */
+				if (static::$_use_twitter !== true) 
+				{
+					static::_unregister(true);
+					return true;
+				} 
+
 				/* $result = \DB::select('users.*', 'users_auths.password', array('twitters.id', 'twitter_id'))->from('users')
 				  ->join('users_auths')
 				  ->on('users_auths.id', '=', 'users.id')
@@ -189,10 +193,34 @@ class Acl_User {
 				  ->on('users.id', '=', 'twitters.user_id')
 				  ->where('twitters.id', '=', $twitter_oauth->id)
 				  ->execute(); */
+				
+				$twitter_oauth = \Hybrid\Acl_Twitter::get();
+				
+				$results = \DB::select('users.*', array('users_twitters.id', 'twitter_id'))
+					->from('users')
+					->join('users_twitters')
+					->on('users.id', '=', 'users_twitters.user_id')
+					->where('users_twitters.id', '=', $twitter_oauth->id)->limit(1);
+				
+				if (static::$_use_auth === true)
+				{
+					$results->select('users_auths.password')
+						->join('users_auths')
+						->on('users_auths.user_id', '=', 'users.id');
+				}
+				
+				if (static::$_use_meta === true)
+				{
+					$results->select('users_meta.*')
+						->join('users_meta')
+						->on('users_meta.user_id', '=', 'users.id');	
+				}
+				
+				$result = $results->as_object()->execute();
 			break;
 		}
 
-		if ($result->count() < 1) 
+		if (is_null($result) or $result->count() < 1) 
 		{
 			static::_unregister(true);
 			return true;
@@ -253,7 +281,7 @@ class Acl_User {
 	 * @param	string	$password
 	 * @return	bool
 	 */
-	public static function login($username, $password) 
+	public static function login($username, $password, $method = 'normal') 
 	{
 		/*
 		 * SELECT `users`.*, `users_auths`.`password`, `users_twitter`.`id` AS `twitter_id` 
@@ -261,8 +289,8 @@ class Acl_User {
 		 * INNER JOIN `users_auths` ON (`users_auths`.`user_id`=`users`.`id`) 
 		 * LEFT JOIN `users_twitters` ON (`users_twitters`.`user_id`=`users`.`id`)   
 		 * WHERE (`users`.`user_name`='%s' OR `users`.`email`='%s') 
-		 * AND `users_auth`.`password`=''  */
-		/* $user = \Model_User::find_by_user_name_or_email($username, $username, array('limit' => 1, 'include' => array('users_auths', 'users_twitters'))); */
+		 * AND `users_auth`.`password`='' */
+		
 
 		$result = \DB::select('users.*')
 				->from('users');
@@ -283,28 +311,44 @@ class Acl_User {
 
 		if (static::$_use_twitter === true)
 		{
-			$result->select(array('users_twitters.id', 'twitter_id'))
+			$result->select(array('users_twitters.id', 'twitter_id'), 'token')
 				->join('users_twitters', 'left')
 				->on('users_twitters.user_id', '=', 'users.id');
 		}
+		elseif ($method == 'twitter_oauth')
+		{
+			return false;
+		}
 
-		$users = $result->where_open()
+		$result->where_open()
 			->where('users.user_name', '=', $username)
 			->or_where('users.email', '=', $username)
 			->where_close()
 			->limit(1)->as_object()->execute();
 
-		if ($users->count() < 1) 
+		if (is_null($result) or $result->count() < 1) 
 		{
 			return false;
 		} 
 		else 
 		{
-			$user = $users->current();
+			$user = $result->current();
 
-			if ($user->password !== static::add_salt($password)) 
+			switch ($method)
 			{
-				return false;
+				case 'normal' :
+					if ($user->password !== static::add_salt($password)) 
+					{
+						return false;
+					}
+				break;
+
+				case 'twitter_oauth' :
+					if ($user->token !== $password)
+					{
+						return false;
+					}
+				break;
 			}
 
 			if ($user->status !== 'verified') 
@@ -357,7 +401,7 @@ class Acl_User {
 
 		if (true === $redirect) 
 		{
-			\Response::redirect('site/index');
+			\Response::redirect(\Config::get('app.api._route.after_logout', '/'));
 		}
 
 		return true;
@@ -430,6 +474,16 @@ class Acl_User {
 		if (true == $delete) 
 		{
 			\Cookie::delete('_users');
+
+			if (static::$_use_twitter === true)
+			{
+				\Hybrid\Acl_Twitter::logout();
+			}
+
+			if (static::$_use_facebook === true)
+			{
+				\Hybrid\Acl_Facebook::logout();
+			}
 		}
 
 		return true;

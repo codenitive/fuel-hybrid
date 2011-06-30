@@ -22,6 +22,7 @@ Autoloader::add_classes(array (
 	
 	'Hybrid\\Acl'                       => __DIR__.'/classes/acl.php',
 	'Hybrid\\Acl_User'                  => __DIR__.'/classes/acl/user.php',
+	'Hybrid\\Acl_Twitter'               => __DIR__.'/classes/acl/twitter.php',
 	
 	'Hybrid\\Controller'                => __DIR__.'/classes/controller.php',
 	'Hybrid\\Controller_Frontend'       => __DIR__.'/classes/controller/frontend.php',
