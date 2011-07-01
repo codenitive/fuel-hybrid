@@ -15,6 +15,10 @@ return array(
 	
 	// set template file
 	'template' 				=> 'default',
+
+	'frontend'				=> array(
+		'template'				=> null,
+	)
 	
 	// available language for this application
 	'available_language' 	=> array(
