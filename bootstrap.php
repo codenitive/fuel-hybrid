@@ -22,13 +22,13 @@ Autoloader::add_classes(array (
 	
 	'Hybrid\\Acl'                       => __DIR__.'/classes/acl.php',
 	'Hybrid\\Acl_User'                  => __DIR__.'/classes/acl/user.php',
+	'Hybrid\\Acl_Facebook'              => __DIR__.'/classes/acl/facebook.php',
 	'Hybrid\\Acl_Twitter'               => __DIR__.'/classes/acl/twitter.php',
 	
 	'Hybrid\\Controller'                => __DIR__.'/classes/controller.php',
 	'Hybrid\\Controller_Frontend'       => __DIR__.'/classes/controller/frontend.php',
 	'Hybrid\\Controller_Template'       => __DIR__.'/classes/controller/template.php',
 	'Hybrid\\Controller_Rest'           => __DIR__.'/classes/controller/rest.php',
-	'Hybrid\\Controller_Combine'        => __DIR__.'/classes/controller/combine.php',
 	'Hybrid\\Controller_Hybrid'         => __DIR__.'/classes/controller/hybrid.php',
 	
 	'Hybrid\\Chart'                     => __DIR__.'/classes/chart.php',
