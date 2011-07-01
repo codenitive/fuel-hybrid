@@ -2,49 +2,55 @@
 
 return array(
 	// application identity is a unique string to be used in cookie and etc.
-	'identity'			=> 'fuelapp',
+	'identity'				=> 'fuelapp',
 	
 	// set application name
-	'site_name'			=> 'FuelPHP Application',
+	'site_name'				=> 'FuelPHP Application',
 	
 	// set application tagline
-	'site_tagline'		=> 'Some fancy words',
+	'site_tagline'			=> 'Some fancy words',
 	
 	// set application into maintenance mode if value is set to true (default is false)
-	'maintenance_mode' => false,
+	'maintenance_mode' 		=> false,
 	
 	// set template file
-	'template' => 'default',
+	'template' 				=> 'default',
+
+	'frontend'				=> array(
+		'template'				=> null,
+	)
 	
 	// available language for this application
-	'available_language' => array(
+	'available_language' 	=> array(
 		'en',
 	),
 	
-	'user_table' => array(
-		'use_meta' => true,
-		'use_auth' => true,
-		'use_twitter' => false,
-		'use_facebook' => false,
+	'user_table' 			=> array(
+		'use_meta' 				=> true,
+		'use_auth' 				=> true,
+		'use_twitter'			=> false,
+		'use_facebook' 			=> false,
 	),
 
-	'api' => array(
-		'twitter' => array(
-			'consumer_key' => '',
-			'consumer_secret' => '',
-			'user_token' => '',
-			'user_secret' => '',
+	'api' 					=> array(
+		'twitter' 				=> array(
+			'consumer_key' 			=> '',
+			'consumer_secret' 		=> '',
+			'user_token' 			=> '',
+			'user_secret' 			=> '',
 		),
-		'facebook' => array(
-			'app_id' => '',
-			'secret' => '',
+		'facebook' 			=> array(
+			'app_id' 			=> '',
+			'secret' 			=> '',
+			'redirect_uri'		=> '',
+			'scope'				=> '',
 		),
-		'_redirect' => array(
-			'registration' => 'register',
-			'after_login' => '/',
-			'after_logout' => '/',
+		'_redirect' 		=> array(
+			'registration' 		=> 'register',
+			'after_login' 		=> '/',
+			'after_logout' 		=> '/',
 		),
 	),
 	
-	'salt' => 's8g5MgO5kVtEEmc_o0rP0UfI',
+	'salt' 					=> 's8g5MgO5kVtEEmc_o0rP0UfI',
 );

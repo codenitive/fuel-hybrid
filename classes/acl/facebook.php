@@ -132,6 +132,33 @@ class Acl_Facebook {
 		return false;
 	}
 
+	public static function get_url()
+	{
+		$redirect_uri = \Config::get('app.api.facebook.redirect_uri');
+		$scope = \Config::get('app.api.facebook.scope', '');
+
+		$config = array('scope' => $scope);
+
+		if (!is_null($redirect_uri))
+		{
+			$config['redirect_uri'] = $redirect_uri;
+		}
+
+		switch (static::$items['access'])
+		{
+			case 1 :
+			case 2 :
+				unset($config['scope']);
+				return static::$_instance->getLogoutUrl($config);
+			break;
+
+			case 0 :
+			default :
+				return static::$_instance->getLoginUrl($config);
+			break;
+		}
+	}
+
 	/**
 	 * Stage 2: verifying the user account
 	 *

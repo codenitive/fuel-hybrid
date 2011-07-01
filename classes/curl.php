@@ -170,8 +170,7 @@ class Curl {
 				curl_setopt($this->_instance, $key, $value);
 			}
 		}
-		
-		if (is_string($option) and isset($value))
+		elseif (is_string($option) and isset($value))
 		{
 			curl_setopt($this->_instance, $option, $value);
 		}
@@ -187,11 +186,12 @@ class Curl {
 	public function execute()
 	{
 		$response = new \stdClass();
+		$uri = $this->_request_uri.'?'.http_build_query($this->_request_data, '', '&');
 		
-		curl_setopt($this->_instance, CURLOPT_URL, $this->_request_uri.'?'.http_build_query($this->_request_data, '', '&')); 
+		curl_setopt($this->_instance, CURLOPT_URL, $uri); 
 		$info = curl_getinfo($this->_instance);
 		
-		$response->body = curl_exec($this->_instance);
+		$response->body = $response->raw_body = curl_exec($this->_instance);
 		$response->status = $info['http_code'];
 		
 		// clean up curl session
