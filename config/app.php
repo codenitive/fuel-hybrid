@@ -18,7 +18,7 @@ return array(
 
 	'frontend'				=> array(
 		'template'				=> null,
-	)
+	),
 	
 	// available language for this application
 	'available_language' 	=> array(
