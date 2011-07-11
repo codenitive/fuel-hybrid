@@ -39,8 +39,6 @@ class Acl_User {
 	 */
 	protected static function _set_default() 
 	{
-		$twitter = 0;
-
 		static::$items = array(
 			'id' => 0,
 			'user_name' => 'guest',
@@ -52,7 +50,8 @@ class Acl_User {
 			'method' => 'normal',
 			'gender' => '',
 			'status' => 1,
-			'twitter' => $twitter
+			'twitter' => 0,
+			'facebook' => 0
 		);
 
 		return true;
@@ -113,8 +112,9 @@ class Acl_User {
 		} 
 		else 
 		{
+			$users = new \stdClass();
+			$users->method = 'normal';
 			static::_unregister();
-			return true;
 		}
 
 		static::$acl = new \Hybrid\Acl;
@@ -144,12 +144,7 @@ class Acl_User {
 		switch ($users->method) 
 		{
 			case 'normal' :
-				/*
-				 * SELECT `users`.*, `users_auths`.`password`, `users_twitter`.`id` AS `twitter_id` 
-				 * FROM `users` 
-				 * INNER JOIN `users_auths` ON (`users_auths`.`user_id`=`users`.`id`) 
-				 * LEFT JOIN `users_twitters` ON (`users_twitters`.`user_id`=`users`.`id`)   
-				 * WHERE `users`.`id`=%d  */
+
 				$results = \DB::select('users.*')
 					->from('users')
 					->where('users.id', '=', static::$items['id'])->limit(1);
@@ -174,6 +169,13 @@ class Acl_User {
 						->join('users_twitters', 'left')
 						->on('users_twitters.user_id', '=', 'users.id');
 				}
+
+				if (static::$_use_facebook === true)
+				{
+					$results->select(array('users_facebooks.id', 'facebook_id'))
+						->join('users_facebooks', 'left')
+						->on('users_facebooks.user_id', '=', 'users.id');
+				}
 				
 				$result = $results->as_object()->execute();
 
@@ -184,15 +186,7 @@ class Acl_User {
 				{
 					static::_unregister(true);
 					return true;
-				} 
-
-				/* $result = \DB::select('users.*', 'users_auths.password', array('twitters.id', 'twitter_id'))->from('users')
-				  ->join('users_auths')
-				  ->on('users_auths.id', '=', 'users.id')
-				  ->join('twitters')
-				  ->on('users.id', '=', 'twitters.user_id')
-				  ->where('twitters.id', '=', $twitter_oauth->id)
-				  ->execute(); */
+				}
 				
 				$twitter_oauth = \Hybrid\Acl_Twitter::get();
 				
@@ -200,7 +194,7 @@ class Acl_User {
 					->from('users')
 					->join('users_twitters')
 					->on('users.id', '=', 'users_twitters.user_id')
-					->where('users_twitters.id', '=', $twitter_oauth->id)->limit(1);
+					->where('users_twitters.twitter_id', '=', $twitter_oauth->id)->limit(1);
 				
 				if (static::$_use_auth === true)
 				{
@@ -214,6 +208,52 @@ class Acl_User {
 					$results->select('users_meta.*')
 						->join('users_meta')
 						->on('users_meta.user_id', '=', 'users.id');	
+				}
+
+				if (static::$_use_facebook === true)
+				{
+					$results->select(array('users_facebooks.id', 'facebook_id'))
+						->join('users_facebooks', 'left')
+						->on('users_facebooks.user_id', '=', 'users.id');
+				}
+				
+				$result = $results->as_object()->execute();
+			break;
+
+			case 'facebook_oauth' :
+				if (static::$_use_facebook !== true) 
+				{
+					static::_unregister(true);
+					return true;
+				}
+				
+				$facebook_oauth = \Hybrid\Acl_Facebook::get();
+				
+				$results = \DB::select('users.*', array('users_facebooks.id', 'facebook_id'))
+					->from('users')
+					->join('users_facebooks')
+					->on('users.id', '=', 'users_facebooks.user_id')
+					->where('users_facebooks.facebook_id', '=', $facebook_oauth->id)->limit(1);
+				
+				if (static::$_use_auth === true)
+				{
+					$results->select('users_auths.password')
+						->join('users_auths')
+						->on('users_auths.user_id', '=', 'users.id');
+				}
+				
+				if (static::$_use_meta === true)
+				{
+					$results->select('users_meta.*')
+						->join('users_meta')
+						->on('users_meta.user_id', '=', 'users.id');	
+				}
+
+				if (static::$_use_twitter === true)
+				{
+					$results->select(array('users_twitters.id', 'twitter_id'))
+						->join('users_twitters', 'left')
+						->on('users_twitters.user_id', '=', 'users.id');
 				}
 				
 				$result = $results->as_object()->execute();
@@ -263,6 +303,12 @@ class Acl_User {
 			{
 				static::$items['twitter'] = $user->twitter_id;
 			}
+
+			// if user already link their account with facebook, map the relationship
+			if (property_exists($user, 'facebook_id')) 
+			{
+				static::$items['facebook'] = $user->facebook_id;
+			}
 		}
 
 		return true;
@@ -311,22 +357,25 @@ class Acl_User {
 
 		if (static::$_use_twitter === true)
 		{
-			$result->select(array('users_twitters.id', 'twitter_id'), 'token')
+			$result->select(array('users_twitters.id', 'twitter_id'), array('users_twitters.token', 'twitter_token'))
 				->join('users_twitters', 'left')
 				->on('users_twitters.user_id', '=', 'users.id');
 		}
-		elseif ($method == 'twitter_oauth')
+
+		if (static::$_use_facebook === true)
 		{
-			return false;
+			$result->select(array('users_facebooks.id', 'facebook_id'), array('users_facebooks.token', 'facebook_token'))
+				->join('users_facebooks', 'left')
+				->on('users_facebooks.user_id', '=', 'users.id');
 		}
 
-		$result->where_open()
+		$result = $result->where_open()
 			->where('users.user_name', '=', $username)
 			->or_where('users.email', '=', $username)
 			->where_close()
 			->limit(1)->as_object()->execute();
 
-		if (is_null($result) or $result->count() < 1) 
+		if (is_null($result) and $result->count() < 1) 
 		{
 			return false;
 		} 
@@ -344,7 +393,14 @@ class Acl_User {
 				break;
 
 				case 'twitter_oauth' :
-					if ($user->token !== $password)
+					if ($user->twitter_token !== $password)
+					{
+						return false;
+					}
+				break;
+
+				case 'facebook_oauth' :
+					if ($user->facebook_token !== $password)
 					{
 						return false;
 					}
@@ -369,9 +425,16 @@ class Acl_User {
 				}
 			}
 
-			if (property_exists($user, 'twitter_id')) 
+			// if user already link their account with twitter, map the relationship
+			if (\property_exists($user, 'twitter_id')) 
 			{
 				static::$items['twitter'] = $user->twitter_id;
+			}
+
+			// if user already link their account with facebook, map the relationship
+			if (property_exists($user, 'facebook_id')) 
+			{
+				static::$items['facebook'] = $user->facebook_id;
 			}
 
 			static::_get_roles();
@@ -482,7 +545,7 @@ class Acl_User {
 
 			if (static::$_use_facebook === true)
 			{
-				\Hybrid\Acl_Facebook::logout();
+				\Hybrid\Acl_Facebook::logout(false);
 			}
 		}
 

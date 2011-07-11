@@ -38,6 +38,7 @@ class Acl_Twitter {
 		'secret' => null,
 		'access' => 0,
 		'id' => 0,
+		'user_id' => 0,
 		'info' => null
 	);
 
@@ -113,6 +114,9 @@ class Acl_Twitter {
 	{
 		switch (static::$items['access']) 
 		{
+			case 3 :
+				return static::_authenticate();
+			break;
 
 			case 2 :
 				# initiate stage 3
@@ -131,6 +135,42 @@ class Acl_Twitter {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Stage 4: authenticate
+	 * 
+	 * @static
+	 * @access 	protected
+	 * @return 	bool
+	 */
+	protected static function _authenticate()
+	{
+		$result = \DB::select('users_twitters.*', array('users.user_name', 'username'))
+				->from('users_twitters')
+				->join('users', 'LEFT')
+				->on('users_twitters.user_id', '=', 'users.id')
+				->where('users_twitters.twitter_id', '=', static::$items['id'])->execute();
+
+		if ($result->count() < 1) 
+		{
+			return false;
+		} 
+		else 
+		{
+			$row = $result->current();
+			static::$items['user_id'] = $row['user_id'];
+			static::_update_handler($row['twitter_id']);
+
+			if (is_null($row['user_id']) or intval(static::$items['user_id']) < 1) {
+				\Response::redirect(\Config::get('app.api._redirect.registration', '/'));
+				return true;
+			}
+
+			\Hybrid\Acl_User::login($row['username'], static::$items['token'], 'twitter_oauth');
+			\Response::redirect(\Config::get('app.api._redirect.after_login', '/'));
+			return true;
+		}	
 	}
 
 	/**
@@ -163,27 +203,29 @@ class Acl_Twitter {
 							->from('users_twitters')
 							->join('users', 'LEFT')
 							->on('users_twitters.user_id', '=', 'users.id')
-							->where('users_twitters.id', '=', $response->id)->execute();
+							->where('users_twitters.twitter_id', '=', $response->id)->execute();
 
 			if ($result->count() < 1) 
 			{
 				static::_add_handler($response->id, $response);
-				\Request::redirect(\Config::get('app.api._route.registration', '/'));
+				\Response::redirect(\Config::get('app.api._redirect.registration', '/'));
 				return true;
 			} 
 			else 
 			{
 				$row = $result->current();
 
+				static::$items['user_id'] = $row['user_id'];
 				static::_update_handler($response->id, $response);
 
-				if (is_null($row['user_id'])) {
-					\Request::redirect(\Config::get('app.api._route.registration', '/'));
+				if (is_null($row['user_id']) or intval(static::$items['user_id']) < 1) {
+					\Response::redirect(\Config::get('app.api._redirect.registration', '/'));
 					return true;
 				}
 
 				\Hybrid\Acl_User::login($row['username'], static::$items['token'], 'twitter_oauth');
-				\Request::redirect(\Config::get('app.api._route.after_login', '/'));
+				\Response::redirect(\Config::get('app.api._redirect.after_login', '/'));
+				return true;
 			}
 		}
 
@@ -216,11 +258,12 @@ class Acl_Twitter {
 			static::$_instance->config["user_secret"] = $response['oauth_token_secret'];
 
 			static::_register();
-			static::_factory();
+			static::execute();
+			return true;
 		} 
 		else 
 		{
-			logger('error', '\\Acl\\Twitter::access_token request fail: ' . static::$_instance->response['code']);
+			logger('error', '\\Hybrid\\Acl_Twitter::access_token request fail: ' . static::$_instance->response['code']);
 			logger('debug', 'Response: ' . json_encode(static::$_instance->response));
 			return false;
 		}
@@ -237,7 +280,8 @@ class Acl_Twitter {
 	 */
 	protected static function _request_token() 
 	{
-		static::$_instance->request('POST', static::$_instance->url('oauth/request_token', ''));
+
+		static::$_instance->request('POST', static::$_instance->url("oauth/request_token", ""));
 
 		if (200 == static::$_instance->response['code']) 
 		{
@@ -252,7 +296,7 @@ class Acl_Twitter {
 			$url = static::$_instance->url("oauth/authorize", '');
 			$url .= "?oauth_token={$response['oauth_token']}";
 
-			\Request::redirect($url, 'refresh');
+			\Response::redirect($url, 'refresh');
 			exit();
 			return true;
 		} 
@@ -274,30 +318,36 @@ class Acl_Twitter {
 	 * @param	object	$meta
 	 * @return	bool
 	 */
-	private static function _add_handler($id, $meta) 
+	private static function _add_handler($id, $meta = null) 
 	{
 		if (!is_numeric($id)) 
 		{
 			return false;
 		}
 
-		if (empty($meta)) 
-		{
-			return false;
-		}
-
-		\DB::insert('users_twitters')->set(array(
+		$bind = array(
 			'twitter_id' => $id,
 			'token' => static::$items['token'],
-			'secret' => static::$items['secret']
-		))->execute();
+			'secret' => static::$items['secret'],
+		);
 
-		\DB::insert('twitters')->set(array(
-			'id' => $id,
-			'twitter_name' => $meta->screen_name,
-			'full_name' => $meta->name,
-			'profile_image' => $meta->profile_image_url
-		))->execute();
+		if (\Hybrid\Acl_User::is_logged()) 
+		{
+			$bind['user_id'] = \Hybrid\Acl_User::get('id');
+			static::$items['user_id'] = $bind['user_id'];
+		}
+
+		\DB::insert('users_twitters')->set($bind)->execute();
+
+		if (!empty($meta)) 
+		{
+			\DB::insert('twitters')->set(array(
+				'id' => $id,
+				'twitter_name' => $meta->screen_name,
+				'full_name' => $meta->name,
+				'profile_image' => $meta->profile_image_url
+			))->execute();
+		}
 
 		return true;
 	}
@@ -311,28 +361,34 @@ class Acl_Twitter {
 	 * @param	object	$meta
 	 * @return	bool
 	 */
-	private static function _update_handler($id, $meta) 
+	private static function _update_handler($id, $meta = null) 
 	{
 		if (!is_numeric($id)) 
 		{
 			return false;
 		}
 
-		if (empty($meta)) 
+		$bind = array(
+			'token' => static::$items['token'],
+			'secret' => static::$items['secret'],
+		);
+
+		if (\Hybrid\Acl_User::is_logged()) 
 		{
-			return false;
+			$bind['user_id'] = \Hybrid\Acl_User::get('id');
+			static::$items['user_id'] = $bind['user_id'];
 		}
 
-		\DB::update('users_twitters')->set(array(
-			'token' => static::$items['token'],
-			'secret' => static::$items['secret']
-		))->where('twitter_id', '=', $id)->execute();
+		\DB::update('users_twitters')->set($bind)->where('twitter_id', '=', $id)->execute();
 
-		\DB::update('twitters')->set(array(
-			'full_name' => $meta->name,
-			'twitter_name' => $meta->screen_name,
-			'profile_image' => $meta->profile_image_url
-		))->where('id', '=', $id)->execute();
+		if (!empty($meta)) 
+		{
+			\DB::update('twitters')->set(array(
+				'full_name' => $meta->name,
+				'twitter_name' => $meta->screen_name,
+				'profile_image' => $meta->profile_image_url
+			))->where('id', '=', $id)->execute();
+		}
 
 		return true;
 	}
@@ -363,6 +419,11 @@ class Acl_Twitter {
 		\Cookie::delete('_twitter_oauth');
 
 		return true;
+	}
+
+	public static function is_logged()
+	{
+		return (static::$items['id'] > 0 ? true : false);
 	}
 
 	public static function logout()
