@@ -182,7 +182,15 @@ class Acl_Facebook extends Acl_Abstract {
 			static::_add_handler();
 			static::_register();
 
-			\Response::redirect(\Config::get('app.api._redirect.registration', '/'));
+			if (intval(static::$items['user_id']) < 1) 
+			{
+				\Response::redirect(\Config::get('app.api._redirect.registration', '/'));
+			}
+			else 
+			{
+				\Response::redirect(\Config::get('app.api._redirect.after_login', '/'));
+			}
+			
 			return true;
 		} 
 		else 
@@ -193,8 +201,8 @@ class Acl_Facebook extends Acl_Abstract {
 			static::_update_handler();
 			static::_register();
 
-			if (is_null($row['user_id']) or intval(static::$items['user_id']) < 1) {
-		
+			if (is_null($row['user_id']) or intval(static::$items['user_id']) < 1) 
+			{
 				\Response::redirect(\Config::get('app.api._redirect.registration', '/'));
 				return true;
 			}

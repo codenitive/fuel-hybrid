@@ -193,8 +193,6 @@ class Acl_Twitter extends Acl_Abstract {
 
 			static::$items['access'] = 3;
 
-			static::_register();
-
 			$result = \DB::select('users_twitters.*', array('users.user_name', 'username'))
 							->from('users_twitters')
 							->join('users', 'LEFT')
@@ -204,7 +202,17 @@ class Acl_Twitter extends Acl_Abstract {
 			if ($result->count() < 1) 
 			{
 				static::_add_handler($response->id, $response);
-				\Response::redirect(\Config::get('app.api._redirect.registration', '/'));
+				static::_register();
+
+				if (intval(static::$items['user_id']) < 1) 
+				{
+					\Response::redirect(\Config::get('app.api._redirect.registration', '/'));
+				}
+				else 
+				{
+					\Response::redirect(\Config::get('app.api._redirect.after_login', '/'));
+				}
+				
 				return true;
 			} 
 			else 
@@ -213,6 +221,7 @@ class Acl_Twitter extends Acl_Abstract {
 
 				static::$items['user_id'] = $row['user_id'];
 				static::_update_handler($response->id, $response);
+				static::_register();
 
 				if (is_null($row['user_id']) or intval(static::$items['user_id']) < 1) {
 					\Response::redirect(\Config::get('app.api._redirect.registration', '/'));
