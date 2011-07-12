@@ -25,7 +25,7 @@ namespace Hybrid;
  * @category    Acl_User
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
-class Acl_User {
+class Acl_User extends Acl_Abstract {
 
 	protected static $items = null;
 	public static $acl = NULL;
@@ -329,15 +329,6 @@ class Acl_User {
 	 */
 	public static function login($username, $password, $method = 'normal') 
 	{
-		/*
-		 * SELECT `users`.*, `users_auths`.`password`, `users_twitter`.`id` AS `twitter_id` 
-		 * FROM `users` 
-		 * INNER JOIN `users_auths` ON (`users_auths`.`user_id`=`users`.`id`) 
-		 * LEFT JOIN `users_twitters` ON (`users_twitters`.`user_id`=`users`.`id`)   
-		 * WHERE (`users`.`user_name`='%s' OR `users`.`email`='%s') 
-		 * AND `users_auth`.`password`='' */
-		
-
 		$result = \DB::select('users.*')
 				->from('users');
 		
@@ -550,63 +541,6 @@ class Acl_User {
 		}
 
 		return true;
-	}
-
-	/**
-	 * Return TRUE/FALSE whether visitor is logged in to the system
-	 * 
-	 * Usage:
-	 * 
-	 * <code>false === \Hybrid\Acl_User::is_logged()</code>
-	 *
-	 * @static
-	 * @access	public
-	 * @return	bool
-	 */
-	public static function is_logged() 
-	{
-		return (static::$items['id'] > 0 ? true : false);
-	}
-
-	/**
-	 * Enable to add salt to increase the security of the system
-	 *
-	 * @static
-	 * @access	public
-	 * @param	string	$password
-	 * @return	string
-	 */
-	public static function add_salt($password = '') 
-	{
-		$salt =  \Config::get('app.salt', \Config::get('crypt.crypto_key'));
-
-		return sha1($salt . $password);
-	}
-
-	/**
-	 * Get current user authentication
-	 * 
-	 * Usage:
-	 * 
-	 * <code>$user = \Hybrid\Acl_User::get();</code>
-	 *
-	 * @static
-	 * @access	public
-	 * @return	object
-	 */
-	public static function get($name = null) 
-	{
-		if (!is_string($name)) 
-		{
-			return (object) static::$items;
-		}
-
-		if (!\array_key_exists($name, static::$items)) 
-		{
-			return false;
-		}
-
-		return static::$items[$name];
 	}
 
 }
