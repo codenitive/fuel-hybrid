@@ -31,7 +31,7 @@ use \FacebookApiException;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Acl_Facebook {
+class Acl_Facebook extends Acl_Abstract {
 	
 	protected static $_instance = null;
 	protected static $items = array(
@@ -86,6 +86,18 @@ class Acl_Facebook {
 	}
 
 	/**
+	 * return Facebook Object
+	 *
+	 * @static
+	 * @access 	public
+	 * @return 	boolean
+	 */
+	public static function get_adapter() 
+	{
+		return static::$_instance;
+	}
+
+	/**
 	 * Authenticate user with Facebook Account
 	 * There are three process/stage of authenticating an account:
 	 * 2. authenticate the user with Facebook account
@@ -117,22 +129,6 @@ class Acl_Facebook {
 		}
 
 		return $status;
-	}
-
-	/**
-	 * Return Facebook user information and token
-	 *
-	 * @access public
-	 * @return object
-	 */
-	public static function get() 
-	{
-		return (object) static::$items;
-	}
-
-	public static function get_adapter() 
-	{
-		return static::$_instance;
 	}
 
 	public static function get_url($option = array())
@@ -382,11 +378,18 @@ class Acl_Facebook {
 		return true;
 	}
 
-	public static function is_logged()
-	{
-		return (static::$items['id'] > 0 ? true : false);
-	}
-
+	/**
+	 * Initiate user login out from Facebook
+	 *
+	 * Usage:
+	 * 
+	 * <code>\Hybrid\Acl_Facebook::logout(false);</code>
+	 * 
+	 * @static
+	 * @access	public
+	 * @param	bool	$redirect
+	 * @return	bool
+	 */
 	public static function logout($redirect = true)
 	{
 		$url = static::get_url(array('redirect_uri' => \Uri::create('/')));

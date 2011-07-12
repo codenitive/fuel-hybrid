@@ -30,7 +30,7 @@ use \tmhOAuth;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Acl_Twitter {
+class Acl_Twitter extends Acl_Abstract {
 	
 	protected static $_instance = null;
 	protected static $items = array(
@@ -85,16 +85,12 @@ class Acl_Twitter {
 	}
 
 	/**
-	 * Return Twitter user information and token
+	 * Return tmhOAuth Object
 	 *
+	 * @static
 	 * @access public
 	 * @return object
 	 */
-	public static function get() 
-	{
-		return (object) static::$items;
-	}
-
 	public static function get_adapter() 
 	{
 		return static::$_instance;
@@ -421,11 +417,19 @@ class Acl_Twitter {
 		return true;
 	}
 
-	public static function is_logged()
-	{
-		return (static::$items['id'] > 0 ? true : false);
-	}
 
+	/**
+	 * Initiate user login out from Twitter
+	 *
+	 * Usage:
+	 * 
+	 * <code>\Hybrid\Acl_Twitter::logout(false);</code>
+	 * 
+	 * @static
+	 * @access	public
+	 * @param	bool	$redirect
+	 * @return	bool
+	 */
 	public static function logout()
 	{
 		return static::_unregister();
