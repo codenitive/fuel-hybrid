@@ -340,7 +340,7 @@ class Acl_Facebook extends Acl_Abstract {
 			'token' => static::$items['token']
 		);
 
-		if (\Hybrid\Acl_User::is_logged())
+		if (\Hybrid\Acl_User::is_logged() and static::$items['user_id'] == 0)
 		{
 			$bind['user_id'] = \Hybrid\Acl_User::get('id');
 			static::$items['user_id'] = $bind['user_id'];
