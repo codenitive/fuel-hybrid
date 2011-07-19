@@ -14,10 +14,14 @@ return array(
 	'maintenance_mode' 		=> false,
 	
 	// set template file
-	'template' 				=> 'default',
-
-	'frontend'				=> array(
-		'template'				=> null,
+	'template' 				=> array(
+		'folder'	 			=> 'default',
+		'file'					=> 'index',
+		'frontend'				=> array(
+			//'template'				=> null,
+			'folder'	 			=> 'default',
+			'file'					=> 'index',
+		),
 	),
 	
 	// available language for this application

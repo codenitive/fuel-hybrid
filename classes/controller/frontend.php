@@ -94,17 +94,17 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 	 */
 	protected function _prepare_template($data = null)
 	{
-		$theme_path = \Config::get('app.frontend.template');
+		$folder_path = \Config::get('app.template.frontend.folder');
 
-		if (null === $theme_path) 
+		if (null === $folder_path) 
 		{
-			$theme_path = DOCROOT . 'themes/default/';
-			\Config::set('app.frontend.template', $theme_path);
+			$folder_path = DOCROOT . 'themes/default/';
+			\Config::set('app.template.frontend.folder', $folder_path);
 		}
 
-		\Hybrid\View::set_path($theme_path);
+		\Hybrid\View::set_path($folder_path);
 
-		\Asset::add_path($theme_path . 'assets/');
+		\Asset::add_path($folder_path . 'assets/');
 
 		if (true === $this->auto_render) 
 		{
