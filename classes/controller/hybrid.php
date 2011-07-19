@@ -101,7 +101,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
 	 * 
 	 * @access public
 	 */
-	public function before() 
+	public function before($data = null) 
 	{
 		$this->language = \Hybrid\Factory::get_language();
 		$this->user = \Hybrid\Acl_User::get();
@@ -112,7 +112,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
 
 		if ($this->_is_restful === false)
 		{
-			$this->_prepare_template();
+			$this->_prepare_template($data);
 		}
 		else 
 		{
@@ -225,7 +225,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
 	 * 
 	 * @access	protected
 	 */
-	protected function _prepare_template()
+	protected function _prepare_template($data = null)
 	{
 		if (!is_null($this->template))
 		{
@@ -245,6 +245,9 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
 		{
 			// Load the template
 			$this->template = \View::factory($this->template);
+
+			// Set the data to the template if provided
+			$data and $this->template->set_global($data);
 		}
 	}
 	

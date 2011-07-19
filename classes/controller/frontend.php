@@ -49,9 +49,9 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 	 * 
 	 * @access	public
 	 */
-	public function before() 
+	public function before($data = null) 
 	{
-		$this->_prepare_template();
+		$this->_prepare_template($data = null);
 
 		return parent::before();
 	}
@@ -92,7 +92,7 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 	 * 
 	 * @access	protected
 	 */
-	protected function _prepare_template()
+	protected function _prepare_template($data = null)
 	{
 		$theme_path = \Config::get('app.frontend.template');
 
@@ -111,6 +111,9 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
 			$this->template = \Hybrid\View::factory();
 			$this->template->auto_encode(false);
 			$this->template->set_filename('index');
+
+			// Set the data to the template if provided
+			$data and $this->template->set_global($data);
 		}
 	}
 	
