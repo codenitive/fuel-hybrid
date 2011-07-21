@@ -18,6 +18,7 @@ Autoloader::add_classes(array (
 	'Hybrid\\Pagination'                => __DIR__.'/classes/pagination.php',
 	'Hybrid\\Request'                   => __DIR__.'/classes/request.php',
 	'Hybrid\\Restful'                   => __DIR__.'/classes/restful.php',
+	'Hybrid\\Template'                  => __DIR__.'/classes/template.php',
 	'Hybrid\\View'                      => __DIR__.'/classes/view.php',
 	
 	'Hybrid\\Acl'                       => __DIR__.'/classes/acl.php',
