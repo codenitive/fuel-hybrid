@@ -58,7 +58,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
 	 * @access	public
 	 * @var		string
 	 */
-	public $template = null;
+	public $template = 'default';
 	
 	/**
 	 * Auto render template
@@ -209,14 +209,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
 		{
 			$this->response->status = $http_code;
 			
-			if (is_array($data) and count($data) > 0)
-			{
-				foreach ($data as $key => $value)
-				{
-					$this->template->set($key, $value);
-				}
-			}
-			
+			$this->template->set($data);
 		}
 	}
 	
@@ -227,27 +220,12 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
 	 */
 	protected function _prepare_template($data = null)
 	{
-		if (!is_null($this->template))
-		{
-			$file = $this->template;
-		}
-		else 
-		{
-			$file = \Config::get('app.template');
-		}
-		
-		if (is_file(APPPATH . 'views/themes/' . $file . '.php')) 
-		{
-			$this->template = 'themes/' . $file;
-		}
-		
 		if ($this->auto_render === true)
 		{
-			// Load the template
-			$this->template = \View::factory($this->template);
+			$this->template = \Hybrid\Template::factory($this->template);
 
 			// Set the data to the template if provided
-			$data and $this->template->set_global($data);
+			$data and $this->template->view->set_global($data);
 		}
 	}
 	
@@ -259,7 +237,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
 	protected function _render_template()
 	{
 		//we dont want to accidentally change our site_name
-		$this->template->site_name = \Config::get('app.site_name');
+		$this->template->set(array('site_name' => \Config::get('app.site_name')));
 		
 		if ($this->auto_render === true)
 		{
