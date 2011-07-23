@@ -366,7 +366,7 @@ class Acl_User extends Acl_Abstract {
 			->where_close()
 			->limit(1)->as_object()->execute();
 
-		if (is_null($result) and $result->count() < 1) 
+		if (is_null($result) or $result->count() < 1) 
 		{
 			return false;
 		} 
