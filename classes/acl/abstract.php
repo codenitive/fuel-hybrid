@@ -5,7 +5,6 @@ namespace Hybrid;
 abstract class Acl_Abstract {
 
 	protected static $items;
-	public abstract static function _init();
 
 	/**
 	 * Return TRUE/FALSE whether visitor is logged in to the system
