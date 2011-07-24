@@ -19,29 +19,28 @@ namespace Hybrid;
  * Factory class tests
  * 
  * @group Hybrid
- * @group Factory
+ * @group Html
  */
-class Test_Factory extends \Fuel\Core\TestCase {
+class Test_Html extends \Fuel\Core\TestCase {
 	
 	public function setup() 
 	{
 		\Fuel::add_package('hybrid');
+		\Config::set('app.site_name', 'FuelPHP');
 	}
 
-	public function test_language() 
+	public function test_title()
 	{
-		$expected = \Config::get('language');
-		$output = \Hybrid\Factory::get_language();
-		
+		$expected = '<title>FuelPHP</title>';
+		$output = \Hybrid\Html::title();
+
+		$this->assertEquals($expected, $output);
+
+		$expected = '<title>Hello World &mdash; FuelPHP</title>';
+		$output = \Hybrid\Html::title('Hello World');
+
 		$this->assertEquals($expected, $output);
 	}
-	
-	public function test_identity() 
-	{
-		$expected = \Config::get('app.identity');
-		$output = \Hybrid\Factory::get_identity();
-		
-		$this->assertEquals($expected, $output);
-	}
+
 
 }
