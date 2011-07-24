@@ -118,13 +118,25 @@ class Template {
 	{
 		if (is_array($data) and count($data) > 0)
 		{
-			foreach ($data as $key => $value)
-			{
-				$this->view->set($key, $value);
-			}
+			$this->view->set($data);
 		}
 
 		return $this;
+	}
+
+	public function partial($filename, $data = null)
+	{
+		$view = \Hybrid\View::factory();
+		$view->set_path($this->_folder);
+		$view->set_filename($this->_filename);
+		$view->auto_encode(static::$_config['auto_encode']);
+
+		if (is_array($data) and count($data) > 0)
+		{
+			$view->set($data);
+		}
+
+		return $view->render();
 	}
 
 	public function render()
