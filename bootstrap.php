@@ -19,6 +19,9 @@ Autoloader::add_classes(array (
 	'Hybrid\\Request'                   => __DIR__.'/classes/request.php',
 	'Hybrid\\Restful'                   => __DIR__.'/classes/restful.php',
 	'Hybrid\\Template'                  => __DIR__.'/classes/template.php',
+	'Hybrid\\Template_Abstract'         => __DIR__.'/classes/template/abstract.php',
+	'Hybrid\\Template_Normal'           => __DIR__.'/classes/template/normal.php',
+	'Hybrid\\Template_Frontend'			=> __DIR__.'/classes/template/frontend.php',
 	'Hybrid\\View'                      => __DIR__.'/classes/view.php',
 	
 	'Hybrid\\Acl'                       => __DIR__.'/classes/acl.php',
