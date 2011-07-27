@@ -16,12 +16,12 @@ return array(
 	// set template file
 	'template' 				=> array(
 		'load_assets'			=> false,
+		'default_folder'		=> 'default/',
 		'default_filename'		=> 'index',
 		'auto_encode'			=> false,
-		'folders'				=> array(
+		'frontend'				=> array(
 			// you can set as many folder as possible
-			'default' 				=> APPPATH . 'views/themes/default/',
-			'frontend'				=> DOCROOT . 'themes/default/',
+			'default'				=> DOCROOT . 'themes/default/',
 		)
 	),
 	
