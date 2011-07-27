@@ -28,18 +28,18 @@ namespace Hybrid;
 
 class Template_Frontend extends Template_Abstract {
 
-	public function __construct()
+	public function __construct($theme = null)
 	{
-		$available_folders = array_keys(static::$_config['folders']);
+		$available_folders = array_keys(static::$config['frontend']);
 
 		if (empty($available_folders))
 		{
 			throw new \Fuel_Exception("\\Hybrid\\Template configuration is not completed");
 		}
 
-		if (in_array(trim(strval($type)), $available_folders))
+		if (in_array(trim(strval($theme)), $available_folders))
 		{
-			$this->folder = static::$config['folders'][$type];
+			$this->folder = static::$config['frontend'][$theme];
 		}
 		else
 		{

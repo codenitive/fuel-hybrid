@@ -28,16 +28,26 @@ namespace Hybrid;
 
 class Template_Normal extends Template_Abstract {
 
-	public function __construct()
+	public static function factory($folder)
+	{
+		return new static($folder);
+	}
+
+	public function __construct($folder = null)
 	{
 		// Assets shouldn't be added in APPPATH/views at all
-		
-		$this->folder = static::$config['default_folder'];
-		$this->filename = static::$config['default_filename'];
-
-		if (!!static::$config['load_assets'])
+		if (!empty($folder))
 		{
-			$this->load_assets();
+			$this->folder = $folder;
+		}
+		elseif (isset(static::$config['default_folder']))
+		{
+			$this->folder = static::$config['default_folder'];
+		}
+
+		if (isset(static::$config['default_filename']))
+		{
+			$this->filename = static::$config['default_filename'];
 		}
 
 		$this->view = \View::factory();

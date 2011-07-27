@@ -28,18 +28,30 @@ namespace Hybrid;
 
 class Template {
 
+	protected static $instances = array();
+
 	public static function factory($type = null)
 	{
-		return new static($type, $config);
-	}
+		$theme = null;
+		$type = explode('.', strval($type));
 
-	public function __construct($type = null)
-	{
-		$driver = '\\Hybrid\\Template_'.ucfirst(strval($type));
-
-		if (class_exists($driver)) 
+		if (count($type) > 1) 
 		{
-			return new $driver($config);
+			$theme = $type[1];
+		}
+		
+		$type = $type[0];
+
+		$driver = '\\Hybrid\\Template_'.ucfirst($type);
+
+		if (isset(static::$instances[$type]))
+		{
+			return static::$instances[$type];
+		}
+		elseif (class_exists($driver)) 
+		{
+			static::$instances[$type] = new $driver($theme);
+			return static::$instances[$type];
 		}
 		else 
 		{

@@ -33,7 +33,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
 	 * @access	public
 	 * @var		string
 	 */
-	public $template = 'default';
+	public $template = 'normal';
 	
 	/**
 	 * Auto render template

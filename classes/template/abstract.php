@@ -39,16 +39,9 @@ abstract class Template_Abstract {
 		}
 	}
 
-	public static function factory()
-	{
-		return new static();
-	}
-
 	protected $folder = 'default';
 	protected $filename = 'index';
 	public $view = null;
-
-	public abstract function __construct ();
 
 	public function load_assets() {
 		$folder_path = $this->folder . 'assets/';
