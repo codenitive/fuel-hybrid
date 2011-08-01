@@ -123,16 +123,17 @@ class Request extends \Fuel\Core\Request {
 	 * <code>$exec = \Hybrid\Request::connector('PUT controller/model?hello=world')->execute();
 	 * \Debug::dump($exec);</code>
 	 * 
-	 * @return	object	containing $data and HTTP Response $status
+	 * @param  	array|null  $method_params  An array of parameters to pass to the method being executed
+	 * @return	object		containing $data and HTTP Response $status
 	 * @see		\Request::execute()
 	 */
-	public function execute() 
+	public function execute($method_params = null) 
 	{
 		// Since this just a imitation of curl request, \Hybrid\Input need to know the 
 		// request method and data available in the connection.
 		\Hybrid\Input::connect($this->_request_method, $this->_request_data);
 
-		$execute = parent::execute();
+		$execute = parent::execute($method_params);
 
 		// We need to clean-up any request object transfered to \Hybrid\Input so that
 		// any following request to \Hybrid\Input will redirected to \Fuel\Core\Input
