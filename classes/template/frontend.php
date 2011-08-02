@@ -60,7 +60,7 @@ class Template_Frontend extends Template_Abstract {
 	{
 		$view = \Hybrid\View::factory();
 		$view->set_path($this->folder);
-		$view->set_filename($this->filename);
+		$view->set_filename($filename);
 		$view->auto_encode(static::$config['auto_encode']);
 
 		if (is_array($data) and count($data) > 0)
