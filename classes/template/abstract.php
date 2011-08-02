@@ -52,7 +52,8 @@ abstract class Template_Abstract {
 		}
 		else
 		{
-			\Assets::add_path($folder_path);
+			$folder_path = str_replace(DOCROOT, '', $folder_path);
+			\Asset::add_path($folder_path);
 		}
 
 		return $this;
