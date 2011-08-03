@@ -103,15 +103,20 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
 	 */
 	public function before($data = null) 
 	{
+		$this->_is_restful = \Hybrid\Restful::is_rest();
+
+		if ($this->_is_restful === true)
+		{
+			\Fuel::$profiling = false;
+		}
+
 		$this->language = \Hybrid\Factory::get_language();
 		$this->user = \Hybrid\Acl_User::get();
 
 		\Event::trigger('controller_before');
-		
-		$this->_is_restful = \Hybrid\Restful::is_rest();
 
 		if ($this->_is_restful === false)
-		{
+		{	
 			$this->_prepare_template($data);
 		}
 		else 
