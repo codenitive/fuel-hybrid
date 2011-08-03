@@ -33,7 +33,7 @@ class Template_Normal extends Template_Abstract {
 		return new static($folder);
 	}
 
-	public function __construct($folder = null)
+	public function __construct($folder = null, $filename = null)
 	{
 		// Assets shouldn't be added in APPPATH/views at all
 		if (!empty($folder))
@@ -45,7 +45,11 @@ class Template_Normal extends Template_Abstract {
 			$this->folder = static::$config['default_folder'];
 		}
 
-		if (isset(static::$config['default_filename']))
+		if (!empty($filename))
+		{
+			$this->filename = $filename;
+		}
+		elseif (isset(static::$config['default_filename']))
 		{
 			$this->filename = static::$config['default_filename'];
 		}

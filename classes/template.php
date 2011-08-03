@@ -28,30 +28,44 @@ namespace Hybrid;
 
 class Template {
 
+	const DEFAULT_TEMPLATE = 'normal';
+
 	protected static $instances = array();
 
-	public static function factory($type = null)
+	public static function _init()
 	{
-		$theme = null;
-		$type = explode('.', strval($type));
+		\Config::load('app', true);
+	}
+
+	public static function factory($name = null)
+	{
+		if (is_null($name))
+		{
+			$name = \Config::get('app.template.default', self::DEFAULT_TEMPLATE);	
+		}
+
+		$folder = null;
+		$filename = null;
+		$type = explode('.', strval($name));
 
 		if (count($type) > 1) 
 		{
-			$theme = $type[1];
+			$folder = $type[1];
 		}
 		
 		$type = $type[0];
+		$name = $type . '.' . $folder;
 
 		$driver = '\\Hybrid\\Template_'.ucfirst($type);
 
-		if (isset(static::$instances[$type]))
+		if (isset(static::$instances[$name]))
 		{
-			return static::$instances[$type];
+			return static::$instances[$name];
 		}
 		elseif (class_exists($driver)) 
 		{
-			static::$instances[$type] = new $driver($theme);
-			return static::$instances[$type];
+			static::$instances[$name] = new $driver($folder, $filename);
+			return static::$instances[$name];
 		}
 		else 
 		{

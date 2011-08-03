@@ -28,7 +28,7 @@ namespace Hybrid;
 
 class Template_Frontend extends Template_Abstract {
 
-	public function __construct($theme = null)
+	public function __construct($theme = null, $filename = null)
 	{
 		$available_folders = array_keys(static::$config['frontend']);
 
@@ -46,8 +46,15 @@ class Template_Frontend extends Template_Abstract {
 			throw new \Fuel_Exception("Requested Template folder is not available");
 		}
 
-		$this->filename = static::$config['default_filename'];
-
+		if (!empty($filename))
+		{
+			$this->filename = $filename;
+		}
+		else 
+		{
+			$this->filename = static::$config['default_filename'];
+		}
+		
 		if (!!static::$config['load_assets'])
 		{
 			$this->load_assets();
@@ -67,7 +74,7 @@ class Template_Frontend extends Template_Abstract {
 		{
 			$view->set($data);
 		}
-
+		
 		return $view->render();
 	}
 

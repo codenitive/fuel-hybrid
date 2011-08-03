@@ -73,6 +73,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
 	{
 		$this->language = \Hybrid\Factory::get_language();
 		$this->user = \Hybrid\Acl_User::get();
+		\Fuel::$profiling = false;
 
 		\Event::trigger('controller_before');
 		
