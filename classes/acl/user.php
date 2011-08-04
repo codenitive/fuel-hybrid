@@ -58,6 +58,7 @@ class Acl_User extends Acl_Abstract {
 	}
 	
 	protected static $_optionals = array('email', 'status', 'full_name', 'gender', 'birthdate');
+	protected static $_allowed_status = array('verified');
 	protected static $_use_meta = true;
 	protected static $_use_auth = true;
 	protected static $_use_twitter = false;
@@ -269,7 +270,7 @@ class Acl_User extends Acl_Abstract {
 		{
 			$user = $result->current();
 
-			if ($user->status !== 'verified') 
+			if (!in_array($user->status, static::$_allowed_status)) 
 			{
 				// only verified user can login to this application
 				static::_unregister();
@@ -398,7 +399,7 @@ class Acl_User extends Acl_Abstract {
 				break;
 			}
 
-			if ($user->status !== 'verified') 
+			if (!in_array($user->status, static::$_allowed_status)) 
 			{
 				return false;
 			}
