@@ -50,6 +50,13 @@ class Template {
 
 		if (count($type) > 1) 
 		{
+			// set filename if available
+			if (isset($type[2]))
+			{
+				$filename = $type[2];
+			}
+
+			// folder should be available if type count > 1
 			$folder = $type[1];
 		}
 		
