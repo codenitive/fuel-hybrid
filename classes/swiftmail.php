@@ -1,0 +1,370 @@
+<?php
+
+/**
+ * Fuel is a fast, lightweight, community driven PHP5 framework.
+ *
+ * @package    Fuel
+ * @version    1.0
+ * @author     Fuel Development Team
+ * @license    MIT License
+ * @copyright  2010 - 2011 Fuel Development Team
+ * @link       http://fuelphp.com
+ */
+
+namespace Hybrid;
+
+import('swift/swift_required', 'vendor');
+
+/**
+ * Hybrid 
+ * 
+ * A set of class that extends the functionality of FuelPHP without 
+ * affecting the standard workflow when the application doesn't actually 
+ * utilize Hybrid feature.
+ * 
+ * @package     Fuel
+ * @subpackage  Hybrid
+ * @category    Swiftmail
+ * @author      Mior Muhammad Zaki <crynobone@gmail.com>
+ */
+
+ class Swiftmail {
+    
+    protected static $config = array();
+
+    /**
+     * Creates a new instance of the email driver
+     *
+     * @static
+     * @access  public
+     * @param   array   $config
+     * @return  Swiftmail
+     */
+    public static function factory($config = array())
+    {
+        $initconfig = \Config::load('email', null, true);
+        if (is_array($config) && is_array($initconfig))
+        {
+            $config = array_merge($initconfig, $config);
+        }
+
+        return new static($config);
+    }
+
+    protected $mailer       = null;
+    protected $messager     = null;
+    protected $recipients   = array(
+        'to'        => array(),
+        'bcc'       => array(),
+        'cc'        => array(),
+        'from'      => array(),
+        'reply_to'  => array(),
+    );
+    protected $debug        = null;
+
+    public function __construct($config)
+    {
+        $this->config   = $config;
+        $transport      = "_transport_" . $config['protocol'];
+
+        $this->debug                = new \stdClass();
+        $this->debug->success       = false;
+        $this->debug->failures      = null;
+        $this->debug->total_sent    = 0;
+
+        if (method_exists($this, $transport))
+        {
+            $transport      = $this->{$transport}($config);
+            $this->messager = new \Swift_Message();
+            $this->mailer   = new \Swift_Mailer($transport);
+
+            $this->messager->setCharset($config['charset']);
+
+            switch($config['mailtype'])
+            {
+               case 'html' :
+                    $this->messager->setContentType('plain/html');
+                break; 
+
+                case 'text' :
+                default :
+                    $this->messager->setContentType('plain/text');
+                break;
+            }
+        }
+        else
+        {
+            throw new \Fuel_Exception("Swiftmail protocol: " . $config['protocol'] . " does not exist");
+        }
+    }
+
+    /**
+     * Sets the subject of the email.
+     *
+     * @param   string  $subject
+     * @return  self
+     */
+    public function subject($subject)
+    {
+        $this->messager->setSubject($subject);
+
+        return $this;
+    }
+
+    /**
+     * Sets the message of the email, content type is determined by 'mailtype'
+     *
+     * @access  public
+     * @param   string  $content
+     * @return  self
+     */
+    public function message($content)
+    {
+        $this->messager->setBody($content, $this->config['mailtype']);
+
+        return $this;
+    }
+
+    /**
+     * Sets the Plain Text content to place into the email.
+     *
+     * @access  public
+     * @param   string  $content   The emails Plain Text
+     * @return  self
+     */
+    public function text($content)
+    {
+        $this->messager->addPart($content, 'plain/text');
+
+        return $this;
+    }
+
+    /**
+     * Sets the HTML content to place into the email.
+     *
+     * @access  public
+     * @param   string  $content   The emails HTML
+     * @return  self
+     */
+    public function html($content)
+    {
+        $this->messager->addPart($content, 'plain/html');
+
+        return $this;
+    }
+
+    /**
+     * Adds a direct recipient
+     *
+     * @access  public
+     * @param   string  $address    A single email
+     * @param   string  $name       Recipient name
+     * @return  self
+     */
+    public function to($address, $name = '') {
+        $this->add_multiple_recipients('to', $address, $name);
+
+        return $this;
+    }
+
+    /**
+     * Adds a carbon copy recipient
+     *
+     * @access  public
+     * @param   string  $address    A single email
+     * @param   string  $name       Recipient name
+     * @return  self
+     */
+    public function cc($address, $name = '') {
+        $this->add_multiple_recipients('cc', $address, $name);
+
+        return $this;
+    }
+
+    /**
+     * Adds a blind carbon copy recipient
+     *
+     * @access  public
+     * @param   string  $address    A single email
+     * @param   string  $name       Recipient name
+     * @return  self
+     */
+    public function bcc($address, $name = '') {
+        $this->add_multiple_recipients('bcc', $address, $name);
+
+        return $this;
+    }
+
+    /**
+     * Adds a direct sender
+     *
+     * @access  public
+     * @param   string  $address    A single email
+     * @param   string  $name       Recipient name
+     * @return  self
+     */
+    public function from($address, $name = '') {
+        $this->add_multiple_recipients('from', $address, $name);
+
+        return $this;
+    }
+
+    /**
+     * Adds a direct reply-to
+     *
+     * @access  public
+     * @param   string  $address    A single email
+     * @param   string  $name       Recipient name
+     * @return  self
+     */
+    public function reply_to($address, $name = '') {
+        $this->add_multiple_recipients('reply_to', $address, $name);
+
+        return $this;
+    }
+
+    /**
+     * Add recipients or senders based on desired 'type'
+     *
+     * @access  protected
+     * @param   string  $type       'to', 'cc', 'bcc', 'from' or 'reply_to'
+     * @param   string  $address    A single email
+     * @param   string  $name       Recipient name
+     * @return  bool                Return true on success
+     */
+    protected function add_multiple_recipients($type, $address, $name = '')
+    {
+        if (!isset($this->recipients[$type]))
+        {
+            throw new \Fuel_Exception("Recipient type: {$type} does not exist");
+        }
+
+        if (!empty($name))
+        {
+            $this->recipients[$type][$address] = $name; 
+        }
+
+        $this->recipients[$type][] = $address;
+
+        return true;
+    }
+
+    /**
+     * Sends the email.
+     *
+     * @access  public
+     * @return  object     containing success status, total email sent and failure during email sending
+     */
+    public function send()
+    {
+        $this->messager->setTo($this->recipients['to']);
+        $this->messager->setFrom($this->recipients['from']);
+
+        if (count($this->recipients['reply_to']) > 0)
+        {
+            $this->messager->setReplyTo($this->recipients['reply_to']);
+        }
+
+        if (count($this->recipients['cc']) > 0)
+        {
+            $this->messager->setCc($this->recipients['cc']);
+        }
+
+        if (count($this->recipients['bcc']) > 0)
+        {
+            $this->messager->setBcc($this->recipients['bcc']);
+        }
+
+        $result = $this->mailer->send($this->messager, $failure);
+
+        $this->debug->failure = $failure;
+
+        if (intval($result) >= 1)
+        {
+            $this->debug->success       = true;
+            $this->debug->total_sent    = intval($result);
+        }
+
+        return $this->debug->success;
+    }
+
+    public function debug()
+    {
+        return $this->debug;
+    }
+
+    /**
+     * Attaches a file in the local filesystem to the email.
+     * 
+     * @todo    not implemented yet
+     * @access  public
+     * @param   string  $filename       The file to be used.
+     * @param   string  $disposition    Defaults to attachment, can also be inline?
+     * @return  self
+     */
+    public function attach($filename, $disposition)
+    {
+        $attachment = \Swift_Attachment::fromPath($filename)->setDisposition($disposition);
+        $this->messager->attach($attachment);
+        
+        return $this;
+    }
+
+    /**
+     * Dynamically attaches a file to the email.
+     *
+     * @todo    not implemented yet
+     * @access  public
+     * @param   string  $contents       The contents of the attachment
+     * @param   string  $filename       The filename to use in the email
+     * @param   string  $disposition    Defaults to attachment, can also be inline?
+     * @return  self
+     */
+    public static function dynamic_attach($contents, $filename, $disposition = 'attachment')
+    {
+        throw new \Fuel_Exception("File attachment has not been implemented yet");
+        return $this;
+    }
+
+
+    protected function _transport_sendmail($config)
+    {
+        return new \Swift_SendmailTransport($config['sendmail_path'] . ' -oi -t');
+    }
+
+    protected function _transport_mail($config)
+    {
+        return new \Swift_MailTransport();
+    }
+
+    protected function _transport_smtp($config)
+    {
+        if (is_array($config) and !empty($config))
+        {
+            extract($config);  
+        }
+
+        $ssl = null;
+
+        if (preg_match('/^(ssl:\/\/)(.*)$/', $smtp_host, $matches))
+        {
+            $ssl        = 'ssl';
+            $smtp_host  = $matches[2]; 
+        }
+
+        $transport = new \Swift_SmtpTransport($smtp_host, $smtp_port, $ssl);
+
+        if (!empty($smtp_user))
+        {
+            $transport->setUsername($smtp_user);
+        }
+
+        if (!empty($smtp_pass))
+        {
+            $transport->setPassword($smtp_pass);
+        }
+
+        return $transport;
+    }
+
+}
