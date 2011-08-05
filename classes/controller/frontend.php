@@ -28,89 +28,89 @@ namespace Hybrid;
  */
 abstract class Controller_Frontend extends \Hybrid\Controller {
 
-	/**
-	 * Page template
-	 * 
-	 * @access	public
-	 * @var		string
-	 */
-	public $template = 'frontend';
-	
-	/**
-	 * Auto render template
-	 * 
-	 * @access	public
-	 * @var		bool	
-	 */
-	public $auto_render = true;
+    /**
+     * Page template
+     * 
+     * @access  public
+     * @var     string
+     */
+    public $template = 'frontend';
+    
+    /**
+     * Auto render template
+     * 
+     * @access  public
+     * @var     bool    
+     */
+    public $auto_render = true;
 
-	/**
-	 * This method will be called after we route to the destinated method
-	 * 
-	 * @access	public
-	 */
-	public function before($data = null) 
-	{
-		$this->_prepare_template($data);
+    /**
+     * This method will be called after we route to the destinated method
+     * 
+     * @access  public
+     */
+    public function before($data = null) 
+    {
+        $this->_prepare_template($data);
 
-		return parent::before();
-	}
+        return parent::before();
+    }
 
-	/**
-	 * Takes pure data and optionally a status code, then creates the response
-	 * 
-	 * @param	array		$data
-	 * @param	int			$http_code
-	 */
-	protected function response($data = array(), $http_code = 200) 
-	{
-		$this->response->status = $http_code;
+    /**
+     * Takes pure data and optionally a status code, then creates the response
+     * 
+     * @param   array       $data
+     * @param   int         $http_code
+     */
+    protected function response($data = array(), $http_code = 200) 
+    {
+        $this->response->status = $http_code;
 
-		$this->template->set($data);
-	}
+        $this->template->set($data);
+    }
 
-	/**
-	 * This method will be called after we route to the destinated method
-	 * 
-	 * @access	public
-	 */
-	public function after() 
-	{
-		$this->_render_template();
+    /**
+     * This method will be called after we route to the destinated method
+     * 
+     * @access  public
+     */
+    public function after() 
+    {
+        $this->_render_template();
 
-		return parent::after();
-	}
-	
-	/**
-	 * Prepare template
-	 * 
-	 * @access	protected
-	 */
-	protected function _prepare_template($data = null)
-	{
-		if ($this->auto_render === true)
-		{
-			$this->template = \Hybrid\Template::factory($this->template);
+        return parent::after();
+    }
+    
+    /**
+     * Prepare template
+     * 
+     * @access  protected
+     */
+    protected function _prepare_template($data = null)
+    {
+        if ($this->auto_render === true)
+        {
+            $this->template = \Hybrid\Template::factory($this->template);
 
-			// Set the data to the template if provided
-			$data and $this->template->view->set_global($data);
-		}
-	}
-	
-	/**
-	 * Render template
-	 * 
-	 * @access	protected
-	 */
-	protected function _render_template()
-	{
-		//we dont want to accidentally change our site_name
-		$this->template->set(array('site_name' => \Config::get('app.site_name')));
-		
-		if ($this->auto_render === true)
-		{
-			$this->response->body($this->template->render());
-		}
-	}
+            // Set the data to the template if provided
+            $data and $this->template->view->set_global($data);
+        }
+    }
+    
+    /**
+     * Render template
+     * 
+     * @access  protected
+     */
+    protected function _render_template()
+    {
+        //we dont want to accidentally change our site_name
+        $this->template->set(array('site_name' => \Config::get('app.site_name')));
+        
+        if ($this->auto_render === true)
+        {
+            $this->response->body($this->template->render());
+        }
+    }
 
 }

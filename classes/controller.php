@@ -28,51 +28,51 @@ namespace Hybrid;
  */
 abstract class Controller extends \Fuel\Core\Controller {
 
-	/**
-	 * Run ACL check and redirect user automatically if user doesn't have the privilege
-	 * 
-	 * @final
-	 * @access	public
-	 * @param	mixed	$resource
-	 * @param	string	$type 
-	 */
-	final protected function _acl($resource, $type = null) 
-	{
-		$status = \Hybrid\Acl::access_status($resource, $type);
+    /**
+     * Run ACL check and redirect user automatically if user doesn't have the privilege
+     * 
+     * @final
+     * @access  public
+     * @param   mixed   $resource
+     * @param   string  $type 
+     */
+    final protected function _acl($resource, $type = null) 
+    {
+        $status = \Hybrid\Acl::access_status($resource, $type);
 
-		switch ($status) 
-		{
-			case 401 :
-				\Request::show_404();
-			break;
-		}
-	}
+        switch ($status) 
+        {
+            case 401 :
+                \Request::show_404();
+            break;
+        }
+    }
 
-	/**
-	 * This method will be called after we route to the destinated method
-	 * 
-	 * @access	public
-	 */
-	public function before() 
-	{
-		$this->language = \Hybrid\Factory::get_language();
-		$this->user = \Hybrid\Acl_User::get();
+    /**
+     * This method will be called after we route to the destinated method
+     * 
+     * @access  public
+     */
+    public function before() 
+    {
+        $this->language = \Hybrid\Factory::get_language();
+        $this->user = \Hybrid\Acl_User::get();
 
-		\Event::trigger('controller_before');
+        \Event::trigger('controller_before');
 
-		return parent::before();
-	}
+        return parent::before();
+    }
 
-	/**
-	 * This method will be called after we route to the destinated method
-	 * 
-	 * @access	public
-	 */
-	public function after() 
-	{
-		\Event::trigger('controller_after');
+    /**
+     * This method will be called after we route to the destinated method
+     * 
+     * @access  public
+     */
+    public function after() 
+    {
+        \Event::trigger('controller_after');
 
-		return parent::after();
-	}
+        return parent::after();
+    }
 
 }
