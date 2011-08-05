@@ -26,124 +26,124 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 abstract class Controller_Rest extends \Fuel\Core\Controller {
-	
-	/**
-	 * Rest format to be used
-	 * 
-	 * @access	protected
-	 * @var		string
-	 */
-	protected $rest_format = null;
-	
-	/**
-	 * Set the default content type using PHP Header
-	 * 
-	 * @access	protected
-	 * @var		bool
-	 */
-	protected $set_content_type = true;
+    
+    /**
+     * Rest format to be used
+     * 
+     * @access  protected
+     * @var     string
+     */
+    protected $rest_format = null;
+    
+    /**
+     * Set the default content type using PHP Header
+     * 
+     * @access  protected
+     * @var     bool
+     */
+    protected $set_content_type = true;
 
-	/**
-	 * Run ACL check and redirect user automatically if user doesn't have the privilege
-	 * 
-	 * @access	public
-	 * @param	mixed	$resource
-	 * @param	string	$type 
-	 */
-	final protected function _acl($resource, $type = null) 
-	{
-		$status = \Hybrid\Acl::access_status($resource, $type);
+    /**
+     * Run ACL check and redirect user automatically if user doesn't have the privilege
+     * 
+     * @access  public
+     * @param   mixed   $resource
+     * @param   string  $type 
+     */
+    final protected function _acl($resource, $type = null) 
+    {
+        $status = \Hybrid\Acl::access_status($resource, $type);
 
-		switch ($status) 
-		{
-			case 401 :
-				$this->response(array('text' => 'You doesn\'t have privilege to do this action'), 401);
-				print $this->response->body;
-				exit();
-			break;
-		}
-	}
+        switch ($status) 
+        {
+            case 401 :
+                $this->response(array('text' => 'You doesn\'t have privilege to do this action'), 401);
+                print $this->response->body;
+                exit();
+            break;
+        }
+    }
 
-	/**
-	 * This method will be called after we route to the destinated method
-	 * 
-	 * @access	public
-	 */
-	public function before() 
-	{
-		$this->language = \Hybrid\Factory::get_language();
-		$this->user = \Hybrid\Acl_User::get();
-		\Fuel::$profiling = false;
+    /**
+     * This method will be called after we route to the destinated method
+     * 
+     * @access  public
+     */
+    public function before() 
+    {
+        $this->language = \Hybrid\Factory::get_language();
+        $this->user = \Hybrid\Acl_User::get();
+        \Fuel::$profiling = false;
 
-		\Event::trigger('controller_before');
-		
-		if (\Hybrid\Request::main() !== \Hybrid\Request::active()) 
-		{
-			$this->set_content_type = false;
-		}
-		
-		\Hybrid\Restful::auth();
+        \Event::trigger('controller_before');
+        
+        if (\Hybrid\Request::main() !== \Hybrid\Request::active()) 
+        {
+            $this->set_content_type = false;
+        }
+        
+        \Hybrid\Restful::auth();
 
-		return parent::before();
-	}
+        return parent::before();
+    }
 
-	/**
-	 * This method will be called after we route to the destinated method
-	 * 
-	 * @access	public
-	 */
-	public function after() 
-	{
-		\Event::trigger('controller_after');
-		
-		return parent::after();
-	}
+    /**
+     * This method will be called after we route to the destinated method
+     * 
+     * @access  public
+     */
+    public function after() 
+    {
+        \Event::trigger('controller_after');
+        
+        return parent::after();
+    }
 
-	/**
-	 * Requests are not made to methods directly The request will be for an "object".
-	 * this simply maps the object and method to the correct Controller method.
-	 * 
-	 * @param	Request	$resource
-	 * @param	array	$arguments
-	 */
-	public function router($resource, $arguments) 
-	{
-		$pattern = \Hybrid\Restful::$pattern;
-		
-		// Remove the extension from arguments too
-		$resource = preg_replace($pattern, '', $resource);
-		
-		// If they call user, go to $this->post_user();
-		$controller_method = strtolower(\Hybrid\Input::method()) . '_' . $resource;
-		
-		if (method_exists($this, $controller_method)) 
-		{
-			call_user_func(array($this, $controller_method));
-		}
-		else 
-		{
-			$this->response->status = 404;
-			return;
-		}
-	}
+    /**
+     * Requests are not made to methods directly The request will be for an "object".
+     * this simply maps the object and method to the correct Controller method.
+     * 
+     * @param   Request $resource
+     * @param   array   $arguments
+     */
+    public function router($resource, $arguments) 
+    {
+        $pattern = \Hybrid\Restful::$pattern;
+        
+        // Remove the extension from arguments too
+        $resource = preg_replace($pattern, '', $resource);
+        
+        // If they call user, go to $this->post_user();
+        $controller_method = strtolower(\Hybrid\Input::method()) . '_' . $resource;
+        
+        if (method_exists($this, $controller_method)) 
+        {
+            call_user_func(array($this, $controller_method));
+        }
+        else 
+        {
+            $this->response->status = 404;
+            return;
+        }
+    }
 
-	/**
-	 * Takes pure data and optionally a status code, then creates the response
-	 * 
-	 * @param	array	$data
-	 * @param	int		$http_code
-	 */
-	protected function response($data = array(), $http_code = 200) 
-	{
-		$restful = \Hybrid\Restful::factory($data, $http_code)->format($this->rest_format)->execute();
-		
-		$this->response->body($restful->body);
-		$this->response->status = $restful->status;
-		
-		if ($this->set_content_type === true) 
-		{
-			// Set the correct format header
-			$this->response->set_header('Content-Type', \Hybrid\Restful::content_type($restful->format));
-		}
-	}
+    /**
+     * Takes pure data and optionally a status code, then creates the response
+     * 
+     * @param   array   $data
+     * @param   int     $http_code
+     */
+    protected function response($data = array(), $http_code = 200) 
+    {
+        $restful = \Hybrid\Restful::factory($data, $http_code)->format($this->rest_format)->execute();
+        
+        $this->response->body($restful->body);
+        $this->response->status = $restful->status;
+        
+        if ($this->set_content_type === true) 
+        {
+            // Set the correct format header
+            $this->response->set_header('Content-Type', \Hybrid\Restful::content_type($restful->format));
+        }
+    }
 }
