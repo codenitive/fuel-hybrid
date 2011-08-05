@@ -28,63 +28,66 @@ namespace Hybrid;
 
 class Template_Frontend extends Template_Abstract {
 
-	public function __construct($theme = null, $filename = null)
-	{
-		$available_folders = array_keys(static::$config['frontend']);
+    public function __construct($theme = null, $filename = null)
+    {
+        $available_folders = array_keys(static::$config['frontend']);
 
-		if (empty($available_folders))
-		{
-			throw new \Fuel_Exception("\\Hybrid\\Template configuration is not completed");
-		}
+        if (empty($available_folders))
+        {
+            throw new \Fuel_Exception("\\Hybrid\\Template configuration is not completed");
+        }
 
-		if (in_array(trim(strval($theme)), $available_folders))
-		{
-			$this->folder = static::$config['frontend'][$theme];
-		}
-		else
-		{
-			throw new \Fuel_Exception("Requested Template folder is not available");
-		}
+        if (in_array(trim(strval($theme)), $available_folders))
+        {
+            $this->folder = static::$config['frontend'][$theme];
+        }
+        else
+        {
+            throw new \Fuel_Exception("Requested Template folder is not available");
+        }
 
-		if (!empty($filename))
-		{
-			$this->filename = $filename;
-		}
-		else 
-		{
-			$this->filename = static::$config['default_filename'];
-		}
-		
-		if (!!static::$config['load_assets'])
-		{
-			$this->load_assets();
-		}
+        if (!empty($filename))
+        {
+            $this->filename = $filename;
+        }
+        else 
+        {
+            $this->filename = static::$config['default_filename'];
+        }
+        
+        if (!!static::$config['load_assets'])
+        {
+            $this->load_assets();
+        }
 
-		$this->view = \Hybrid\View::factory();
-	}
+        $this->view = \Hybrid\View::factory();
+    }
 
-	public function partial($filename, $data = null)
-	{
-		$view = \Hybrid\View::factory();
-		$view->set_path($this->folder);
-		$view->set_filename($filename);
-		$view->auto_encode(static::$config['auto_encode']);
+    public function partial($filename, $data = null)
+    {
+        $view = \Hybrid\View::factory();
+        $view->set_path($this->folder);
+        $view->set_filename($filename);
+        $view->auto_encode(static::$config['auto_encode']);
 
-		if (is_array($data) and count($data) > 0)
-		{
-			$view->set($data);
-		}
-		
-		return $view->render();
-	}
+        if (is_array($data) and count($data) > 0)
+        {
+            $view->set($data);
+        }
+        
+        return $view->render();
+    }
 
-	public function render()
-	{
-		$this->view->set_path($this->folder);
-		$this->view->set_filename($this->filename);
-		$this->view->auto_encode(static::$config['auto_encode']);
+    public function render()
+    {
+        $this->view->set_path($this->folder);
+        $this->view->set_filename($this->filename);
+        $this->view->auto_encode(static::$config['auto_encode']);
+        $this->view->set(array(
+            'template' => $this,
+        ));
 
-		return $this->view->render();
-	}
+        return $this->view->render();
+    }
 
 }

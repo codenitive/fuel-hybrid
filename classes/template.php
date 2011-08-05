@@ -28,56 +28,56 @@ namespace Hybrid;
 
 class Template {
 
-	const DEFAULT_TEMPLATE = 'normal';
+    const DEFAULT_TEMPLATE = 'normal';
 
-	protected static $instances = array();
+    protected static $instances = array();
 
-	public static function _init()
-	{
-		\Config::load('app', true);
-	}
+    public static function _init()
+    {
+        \Config::load('app', true);
+    }
 
-	public static function factory($name = null)
-	{
-		if (is_null($name))
-		{
-			$name = \Config::get('app.template.default', self::DEFAULT_TEMPLATE);	
-		}
+    public static function factory($name = null)
+    {
+        if (is_null($name))
+        {
+            $name = \Config::get('app.template.default', self::DEFAULT_TEMPLATE);   
+        }
 
-		$folder = null;
-		$filename = null;
-		$type = explode('.', strval($name));
+        $folder = null;
+        $filename = null;
+        $type = explode('.', strval($name));
 
-		if (count($type) > 1) 
-		{
-			// set filename if available
-			if (isset($type[2]))
-			{
-				$filename = $type[2];
-			}
+        if (count($type) > 1) 
+        {
+            // set filename if available
+            if (isset($type[2]))
+            {
+                $filename = $type[2];
+            }
 
-			// folder should be available if type count > 1
-			$folder = $type[1];
-		}
-		
-		$type = $type[0];
-		$name = $type . '.' . $folder;
+            // folder should be available if type count > 1
+            $folder = $type[1];
+        }
+        
+        $type = $type[0];
+        $name = $type . '.' . $folder;
 
-		$driver = '\\Hybrid\\Template_'.ucfirst($type);
+        $driver = '\\Hybrid\\Template_'.ucfirst($type);
 
-		if (isset(static::$instances[$name]))
-		{
-			return static::$instances[$name];
-		}
-		elseif (class_exists($driver)) 
-		{
-			static::$instances[$name] = new $driver($folder, $filename);
-			return static::$instances[$name];
-		}
-		else 
-		{
-			throw new \Fuel_Exception("Requested {$driver} does not exist");
-		}
-	}
+        if (isset(static::$instances[$name]))
+        {
+            return static::$instances[$name];
+        }
+        elseif (class_exists($driver)) 
+        {
+            static::$instances[$name] = new $driver($folder, $filename);
+            return static::$instances[$name];
+        }
+        else 
+        {
+            throw new \Fuel_Exception("Requested {$driver} does not exist");
+        }
+    }
 
 }
