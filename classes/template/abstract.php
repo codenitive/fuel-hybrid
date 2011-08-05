@@ -28,78 +28,78 @@ namespace Hybrid;
 
 abstract class Template_Abstract {
 
-	protected static $config = null;
-	
-	public static function _init()
-	{
-		if (is_null(static::$config))
-		{
-			\Config::load('app', 'app');
-			static::$config = \Config::get('app.template', array());
-		}
-	}
+    protected static $config = null;
+    
+    public static function _init()
+    {
+        if (is_null(static::$config))
+        {
+            \Config::load('app', 'app');
+            static::$config = \Config::get('app.template', array());
+        }
+    }
 
-	protected $folder = 'default';
-	protected $filename = 'index';
-	public $view = null;
+    protected $folder = 'default';
+    protected $filename = 'index';
+    public $view = null;
 
-	public function load_assets() {
-		$folder_path = $this->folder . 'assets/';
+    public function load_assets() {
+        $folder_path = $this->folder . 'assets/';
 
-		if (!\is_dir($folder_path))
-		{
-			throw new \Fuel_Exception("Unable to load assets at {$folder_path}");
-		}
-		else
-		{
-			$folder_path = str_replace(DOCROOT, '', $folder_path);
-			\Asset::add_path($folder_path);
-		}
+        if (!\is_dir($folder_path))
+        {
+            throw new \Fuel_Exception("Unable to load assets at {$folder_path}");
+        }
+        else
+        {
+            $folder_path = str_replace(DOCROOT, '', $folder_path);
+            \Asset::add_path($folder_path);
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function set_folder($path = null)
-	{
-		if (!\is_dir($path))
-		{
-			throw new \Fuel_Exception("Path {$path} does not appear to a valid folder");
-		}
-		else 
-		{
-			$this->folder = $path;
+    public function set_folder($path = null)
+    {
+        if (!\is_dir($path))
+        {
+            throw new \Fuel_Exception("Path {$path} does not appear to a valid folder");
+        }
+        else 
+        {
+            $this->folder = $path;
 
-			if (!!static::$config['load_assets'])
-			{
-				return $this->load_assets();
-			}
-		}
+            if (!!static::$config['load_assets'])
+            {
+                return $this->load_assets();
+            }
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function set_filename($filename = null)
-	{
-		if (!empty($filename))
-		{
-			$this->filename = $filename;
-		}
+    public function set_filename($filename = null)
+    {
+        if (!empty($filename))
+        {
+            $this->filename = $filename;
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function set($data = array())
-	{
-		if (is_array($data) and count($data) > 0)
-		{
-			$this->view->set($data);
-		}
+    public function set($data = array())
+    {
+        if (is_array($data) and count($data) > 0)
+        {
+            $this->view->set($data);
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public abstract function partial($filename, $data = null);
+    public abstract function partial($filename, $data = null);
 
-	public abstract function render();
+    public abstract function render();
 
 }

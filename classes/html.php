@@ -26,25 +26,25 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 class Html extends \Fuel\Core\Html {
-	
-	/**
+    
+    /**
      * Generates a html title tag
      *
-	 * @static
-	 * @access	public
-     * @param	string	$content page title
-     * @return	string
+     * @static
+     * @access  public
+     * @param   string  $content page title
+     * @return  string
      */
-	public static function title($content = '') 
-	{
-		$title = \Config::get('app.site_name');
+    public static function title($content = '') 
+    {
+        $title = \Config::get('app.site_name');
 
-		if (!empty($content) and is_string($content)) 
-		{
-			$title = sprintf('%s &mdash; %s', $content, $title);
-		}
+        if (!empty($content) and is_string($content)) 
+        {
+            $title = sprintf('%s &mdash; %s', $content, $title);
+        }
 
-		return html_tag('title', array(), $title);
-	}
-	
+        return html_tag('title', array(), $title);
+    }
+    
 }
