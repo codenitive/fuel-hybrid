@@ -27,99 +27,99 @@ namespace Hybrid;
  */
 class Input {
 
-	/**
-	 * Store \Hybrid\Request object (if available)
-	 * 
-	 * @access		protected
-	 * @staticvar	mixed 
-	 */
-	protected static $request = null;
+    /**
+     * Store \Hybrid\Request object (if available)
+     * 
+     * @access      protected
+     * @staticvar   mixed 
+     */
+    protected static $request = null;
 
-	/**
-	 * Receive \Hybrid\Request connection information
-	 * 
-	 * @static
-	 * @access	public
-	 * @param	string	$method
-	 * @param	array	$data
-	 */
-	public static function connect($method = '', $data = array()) 
-	{
-		if (!empty($method)) 
-		{
-			static::$request = (object) array('method' => $method, 'data' => $data);
-		}
-	}
+    /**
+     * Receive \Hybrid\Request connection information
+     * 
+     * @static
+     * @access  public
+     * @param   string  $method
+     * @param   array   $data
+     */
+    public static function connect($method = '', $data = array()) 
+    {
+        if (!empty($method)) 
+        {
+            static::$request = (object) array('method' => $method, 'data' => $data);
+        }
+    }
 
-	/**
-	 * Disconnect current \Hybrid\Request connection
-	 * 
-	 * @static
-	 * @access	public
-	 */
-	public static function disconnect() 
-	{
-		static::$request = null;
-	}
+    /**
+     * Disconnect current \Hybrid\Request connection
+     * 
+     * @static
+     * @access  public
+     */
+    public static function disconnect() 
+    {
+        static::$request = null;
+    }
 
-	public static function __callStatic($name, $args) 
-	{
-		// If $request is null, it's a request from \Fuel\Core\Request so use it instead
-		if (in_array(strtolower($name), array('is_ajax', 'user_agent', 'real_ip', 'referrer', 'server'))) 
-		{
-			return call_user_func(array('\\Input', $name));
-		}
-		
-		// Check whether this request is from \Fuel\Core\Request or \Hybrid\Request
-		$using_hybrid = false;
-		
-		if (!is_null(static::$request) and static::$request->method !== '') 
-		{
-			$using_hybrid = true;
-		}
+    public static function __callStatic($name, $args) 
+    {
+        // If $request is null, it's a request from \Fuel\Core\Request so use it instead
+        if (in_array(strtolower($name), array('is_ajax', 'user_agent', 'real_ip', 'referrer', 'server'))) 
+        {
+            return call_user_func(array('\\Input', $name));
+        }
+        
+        // Check whether this request is from \Fuel\Core\Request or \Hybrid\Request
+        $using_hybrid = false;
+        
+        if (!is_null(static::$request) and static::$request->method !== '') 
+        {
+            $using_hybrid = true;
+        }
 
-		if (!$using_hybrid and $name == 'method') 
-		{
-			return call_user_func(array('\\Input', 'method'));
-		}
+        if (!$using_hybrid and $name == 'method') 
+        {
+            return call_user_func(array('\\Input', 'method'));
+        }
 
-		$default = null;
-		$index = null;
+        $default = null;
+        $index = null;
 
-		switch (true) 
-		{
-			case count($args) > 1 :
-				$default = $args[1];
-			case count($args) > 0 :
-				$index = $args[0];
-			break;
-		}
+        switch (true) 
+        {
+            case count($args) > 1 :
+                $default = $args[1];
+            case count($args) > 0 :
+                $index = $args[0];
+            break;
+        }
 
-		if ($name === 'method') 
-		{
-			return static::$request->method;
-		}
+        if ($name === 'method') 
+        {
+            return static::$request->method;
+        }
 
-		// Reach this point but $index is null (which isn't be so we should just return the default value) 
-		if (is_null($index)) 
-		{
-			return $default;
-		}
+        // Reach this point but $index is null (which isn't be so we should just return the default value) 
+        if (is_null($index)) 
+        {
+            return $default;
+        }
 
-		if (false === $using_hybrid) 
-		{
-			// Not using \Hybrid\Request, it has to be from \Fuel\Core\Input.
-			return call_user_func_array(array('\\Input', $name), array($index, $default));
-		}
+        if (false === $using_hybrid) 
+        {
+            // Not using \Hybrid\Request, it has to be from \Fuel\Core\Input.
+            return call_user_func_array(array('\\Input', $name), array($index, $default));
+        }
 
-		if ((strtoupper($name) === static::$request->method)) 
-		{
-			return isset(static::$request->data[$index]) ? static::$request->data[$index] : $default;
-		} 
-		else 
-		{
-			return $default;
-		}
-	}
+        if ((strtoupper($name) === static::$request->method)) 
+        {
+            return isset(static::$request->data[$index]) ? static::$request->data[$index] : $default;
+        } 
+        else 
+        {
+            return $default;
+        }
+    }
 
 }
