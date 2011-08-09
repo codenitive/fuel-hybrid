@@ -15,6 +15,7 @@ namespace Hybrid;
 
 abstract class Acl_Abstract {
 
+
     protected static $items;
 
     /**
@@ -46,17 +47,17 @@ abstract class Acl_Abstract {
      */
     public static function get($name = null) 
     {
-        if (!is_string($name)) 
+        if (is_null($name)) 
         {
             return (object) static::$items;
         }
 
-        if (!\array_key_exists($name, static::$items)) 
+        if (\array_key_exists($name, static::$items)) 
         {
-            return false;
+            return static::$items[$name];
         }
 
-        return static::$items[$name];
+        return false;
     }
 
     /**
