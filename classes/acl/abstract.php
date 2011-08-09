@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Fuel is a fast, lightweight, community driven PHP5 framework.
+ *
+ * @package    Fuel
+ * @version    1.0
+ * @author     Fuel Development Team
+ * @license    MIT License
+ * @copyright  2010 - 2011 Fuel Development Team
+ * @link       http://fuelphp.com
+ */
+
 namespace Hybrid;
 
 abstract class Acl_Abstract {
@@ -62,4 +73,5 @@ abstract class Acl_Abstract {
 
         return sha1($salt . $password);
     }
+    
 }

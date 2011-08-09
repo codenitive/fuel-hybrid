@@ -35,13 +35,13 @@ class Restful {
      * @var     array 
      */
     protected static $_supported_formats = array(
-        'xml' => 'application/xml',
-        'rawxml' => 'application/xml',
-        'json' => 'application/json',
-        'serialized' => 'application/vnd.php.serialized',
-        'php' => 'text/plain',
-        'html' => 'text/html',
-        'csv' => 'application/csv'
+        'xml'           => 'application/xml',
+        'rawxml'        => 'application/xml',
+        'json'          => 'application/json',
+        'serialized'    => 'application/vnd.php.serialized',
+        'php'           => 'text/plain',
+        'html'          => 'text/html',
+        'csv'           => 'application/csv'
     );
     
     /**
@@ -178,6 +178,7 @@ class Restful {
     /**
      * Set the rest format
      * 
+     * @access  public
      * @param   string  $rest_format
      * @return  Restful 
      */
@@ -196,6 +197,7 @@ class Restful {
     /**
      * Execute the Rest request and return the output
      * 
+     * @access  public
      * @return  object
      */
     public function execute()
@@ -247,6 +249,8 @@ class Restful {
     /**
      * Check user login
      * 
+     * @static
+     * @access  public
      * @param   string  $username
      * @param   mixed   $password
      * @return  bool 

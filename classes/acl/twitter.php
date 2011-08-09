@@ -34,12 +34,12 @@ class Acl_Twitter extends Acl_Abstract {
     
     protected static $_instance = null;
     protected static $items = array(
-        'token' => null,
-        'secret' => null,
-        'access' => 0,
-        'id' => 0,
-        'user_id' => 0,
-        'info' => null
+        'token'     => null,
+        'secret'    => null,
+        'access'    => 0,
+        'id'        => 0,
+        'user_id'   => 0,
+        'info'      => null
     );
 
     /**

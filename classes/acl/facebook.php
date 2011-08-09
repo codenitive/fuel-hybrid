@@ -35,11 +35,11 @@ class Acl_Facebook extends Acl_Abstract {
     
     protected static $_instance = null;
     protected static $items = array(
-        'id' => 0,
-        'user_id' => 0,
-        'token' => '',
-        'info' => null,
-        'access' => 0,
+        'id'        => 0,
+        'user_id'   => 0,
+        'token'     => '',
+        'info'      => null,
+        'access'    => 0,
     );
     protected static $_config = null;
     protected static $_user = null;

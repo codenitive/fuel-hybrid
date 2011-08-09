@@ -59,8 +59,10 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
     /**
      * Takes pure data and optionally a status code, then creates the response
      * 
-     * @param   array       $data
-     * @param   int         $http_code
+     * @access  protected
+     * @param   array   $data
+     * @param   int     $http_code
+     * @return  void
      */
     protected function response($data = array(), $http_code = 200) 
     {
@@ -73,6 +75,7 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
      * This method will be called after we route to the destinated method
      * 
      * @access  public
+     * @return  void
      */
     public function after() 
     {
@@ -85,6 +88,8 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
      * Prepare template
      * 
      * @access  protected
+     * @param   array   $data
+     * @return  void
      */
     protected function _prepare_template($data = null)
     {
@@ -101,6 +106,7 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
      * Render template
      * 
      * @access  protected
+     * @return  void
      */
     protected function _render_template()
     {

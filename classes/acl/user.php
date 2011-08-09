@@ -40,18 +40,18 @@ class Acl_User extends Acl_Abstract {
     protected static function _set_default() 
     {
         static::$items = array(
-            'id' => 0,
+            'id'        => 0,
             'user_name' => 'guest',
             'full_name' => '',
-            'email' => '',
-            'roles' => array('guest'),
-            '_hash' => '',
-            'password' => '',
-            'method' => 'normal',
-            'gender' => '',
-            'status' => 1,
-            'twitter' => 0,
-            'facebook' => 0
+            'email'     => '',
+            'roles'     => array('guest'),
+            '_hash'     => '',
+            'password'  => '',
+            'method'    => 'normal',
+            'gender'    => '',
+            'status'    => 1,
+            'twitter'   => 0,
+            'facebook'  => 0
         );
 
         return true;
