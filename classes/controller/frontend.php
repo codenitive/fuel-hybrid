@@ -48,6 +48,7 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
      * This method will be called after we route to the destinated method
      * 
      * @access  public
+     * @return  void
      */
     public function before($data = null) 
     {

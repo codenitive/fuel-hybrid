@@ -25,8 +25,14 @@ namespace Hybrid;
  * @category    View
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+
 class View extends \Fuel\Core\View {
 
+    /**
+     * @static
+     * @access  protected
+     * @var     string
+     */
     protected static $_path = '';
 
     /**
@@ -57,7 +63,7 @@ class View extends \Fuel\Core\View {
      * @static
      * @access  public
      * @param   string  $file view filename
-     * @return  View
+     * @return  object  return $this to allow chaining
      * @throws  View_Exception
      */
     public function set_filename($file) 
