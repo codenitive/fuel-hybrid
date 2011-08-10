@@ -25,6 +25,7 @@ namespace Hybrid;
  * @category    Acl_User
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+
 class Acl_User extends Acl_Abstract {
 
     protected static $items = null;
@@ -88,7 +89,7 @@ class Acl_User extends Acl_Abstract {
      * be verify so that no one else could try to copy the same cookie configuration 
      * and use it as their own.
      * 
-     * @TODO need to use User-Agent as one of the hash value 
+     * @todo    need to use User-Agent as one of the hash value 
      * 
      * @static
      * @access  private
@@ -473,12 +474,6 @@ class Acl_User extends Acl_Abstract {
     {
         $data = array();
 
-        /* SELECT `roles`.* 
-         * FROM `roles` 
-         * INNER JOIN `users_roles` 
-         * ON (`users_roles`.`role_id`=`roles`.`id`) 
-         * WHERE `users_roles`.`user_id`=%d
-         */
         $roles = \DB::select('roles.id', 'roles.name')
                 ->from('roles')
                 ->join('users_roles')
@@ -526,19 +521,21 @@ class Acl_User extends Acl_Abstract {
     {
         static::_set_default();
 
-        if (true == $delete) 
+        if (false === $delete) 
         {
-            \Cookie::delete('_users');
+            return true;
+        }
 
-            if (static::$_use_twitter === true)
-            {
-                \Hybrid\Acl_Twitter::logout();
-            }
+        \Cookie::delete('_users');
 
-            if (static::$_use_facebook === true)
-            {
-                \Hybrid\Acl_Facebook::logout(false);
-            }
+        if (static::$_use_twitter === true)
+        {
+            \Hybrid\Acl_Twitter::logout();
+        }
+
+        if (static::$_use_facebook === true)
+        {
+            \Hybrid\Acl_Facebook::logout(false);
         }
 
         return true;

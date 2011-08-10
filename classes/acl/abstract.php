@@ -15,7 +15,11 @@ namespace Hybrid;
 
 abstract class Acl_Abstract {
 
-
+    /**
+     * @static
+     * @access  protected
+     * @var     object|array
+     */
     protected static $items;
 
     /**
@@ -47,7 +51,7 @@ abstract class Acl_Abstract {
      */
     public static function get($name = null) 
     {
-        if (is_null($name)) 
+        if (\is_null($name)) 
         {
             return (object) static::$items;
         }
@@ -72,7 +76,7 @@ abstract class Acl_Abstract {
     {
         $salt =  \Config::get('app.salt', \Config::get('crypt.crypto_key'));
 
-        return sha1($salt . $password);
+        return \sha1($salt . $password);
     }
     
 }

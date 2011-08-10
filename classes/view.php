@@ -46,6 +46,7 @@ class View extends \Fuel\Core\View {
      * @static
      * @access  public
      * @param   string  $path 
+     * @return  void
      */
     public static function set_path($path) 
     {
@@ -63,7 +64,7 @@ class View extends \Fuel\Core\View {
      * @static
      * @access  public
      * @param   string  $file view filename
-     * @return  object  return $this to allow chaining
+     * @return  self
      * @throws  View_Exception
      */
     public function set_filename($file) 

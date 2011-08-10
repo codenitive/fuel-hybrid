@@ -30,8 +30,6 @@ import('swift/swift_required', 'vendor');
 
  class Swiftmail {
     
-    protected static $config = array();
-
     /**
      * Creates a new instance of the email driver
      *
@@ -43,6 +41,7 @@ import('swift/swift_required', 'vendor');
     public static function factory($config = array())
     {
         $initconfig = \Config::load('email', null, true);
+        
         if (is_array($config) && is_array($initconfig))
         {
             $config = array_merge($initconfig, $config);
@@ -51,8 +50,28 @@ import('swift/swift_required', 'vendor');
         return new static($config);
     }
 
+    /**
+     * Mailer object
+     *
+     * @access  protected
+     * @var     Swift_Mailer
+     */
     protected $mailer       = null;
+
+    /**
+     * Message object
+     * 
+     * @access  protected
+     * @var     Swift_Message
+     */
     protected $messager     = null;
+
+    /**
+     * Recipients list
+     *
+     * @access  protected
+     * @var     array
+     */
     protected $recipients   = array(
         'to'        => array(),
         'bcc'       => array(),
@@ -60,6 +79,13 @@ import('swift/swift_required', 'vendor');
         'from'      => array(),
         'reply_to'  => array(),
     );
+
+    /**
+     * Contain all debugging message
+     *
+     * @access  protected
+     * @var     object
+     */
     protected $debug        = null;
 
     public function __construct($config)
@@ -323,10 +349,16 @@ import('swift/swift_required', 'vendor');
     public static function dynamic_attach($contents, $filename, $disposition = 'attachment')
     {
         throw new \Fuel_Exception("File attachment has not been implemented yet");
+
         return $this;
     }
 
-
+    /**
+     * Initiate a new transport to use Sendmail protocol
+     *
+     * @access  protected
+     * @return  Swift_SendmailTransport
+     */
     protected function _transport_sendmail($config)
     {
         return new \Swift_SendmailTransport($config['sendmail_path'] . ' -oi -t');
