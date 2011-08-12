@@ -11,6 +11,9 @@
  */
 
 Autoloader::add_classes(array (
+    'Hybrid\\Cart'                      => __DIR__.'/classes/cart.php',
+    //'Hybrid\\Checkout'                  => __DIR__.'/classes/checkout.php',
+
     'Hybrid\\Curl'                      => __DIR__.'/classes/curl.php',
     'Hybrid\\Factory'                   => __DIR__.'/classes/factory.php',
     'Hybrid\\Input'                     => __DIR__.'/classes/input.php',
