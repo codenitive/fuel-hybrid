@@ -33,7 +33,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
      * @access  public
      * @var     string
      */
-    public $template = 'normal';
+    public $template        = 'normal';
     
     /**
      * Auto render template
@@ -41,7 +41,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
      * @access  public
      * @var     bool    
      */
-    public $auto_render = true;
+    public $auto_render     = true;
 
     /**
      * Run ACL check and redirect user automatically if user doesn't have the privilege
@@ -50,7 +50,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
      * @param   mixed   $resource
      * @param   string  $type 
      */
-    final protected function _acl($resource, $type = null) 
+    final protected function acl($resource, $type = null) 
     {
         $status = \Hybrid\Acl::access_status($resource, $type);
 
@@ -69,12 +69,12 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
      */
     public function before($data = null) 
     {
-        $this->language = \Hybrid\Factory::get_language();
-        $this->user = \Hybrid\Acl_User::get();
+        $this->language     = \Hybrid\Factory::get_language();
+        $this->user         = \Hybrid\Acl_User::get();
 
         \Event::trigger('controller_before');
         
-        $this->_prepare_template($data);
+        $this->prepare_template($data);
 
         return parent::before();
     }
@@ -88,7 +88,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
     {
         \Event::trigger('controller_after');
 
-        $this->_render_template();
+        $this->render_template();
 
         return parent::after();
     }
@@ -111,9 +111,9 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
      * 
      * @access  protected
      */
-    protected function _prepare_template($data = null)
+    protected function prepare_template($data = null)
     {
-        if ($this->auto_render === true)
+        if (true === $this->auto_render)
         {
             $this->template = \Hybrid\Template::factory($this->template);
             
@@ -127,12 +127,12 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
      * 
      * @access  protected
      */
-    protected function _render_template()
+    protected function render_template()
     {
         //we dont want to accidentally change our site_name
         $this->template->set(array('site_name' => \Config::get('app.site_name')));
         
-        if ($this->auto_render === true)
+        if (true === $this->auto_render)
         {
             $this->response->body($this->template->render());
         }

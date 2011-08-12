@@ -44,25 +44,25 @@ class Request extends \Fuel\Core\Request {
      */
     public static function connect($uri, $dataset = array()) 
     {
-        $uri_segments = explode(' ', $uri);
-        $type = 'GET';
+        $uri_segments   = explode(' ', $uri);
+        $type           = 'GET';
 
         if (in_array(strtoupper($uri_segments[0]), array('DELETE', 'POST', 'PUT', 'GET'))) 
         {
-            $uri = $uri_segments[1];
-            $type = $uri_segments[0];
+            $uri        = $uri_segments[1];
+            $type       = $uri_segments[0];
         }
 
-        $query_dataset = array();
-        $query_string = parse_url($uri);
+        $query_dataset  = array();
+        $query_string   = parse_url($uri);
 
         if (isset($query_string['query'])) 
         {
-            $uri = $query_string['path'];
+            $uri        = $query_string['path'];
             parse_str($query_string['query'], $query_dataset);
         }
 
-        $dataset = array_merge($query_dataset, $dataset);
+        $dataset        = array_merge($query_dataset, $dataset);
 
         logger(\Fuel::L_INFO, 'Creating a new Request with URI = "' . $uri . '"', __METHOD__);
 
@@ -83,7 +83,7 @@ class Request extends \Fuel\Core\Request {
      * @access  protected
      * @var     array
      */
-    protected $_request_data = array();
+    protected $request_data     = array();
     
     /**
      * Request method
@@ -91,7 +91,7 @@ class Request extends \Fuel\Core\Request {
      * @access  protected
      * @var     string
      */
-    protected $_request_method = '';
+    protected $request_method   = '';
 
     /**
      * Creates the new Request object by getting a new URI object, then parsing
@@ -108,10 +108,10 @@ class Request extends \Fuel\Core\Request {
         parent::__construct($uri, $route);
 
         // store this construct method and data staticly
-        $this->_request_method = $type;
-        $this->_request_data = $dataset;
+        $this->request_method   = $type;
+        $this->request_data     = $dataset;
 
-        $this->response = NULL;
+        $this->response         = NULL;
     }
 
     /**
@@ -133,13 +133,13 @@ class Request extends \Fuel\Core\Request {
         // request method and data available in the connection.
         \Hybrid\Input::connect($this->_request_method, $this->_request_data);
 
-        $execute = parent::execute($method_params);
+        $execute                = parent::execute($method_params);
 
         // We need to clean-up any request object transfered to \Hybrid\Input so that
         // any following request to \Hybrid\Input will redirected to \Fuel\Core\Input
         \Hybrid\Input::disconnect();
-        $this->_request_method = '';
-        $this->_request_data = array();
+        $this->request_method   = '';
+        $this->request_data     = array();
 
         return $execute;
     }

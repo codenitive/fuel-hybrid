@@ -26,7 +26,7 @@ namespace Hybrid;
  * @abstract
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
-abstract class Controller_Frontend extends \Hybrid\Controller {
+abstract class Controller_Frontend extends Controller {
 
     /**
      * Page template
@@ -52,7 +52,7 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
      */
     public function before($data = null) 
     {
-        $this->_prepare_template($data);
+        $this->prepare_template($data);
 
         return parent::before();
     }
@@ -80,7 +80,7 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
      */
     public function after() 
     {
-        $this->_render_template();
+        $this->render_template();
 
         return parent::after();
     }
@@ -92,9 +92,9 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
      * @param   array   $data
      * @return  void
      */
-    protected function _prepare_template($data = null)
+    protected function prepare_template($data = null)
     {
-        if ($this->auto_render === true)
+        if (true === $this->auto_render)
         {
             $this->template = \Hybrid\Template::factory($this->template);
 
@@ -109,12 +109,12 @@ abstract class Controller_Frontend extends \Hybrid\Controller {
      * @access  protected
      * @return  void
      */
-    protected function _render_template()
+    protected function render_template()
     {
         //we dont want to accidentally change our site_name
         $this->template->set(array('site_name' => \Config::get('app.site_name')));
         
-        if ($this->auto_render === true)
+        if (true === $this->auto_render)
         {
             $this->response->body($this->template->render());
         }

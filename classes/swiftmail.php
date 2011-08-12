@@ -86,17 +86,17 @@ import('swift/swift_required', 'vendor');
      * @access  protected
      * @var     object
      */
-    protected $debug        = null;
+    protected $debugs       = null;
 
     public function __construct($config)
     {
         $this->config   = $config;
         $transport      = "_transport_" . $config['protocol'];
 
-        $this->debug                = new \stdClass();
-        $this->debug->success       = false;
-        $this->debug->failures      = null;
-        $this->debug->total_sent    = 0;
+        $this->debugs               = new \stdClass();
+        $this->debugs->success      = false;
+        $this->debugs->failures     = null;
+        $this->debugs->total_sent   = 0;
 
         if (method_exists($this, $transport))
         {
@@ -279,9 +279,10 @@ import('swift/swift_required', 'vendor');
      * Sends the email.
      *
      * @access  public
-     * @return  object     containing success status, total email sent and failure during email sending
+     * @param   bool    $debug      set to TRUE will return $this->debug object instead of just the success status    
+     * @return  bool|object  
      */
-    public function send()
+    public function send($debug = false)
     {
         $this->messager->setTo($this->recipients['to']);
         $this->messager->setFrom($this->recipients['from']);
@@ -303,20 +304,31 @@ import('swift/swift_required', 'vendor');
 
         $result = $this->mailer->send($this->messager, $failure);
 
-        $this->debug->failure = $failure;
+        $this->debugs->failure = $failure;
 
         if (intval($result) >= 1)
         {
-            $this->debug->success       = true;
-            $this->debug->total_sent    = intval($result);
+            $this->debugs->success       = true;
+            $this->debugs->total_sent    = intval($result);
         }
 
-        return $this->debug->success;
+        if (false === $debug)
+        {
+            return $this->debugs->success;
+        }
+
+        return $this->debug();
     }
 
+    /**
+     * Get transport/mail debug object
+     *
+     * @access  public
+     * @return  object  containing success status, total email sent and failure during email sending
+     */
     public function debug()
     {
-        return $this->debug;
+        return $this->debugs;
     }
 
     /**
@@ -357,19 +369,34 @@ import('swift/swift_required', 'vendor');
      * Initiate a new transport to use Sendmail protocol
      *
      * @access  protected
+     * @param   array   $config
      * @return  Swift_SendmailTransport
      */
-    protected function _transport_sendmail($config)
+    protected function transport_sendmail($config)
     {
         return new \Swift_SendmailTransport($config['sendmail_path'] . ' -oi -t');
     }
 
-    protected function _transport_mail($config)
+    /**
+     * Initiate a new transport to use mail protocol
+     *
+     * @access  protected
+     * @param   array   $config
+     * @return  Swift_MailTransport
+     */
+    protected function transport_mail($config)
     {
         return new \Swift_MailTransport();
     }
 
-    protected function _transport_smtp($config)
+    /**
+     * Initiate a new transport to use SMTP protocol
+     *
+     * @access  protected
+     * @param   array   $config
+     * @return  Swift_SmtpTransport
+     */
+    protected function transport_smtp($config)
     {
         if (is_array($config) and !empty($config))
         {

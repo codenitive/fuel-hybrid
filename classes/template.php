@@ -70,9 +70,9 @@ class Template {
             $name = \Config::get('app.template.default', self::DEFAULT_TEMPLATE);   
         }
 
-        $folder = null;
-        $filename = null;
-        $type = explode('.', strval($name));
+        $folder     = null;
+        $filename   = null;
+        $type       = explode('.', strval($name));
 
         if (count($type) > 1) 
         {
@@ -89,14 +89,13 @@ class Template {
         $type = $type[0];
         $name = $type . '.' . $folder;
 
-        $driver = '\\Hybrid\\Template_'.ucfirst($type);
+        $driver = '\\Hybrid\\Template_' . ucfirst($type);
 
         if (isset(static::$instances[$name]))
         {
             // load from cache if instance already loaded
             return static::$instances[$name];
         }
-
         elseif (class_exists($driver)) 
         {
             // load a new template if class exist

@@ -33,7 +33,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      * @access  protected
      * @var     string
      */
-    protected $rest_format = null;
+    protected $rest_format          = null;
     
     /**
      * Set the default content type using PHP Header
@@ -41,7 +41,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      * @access  protected
      * @var     bool
      */
-    protected $set_content_type = true;
+    protected $set_content_type     = true;
 
     /**
      * Run ACL check and redirect user automatically if user doesn't have the privilege
@@ -50,14 +50,14 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      * @param   mixed   $resource
      * @param   string  $type 
      */
-    final protected function _acl($resource, $type = null) 
+    final protected function acl($resource, $type = null) 
     {
         $status = \Hybrid\Acl::access_status($resource, $type);
 
         switch ($status) 
         {
             case 401 :
-                $this->response(array('text' => 'You doesn\'t have privilege to do this action'), 401);
+                $this->response(array('text' => "You doesn't have privilege to do this action"), 401);
                 print $this->response->body;
                 exit();
             break;
@@ -71,9 +71,9 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      */
     public function before() 
     {
-        $this->language = \Hybrid\Factory::get_language();
-        $this->user = \Hybrid\Acl_User::get();
-        \Fuel::$profiling = false;
+        $this->language     = \Hybrid\Factory::get_language();
+        $this->user         = \Hybrid\Acl_User::get();
+        \Fuel::$profiling   = false;
 
         \Event::trigger('controller_before');
         
@@ -108,15 +108,15 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      */
     public function router($resource, $arguments) 
     {
-        $pattern = \Hybrid\Restful::$pattern;
+        $pattern            = \Hybrid\Restful::$pattern;
         
         // Remove the extension from arguments too
-        $resource = preg_replace($pattern, '', $resource);
+        $resource           = preg_replace($pattern, '', $resource);
         
         // If they call user, go to $this->post_user();
-        $controller_method = strtolower(\Hybrid\Input::method()) . '_' . $resource;
+        $controller_method  = strtolower(\Hybrid\Input::method()) . '_' . $resource;
         
-        if (method_exists($this, $controller_method)) 
+        if (\method_exists($this, $controller_method)) 
         {
             call_user_func(array($this, $controller_method));
         }
@@ -135,15 +135,17 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      */
     protected function response($data = array(), $http_code = 200) 
     {
-        $restful = \Hybrid\Restful::factory($data, $http_code)->format($this->rest_format)->execute();
+        $rest   = \Hybrid\Restful::factory($data, $http_code)
+                    ->format($this->rest_format)
+                    ->execute();
         
-        $this->response->body($restful->body);
-        $this->response->status = $restful->status;
+        $this->response->body($rest->body);
+        $this->response->status     = $rest->status;
         
-        if ($this->set_content_type === true) 
+        if (true === $this->set_content_type) 
         {
             // Set the correct format header
-            $this->response->set_header('Content-Type', \Hybrid\Restful::content_type($restful->format));
+            $this->response->set_header('Content-Type', \Hybrid\Restful::content_type($rest->format));
         }
     }
 }

@@ -98,6 +98,12 @@ class Acl_User extends Acl_Abstract {
     public static function _init() 
     {
         parent::_init();
+
+        // allow to disable user acl, would be useful when database not available
+        if (false === \Config::get('app.user_acl.enabled', true))
+        {
+            return;
+        }
         
         // This method should only be called once, but just in case that doesn't work we should return null
         if (!is_null(static::$acl))
