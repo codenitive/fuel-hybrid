@@ -321,10 +321,12 @@ class Acl_User extends Acl_Abstract {
     {
         // load ACL configuration
         $config             = \Config::get('app.user_acl', array());
+
+        $reserved_property  = array('items', 'acl', 'optional_fields');
         
         foreach ($config as $key => $value)
         {
-            if (!property_exists('\\Hybrid\\Acl_User', "{$key}"))
+            if (!property_exists('\\Hybrid\\Acl_User', "{$key}") or in_array($key, $reserved_property))
             {
                 continue;
             }
@@ -339,7 +341,7 @@ class Acl_User extends Acl_Abstract {
         }
         
         static::$optional_fields = array_merge($config['optional_fields'], static::$optional_fields);
-        
+
         foreach (static::$optional_fields as $field)
         {
             if (is_string($field) and !isset(static::$items[$field]))
