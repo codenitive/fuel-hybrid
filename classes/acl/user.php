@@ -28,8 +28,8 @@ namespace Hybrid;
 
 class Acl_User extends Acl_Abstract {
 
-    protected static $items = null;
-    public static $acl = NULL;
+    protected static $items     = null;
+    public static $acl          = NULL;
 
     /**
      * Default value for user data
@@ -38,7 +38,7 @@ class Acl_User extends Acl_Abstract {
      * @access  protected
      * @return  bool
      */
-    protected static function _set_default() 
+    protected static function set_default() 
     {
         static::$items = array(
             'id'        => 0,
@@ -58,12 +58,12 @@ class Acl_User extends Acl_Abstract {
         return true;
     }
     
-    protected static $_optionals = array('email', 'status', 'full_name', 'gender', 'birthdate');
-    protected static $_allowed_status = array('verified');
-    protected static $_use_meta = true;
-    protected static $_use_auth = true;
-    protected static $_use_twitter = false;
-    protected static $_use_facebook = false;
+    protected static $optional_fields   = array('email', 'status', 'full_name', 'gender', 'birthdate');
+    protected static $allowed_status    = array('verified');
+    protected static $use_meta          = true;
+    protected static $use_auth          = true;
+    protected static $use_twitter       = false;
+    protected static $use_facebook      = false;
 
     /**
      * Get Acl\Role object, it's a quick way of get and use \Acl\Role without having to 
@@ -97,51 +97,34 @@ class Acl_User extends Acl_Abstract {
      */
     public static function _init() 
     {
-        \Config::load('app', true);
-        \Config::load('crypt', true);
+        parent::_init();
         
+        // This method should only be called once, but just in case that doesn't work we should return null
         if (!is_null(static::$acl))
         {
             return;
         }
 
-        $users = \Cookie::get('_users');
+        // get user data from cookie
+        $users              = \Cookie::get('_users');
 
+        // user data shouldn't be null if there user authentication available, if not populate from default
         if (!is_null($users)) 
         {
-            $users = unserialize(\Crypt::decode($users));
-            static::$items = (array) $users;
+            $users          = unserialize(\Crypt::decode($users));
+            static::$items  = (array) $users;
         } 
         else 
         {
-            $users = new \stdClass();
-            $users->method = 'normal';
-            static::_unregister();
+            $users          = new \stdClass();
+            $users->method  = 'normal';
+            static::unregister();
         }
 
-        static::$acl = new \Hybrid\Acl;
-        
-        $config = \Config::get('app.user_table', array());
-        
-        foreach ($config as $key => $value)
-        {
-            if (!!property_exists('\\Hybrid\\Acl_User', "_{$key}"))
-            {
-                $property = '_'.$key;
-                static::$$property = $value;
-                \Config::set("app.user_table.{$key}", $value);
-            }
-        }
-        
-        static::$_optionals = \Config::get('app.user_table.optionals', static::$_optionals);
-        
-        foreach (static::$_optionals as $field)
-        {
-            if (is_string($field) and !isset(static::$items[$field]))
-            {
-                static::$items[$field] = '';
-            }
-        }
+        // this is optional, but useful as a shorthand
+        static::$acl        = new \Hybrid\Acl;
+
+        static::load_config();
 
         switch ($users->method) 
         {
@@ -149,30 +132,31 @@ class Acl_User extends Acl_Abstract {
 
                 $results = \DB::select('users.*')
                     ->from('users')
-                    ->where('users.id', '=', static::$items['id'])->limit(1);
+                    ->where('users.id', '=', static::$items['id'])
+                    ->limit(1);
                 
-                if (static::$_use_auth === true)
+                if (true === static::$use_auth)
                 {
                     $results->select('users_auths.password')
                         ->join('users_auths')
                         ->on('users_auths.user_id', '=', 'users.id');
                 }
                 
-                if (static::$_use_meta === true)
+                if (true === static::$use_meta)
                 {
                     $results->select('users_meta.*')
                         ->join('users_meta')
                         ->on('users_meta.user_id', '=', 'users.id');    
                 }
                 
-                if (static::$_use_twitter === true)
+                if (true === static::$use_twitter)
                 {
                     $results->select(array('users_twitters.id', 'twitter_id'))
                         ->join('users_twitters', 'left')
                         ->on('users_twitters.user_id', '=', 'users.id');
                 }
 
-                if (static::$_use_facebook === true)
+                if (true === static::$use_facebook)
                 {
                     $results->select(array('users_facebooks.id', 'facebook_id'))
                         ->join('users_facebooks', 'left')
@@ -184,9 +168,9 @@ class Acl_User extends Acl_Abstract {
             break;
 
             case 'twitter_oauth' :
-                if (static::$_use_twitter !== true) 
+                if (true !== static::$use_twitter) 
                 {
-                    static::_unregister(true);
+                    static::unregister(true);
                     return true;
                 }
                 
@@ -196,23 +180,24 @@ class Acl_User extends Acl_Abstract {
                     ->from('users')
                     ->join('users_twitters')
                     ->on('users.id', '=', 'users_twitters.user_id')
-                    ->where('users_twitters.twitter_id', '=', $twitter_oauth->id)->limit(1);
+                    ->where('users_twitters.twitter_id', '=', $twitter_oauth->id)
+                    ->limit(1);
                 
-                if (static::$_use_auth === true)
+                if (true === static::$use_auth)
                 {
                     $results->select('users_auths.password')
                         ->join('users_auths')
                         ->on('users_auths.user_id', '=', 'users.id');
                 }
                 
-                if (static::$_use_meta === true)
+                if (true === static::$use_meta)
                 {
                     $results->select('users_meta.*')
                         ->join('users_meta')
                         ->on('users_meta.user_id', '=', 'users.id');    
                 }
 
-                if (static::$_use_facebook === true)
+                if (true === static::$use_facebook)
                 {
                     $results->select(array('users_facebooks.id', 'facebook_id'))
                         ->join('users_facebooks', 'left')
@@ -223,9 +208,9 @@ class Acl_User extends Acl_Abstract {
             break;
 
             case 'facebook_oauth' :
-                if (static::$_use_facebook !== true) 
+                if (true !== static::$use_facebook) 
                 {
-                    static::_unregister(true);
+                    static::unregister(true);
                     return true;
                 }
                 
@@ -235,23 +220,24 @@ class Acl_User extends Acl_Abstract {
                     ->from('users')
                     ->join('users_facebooks')
                     ->on('users.id', '=', 'users_facebooks.user_id')
-                    ->where('users_facebooks.facebook_id', '=', $facebook_oauth->id)->limit(1);
+                    ->where('users_facebooks.facebook_id', '=', $facebook_oauth->id)
+                    ->limit(1);
                 
-                if (static::$_use_auth === true)
+                if (true === static::$use_auth)
                 {
                     $results->select('users_auths.password')
                         ->join('users_auths')
                         ->on('users_auths.user_id', '=', 'users.id');
                 }
                 
-                if (static::$_use_meta === true)
+                if (true === static::$use_meta)
                 {
                     $results->select('users_meta.*')
                         ->join('users_meta')
                         ->on('users_meta.user_id', '=', 'users.id');    
                 }
 
-                if (static::$_use_twitter === true)
+                if (true === static::$use_twitter)
                 {
                     $results->select(array('users_twitters.id', 'twitter_id'))
                         ->join('users_twitters', 'left')
@@ -264,17 +250,17 @@ class Acl_User extends Acl_Abstract {
 
         if (is_null($result) or $result->count() < 1) 
         {
-            static::_unregister(true);
+            static::unregister(true);
             return true;
         } 
         else 
         {
             $user = $result->current();
 
-            if (!in_array($user->status, static::$_allowed_status)) 
+            if (!in_array($user->status, static::$allowed_status)) 
             {
                 // only verified user can login to this application
-                static::_unregister();
+                static::unregister();
                 return true;
             }
 
@@ -283,33 +269,76 @@ class Acl_User extends Acl_Abstract {
 
             if (static::$items['_hash'] !== static::add_salt($hash)) 
             {
-                static::_unregister();
+                static::unregister();
                 return true;
             }
 
-            static::$items['id'] = $user->user_id;
+            static::$items['id']        = $user->user_id;
             static::$items['user_name'] = $user->user_name;
-            static::$items['roles'] = $users->roles;
-            static::$items['password'] = $user->password;
+            static::$items['roles']     = $users->roles;
+            static::$items['password']  = $user->password;
             
-            foreach (static::$_optionals as $property)
+            foreach (static::$optional_fields as $property)
             {
-                if (\property_exists($user, $property))
+                if (!\property_exists($user, $property))
                 {
-                    static::$items[$property] = $user->{$property};
+                    continue;
                 }
+                    
+                static::$items[$property]   = $user->{$property};
             }
 
             // if user already link their account with twitter, map the relationship
-            if (property_exists($user, 'twitter_id')) 
+            if (\property_exists($user, 'twitter_id')) 
             {
-                static::$items['twitter'] = $user->twitter_id;
+                static::$items['twitter']   = $user->twitter_id;
             }
 
             // if user already link their account with facebook, map the relationship
-            if (property_exists($user, 'facebook_id')) 
+            if (\property_exists($user, 'facebook_id')) 
             {
-                static::$items['facebook'] = $user->facebook_id;
+                static::$items['facebook']  = $user->facebook_id;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Load and bind instance configuration
+     *
+     * @static
+     * @access  protected
+     * @return  void
+     */
+    protected static function load_config()
+    {
+        // load ACL configuration
+        $config             = \Config::get('app.user_acl', array());
+        
+        foreach ($config as $key => $value)
+        {
+            if (!property_exists('\\Hybrid\\Acl_User', "{$key}"))
+            {
+                continue;
+            }
+
+            static::$$key = $value;
+            \Config::set("app.user_acl.{$key}", $value);
+        }
+
+        if (!isset($config['optional_fields']) or !is_array($config['optional_fields']))
+        {
+            $config['optional_fields'] = array();
+        }
+        
+        static::$optional_fields = array_merge($config['optional_fields'], static::$optional_fields);
+        
+        foreach (static::$optional_fields as $field)
+        {
+            if (is_string($field) and !isset(static::$items[$field]))
+            {
+                static::$items[$field] = '';
             }
         }
 
@@ -334,28 +363,28 @@ class Acl_User extends Acl_Abstract {
         $result = \DB::select('users.*')
                 ->from('users');
         
-        if (static::$_use_auth === true)
+        if (true === static::$use_auth)
         {
             $result->select('users_auths.password')
                 ->join('users_auths')
                 ->on('users_auths.user_id', '=', 'users.id');
         }
 
-        if (static::$_use_meta === true)
+        if (true === static::$use_meta)
         {
             $result->select('users_meta.*')
                 ->join('users_meta')
                 ->on('users_meta.user_id', '=', 'users.id');    
         }
 
-        if (static::$_use_twitter === true)
+        if (true === static::$use_twitter)
         {
             $result->select(array('users_twitters.id', 'twitter_id'), array('users_twitters.token', 'twitter_token'))
                 ->join('users_twitters', 'left')
                 ->on('users_twitters.user_id', '=', 'users.id');
         }
 
-        if (static::$_use_facebook === true)
+        if (true === static::$use_facebook)
         {
             $result->select(array('users_facebooks.id', 'facebook_id'), array('users_facebooks.token', 'facebook_token'))
                 ->join('users_facebooks', 'left')
@@ -366,10 +395,13 @@ class Acl_User extends Acl_Abstract {
             ->where('users.user_name', '=', $username)
             ->or_where('users.email', '=', $username)
             ->where_close()
-            ->limit(1)->as_object()->execute();
+            ->limit(1)
+            ->as_object()
+            ->execute();
 
         if (is_null($result) or $result->count() < 1) 
         {
+            throw new \Fuel_Exception("User {$username} does not exist in our database");
             return false;
         } 
         else 
@@ -381,6 +413,7 @@ class Acl_User extends Acl_Abstract {
                 case 'normal' :
                     if ($user->password !== static::add_salt($password)) 
                     {
+                        throw new \Fuel_Exception("Invalid username and password combination");
                         return false;
                     }
                 break;
@@ -388,6 +421,7 @@ class Acl_User extends Acl_Abstract {
                 case 'twitter_oauth' :
                     if ($user->twitter_token !== $password)
                     {
+                        throw new \Fuel_Exception("Invalid Twitter token, please sign-in with Twitter again");
                         return false;
                     }
                 break;
@@ -395,43 +429,47 @@ class Acl_User extends Acl_Abstract {
                 case 'facebook_oauth' :
                     if ($user->facebook_token !== $password)
                     {
+                        throw new \Fuel_Exception("Invalid Facebook token, please sign-in with Facebook again");
                         return false;
                     }
                 break;
             }
 
-            if (!in_array($user->status, static::$_allowed_status)) 
+            if (!in_array($user->status, static::$allowed_status)) 
             {
+                throw new \Fuel_Exception("User {$username} is not allowed to login");
                 return false;
             }
 
-            static::$items['id'] = $user->user_id;
+            static::$items['id']        = $user->user_id;
             static::$items['user_name'] = $user->user_name;
-            static::$items['method'] = 'normal';
-            static::$items['password'] = $user->password;
+            static::$items['method']    = $method;
+            static::$items['password']  = $user->password;
             
-            foreach (static::$_optionals as $property)
+            foreach (static::$optional_fields as $property)
             {
-                if (\property_exists($user, $property))
+                if (!\property_exists($user, $property))
                 {
-                    static::$items[$property] = $user->{$property};
+                    continue;
                 }
+                
+                static::$items[$property] = $user->{$property};
             }
 
             // if user already link their account with twitter, map the relationship
             if (\property_exists($user, 'twitter_id')) 
             {
-                static::$items['twitter'] = $user->twitter_id;
+                static::$items['twitter']   = $user->twitter_id;
             }
 
             // if user already link their account with facebook, map the relationship
             if (property_exists($user, 'facebook_id')) 
             {
-                static::$items['facebook'] = $user->facebook_id;
+                static::$items['facebook']  = $user->facebook_id;
             }
 
-            static::_get_roles();
-            static::_register();
+            static::get_roles();
+            static::register();
 
             return true;
         }
@@ -453,11 +491,11 @@ class Acl_User extends Acl_Abstract {
      */
     public static function logout($redirect = true) 
     {
-        static::_unregister(true);
+        static::unregister(true);
 
         if (true === $redirect) 
         {
-            \Response::redirect(\Config::get('app.api._route.after_logout', '/'));
+            static::redirect('after_login');
         }
 
         return true;
@@ -470,7 +508,7 @@ class Acl_User extends Acl_Abstract {
      * @access  protected
      * @return  bool
      */
-    protected static function _get_roles() 
+    protected static function get_roles() 
     {
         $data = array();
 
@@ -484,10 +522,10 @@ class Acl_User extends Acl_Abstract {
 
         foreach ($roles as $role) 
         {
-            $data['' . $role->id] = \Inflector::friendly_title($role->name, '-', TRUE);
+            $data['' . $role->id]   = \Inflector::friendly_title($role->name, '-', true);
         }
 
-        static::$items['roles'] = $data;
+        static::$items['roles']     = $data;
 
         return true;
     }
@@ -499,10 +537,10 @@ class Acl_User extends Acl_Abstract {
      * @access  protected
      * @return  bool
      */
-    protected static function _register() 
+    protected static function register() 
     {
-        $values = static::$items;
-        $values['_hash'] = static::add_salt(static::$items['user_name'] . static::$items['password']);
+        $values             = static::$items;
+        $values['_hash']    = static::add_salt(static::$items['user_name'] . static::$items['password']);
 
         \Cookie::set('_users', \Crypt::encode(serialize((object) $values)));
 
@@ -517,9 +555,9 @@ class Acl_User extends Acl_Abstract {
      * @param   bool    $delete set to true to delete session, only when login out
      * @return  bool
      */
-    protected static function _unregister($delete = false) 
+    protected static function unregister($delete = false) 
     {
-        static::_set_default();
+        static::set_default();
 
         if (false === $delete) 
         {
@@ -528,12 +566,12 @@ class Acl_User extends Acl_Abstract {
 
         \Cookie::delete('_users');
 
-        if (static::$_use_twitter === true)
+        if (true === static::$use_twitter)
         {
             \Hybrid\Acl_Twitter::logout();
         }
 
-        if (static::$_use_facebook === true)
+        if (true === static::$use_facebook)
         {
             \Hybrid\Acl_Facebook::logout(false);
         }

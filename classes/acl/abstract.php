@@ -22,6 +22,12 @@ abstract class Acl_Abstract {
      */
     protected static $items;
 
+    public static function _init()
+    {
+        \Config::load('app', true);
+        \Config::load('crypt', true);
+    }
+
     /**
      * Return TRUE/FALSE whether visitor is logged in to the system
      * 
@@ -77,6 +83,35 @@ abstract class Acl_Abstract {
         $salt =  \Config::get('app.salt', \Config::get('crypt.crypto_key'));
 
         return \sha1($salt . $password);
+    }
+
+    /**
+     * Redirect user based on type
+     *
+     * @static
+     * @access  protected
+     * @param   string  $type
+     * @param   string  $default_route
+     * @throws  \Fuel_Exception
+     */
+    protected static function redirect($type, $default_route = '/')
+    {
+        switch ($type)
+        {
+            case 'registration' :
+                \Response::redirect(\Config::get('app.api._redirect.registration', $default_route));
+            break;
+
+            case 'after_login' :
+                \Response::redirect(\Config::get('app.api._redirect.after_login', $default_route));
+            break;
+
+            default :
+                throw new \Fuel_Exception("Unable to redirect type: {$type}");
+                return;
+        }
+
+        return true;
     }
     
 }
