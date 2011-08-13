@@ -73,9 +73,9 @@ class Acl_Twitter extends Acl_Abstract {
     {
         $oauth = \Cookie::get('_twitter_oauth');
 
-        if (!is_null($oauth)) 
+        if (!\is_null($oauth)) 
         {
-            $oauth  = unserialize(\Crypt::decode($oauth));
+            $oauth  = \unserialize(\Crypt::decode($oauth));
 
             static::$items                          = (array) $oauth;
             static::$adapter->config["user_token"]  = $oauth->token;
@@ -161,7 +161,7 @@ class Acl_Twitter extends Acl_Abstract {
             static::$items['user_id'] = $row['user_id'];
             static::update_handler($row['twitter_id']);
 
-            if (is_null($row['user_id']) or intval(static::$items['user_id']) < 1) 
+            if (\is_null($row['user_id']) or \intval(static::$items['user_id']) < 1) 
             {
                 static::redirect('registration');
 
@@ -186,9 +186,9 @@ class Acl_Twitter extends Acl_Abstract {
     {
         static::$adapter->request('GET', static::$adapter->url('1/account/verify_credentials'));
 
-        $response = json_decode(static::$adapter->response['response']);
+        $response = \json_decode(static::$adapter->response['response']);
 
-        if (isset($response->id)) 
+        if (\isset($response->id)) 
         {
             static::$items['id']    = $response->id;
             static::$items['info']  = (object) array(
@@ -211,7 +211,7 @@ class Acl_Twitter extends Acl_Abstract {
                 static::add_handler($response->id, $response);
                 static::register();
 
-                if (intval(static::$items['user_id']) < 1) 
+                if (\intval(static::$items['user_id']) < 1) 
                 {
                     static::redirect('registration');
                 }
@@ -230,7 +230,7 @@ class Acl_Twitter extends Acl_Abstract {
                 static::update_handler($response->id, $response);
                 static::register();
 
-                if (is_null($row['user_id']) or intval(static::$items['user_id']) < 1) 
+                if (\is_null($row['user_id']) or \intval(static::$items['user_id']) < 1) 
                 {
                     static::redirect('registration');
 
@@ -261,7 +261,7 @@ class Acl_Twitter extends Acl_Abstract {
             'oauth_verifier' => \Hybrid\Input::get('oauth_verifier', '')
         ));
 
-        if (200 == static::$adapter->response['code']) 
+        if (200 === \intval(static::$adapter->response['code'])) 
         {
             $response = static::$adapter->extract_params(static::$adapter->response["response"]);
 
@@ -279,7 +279,7 @@ class Acl_Twitter extends Acl_Abstract {
         else 
         {
             logger('error', '\\Hybrid\\Acl_Twitter::access_token request fail: ' . static::$adapter->response['code']);
-            logger('debug', 'Response: ' . json_encode(static::$adapter->response));
+            logger('debug', 'Response: ' . \json_encode(static::$adapter->response));
             return false;
         }
 
@@ -334,7 +334,7 @@ class Acl_Twitter extends Acl_Abstract {
      */
     private static function add_handler($id, $meta = null) 
     {
-        if (!is_numeric($id)) 
+        if (!\is_numeric($id)) 
         {
             return false;
         }
@@ -355,7 +355,7 @@ class Acl_Twitter extends Acl_Abstract {
             ->set($bind)
             ->execute();
 
-        if (!empty($meta)) 
+        if (!\empty($meta)) 
         {
             \DB::insert('twitters')->set(array(
                 'id'            => $id,
@@ -379,7 +379,7 @@ class Acl_Twitter extends Acl_Abstract {
      */
     private static function update_handler($id, $meta = null) 
     {
-        if (!is_numeric($id)) 
+        if (!\is_numeric($id)) 
         {
             return false;
         }
@@ -389,7 +389,7 @@ class Acl_Twitter extends Acl_Abstract {
             'secret'    => static::$items['secret'],
         );
 
-        if (\Hybrid\Acl_User::is_logged() and 0 == static::$items['user_id']) 
+        if (\Hybrid\Acl_User::is_logged() and 0 === \intval(static::$items['user_id'])) 
         {
             $bind['user_id']            = \Hybrid\Acl_User::get('id');
             static::$items['user_id']   = $bind['user_id'];
@@ -400,7 +400,7 @@ class Acl_Twitter extends Acl_Abstract {
             ->where('twitter_id', '=', $id)
             ->execute();
 
-        if (!empty($meta)) 
+        if (!\empty($meta)) 
         {
             \DB::update('twitters')
                 ->set(array(
@@ -424,7 +424,7 @@ class Acl_Twitter extends Acl_Abstract {
      */
     protected static function register() 
     {
-        \Cookie::set('_twitter_oauth', \Crypt::encode(serialize((object) static::$items)));
+        \Cookie::set('_twitter_oauth', \Crypt::encode(\serialize((object) static::$items)));
 
         return true;
     }
