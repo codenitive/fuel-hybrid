@@ -153,7 +153,7 @@ class Acl_Facebook extends Acl_Abstract {
         {
             case 1 :
             case 2 :
-                \unset($config['scope']);
+                unset($config['scope']);
                 return static::$adapter->getLogoutUrl($config);
             break;
 
@@ -286,7 +286,7 @@ class Acl_Facebook extends Acl_Abstract {
             return false;
         }
 
-        if (\empty(static::$items['info'])) 
+        if (empty(static::$items['info'])) 
         {
             return false;
         }
@@ -337,7 +337,7 @@ class Acl_Facebook extends Acl_Abstract {
             return false;
         }
 
-        if (\empty(static::$items['info'])) 
+        if (empty(static::$items['info'])) 
         {
             return false;
         }

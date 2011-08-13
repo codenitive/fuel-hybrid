@@ -188,7 +188,7 @@ class Acl_Twitter extends Acl_Abstract {
 
         $response = \json_decode(static::$adapter->response['response']);
 
-        if (\isset($response->id)) 
+        if (isset($response->id)) 
         {
             static::$items['id']    = $response->id;
             static::$items['info']  = (object) array(
@@ -355,7 +355,7 @@ class Acl_Twitter extends Acl_Abstract {
             ->set($bind)
             ->execute();
 
-        if (!\empty($meta)) 
+        if (!empty($meta)) 
         {
             \DB::insert('twitters')->set(array(
                 'id'            => $id,
@@ -400,7 +400,7 @@ class Acl_Twitter extends Acl_Abstract {
             ->where('twitter_id', '=', $id)
             ->execute();
 
-        if (!\empty($meta)) 
+        if (!empty($meta)) 
         {
             \DB::update('twitters')
                 ->set(array(

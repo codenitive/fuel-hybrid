@@ -335,7 +335,7 @@ class Acl_User extends Acl_Abstract {
             \Config::set("app.user_acl.{$key}", $value);
         }
 
-        if (!\isset($config['optional_fields']) or !\is_array($config['optional_fields']))
+        if (!isset($config['optional_fields']) or !\is_array($config['optional_fields']))
         {
             $config['optional_fields'] = array();
         }
@@ -344,7 +344,7 @@ class Acl_User extends Acl_Abstract {
 
         foreach (static::$optional_fields as $field)
         {
-            if (\is_string($field) and !\isset(static::$items[$field]))
+            if (\is_string($field) and !isset(static::$items[$field]))
             {
                 static::$items[$field] = '';
             }
