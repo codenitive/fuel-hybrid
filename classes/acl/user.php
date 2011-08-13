@@ -106,7 +106,7 @@ class Acl_User extends Acl_Abstract {
         }
         
         // This method should only be called once, but just in case that doesn't work we should return null
-        if (!is_null(static::$acl))
+        if (!\is_null(static::$acl))
         {
             return;
         }
@@ -117,7 +117,7 @@ class Acl_User extends Acl_Abstract {
         // user data shouldn't be null if there user authentication available, if not populate from default
         if (!is_null($users)) 
         {
-            $users          = unserialize(\Crypt::decode($users));
+            $users          = \unserialize(\Crypt::decode($users));
             static::$items  = (array) $users;
         } 
         else 
@@ -254,7 +254,7 @@ class Acl_User extends Acl_Abstract {
             break;
         }
 
-        if (is_null($result) or $result->count() < 1) 
+        if (\is_null($result) or $result->count() < 1) 
         {
             static::unregister(true);
             return true;
@@ -263,7 +263,7 @@ class Acl_User extends Acl_Abstract {
         {
             $user = $result->current();
 
-            if (!in_array($user->status, static::$allowed_status)) 
+            if (!\in_array($user->status, static::$allowed_status)) 
             {
                 // only verified user can login to this application
                 static::unregister();
@@ -326,7 +326,7 @@ class Acl_User extends Acl_Abstract {
         
         foreach ($config as $key => $value)
         {
-            if (!property_exists('\\Hybrid\\Acl_User', "{$key}") or in_array($key, $reserved_property))
+            if (!\property_exists('\\Hybrid\\Acl_User', "{$key}") or \in_array($key, $reserved_property))
             {
                 continue;
             }
@@ -335,16 +335,16 @@ class Acl_User extends Acl_Abstract {
             \Config::set("app.user_acl.{$key}", $value);
         }
 
-        if (!isset($config['optional_fields']) or !is_array($config['optional_fields']))
+        if (!\isset($config['optional_fields']) or !\is_array($config['optional_fields']))
         {
             $config['optional_fields'] = array();
         }
         
-        static::$optional_fields = array_merge($config['optional_fields'], static::$optional_fields);
+        static::$optional_fields = \array_merge($config['optional_fields'], static::$optional_fields);
 
         foreach (static::$optional_fields as $field)
         {
-            if (is_string($field) and !isset(static::$items[$field]))
+            if (\is_string($field) and !\isset(static::$items[$field]))
             {
                 static::$items[$field] = '';
             }
@@ -407,7 +407,7 @@ class Acl_User extends Acl_Abstract {
             ->as_object()
             ->execute();
 
-        if (is_null($result) or $result->count() < 1) 
+        if (\is_null($result) or $result->count() < 1) 
         {
             throw new \Fuel_Exception("User {$username} does not exist in our database");
             return false;
@@ -443,7 +443,7 @@ class Acl_User extends Acl_Abstract {
                 break;
             }
 
-            if (!in_array($user->status, static::$allowed_status)) 
+            if (!\in_array($user->status, static::$allowed_status)) 
             {
                 throw new \Fuel_Exception("User {$username} is not allowed to login");
                 return false;
@@ -471,7 +471,7 @@ class Acl_User extends Acl_Abstract {
             }
 
             // if user already link their account with facebook, map the relationship
-            if (property_exists($user, 'facebook_id')) 
+            if (\property_exists($user, 'facebook_id')) 
             {
                 static::$items['facebook']  = $user->facebook_id;
             }
@@ -550,7 +550,7 @@ class Acl_User extends Acl_Abstract {
         $values             = static::$items;
         $values['_hash']    = static::add_salt(static::$items['user_name'] . static::$items['password']);
 
-        \Cookie::set('_users', \Crypt::encode(serialize((object) $values)));
+        \Cookie::set('_users', \Crypt::encode(\serialize((object) $values)));
 
         return true;
     }

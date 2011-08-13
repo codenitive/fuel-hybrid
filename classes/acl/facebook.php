@@ -55,7 +55,7 @@ class Acl_Facebook extends Acl_Abstract {
     {
         parent::_init();
 
-        if (is_null(static::$adapter)) 
+        if (\is_null(static::$adapter)) 
         {
             static::$config = \Config::get('app.api.facebook');
             
@@ -81,9 +81,9 @@ class Acl_Facebook extends Acl_Abstract {
     {
         $oauth              = \Cookie::get('_facebook_oauth');
 
-        if (!is_null($oauth))
+        if (!\is_null($oauth))
         {
-            $oauth          = unserialize(\Crypt::decode($oauth));
+            $oauth          = \unserialize(\Crypt::decode($oauth));
             static::$items  = (array) $oauth;
         }
     }
@@ -113,7 +113,7 @@ class Acl_Facebook extends Acl_Abstract {
     {
         $status = false;
 
-        switch (intval(static::$items['access']))
+        switch (\intval(static::$items['access']))
         {
             case 0 :
                 $status = static::access_token();
@@ -142,18 +142,18 @@ class Acl_Facebook extends Acl_Abstract {
 
         $config         = array('scope' => $scope);
 
-        if (!is_null($redirect_uri))
+        if (!\is_null($redirect_uri))
         {
             $config['redirect_uri'] = \Uri::create($redirect_uri);
         }
 
-        $config         = array_merge($config, $option);
+        $config         = \array_merge($config, $option);
 
         switch (static::$items['access'])
         {
             case 1 :
             case 2 :
-                unset($config['scope']);
+                \unset($config['scope']);
                 return static::$adapter->getLogoutUrl($config);
             break;
 
@@ -187,7 +187,7 @@ class Acl_Facebook extends Acl_Abstract {
             static::add_handler();
             static::register();
 
-            if (intval(static::$items['user_id']) < 1) 
+            if (\intval(static::$items['user_id']) < 1) 
             {
                 static::redirect('registration');
             }
@@ -206,7 +206,7 @@ class Acl_Facebook extends Acl_Abstract {
             static::update_handler();
             static::register();
 
-            if (is_null($row['user_id']) or intval(static::$items['user_id']) < 1) 
+            if (\is_null($row['user_id']) or \intval(static::$items['user_id']) < 1) 
             {
                 static::redirect('registration');
 
@@ -233,7 +233,7 @@ class Acl_Facebook extends Acl_Abstract {
     {
         static::$user = static::$adapter->getUser();
 
-        if (static::$user <> 0 and !is_null(static::$user))
+        if (static::$user <> 0 and !\is_null(static::$user))
         {
             return false;
         }
@@ -281,12 +281,12 @@ class Acl_Facebook extends Acl_Abstract {
     {
         $id = static::$items['id'];
 
-        if (!is_numeric($id)) 
+        if (!\is_numeric($id)) 
         {
             return false;
         }
 
-        if (empty(static::$items['info'])) 
+        if (\empty(static::$items['info'])) 
         {
             return false;
         }
@@ -332,12 +332,12 @@ class Acl_Facebook extends Acl_Abstract {
     {
         $id = static::$items['id'];
 
-        if (!is_numeric($id)) 
+        if (!\is_numeric($id)) 
         {
             return false;
         }
 
-        if (empty(static::$items['info'])) 
+        if (\empty(static::$items['info'])) 
         {
             return false;
         }
@@ -346,7 +346,7 @@ class Acl_Facebook extends Acl_Abstract {
             'token' => static::$items['token']
         );
 
-        if (\Hybrid\Acl_User::is_logged() and 0 == static::$items['user_id'])
+        if (\Hybrid\Acl_User::is_logged() and 0 === \intval(static::$items['user_id']))
         {
             $bind['user_id'] = \Hybrid\Acl_User::get('id');
             static::$items['user_id'] = $bind['user_id'];
@@ -379,7 +379,7 @@ class Acl_Facebook extends Acl_Abstract {
      */
     protected static function register() 
     {
-        \Cookie::set('_facebook_oauth', \Crypt::encode(serialize((object) static::$items)));
+        \Cookie::set('_facebook_oauth', \Crypt::encode(\serialize((object) static::$items)));
 
         return true;
     }
