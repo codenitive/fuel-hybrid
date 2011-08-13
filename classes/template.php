@@ -86,8 +86,8 @@ class Template {
             $folder = $type[1];
         }
         
-        $type = $type[0];
-        $name = $type . '.' . $folder;
+        $type   = $type[0];
+        $name   = $type . '.' . $folder;
 
         $driver = '\\Hybrid\\Template_' . ucfirst($type);
 

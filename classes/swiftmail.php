@@ -91,7 +91,7 @@ import('swift/swift_required', 'vendor');
     public function __construct($config)
     {
         $this->config   = $config;
-        $transport      = "_transport_" . $config['protocol'];
+        $transport      = "transport_" . $config['protocol'];
 
         $this->debugs               = new \stdClass();
         $this->debugs->success      = false;
