@@ -26,6 +26,9 @@ Autoloader::add_classes(array (
     'Hybrid\\Acl_Facebook'              => __DIR__.'/classes/acl/facebook.php',
     'Hybrid\\Acl_Twitter'               => __DIR__.'/classes/acl/twitter.php',
     'Hybrid\\Acl_User'                  => __DIR__.'/classes/acl/user.php',
+
+    'Hybrid\\Acl_Controller_Facebook'   => __DIR__.'/classes/acl/controller/facebook.php',
+    'Hybrid\\Acl_Controller_Twitter'    => __DIR__.'/classes/acl/controller/twitter.php',
     
     'Hybrid\\Chart'                     => __DIR__.'/classes/chart.php',
     'Hybrid\\Chart_Utility'             => __DIR__.'/classes/chart/utility.php',

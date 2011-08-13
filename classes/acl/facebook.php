@@ -245,7 +245,7 @@ class Acl_Facebook extends Acl_Abstract {
         } 
         catch (\FacebookApiException $e)
         {
-            logger('error', '\\Hybrid\\Acl_Facebook::access_token request fail: ' . $e->getMessage());
+            \Log::error('\\Hybrid\\Acl_Facebook::access_token request fail: ' . $e->getMessage());
             static::$user                   = null;
             static::$items['access']        = 0;
         }

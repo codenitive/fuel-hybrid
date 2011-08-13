@@ -278,8 +278,8 @@ class Acl_Twitter extends Acl_Abstract {
         } 
         else 
         {
-            logger('error', '\\Hybrid\\Acl_Twitter::access_token request fail: ' . static::$adapter->response['code']);
-            logger('debug', 'Response: ' . \json_encode(static::$adapter->response));
+            \Log::error('\\Hybrid\\Acl_Twitter::access_token request fail: ' . static::$adapter->response['code']);
+            \Log::debug('Response: ' . \json_encode(static::$adapter->response));
             return false;
         }
 
@@ -316,7 +316,7 @@ class Acl_Twitter extends Acl_Abstract {
         } 
         else 
         {
-            logger('error', '\\Hybrid\\Acl_Twitter::request_token request fail: ' . static::$adapter->response['code']);
+            \Log::error('\\Hybrid\\Acl_Twitter::request_token request fail: ' . static::$adapter->response['code']);
             return false;
         }
 
