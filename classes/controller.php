@@ -36,7 +36,7 @@ abstract class Controller extends \Fuel\Core\Controller {
      * @param   mixed   $resource
      * @param   string  $type 
      */
-    final protected function _acl($resource, $type = null) 
+    final protected function acl($resource, $type = null) 
     {
         $status = \Hybrid\Acl::access_status($resource, $type);
 
@@ -56,7 +56,7 @@ abstract class Controller extends \Fuel\Core\Controller {
     public function before() 
     {
         $this->language = \Hybrid\Factory::get_language();
-        $this->user = \Hybrid\Acl_User::get();
+        $this->user     = \Hybrid\Acl_User::get();
 
         \Event::trigger('controller_before');
 

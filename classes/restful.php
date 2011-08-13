@@ -34,14 +34,14 @@ class Restful {
      * @access  protected
      * @var     array 
      */
-    protected static $_supported_formats = array(
-        'xml' => 'application/xml',
-        'rawxml' => 'application/xml',
-        'json' => 'application/json',
-        'serialized' => 'application/vnd.php.serialized',
-        'php' => 'text/plain',
-        'html' => 'text/html',
-        'csv' => 'application/csv'
+    protected static $supported_formats = array(
+        'xml'           => 'application/xml',
+        'rawxml'        => 'application/xml',
+        'json'          => 'application/json',
+        'serialized'    => 'application/vnd.php.serialized',
+        'php'           => 'text/plain',
+        'html'          => 'text/html',
+        'csv'           => 'application/csv'
     );
     
     /**
@@ -58,10 +58,11 @@ class Restful {
      * 
      * @static
      * @access  public
+     * @return  void
      */
     public static function _init()
     {
-        static::$pattern = sprintf('/\.(%s)$/', implode('|', array_keys(static::$_supported_formats)));
+        static::$pattern = sprintf('/\.(%s)$/', implode('|', array_keys(static::$supported_formats)));
         \Config::load('rest', true);
     }
     
@@ -86,13 +87,13 @@ class Restful {
      * @access  public
      * @return  bool
      */
-    public static function is_rest()
+    public static function is_rest_call()
     {
         $pattern = static::$pattern;
         $resource = \Request::active()->action;
 
         // Check if a file extension is used
-        if (preg_match($pattern, $resource, $matches) or static::_detect_format() != '')
+        if (preg_match($pattern, $resource, $matches) or static::detect_format() != '')
         {
             return true;
         }
@@ -112,12 +113,12 @@ class Restful {
      */
     public static function content_type($format)
     {
-        if (!array_key_exists($format, static::$_supported_formats))
+        if (!array_key_exists($format, static::$supported_formats))
         {
             $format = 'html';
         }
         
-        return static::$_supported_formats[$format];
+        return static::$supported_formats[$format];
     }
     
     /**
@@ -130,11 +131,11 @@ class Restful {
     {
         if (\Config::get('rest.auth') == 'basic')
         {
-            static::_prepare_basic_auth();
+            static::prepare_basic_auth();
         }
         elseif (\Config::get('rest.auth') == 'digest')
         {
-            static::_prepare_digest_auth();
+            static::prepare_digest_auth();
         }
     }
     
@@ -147,8 +148,8 @@ class Restful {
      */
     public function __construct($data = array(), $http_code = 200)
     {
-        $this->_data = $data;
-        $this->_http_status = $http_code;
+        $this->data = $data;
+        $this->http_status = $http_code;
     }
     
     /**
@@ -157,7 +158,7 @@ class Restful {
      * @access  protected
      * @var     string
      */
-    protected $_rest_format = null;
+    protected $rest_format = null;
     
     /**
      * Dataset for output
@@ -165,7 +166,7 @@ class Restful {
      * @access  protected
      * @var     array 
      */
-    protected $_data = array();
+    protected $data = array();
     
     /**
      * HTTP Response status
@@ -173,11 +174,12 @@ class Restful {
      * @access  protected
      * @var     int
      */
-    protected $_http_status = 200;
+    protected $http_status = 200;
     
     /**
      * Set the rest format
      * 
+     * @access  public
      * @param   string  $rest_format
      * @return  Restful 
      */
@@ -185,9 +187,13 @@ class Restful {
     {
         $rest_format = trim(strtolower($rest_format));
         
-        if (in_array($rest_format, static::$_supported_formats))
+        if (in_array($rest_format, static::$supported_formats))
         {
-            $this->_rest_format = $rest_format;
+            $this->rest_format = $rest_format;
+        }
+        else
+        {
+            throw new \Fuel_Exception("{$rest_format} is not a valid REST format");
         }
         
         return $this;
@@ -196,21 +202,22 @@ class Restful {
     /**
      * Execute the Rest request and return the output
      * 
+     * @access  public
      * @return  object
      */
     public function execute()
     {
-        if (empty($this->_data))
+        if (empty($this->data))
         {
-            $this->_http_status = 404;
+            $this->http_status = 404;
         }
         
         $pattern = static::$pattern;
         $resource = \Request::active()->action;
         
-        $format = $this->_rest_format;
+        $format = $this->rest_format;
         $response = new \stdClass();
-        $response->status = $this->_http_status;
+        $response->status = $this->http_status;
         
         // Check if a file extension is used
         if (preg_match($pattern, $resource, $matches)) 
@@ -224,21 +231,21 @@ class Restful {
         if (is_null($format))
         {
             // Which format should the data be returned in?
-            $format = $this->_detect_format();
+            $format = $this->detect_format();
         }
         
         $response->format = $format;
         
         // If the format method exists, call and return the output in that format
-        if (method_exists('\\Format', 'to_'.$format))
+        if (\method_exists('\\Format', 'to_' . $format))
         {
-            $response->body = \Format::factory($this->_data)->{'to_'.$format}();
+            $response->body = \Format::factory($this->data)->{'to_'.$format}();
         }
 
         // Format not supported, output directly
         else 
         {
-            $response->body = (string) $this->_data;
+            $response->body = (string) $this->data;
         }
         
         return $response;
@@ -247,11 +254,13 @@ class Restful {
     /**
      * Check user login
      * 
+     * @static
+     * @access  public
      * @param   string  $username
      * @param   mixed   $password
      * @return  bool 
      */
-    protected static function _check_login($username = '', $password = null)
+    protected static function check_login($username = '', $password = null)
     {
         if (empty($username))
         {
@@ -280,7 +289,7 @@ class Restful {
      * @static
      * @access  protected
      */
-    protected static function _prepare_basic_auth()
+    protected static function prepare_basic_auth()
     {
         $username = null;
         $password = null;
@@ -301,9 +310,9 @@ class Restful {
             }
         }
 
-        if (!static::_check_login($username, $password))
+        if (!static::check_login($username, $password))
         {
-            static::_force_login();
+            static::force_login();
         }
     }
 
@@ -313,7 +322,7 @@ class Restful {
      * @static
      * @access  protected
      */
-    protected static function _prepare_digest_auth()
+    protected static function prepare_digest_auth()
     {
         $uniqid = uniqid(""); // Empty argument for backward compatibility
         // We need to test which server authentication variable to use
@@ -336,24 +345,24 @@ class Restful {
           a wrong auth. informations. */
         if (empty($digest_string))
         {
-            static::_force_login($uniqid);
+            static::force_login($uniqid);
         }
 
         // We need to retrieve authentication informations from the $auth_data variable
         preg_match_all('@(username|nonce|uri|nc|cnonce|qop|response)=[\'"]?([^\'",]+)@', $digest_string, $matches);
         $digest = array_combine($matches[1], $matches[2]);
 
-        if (!array_key_exists('username', $digest) or !static::_check_login($digest['username']))
+        if (!array_key_exists('username', $digest) or !static::check_login($digest['username']))
         {
-            static::_force_login($uniqid);
+            static::force_login($uniqid);
         }
 
-        $valid_logins = & \Config::get('rest.valid_logins');
-        $valid_pass = $valid_logins[$digest['username']];
+        $valid_logins   = & \Config::get('rest.valid_logins');
+        $valid_pass     = $valid_logins[$digest['username']];
 
         // This is the valid response expected
-        $A1 = md5($digest['username'] . ':' . \Config::get('rest.realm') . ':' . $valid_pass);
-        $A2 = md5(strtoupper(\Hybrid\Input::method()) . ':' . $digest['uri']);
+        $A1             = md5($digest['username'] . ':' . \Config::get('rest.realm') . ':' . $valid_pass);
+        $A2             = md5(strtoupper(\Hybrid\Input::method()) . ':' . $digest['uri']);
         $valid_response = md5($A1 . ':' . $digest['nonce'] . ':' . $digest['nc'] . ':' . $digest['cnonce'] . ':' . $digest['qop'] . ':' . $A2);
 
         if ($digest['response'] != $valid_response)
@@ -371,10 +380,10 @@ class Restful {
      * @access  protected
      * @return  string
      */
-    protected static function _detect_format()
+    protected static function detect_format()
     {
         // A format has been passed as an argument in the URL and it is supported
-        if (\Hybrid\Input::get_post('format') and static::$_supported_formats[\Hybrid\Input::get_post('format')])
+        if (\Hybrid\Input::get_post('format') and static::$supported_formats[\Hybrid\Input::get_post('format')])
         {
             return \Hybrid\Input::get_post('format');
         }
@@ -383,7 +392,7 @@ class Restful {
         if (\Config::get('rest.ignore_http_accept') === false and \Hybrid\Input::server('HTTP_ACCEPT'))
         {
             // Check all formats against the HTTP_ACCEPT header
-            foreach (array_keys(static::$_supported_formats) as $format)
+            foreach (array_keys(static::$supported_formats) as $format)
             {
                 // Has this format been requested?
                 if (strpos(\Hybrid\Input::server('HTTP_ACCEPT'), $format) !== false)
@@ -421,7 +430,7 @@ class Restful {
      * @access  protected
      * @return  string
      */
-    protected static function _detect_lang()
+    protected static function detect_lang()
     {
         if (!$lang = \Hybrid\Input::server('HTTP_ACCEPT_LANGUAGE'))
         {
@@ -431,14 +440,14 @@ class Restful {
         // They might have sent a few, make it an array
         if (strpos($lang, ',') !== false)
         {
-            $langs = explode(',', $lang);
+            $langs          = explode(',', $lang);
 
-            $return_langs = array();
-            $i = 1;
+            $return_langs   = array();
+
             foreach ($langs as $lang)
             {
                 // Remove weight and strip space
-                list($lang) = explode(';', $lang);
+                list($lang)     = explode(';', $lang);
                 $return_langs[] = trim($lang);
             }
 
@@ -456,7 +465,7 @@ class Restful {
      * @access  protected
      * @param   string  $nonce 
      */
-    protected static function _force_login($nonce = '')
+    protected static function force_login($nonce = '')
     {
         header('HTTP/1.0 401 Unauthorized');
         header('HTTP/1.1 401 Unauthorized');

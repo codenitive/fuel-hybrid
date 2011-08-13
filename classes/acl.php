@@ -39,7 +39,7 @@ class Acl {
      * @access      protected
      * @staticvar   array
      */
-    protected static $_roles = array();
+    protected static $roles = array();
     
     /**
      * List of resources
@@ -47,7 +47,7 @@ class Acl {
      * @access      protected
      * @staticvar   array
      */
-    protected static $_resources = array();
+    protected static $resources = array();
     
     /**
      * List of types
@@ -55,7 +55,7 @@ class Acl {
      * @access      protected
      * @staticvar   array
      */
-    protected static $_types = array('deny', 'view', 'create', 'edit', 'delete', 'all');
+    protected static $types = array('deny', 'view', 'create', 'edit', 'delete', 'all');
     
     /**
      * List of ACL map between roles, resources and types
@@ -63,7 +63,7 @@ class Acl {
      * @access      protected
      * @staticvar   array
      */
-    protected static $_acl = array();
+    protected static $acl = array();
 
     /**
      * Only called once 
@@ -112,9 +112,9 @@ class Acl {
      */
     public static function access($resource, $type = 'view') 
     {
-        $types = static::$_types;
+        $types = static::$types;
 
-        if (!in_array($resource, static::$_resources)) 
+        if (!in_array($resource, static::$resources)) 
         {
             return true;
         }
@@ -126,19 +126,19 @@ class Acl {
 
         foreach ($user->roles as $role) 
         {
-            if (!isset(static::$_acl[$role . '/' . $resource])) 
+            if (!isset(static::$acl[$role . '/' . $resource])) 
             {
                 continue;
             }
 
-            if (static::$_acl[$role . '/' . $resource] == $type) 
+            if (static::$acl[$role . '/' . $resource] == $type) 
             {
                 return true;
             }
 
             for ($i = ($type_id + 1); $i < $length; $i++) 
             {
-                if (static::$_acl[$role . '/' . $resource] == $types[$i]) 
+                if (static::$acl[$role . '/' . $resource] == $types[$i]) 
                 {
                     return true;
                 }
@@ -223,13 +223,13 @@ class Acl {
 
         if (is_array($roles)) 
         {
-            static::$_roles = static::$_roles + $roles;
+            static::$roles = static::$roles + $roles;
             return true;
         }
 
         if (is_string($roles)) 
         {
-            array_push(static::$_roles, trim(\Inflector::friendly_title($roles, '-', true)));
+            array_push(static::$roles, trim(\Inflector::friendly_title($roles, '-', true)));
             return true;
         }
 
@@ -253,12 +253,12 @@ class Acl {
 
         if (is_array($resources)) 
         {
-            static::$_resources = static::$_resources + $resources;
+            static::$resources = static::$resources + $resources;
             return true;
         }
 
         if (is_string($resources)) {
-            array_push(static::$_resources, trim(\Inflector::friendly_title($resources, '-', true)));
+            array_push(static::$resources, trim(\Inflector::friendly_title($resources, '-', true)));
             return true;
         }
 
@@ -278,7 +278,7 @@ class Acl {
      */
     public static function allow($roles, $resources, $type = 'view') 
     {
-        if (!in_array($type, static::$_types)) 
+        if (!in_array($type, static::$types)) 
         {
             return false;
         }
@@ -297,7 +297,7 @@ class Acl {
         {
             $role = \Inflector::friendly_title($role, '-', true);
 
-            if (!in_array($role, static::$_roles)) 
+            if (!in_array($role, static::$roles)) 
             {
                 throw new \Fuel_Exception("Role {$role} does not exist.");
                 continue;
@@ -307,7 +307,7 @@ class Acl {
             {
                 $resource = \Inflector::friendly_title($resource, '-', true);
 
-                if (!in_array($resource, static::$_resources)) 
+                if (!in_array($resource, static::$resources)) 
                 {
                     throw new \Fuel_Exception("Resource {$resource} does not exist.");
                     continue;
@@ -315,7 +315,7 @@ class Acl {
 
                 $id = $role . '/' . $resource;
 
-                static::$_acl[$id] = $type;
+                static::$acl[$id] = $type;
             }
         }
 

@@ -30,11 +30,13 @@ return array(
         'en',
     ),
     
-    'user_table'            => array(
+    'user_acl'              => array(
+        'enabled'               => true,
         'use_meta'              => true,
         'use_auth'              => true,
         'use_twitter'           => false,
         'use_facebook'          => false,
+        'optional_fields'       => null,
     ),
 
     'api'                   => array(

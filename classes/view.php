@@ -25,9 +25,15 @@ namespace Hybrid;
  * @category    View
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+
 class View extends \Fuel\Core\View {
 
-    protected static $_path = '';
+    /**
+     * @static
+     * @access  protected
+     * @var     string
+     */
+    protected static $path = '';
 
     /**
      * Set the global path.
@@ -40,10 +46,11 @@ class View extends \Fuel\Core\View {
      * @static
      * @access  public
      * @param   string  $path 
+     * @return  void
      */
     public static function set_path($path) 
     {
-        static::$_path = $path;
+        static::$path = $path;
     }
 
     /**
@@ -57,21 +64,21 @@ class View extends \Fuel\Core\View {
      * @static
      * @access  public
      * @param   string  $file view filename
-     * @return  View
+     * @return  self
      * @throws  View_Exception
      */
     public function set_filename($file) 
     {
         switch (true) 
         {
-            case ($path = $this->_find_file($file)) : break;
+            case ($path = $this->find_file($file)) : break;
             case ($path = \Fuel::find_file('views', $file, '.php', false, false)) : break;
             default :
                 throw new \View_Exception('The requested view could not be found: ' . \Fuel::clean_path($file));
         }
 
         // Store the file path locally
-        $this->_file = $path;
+        $this->file = $path;
 
         return $this;
     }
@@ -84,14 +91,14 @@ class View extends \Fuel\Core\View {
      * @param   string  $file
      * @return  mixed
      */
-    protected function _find_file($file) 
+    protected function find_file($file) 
     {
-        if (empty(static::$_path) or !\is_file(static::$_path . $file . '.php'))
+        if (empty(static::$path) or !\is_file(static::$path . $file . '.php'))
         {
             return null;
         }
  
-        return static::$_path . $file . '.php';
+        return static::$path . $file . '.php';
     }
 
 }

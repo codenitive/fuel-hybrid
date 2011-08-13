@@ -28,15 +28,41 @@ namespace Hybrid;
 
 class Template {
 
+    /**
+     * Default template driver
+     *
+     * @var     constant
+     */
     const DEFAULT_TEMPLATE = 'normal';
 
+    /**
+     * Cache template instance so we can reuse it on multiple request eventhough 
+     * it's almost impossible to happen
+     * 
+     * @static
+     * @access  protected
+     * @var     array
+     */
     protected static $instances = array();
 
+    /**
+     * Only load the configuration once
+     *
+     * @static
+     * @access  public
+     */
     public static function _init()
     {
         \Config::load('app', true);
     }
 
+    /**
+     * Initiate a new Template instance
+     * 
+     * @static
+     * @access  public
+     * @return  Template_Abstract
+     */
     public static function factory($name = null)
     {
         if (is_null($name))
@@ -44,9 +70,9 @@ class Template {
             $name = \Config::get('app.template.default', self::DEFAULT_TEMPLATE);   
         }
 
-        $folder = null;
-        $filename = null;
-        $type = explode('.', strval($name));
+        $folder     = null;
+        $filename   = null;
+        $type       = explode('.', strval($name));
 
 
         if (count($type) > 1) 
@@ -61,17 +87,19 @@ class Template {
             $folder = $type[1];
         }
         
-        $type = $type[0];
-        $name = $type . '.' . $folder;
+        $type   = $type[0];
+        $name   = $type . '.' . $folder;
 
-        $driver = '\\Hybrid\\Template_'.ucfirst($type);
+        $driver = '\\Hybrid\\Template_' . ucfirst($type);
 
         if (isset(static::$instances[$name]))
         {
+            // load from cache if instance already loaded
             return static::$instances[$name];
         }
         elseif (class_exists($driver)) 
         {
+            // load a new template if class exist
             static::$instances[$name] = new $driver($folder, $filename);
             return static::$instances[$name];
         }

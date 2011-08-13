@@ -27,112 +27,112 @@ namespace Hybrid;
  */
 class Factory {
 
-	private static $_identity = null;
-	private static $_language = 'en';
+    private static $identity = null;
+    private static $language = 'en';
 
-	/**
-	 * Initiate application configuration
-	 * 
-	 * @static
-	 * @access	public
-	 */
-	public static function _init() 
-	{
-		if (!is_null(static::$_identity)) 
-		{
-			return;
-		}
-		
-		\Config::load('app', true);
+    /**
+     * Initiate application configuration
+     * 
+     * @static
+     * @access  public
+     */
+    public static function _init() 
+    {
+        if (!is_null(static::$identity)) 
+        {
+            return;
+        }
+        
+        \Config::load('app', true);
 
-		static::$_identity = \Config::get('app.identity');
+        static::$identity = \Config::get('app.identity');
 
-		if (\Config::get('app.maintenance_mode') == true) 
-		{
-			static::_maintenance_mode();
-		}
+        if (\Config::get('app.maintenance_mode') == true) 
+        {
+            static::maintenance_mode();
+        }
 
-		$lang = \Session::get(static::$_identity . '_lang');
+        $lang = \Session::get(static::$_identity . '_lang');
 
-		if (!is_null($lang)) 
-		{
-			\Config::set('language', $lang);
-			static::$_language = $lang;
-		} 
-		else 
-		{
-			static::$_language = \Config::get('language');
-		}
+        if (!is_null($lang)) 
+        {
+            \Config::set('language', $lang);
+            static::$language = $lang;
+        } 
+        else 
+        {
+            static::$language = \Config::get('language');
+        }
 
-		\Event::trigger('load_language');
-		\Event::trigger('load_acl');
-	}
+        \Event::trigger('load_language');
+        \Event::trigger('load_acl');
+    }
 
-	/**
-	 * Check for maintenance mode
-	 * 
-	 * @static
-	 * @access	protected
-	 * @throws	\Fuel_Exception
-	 */
-	protected static function _maintenance_mode() 
-	{
-		// This ensures that show_404 is only called once.
-		static $call_count = 0;
-		$call_count++;
+    /**
+     * Check for maintenance mode
+     * 
+     * @static
+     * @access  protected
+     * @throws  \Fuel_Exception
+     */
+    protected static function maintenance_mode() 
+    {
+        // This ensures that show_404 is only called once.
+        static $call_count = 0;
+        $call_count++;
 
-		if ($call_count > 1) 
-		{
-			throw new \Fuel_Exception('It appears your _maintenance_mode_ route is incorrect.  Multiple Recursion has happened.');
-		}
+        if ($call_count > 1) 
+        {
+            throw new \Fuel_Exception('It appears your _maintenance_mode_ route is incorrect.  Multiple Recursion has happened.');
+        }
 
 
-		if (\Config::get('routes._maintenance_mode_') === null) 
-		{
-			throw new \Fuel_Exception('It appears your _maintenance_mode_ route is null.');
-		} 
-		else 
-		{
-			$request = \Request::factory(\Config::get('routes._maintenance_mode_'))->execute();
-			exit($request->send_headers()->response());
-		}
-	}
+        if (\Config::get('routes._maintenance_mode_') === null) 
+        {
+            throw new \Fuel_Exception('It appears your _maintenance_mode_ route is null.');
+        } 
+        else 
+        {
+            $request = \Request::factory(\Config::get('routes._maintenance_mode_'))->execute();
+            exit($request->send_headers()->response());
+        }
+    }
 
-	/**
-	 * Get application codename
-	 *
-	 * @static
-	 * @access	public
-	 * @return	string
-	 */
-	public static function get_identity() 
-	{
-		return static::$_identity;
-	}
+    /**
+     * Get application codename
+     *
+     * @static
+     * @access  public
+     * @return  string
+     */
+    public static function get_identity() 
+    {
+        return static::$identity;
+    }
 
-	/**
-	 * Get application language setup
-	 *
-	 * @static
-	 * @access	public
-	 * @return	string
-	 */
-	public static function get_language() 
-	{
-		return static::$_language;
-	}
+    /**
+     * Get application language setup
+     *
+     * @static
+     * @access  public
+     * @return  string
+     */
+    public static function get_language() 
+    {
+        return static::$language;
+    }
 
-	/**
-	 * Initiate a new View object with language setup
-	 *
-	 * @param	string	$file
-	 * @param	mixed	$data
-	 * @param	bool	$encode
-	 * @return	View
-	 */
-	public static function view($file, $data = null, $encode = null) 
-	{
-		return \View::factory(static::$_language . DS . $file, $data, $encode);
-	}
+    /**
+     * Initiate a new View object with language setup
+     *
+     * @param   string  $file
+     * @param   mixed   $data
+     * @param   bool    $encode
+     * @return  View
+     */
+    public static function view($file, $data = null, $encode = null) 
+    {
+        return \View::factory(static::$language . DS . $file, $data, $encode);
+    }
 
 }

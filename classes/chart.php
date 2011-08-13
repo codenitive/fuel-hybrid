@@ -53,10 +53,10 @@ abstract class Chart {
         return new static();
     }
 
-    protected $options = array();
-    protected $hAxis = 'string';
-    protected $columns = '';
-    protected $rows = '';
+    protected $options  = array();
+    protected $hAxis    = 'string';
+    protected $columns  = '';
+    protected $rows     = '';
 
     /**
      * Clean-up private property on new object
@@ -76,9 +76,9 @@ abstract class Chart {
      */
     public function clear() 
     {
-        $this->options = array();
-        $this->columns = '';
-        $this->rows = '';
+        $this->options  = array();
+        $this->columns  = '';
+        $this->rows     = '';
 
         return true;
     }
@@ -91,9 +91,9 @@ abstract class Chart {
      */
     public function set_columns($data = array()) 
     {
-        $this->columns = '';
+        $this->columns  = '';
 
-        $count = 0;
+        $count          = 0;
 
         if (count($data) > 0) 
         {
@@ -209,4 +209,5 @@ abstract class Chart {
      * @param   int     $height
      */
     public abstract function generate($width, $height);
+    
 }

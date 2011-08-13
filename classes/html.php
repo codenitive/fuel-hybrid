@@ -35,7 +35,7 @@ class Html extends \Fuel\Core\Html {
      * @param   string  $content page title
      * @return  string
      */
-    public static function title($content = '') 
+    public static function title($content = '', $attributes = array()) 
     {
         $title = \Config::get('app.site_name');
 
@@ -44,7 +44,7 @@ class Html extends \Fuel\Core\Html {
             $title = sprintf('%s &mdash; %s', $content, $title);
         }
 
-        return html_tag('title', array(), $title);
+        return html_tag('title', $attributes, $title);
     }
     
 }
