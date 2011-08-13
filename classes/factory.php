@@ -52,7 +52,7 @@ class Factory {
             static::maintenance_mode();
         }
 
-        $lang = \Session::get(static::$_identity . '_lang');
+        $lang = \Session::get(static::$identity . '_lang');
 
         if (!is_null($lang)) 
         {
