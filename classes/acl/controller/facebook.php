@@ -84,7 +84,7 @@ class Acl_Controller_Facebook extends \Hybrid\Controller {
      */
     public function action_detail()
     {
-        if (\Config::get('environment', Fuel::DEVELOPMENT))
+        if (\Config::get('environment', \Fuel::DEVELOPMENT))
         {
             \Debug::dump(\Hybrid\Acl_Facebook::get(), \Hybrid\Acl_User::get());
         }

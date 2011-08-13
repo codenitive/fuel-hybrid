@@ -69,7 +69,7 @@ class Acl_Controller_Twitter extends \Hybrid\Controller {
      */
     public function action_detail()
     {
-        if (\Config::get('environment', Fuel::DEVELOPMENT))
+        if (\Config::get('environment', \Fuel::DEVELOPMENT))
         {
             \Debug::dump(\Hybrid\Acl_Twitter::get(), \Hybrid\Acl_User::get());
         }
