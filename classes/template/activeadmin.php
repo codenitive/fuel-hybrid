@@ -28,18 +28,18 @@ namespace Hybrid;
 
  class Template_ActiveAdmin extends Template {
 
- 	public static function factory()
-	{
-		return new static();
-	}
+    public static function factory()
+    {
+        return new static();
+    }
 
-	public function __construct()
-	{
-		
-	}
- 	
- 	public static function breadcrumb()
- 	{
- 		
- 	}
+    public function __construct()
+    {
+        
+    }
+    
+    public static function breadcrumb()
+    {
+        
+    }
  }
