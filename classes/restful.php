@@ -185,6 +185,11 @@ class Restful {
      */
     public function format($rest_format = '')
     {
+        if (\is_null($rest_format) or empty($rest_format))
+        {
+            return $this;
+        }
+
         $rest_format = trim(strtolower($rest_format));
         
         if (in_array($rest_format, static::$supported_formats))
