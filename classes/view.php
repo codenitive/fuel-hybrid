@@ -33,7 +33,7 @@ class View extends \Fuel\Core\View {
      * @access  protected
      * @var     string
      */
-    protected static $path = '';
+    protected static $_path = '';
 
     /**
      * Set the global path.
@@ -50,7 +50,7 @@ class View extends \Fuel\Core\View {
      */
     public static function set_path($path) 
     {
-        static::$path = $path;
+        static::$_path = $path;
     }
 
     /**
@@ -78,7 +78,7 @@ class View extends \Fuel\Core\View {
         }
 
         // Store the file path locally
-        $this->file = $path;
+        $this->_file = $path;
 
         return $this;
     }
@@ -93,12 +93,12 @@ class View extends \Fuel\Core\View {
      */
     protected function find_file($file) 
     {
-        if (empty(static::$path) or !\is_file(static::$path . $file . '.php'))
+        if (empty(static::$_path) or !\is_file(static::$_path . $file . '.php'))
         {
             return null;
         }
  
-        return static::$path . $file . '.php';
+        return static::$_path . $file . '.php';
     }
 
 }
