@@ -47,7 +47,7 @@ class Acl_Controller_Facebook extends \Hybrid\Controller {
 
         if (null === \Hybrid\Input::get('code', null))
         {
-            \Request::redirect($login, 'refresh');
+            \Response::redirect($login, 'refresh');
         }
     }
 
@@ -63,7 +63,7 @@ class Acl_Controller_Facebook extends \Hybrid\Controller {
 
         if (false === \Hybrid\Acl_Facebook::is_logged() and null === \Hybrid\Input::get('code', null))
         {
-            \Request::redirect($login, 'refresh');
+            \Response::redirect($login, 'refresh');
         }
         else
         {
