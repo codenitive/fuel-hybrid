@@ -142,9 +142,9 @@ HELP;
 
         switch(true)
         {
+            case (true === \is_file($path) and 'y' === \Cli::prompt("Overwrite APPPATH/config/{$file}.php?", array('y', 'n'))) :
             case (false === \is_file($path)) : 
-            case ('y' === \Cli::prompt("Overwrite APPPATH/config/{$file}.php?", array('y', 'n'))) :
-                $path = pathinfo($path);
+               $path = pathinfo($path);
 
                 try
                 {
