@@ -16,6 +16,8 @@ namespace Hybrid;
 abstract class Acl_Abstract {
 
     /**
+     * User data
+     *
      * @static
      * @access  protected
      * @var     object|array
@@ -27,6 +29,7 @@ abstract class Acl_Abstract {
      *
      * @static 
      * @access  public
+     * @return  void
      */
     public static function _init()
     {
@@ -59,6 +62,7 @@ abstract class Acl_Abstract {
      *
      * @static
      * @access  public
+     * @param   string  $name optional key value, return all if $name is null
      * @return  object
      */
     public static function get($name = null) 
@@ -98,6 +102,7 @@ abstract class Acl_Abstract {
      * @access  protected
      * @param   string  $type
      * @param   string  $default_route
+     * @return  void
      * @throws  \Fuel_Exception
      */
     protected static function redirect($type, $default_route = '/')
