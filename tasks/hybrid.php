@@ -63,7 +63,7 @@ class Hybrid {
             $facebook   = true;
         }
 
-        if ('y' === \Cli::prompt("Would you like to use Twitter Oauth?", array('y', 'n')))
+        if ('y' === \Cli::prompt("Would you like to use Twitter OAuth?", array('y', 'n')))
         {
             $twitter    = true;
         }
