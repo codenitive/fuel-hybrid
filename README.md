@@ -23,6 +23,6 @@ Hybrid can be installed using FuelPHP Oil utility, but before we can run the com
             'hybrid',
         ),
 
-Now we can start the installation by running ` php oil refine hybrid `, you will be ask a few configuration how you would like to configure your users database including Facebook Connect and Twitter OAuth option.
+Now we can start the installation by running ` php oil refine hybrid:install ` or browse the help from ` php oil refine hybrid:help ` , you will be ask a few configuration how you would like to configure your users database including Facebook Connect and Twitter OAuth option.
 
 Once model and migrations script generated, please update ` APPPATH/config/app.php ` based on your installation preference.

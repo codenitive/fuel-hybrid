@@ -115,7 +115,7 @@ Usage:
 Runtime options:
   -h, [--help]      # Show option
   -i, [--install]   # Install configuration file and user model/migrations script
-  -q, [--quiet]     # Supress status output
+  -t, [--test]      # Test installation to match configuration
 
 Description:
   The 'oil refine hybrid' command can be used in several ways to facilitate quick development, help with
