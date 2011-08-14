@@ -256,7 +256,7 @@ class Acl_User extends Acl_Abstract {
 
         if (\is_null($result) or $result->count() < 1) 
         {
-            static::unregister(true);
+            static::unregister();
             return true;
         } 
         else 
