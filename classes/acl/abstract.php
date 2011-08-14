@@ -22,6 +22,12 @@ abstract class Acl_Abstract {
      */
     protected static $items;
 
+    /**
+     * Load configurations
+     *
+     * @static 
+     * @access  public
+     */
     public static function _init()
     {
         \Config::load('app', true);
