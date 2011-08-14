@@ -34,6 +34,6 @@ namespace Hybrid;
  		$expected 	= '<script type="text/javascript" src="https://www.google.com/jsapi"></script>';
  		$output 	= \Hybrid\Chart_Utility::js();
 
- 		$this->assertEquals($excepted, $output);
+ 		$this->assertEquals($expected, $output);
  	}
  }
