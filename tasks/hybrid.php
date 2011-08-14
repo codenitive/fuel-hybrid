@@ -25,25 +25,125 @@ class Hybrid {
 
     public static function run()
     {
+        $install    = \Cli::option('i') or \Cli::option('install');
+        $help       = \Cli::option('h') or \Cli::option('help');
+        $test       = \Cli::option('t') or \Cli::option('test');
+
+        switch (true)
+        {
+            case $install :
+                static::install();
+            break;
+
+            case $help :
+                static::help();
+            break;
+
+            case $test :
+                static::test();
+            break;
+        }
+    }
+
+    public static function test()
+    {
+        \Config::load('app', true);
+        
+        $has_error = false;
+
+        if (true === \class_exists('\\Model_Users_Metum') and false === \Config::get('app.user_acl.use_meta', false))
+        {
+            \Cli::write('Please set app.user_acl.use_meta to TRUE in APPPATH/config/app.php', 'red');
+            $has_error = true;
+        }
+
+        if (true === \class_exists('\\Model_Users_Auth') and false === \Config::get('app.user_acl.use_auth', false))
+        {
+            \Cli::write('Please set app.user_acl.use_auth to TRUE in APPPATH/config/app.php', 'red');
+            $has_error = true;
+        }
+
+        if (true === \Config::get('app.user_acl.use_facebook', false))
+        {
+            if ('' === \Config::get('app.api.facebook.app_id', null))
+            {
+                \Cli::write('Please provide app.api.facebook.app_id in APPPATH/config/app.php', 'red');
+                $has_error = true;
+            }
+
+            if ('' === \Config::get('app.api.facebook.secret', null))
+            {
+                \Cli::write('Please provide app.api.facebook.secret in APPPATH/config/app.php', 'red');
+                $has_error = true;
+            }
+        }
+
+        if (true === \Config::get('app.user_acl.use_twitter', false))
+        {
+            if ('' === \Config::get('app.api.twitter.consumer_key', ''))
+            {
+                \Cli::write('Please provide app.api.twitter.consumer_key in APPPATH/config/app.php', 'red');
+                $has_error = true;
+            }
+
+            if ('' === \Config::get('app.api.twitter.secret', ''))
+            {
+                \Cli::write('Please provide app.api.twitter.consumer_secret in APPPATH/config/app.php', 'red');
+                $has_error = true;
+            }
+        }
+
+        if ('' === \Config::get('app.salt', ''))
+        {
+            \Cli::write('Please provide app.salt secret key in APPPATH/config/app.php', 'red');
+            $has_error = true;
+        }
+
+        if (false === $has_error)
+        {
+            \Cli::write('Your application is correctly configured', 'green');
+        }
+    }
+
+    public static function help()
+    {
+        echo <<<HELP
+
+Usage:
+  php oil refine hybrid
+
+Runtime options:
+  -h, [--help]      # Show option
+  -i, [--install]   # Install configuration file and user model/migrations script
+  -q, [--quiet]     # Supress status output
+
+Description:
+  The 'oil refine hybrid' command can be used in several ways to facilitate quick development, help with
+  user database generation and installation
+
+HELP;
+
+    }
+
+    public static function install()
+    {
         \Cli::write("Start Installation", "green");
 
         static::install_config();
         static::install_user();
     }
 
-    public static function install_config()
+    protected static function install_config()
     {
         $file = 'app';
         $path = APPPATH.'config'.DS.$file.'.php';
-
-        $overwrite = \Cli::option('o') || \Cli::option('overwrite');
 
         $content = file_get_contents(PKGPATH.'hybrid/config/app.php');
 
         switch(true)
         {
-            case false === \is_file($path) : 
-            case true === $overwrite :
+            case (false === \is_file($path)) : 
+            case ('y' === \Cli::prompt("Overwrite APPPATH/config/{$file}.php?", array('y', 'n'))) :
                 $path = pathinfo($path);
 
                 try
@@ -56,12 +156,16 @@ class Hybrid {
                     throw new Exception("APPPATH/config/{$file}.php could not be written.");
                 }
             break;
+
+            default :
+            
+            break;
         }
 
        
     }
 
-    public static function install_user()
+    protected static function install_user()
     {
         if (true === \class_exists('\\Model_User'))
         {
