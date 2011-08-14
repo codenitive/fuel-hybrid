@@ -106,6 +106,10 @@ abstract class Acl_Abstract {
                 \Response::redirect(\Config::get('app.api._redirect.after_login', $default_route));
             break;
 
+            case 'after_logout' :
+                \Response::redirect(\Config::get('app.api._redirect.after_logout', $default_route));
+            break;
+
             default :
                 throw new \Fuel_Exception("Unable to redirect type: {$type}");
                 return;

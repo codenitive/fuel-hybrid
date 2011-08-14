@@ -503,7 +503,7 @@ class Acl_User extends Acl_Abstract {
 
         if (true === $redirect) 
         {
-            static::redirect('after_login');
+            static::redirect('after_logout');
         }
 
         return true;
