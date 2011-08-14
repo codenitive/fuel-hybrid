@@ -28,8 +28,22 @@ namespace Hybrid;
 
 abstract class Template_Abstract {
 
+    /**
+     * Template driver configuration
+     *
+     * @static
+     * @access  protected
+     * @var     array
+     */
     protected static $config = null;
     
+    /**
+     * Load configurations
+     *
+     * @static
+     * @access  public
+     * @return  void
+     */
     public static function _init()
     {
         if (is_null(static::$config))
@@ -39,10 +53,37 @@ abstract class Template_Abstract {
         }
     }
 
-    protected $folder = 'default';
-    protected $filename = 'index';
-    public $view = null;
+    /**
+     * Folder location
+     *
+     * @access  protected
+     * @var     string
+     */
+    protected $folder       = 'default';
 
+    /**
+     * Filename
+     *
+     * @access  protected
+     * @var     string
+     */
+    protected $filename     = 'index';
+
+    /**
+     * Adapter \Fuel\Core\View
+     *
+     * @access  public
+     * @var     object
+     */
+    public $view            = null;
+
+    /**
+     * Load asset as subfolder of template
+     *
+     * @access  public
+     * @return  self
+     * @throws  \Fuel_Exception
+     */
     public function load_assets() {
         $folder_path = $this->folder . 'assets/';
 
@@ -59,6 +100,13 @@ abstract class Template_Abstract {
         return $this;
     }
 
+    /**
+     * Set folder location
+     *
+     * @access  public
+     * @return  self
+     * @throws  \Fuel_Exception
+     */
     public function set_folder($path = null)
     {
         if (!\is_dir($path))
@@ -78,6 +126,12 @@ abstract class Template_Abstract {
         return $this;
     }
 
+    /**
+     * Set filename location
+     *
+     * @access  public
+     * @return  self
+     */
     public function set_filename($filename = null)
     {
         if (!empty($filename))
@@ -88,6 +142,12 @@ abstract class Template_Abstract {
         return $this;
     }
 
+    /**
+     * Set data
+     *
+     * @access  public
+     * @return  self
+     */
     public function set($data = array())
     {
         if (is_array($data) and count($data) > 0)
@@ -98,8 +158,23 @@ abstract class Template_Abstract {
         return $this;
     }
 
+    /**
+     * Load partial view
+     *
+     * @abstract
+     * @access  public
+     * @param   string  $filename
+     * @param   array   $data
+     * @return  void
+     */
     public abstract function partial($filename, $data = null);
 
+    /**
+     * Render self::view
+     *
+     * @abstract
+     * @access  public
+     */
     public abstract function render();
 
 }

@@ -28,11 +28,32 @@ namespace Hybrid;
 
 class Template_Normal extends Template_Abstract {
 
-    public static function factory($folder)
+    /**
+     * Initiate a new template using factory
+     *
+     * Example:
+     * <code>$template = \Hybrid\Template_Normal::factory();</code>
+     *
+     * @static
+     * @access  public
+     * @param   string  $theme
+     * @param   string  $filename
+     * @return  void
+     */
+    public static function factory($folder = null, $filename = null)
     {
-        return new static($folder);
+        return new static($folder, $filename);
     }
 
+    /**
+     * Initiate a new template object
+     *
+     * @access  public
+     * @param   string  $theme
+     * @param   string  $filename
+     * @return  void
+     * @throws  \Fuel_Exception
+     */
     public function __construct($folder = null, $filename = null)
     {
         // Assets shouldn't be added in APPPATH/views at all
@@ -57,12 +78,26 @@ class Template_Normal extends Template_Abstract {
         $this->view = \View::factory();
     }
 
-    public function load_assets() {
-        // Assets shouldn't be added in APPPATH/views at all
-
+    /**
+     * Assets shouldn't be added in APPPATH/views at all, just return self
+     *
+     * @access  public
+     * @return  self
+     * @throws  \Fuel_Exception
+     */
+    public function load_assets() 
+    {
         return $this;
     }
 
+    /**
+     * Load partial view
+     *
+     * @access  public
+     * @param   string  $filename
+     * @param   array   $data
+     * @return  string
+     */
     public function partial($filename, $data = null)
     {
         $view = \View::factory();
@@ -77,6 +112,12 @@ class Template_Normal extends Template_Abstract {
         return $view->render();
     }
 
+    /**
+     * Render self::view
+     *
+     * @access  public
+     * @return  string
+     */
     public function render()
     {
         $this->view->set_filename(rtrim($this->folder, '/') . '/' . $this->filename);

@@ -28,6 +28,32 @@ namespace Hybrid;
 
 class Template_Frontend extends Template_Abstract {
 
+    /**
+     * Initiate a new template using factory
+     *
+     * Example:
+     * <code>$template = \Hybrid\Template_Frontend::factory();</code>
+     *
+     * @static
+     * @access  public
+     * @param   string  $theme
+     * @param   string  $filename
+     * @return  void
+     */
+    public static function factory($folder = null, $filename = null)
+    {
+        return new static($folder, $filename);
+    }
+
+    /**
+     * Initiate a new template object
+     *
+     * @access  public
+     * @param   string  $theme
+     * @param   string  $filename
+     * @return  void
+     * @throws  \Fuel_Exception
+     */
     public function __construct($theme = null, $filename = null)
     {
         $available_folders = array_keys(static::$config['frontend']);
@@ -63,6 +89,14 @@ class Template_Frontend extends Template_Abstract {
         $this->view = \Hybrid\View::factory();
     }
 
+    /**
+     * Load partial view
+     *
+     * @access  public
+     * @param   string  $filename
+     * @param   array   $data
+     * @return  string
+     */
     public function partial($filename, $data = null)
     {
         $view = \Hybrid\View::factory();
@@ -78,6 +112,12 @@ class Template_Frontend extends Template_Abstract {
         return $view->render();
     }
 
+    /**
+     * Render self::view
+     *
+     * @access  public
+     * @return  string
+     */
     public function render()
     {
         $this->view->set_path($this->folder);
