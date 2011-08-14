@@ -249,6 +249,8 @@ class Acl_Facebook extends Acl_Abstract {
             static::$user                   = null;
             static::$items['access']        = 0;
         }
+        
+        $scope                              = \Config::get('app.api.facebook.scope', '');
 
         static::$items['info']              = new \stdClass();
         $profile_data                       = (object) $profile_data;
@@ -258,6 +260,19 @@ class Acl_Facebook extends Acl_Abstract {
         static::$items['info']->first_name  = $profile_data->first_name;
         static::$items['info']->last_name   = $profile_data->last_name;
         static::$items['info']->link        = $profile_data->link;
+
+        foreach ($scopes as $scope)
+        {
+            $scope = trim($scope);
+
+            if (empty($scope))
+            {
+                continue;
+            }
+
+            static::$items['info']->{$$scope} = $profile_data->{$$scope};
+        }
+
         static::$items['token']             = static::$adapter->getAccessToken();
 
         if (static::$items['access'] == 0)
