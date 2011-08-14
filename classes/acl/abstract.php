@@ -16,12 +16,21 @@ namespace Hybrid;
 abstract class Acl_Abstract {
 
     /**
+     * User data
+     *
      * @static
      * @access  protected
      * @var     object|array
      */
     protected static $items;
 
+    /**
+     * Load configurations
+     *
+     * @static 
+     * @access  public
+     * @return  void
+     */
     public static function _init()
     {
         \Config::load('app', true);
@@ -53,6 +62,7 @@ abstract class Acl_Abstract {
      *
      * @static
      * @access  public
+     * @param   string  $name optional key value, return all if $name is null
      * @return  object
      */
     public static function get($name = null) 
@@ -92,6 +102,7 @@ abstract class Acl_Abstract {
      * @access  protected
      * @param   string  $type
      * @param   string  $default_route
+     * @return  void
      * @throws  \Fuel_Exception
      */
     protected static function redirect($type, $default_route = '/')
@@ -104,6 +115,10 @@ abstract class Acl_Abstract {
 
             case 'after_login' :
                 \Response::redirect(\Config::get('app.api._redirect.after_login', $default_route));
+            break;
+
+            case 'after_logout' :
+                \Response::redirect(\Config::get('app.api._redirect.after_logout', $default_route));
             break;
 
             default :

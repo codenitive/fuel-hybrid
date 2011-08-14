@@ -28,8 +28,31 @@ namespace Hybrid;
 
 class Acl_Facebook extends Acl_Abstract {
     
+    /**
+     * Facebook Adapter configuration
+     *
+     * @static
+     * @access  protected
+     * @var     array
+     */
     protected static $config    = null;
+
+    /**
+     * Facebook Adapter object
+     *
+     * @static
+     * @access  protected
+     * @var     object
+     */
     protected static $adapter  = null;
+    
+    /**
+     * User data
+     *
+     * @static
+     * @access  protected
+     * @var     object|array
+     */
     protected static $items     = array(
         'id'        => 0,
         'user_id'   => 0,
@@ -37,6 +60,14 @@ class Acl_Facebook extends Acl_Abstract {
         'info'      => null,
         'access'    => 0,
     );
+
+    /**
+     * Facebook User ID
+     *
+     * @static
+     * @access  protected
+     * @var     int
+     */
     protected static $user      = null;
 
     /**
@@ -92,7 +123,7 @@ class Acl_Facebook extends Acl_Abstract {
      *
      * @static
      * @access  public
-     * @return  boolean
+     * @return  object
      */
     public static function get_adapter() 
     {
@@ -105,8 +136,9 @@ class Acl_Facebook extends Acl_Abstract {
      * 2. authenticate the user with Facebook account
      * 3. verifying the user account
      *
-     * @access public
-     * @return boolean
+     * @static
+     * @access  public
+     * @return  bool
      */
     public static function execute()
     {
@@ -133,6 +165,14 @@ class Acl_Facebook extends Acl_Abstract {
         return $status;
     }
 
+    /**
+     * Get Facebook Connect Login/logout URL
+     *
+     * @static
+     * @access  public
+     * @param   array   $option
+     * @return  void
+     */
     public static function get_url($option = array())
     {
         if (true === \Fuel::$is_cli)
@@ -290,8 +330,6 @@ class Acl_Facebook extends Acl_Abstract {
      *
      * @static
      * @access  private
-     * @param   int     $id
-     * @param   object  $meta
      * @return  bool
      */
     private static function add_handler() 
@@ -341,8 +379,6 @@ class Acl_Facebook extends Acl_Abstract {
      *
      * @static
      * @access  private
-     * @param   int     $id
-     * @param   object  $meta
      * @return  bool
      */
     private static function update_handler() 
@@ -429,7 +465,7 @@ class Acl_Facebook extends Acl_Abstract {
      */
     public static function logout($redirect = true)
     {
-        $url = static::get_url(array('redirect_uri' => \Uri::create('/')));
+        $url = static::get_url(array('redirect_uri' => \Uri::create(static::redirect('after_logout'))));
         static::unregister();
 
         if (true === $redirect)

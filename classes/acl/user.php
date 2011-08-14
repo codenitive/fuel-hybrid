@@ -28,7 +28,22 @@ namespace Hybrid;
 
 class Acl_User extends Acl_Abstract {
 
+    /**
+     * User data
+     *
+     * @static
+     * @access  protected
+     * @var     object|array
+     */
     protected static $items     = null;
+    
+    /**
+     * Adapter to \Hybrid\Acl
+     *
+     * @static
+     * @access  public
+     * @var     object
+     */
     public static $acl          = NULL;
 
     /**
@@ -58,11 +73,58 @@ class Acl_User extends Acl_Abstract {
         return true;
     }
     
+    /**
+     * List of user fields to be used
+     *
+     * @static
+     * @access  protected
+     * @var     array
+     */
     protected static $optional_fields   = array('email', 'status', 'full_name', 'gender', 'birthdate');
+
+    /**
+     * Allow status to login based on `users`.`status`
+     *
+     * @static
+     * @access  protected
+     * @var     array
+     */
     protected static $allowed_status    = array('verified');
-    protected static $use_meta          = true;
+    
+    /**
+     * Use `users_meta` table
+     *
+     * @static
+     * @access  protected
+     * @var     bool
+     */
+     protected static $use_meta          = true;
+
+    /**
+     * Use `users_auth` table
+     *
+     * @static
+     * @access  protected
+     * @var     bool
+     */
     protected static $use_auth          = true;
+
+    /**
+     * Use Twitter OAuth
+     *
+     * @static
+     * @access  protected
+     * @var     bool
+     */
     protected static $use_twitter       = false;
+
+    /**
+     * Use Facebook Connect
+     *
+     * @static
+     * @access  protected
+     * @var     bool
+     */
     protected static $use_facebook      = false;
 
     /**
@@ -364,7 +426,9 @@ class Acl_User extends Acl_Abstract {
      * @access  public
      * @param   string  $username
      * @param   string  $password
+     * @param   string  $method     login method using "normal", "facebook_oauth" or "twitter_oauth"
      * @return  bool
+     * @throws  \Fuel_Exception
      */
     public static function login($username, $password, $method = 'normal') 
     {
@@ -503,7 +567,7 @@ class Acl_User extends Acl_Abstract {
 
         if (true === $redirect) 
         {
-            static::redirect('after_login');
+            static::redirect('after_logout');
         }
 
         return true;

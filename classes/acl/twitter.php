@@ -32,7 +32,22 @@ use \tmhOAuth;
 
 class Acl_Twitter extends Acl_Abstract {
     
+    /**
+     * Twitter Adapter object
+     *
+     * @static
+     * @access  protected
+     * @var     object
+     */
     protected static $adapter   = null;
+
+    /**
+     * User data
+     *
+     * @static
+     * @access  protected
+     * @var     object|array
+     */
     protected static $items     = array(
         'token'     => null,
         'secret'    => null,
