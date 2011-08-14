@@ -429,7 +429,7 @@ class Acl_Facebook extends Acl_Abstract {
      */
     public static function logout($redirect = true)
     {
-        $url = static::get_url(array('redirect_uri' => \Uri::create('/')));
+        $url = static::get_url(array('redirect_uri' => \Uri::create(static::redirect('after_logout'))));
         static::unregister();
 
         if (true === $redirect)
