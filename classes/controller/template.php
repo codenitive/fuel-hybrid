@@ -57,7 +57,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
         switch ($status) 
         {
             case 401 :
-                \Request::show_404();
+                throw new \Request404Exception();
             break;
         }
     }

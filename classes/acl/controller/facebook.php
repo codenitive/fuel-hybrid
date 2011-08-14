@@ -96,7 +96,7 @@ class Acl_Controller_Facebook extends \Hybrid\Controller {
         }
         else
         {
-            \Request::show_404();
+            throw new \Request404Exception();
         }
     }
 

@@ -90,7 +90,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
                 }
                 else
                 {
-                    \Request::show_404();
+                    throw new \Request404Exception();
                 }
             break;
         }
@@ -189,7 +189,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
             }
             else
             {
-                \Request::show_404();
+                throw new \Request404Exception();
             }
         }
     }

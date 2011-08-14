@@ -75,7 +75,7 @@ class Acl_Controller_Twitter extends \Hybrid\Controller {
         }
         else
         {
-            \Request::show_404();
+            throw new \Request404Exception();
         }
     }
 
