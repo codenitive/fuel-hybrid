@@ -57,5 +57,5 @@ return array(
         ),
     ),
     
-    'salt'                  => 's8g5MgO5kVtEEmc_o0rP0UfI',
+    'salt'                  => '',
 );
