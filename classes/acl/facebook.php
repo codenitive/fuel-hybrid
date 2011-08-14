@@ -13,11 +13,6 @@
 
 namespace Hybrid;
 
-import('facebook/facebook', 'vendor');
-
-use \Facebook;
-use \FacebookApiException;
-
 /**
  * Hybrid 
  * 
@@ -64,7 +59,11 @@ class Acl_Facebook extends Acl_Abstract {
                 'secret'    => static::$config['secret'],
             );
 
-            static::$adapter = new \Facebook($config);
+            if (false === \Fuel::$is_cli)
+            {
+                import('facebook/facebook', 'vendor');
+                static::$adapter = new \Facebook($config);
+            }
         }
         
         static::factory();
@@ -136,6 +135,11 @@ class Acl_Facebook extends Acl_Abstract {
 
     public static function get_url($option = array())
     {
+        if (true === \Fuel::$is_cli)
+        {
+            return ;
+        }
+        
         // we already have static::$config but we need to check if properties doesn't exist
         $redirect_uri   = \Config::get('app.api.facebook.redirect_uri');
         $scope          = \Config::get('app.api.facebook.scope', '');
