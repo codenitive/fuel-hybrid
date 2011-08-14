@@ -1,13 +1,16 @@
 <?php
 
 /**
- * Faces.MY (Get Listed. Get Hired) 
- *  
- * @package     Hybrid 
- * @category    Tasks
- * @version     0.1.0
- * @since       0.1.0
- * @author      Faces.MY Development Team <hello@faces.my>
+ * Fuel
+ *
+ * Fuel is a fast, lightweight, community driven PHP5 framework.
+ *
+ * @package    Fuel
+ * @version    1.0
+ * @author     Fuel Development Team
+ * @license    MIT License
+ * @copyright  2010 - 2011 Fuel Development Team
+ * @link       http://fuelphp.com
  */
 
 namespace Fuel\Tasks;
@@ -16,7 +19,7 @@ namespace Fuel\Tasks;
  * Setup commandline:
  *      php oil refine hybrid
  *
- * @package  app
+ * @package  hybrid
  */
 class Hybrid {
 
@@ -24,11 +27,47 @@ class Hybrid {
     {
         \Cli::write("Start Installation", "green");
 
+        static::install_config();
         static::install_user();
+    }
+
+    public static function install_config()
+    {
+        $file = 'app';
+        $path = APPPATH.'config'.DS.$file.'.php';
+
+        $overwrite = \Cli::option('o') || \Cli::option('overwrite');
+
+        $content = file_get_contents(PKGPATH.'hybrid/config/app.php');
+
+        switch(true)
+        {
+            case false === \is_file($path) : 
+            case true === $overwrite :
+                $path = pathinfo($path);
+
+                try
+                {
+                    \File::update($path['dirname'], $path['basename'], $content);
+                    \Cli::write("Created config: APPPATH/config/{$file}.php", 'green');
+                }
+                catch (\File_Exception $e)
+                {
+                    throw new Exception("APPPATH/config/{$file}.php could not be written.");
+                }
+            break;
+        }
+
+       
     }
 
     public static function install_user()
     {
+        if (true === \class_exists('\\Model_User'))
+        {
+            \Cli::write("Model User already exist, skipping this process", 'red');
+        }
+
         $user_model = array(
             'user',
             'user_name:string[100]',
@@ -63,7 +102,7 @@ class Hybrid {
             $facebook   = true;
         }
 
-        if ('y' === \Cli::prompt("Would you like to use Twitter Oauth?", array('y', 'n')))
+        if ('y' === \Cli::prompt("Would you like to use Twitter OAuth?", array('y', 'n')))
         {
             $twitter    = true;
         }
