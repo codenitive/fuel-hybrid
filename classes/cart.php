@@ -156,8 +156,6 @@ namespace Hybrid;
             throw new \Fuel_Exception("Item doesn't contain proper format, please provide an array");
             return false;
         }
-
-
     }
 
     /**
@@ -173,6 +171,36 @@ namespace Hybrid;
             throw new \Fuel_Exception("Item doesn't contain proper format, please provide an array");
             return false;
         }
+
+        $save_cart  = false;
+
+        if (isset($items['id']) and isset($items['quantity']))
+        {
+            if (true === $this->_update($items))
+            {
+                $save_cart = true;
+            }
+        }
+        else 
+        {
+            foreach ($items as $item)
+            {
+                if (\is_array($item) and isset($item['id']) and isset($item['quantity']))
+                {
+                    if (true === $this->_update($item))
+                    {
+                        $save_cart = true;
+                    }
+                }
+            }
+        }
+
+        if (true === $save_cart)
+        {
+            return $this->save();
+        }
+
+        return false;
     }
 
     /**
