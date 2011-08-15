@@ -23,6 +23,16 @@ namespace Fuel\Tasks;
  */
 class Hybrid {
 
+    /**
+     * Send command with runtime option:
+     *      php oil refine hybrid --install
+     *      php oil refine hybrid --help
+     *      php oil refine hybrid --test
+     *
+     * @static
+     * @access  public
+     * @return  void
+     */
     public static function run()
     {
         $install    = \Cli::option('i') or \Cli::option('install');
@@ -45,6 +55,13 @@ class Hybrid {
         }
     }
 
+    /**
+     * Test Hybrid package installation, make sure app/config/app.php is using the right configuration
+     *
+     * @static
+     * @access  public
+     * @return  void
+     */
     public static function test()
     {
         \Config::load('app', true);
@@ -105,6 +122,13 @@ class Hybrid {
         }
     }
 
+    /**
+     * Show help menu
+     *
+     * @static
+     * @access  public
+     * @return  void
+     */
     public static function help()
     {
         echo <<<HELP
@@ -125,6 +149,13 @@ HELP;
 
     }
 
+    /**
+     * Run all installation
+     *
+     * @static
+     * @access  public
+     * @return  void
+     */
     public static function install()
     {
         \Cli::write("Start Installation", "green");
@@ -132,7 +163,13 @@ HELP;
         static::install_config();
         static::install_user();
     }
-
+    /**
+     * Install configuration file
+     *
+     * @static
+     * @access  protected
+     * @return  void
+     */
     protected static function install_config()
     {
         $file = 'app';
@@ -142,9 +179,9 @@ HELP;
 
         switch(true)
         {
+            case (true === \is_file($path) and 'y' === \Cli::prompt("Overwrite APPPATH/config/{$file}.php?", array('y', 'n'))) :
             case (false === \is_file($path)) : 
-            case ('y' === \Cli::prompt("Overwrite APPPATH/config/{$file}.php?", array('y', 'n'))) :
-                $path = pathinfo($path);
+               $path = pathinfo($path);
 
                 try
                 {
@@ -161,10 +198,15 @@ HELP;
             
             break;
         }
-
-       
     }
 
+    /**
+     * Install user table
+     *
+     * @static
+     * @access  protected
+     * @return  void
+     */
     protected static function install_user()
     {
         if (true === \class_exists('\\Model_User'))
