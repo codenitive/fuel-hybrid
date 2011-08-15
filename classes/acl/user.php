@@ -162,7 +162,7 @@ class Acl_User extends Acl_Abstract {
         parent::_init();
 
         // allow to disable user acl, would be useful when database not available
-        if (false === \Config::get('app.user_acl.enabled', true))
+        if (false === \Config::get('app.user_acl.enabled', \Config::get('app.user_table.enabled', true)))
         {
             return;
         }
@@ -382,7 +382,7 @@ class Acl_User extends Acl_Abstract {
     protected static function load_config()
     {
         // load ACL configuration
-        $config             = \Config::get('app.user_acl', array());
+        $config             = \Config::get('app.user_acl', \Config::get('app.user_table', array()));
 
         $reserved_property  = array('items', 'acl', 'optional_fields');
         
