@@ -161,7 +161,7 @@ class Curl {
      * @param   string  $value
      * @return  Curl 
      */
-    public function set($option, $value = null)
+    public function setopt($option, $value = null)
     {
         if (is_array($option))
         {
