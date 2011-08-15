@@ -92,21 +92,21 @@ class Template {
 
         $driver = '\\Hybrid\\Template_' . ucfirst($type);
 
-        if (isset(static::$instances[$name]))
-        {
-            // load from cache if instance already loaded
-            return static::$instances[$name];
+        if (!isset(static::$instances[$name]))
+        {   
+            if (class_exists($driver)) 
+            {
+                // load a new template if class exist
+                static::$instances[$name] = new $driver($folder, $filename);
+                return static::$instances[$name];
+            }
+            else 
+            {
+                throw new \Fuel_Exception("Requested {$driver} does not exist");
+            }
         }
-        elseif (class_exists($driver)) 
-        {
-            // load a new template if class exist
-            static::$instances[$name] = new $driver($folder, $filename);
-            return static::$instances[$name];
-        }
-        else 
-        {
-            throw new \Fuel_Exception("Requested {$driver} does not exist");
-        }
+        
+        return static::$instances[$name];
     }
 
 }
