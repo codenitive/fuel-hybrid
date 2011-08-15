@@ -56,6 +56,29 @@ class Template_Frontend extends Template_Abstract {
      */
     public function __construct($theme = null, $filename = null)
     {
+        $this->set_theme($theme);
+
+        if (!empty($filename) and $filename !== '_default_')
+        {
+            $this->set_filename($filename);
+        }
+        else 
+        {
+            $this->set_filename(static::$config['default_filename']);
+        }
+
+        $this->view = \Hybrid\View::factory();
+    }
+
+    /**
+     * Set theme location
+     *
+     * @access  public
+     * @return  self
+     * @throws  \Fuel_Exception
+     */
+    public function set_theme($theme = null)
+    {
         $available_folders = array_keys(static::$config['frontend']);
 
         if (empty($available_folders))
@@ -63,30 +86,33 @@ class Template_Frontend extends Template_Abstract {
             throw new \Fuel_Exception("\\Hybrid\\Template configuration is not completed");
         }
 
+        if (is_null($theme) or $theme === '_default_')
+        {
+            $theme = 'default';
+        }
+
         if (in_array(trim(strval($theme)), $available_folders))
         {
-            $this->folder = static::$config['frontend'][$theme];
+            $this->set_folder(static::$config['frontend'][$theme]);
         }
         else
         {
             throw new \Fuel_Exception("Requested Template folder is not available");
         }
 
-        if (!empty($filename))
-        {
-            $this->filename = $filename;
-        }
-        else 
-        {
-            $this->filename = static::$config['default_filename'];
-        }
-        
-        if (!!static::$config['load_assets'])
-        {
-            $this->load_assets();
-        }
+        return $this;
+    }
 
-        $this->view = \Hybrid\View::factory();
+    /**
+     * Set folder location
+     *
+     * @access  protected
+     * @return  self
+     * @throws  \Fuel_Exception
+     */
+    protected function set_folder($path = null)
+    {
+        return parent::set_folder($path);
     }
 
     /**
@@ -120,6 +146,11 @@ class Template_Frontend extends Template_Abstract {
      */
     public function render()
     {
+        if (!!static::$config['load_assets'])
+        {
+            $this->load_assets();
+        }
+
         $this->view->set_path($this->folder);
         $this->view->set_filename($this->filename);
         $this->view->auto_encode(static::$config['auto_encode']);

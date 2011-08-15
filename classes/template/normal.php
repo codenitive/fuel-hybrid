@@ -57,38 +57,35 @@ class Template_Normal extends Template_Abstract {
     public function __construct($folder = null, $filename = null)
     {
         // Assets shouldn't be added in APPPATH/views at all
-        if (!empty($folder))
+        if (!empty($folder) and $folder !== '_default_')
         {
-            $this->folder = $folder;
+            $this->set_folder($folder);
         }
         elseif (isset(static::$config['default_folder']))
         {
-            $this->folder = static::$config['default_folder'];
+            $this->set_folder(static::$config['default_folder']);
         }
 
-        if (!empty($filename))
+        if (!empty($filename) and $filename !== '_default_')
         {
-            $this->filename = $filename;
+            $this->set_filename($filename);
         }
         elseif (isset(static::$config['default_filename']))
         {
-            $this->filename = static::$config['default_filename'];
+            $this->set_filename(static::$config['default_filename']);
         }
 
         $this->view = \View::factory();
     }
 
     /**
-     * Assets shouldn't be added in APPPATH/views at all, just return self
+     * Assets shouldn't be added in APPPATH/views at all
      *
-     * @access  public
+     * @access  private
      * @return  self
      * @throws  \Fuel_Exception
      */
-    public function load_assets() 
-    {
-        return $this;
-    }
+    private function load_assets() {}
 
     /**
      * Load partial view

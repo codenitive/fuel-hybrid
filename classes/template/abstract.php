@@ -116,11 +116,6 @@ abstract class Template_Abstract {
         else 
         {
             $this->folder = $path;
-
-            if (!!static::$config['load_assets'])
-            {
-                return $this->load_assets();
-            }
         }
 
         return $this;
