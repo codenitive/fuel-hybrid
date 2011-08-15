@@ -28,20 +28,33 @@ namespace Hybrid;
 
  class Cart {
 
+    protected static $instances = array();
+
     public static function _init()
     {
         \Config::load('app', true);
         \Config::load('crypt', true);
     }
 
-    public static function factory($config = null)
+    public static function factory($name = null)
     {
-        return new static($config);
+        // set instance name to default if null given
+        if (is_null($name) or !is_string($name) or empty($name))
+        {
+            $name = \Config::get('app.identity', 'fuelapp');
+        }
+
+        if (is_null(static::$instances[$name]))
+        {
+            static::$instances[$name] = new static();
+        }
+
+        return static::$instances[$name];
     }
 
     protected $cart_contents = array();
 
-    public function __construct($config = null)
+    protected function __construct($config = null)
     {
         $initconfig = \Config::load('app.cart', array());
         $config     = array_merge($config, $initconfig);
@@ -51,7 +64,7 @@ namespace Hybrid;
         $this->cart_content = \Session::get('_cart_content', array());
     }
 
-    public function insert()
+    public function insert($items = array())
     {
         
     }
