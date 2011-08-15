@@ -74,6 +74,7 @@ class Template {
         $filename   = null;
         $type       = explode('.', strval($name));
 
+
         if (count($type) > 1) 
         {
             // set filename if available
