@@ -35,6 +35,14 @@ namespace Hybrid;
         \Config::load('crypt', true);
     }
 
+    /**
+     * Initiate a new instance, reuse if instance already initiated
+     * 
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  Cart
+     */
     public static function factory($name = null)
     {
         // set instance name to default if null given
@@ -51,14 +59,26 @@ namespace Hybrid;
         return static::$instances[$name];
     }
 
+    /**
+     * @var     string 
+     */
     protected $name     = null;
 
+    /**
+     * @var     array
+     */
     protected $contents = array(
         'data'      => array(),
         'total'     => 0.00,
         'quantity'  => 0,
     );
 
+    /**
+     * Construct a new instance
+     *
+     * @access  protected
+     * @return  void
+     */
     protected function __construct($name)
     {
         $this->name     = $name;
@@ -140,14 +160,36 @@ namespace Hybrid;
 
     }
 
+    /**
+     * Insert items into the cart and save it to the session
+     *
+     * @access  public
+     * @param   array   $items
+     */
     public function update($items = array())
     {
-        
+        if (empty($items) or !\is_array($items))
+        {
+            throw new \Fuel_Exception("Item doesn't contain proper format, please provide an array");
+            return false;
+        }
     }
 
-    protected function _update($item)
+    /**
+     * Update to self::contents
+     *
+     * @access  protected
+     * @param   array   $items
+     * @return  bool
+     * @throws  \Fuel_Exception
+     */
+    protected function _update($items = array())
     {
-        
+        if (empty($items) or !\is_array($items))
+        {
+            throw new \Fuel_Exception("Item doesn't contain proper format, please provide an array");
+            return false;
+        }
     }
 
     /**
@@ -174,7 +216,7 @@ namespace Hybrid;
      */
     public function get($type = null)
     {
-        $type = trim(strtolower(strval($type)));
+        $type = \trim(\strtolower(\strval($type)));
 
         if (\array_key_exists($type, $this->contents))
         {
@@ -200,6 +242,5 @@ namespace Hybrid;
 
         return true;
     }
-
 
  }
