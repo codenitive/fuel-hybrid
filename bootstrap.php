@@ -53,7 +53,7 @@ Autoloader::add_classes(array (
     'Hybrid\\Template_Frontend'         => __DIR__.'/classes/template/frontend.php',
 
     'Hybrid\\Text'                      => __DIR__.'/classes/text.php',
-    'Hybrid\\Text_Parser'               => __DIR__.'/classes/text/markdown.php',
+    'Hybrid\\Text_Markdown'             => __DIR__.'/classes/text/markdown.php',
 ));
 
 /* End of file bootstrap.php */
