@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * Fuel is a fast, lightweight, community driven PHP5 framework.
+ *
+ * @package    Fuel
+ * @version    1.0
+ * @author     Fuel Development Team
+ * @license    MIT License
+ * @copyright  2010 - 2011 Fuel Development Team
+ * @link       http://fuelphp.com
+ */
+
+namespace Hybrid;
+
+import('markdown/markdown', 'vendor');
+
+use \Markdown;
+
+/**
+ * Hybrid 
+ * 
+ * A set of class that extends the functionality of FuelPHP without 
+ * affecting the standard workflow when the application doesn't actually 
+ * utilize Hybrid feature.
+ * 
+ * @package     Fuel
+ * @subpackage  Hybrid
+ * @category    Text
+ * @author      Mior Muhammad Zaki <crynobone@gmail.com>
+ */
+class Text_Markdown {
+
+    public function __construct() {}
+
+    public function parse($text = '')
+    {
+        if (empty($text) or !strval($text))
+        {
+            $text = '';
+        }
+
+        return \Markdown($text);
+    }
+
+}
