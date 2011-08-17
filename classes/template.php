@@ -53,7 +53,7 @@ class Template {
      */
     public static function _init()
     {
-        \Config::load('app', true);
+        \Config::load('app', 'app');
     }
 
     /**

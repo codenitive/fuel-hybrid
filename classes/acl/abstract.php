@@ -33,7 +33,7 @@ abstract class Acl_Abstract {
      */
     public static function _init()
     {
-        \Config::load('app', true);
+        \Config::load('app', 'app');
         \Config::load('crypt', true);
     }
 

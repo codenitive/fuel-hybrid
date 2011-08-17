@@ -64,7 +64,7 @@ class Hybrid {
      */
     public static function test()
     {
-        \Config::load('app', true);
+        \Config::load('app', 'app');
         
         $has_error = false;
 

@@ -43,7 +43,7 @@ class Factory {
             return;
         }
         
-        \Config::load('app', true);
+        \Config::load('app', 'app');
 
         static::$identity = \Config::get('app.identity');
 
