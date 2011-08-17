@@ -97,18 +97,6 @@ class Acl_Facebook extends Acl_Abstract {
             }
         }
         
-        static::factory();
-    }
-
-    /**
-     * Get cookie contain
-     *
-     * @static
-     * @access  protected
-     * @return  void
-     */
-    protected static function factory()
-    {
         $oauth              = \Cookie::get('_facebook_oauth');
 
         if (!\is_null($oauth))
