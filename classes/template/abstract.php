@@ -77,6 +77,14 @@ abstract class Template_Abstract {
      */
     public $view            = null;
 
+     /**
+     * List of loaded asset
+     *
+     * @access  protected
+     * @var     array
+     */
+    protected $assets       = array();
+
     /**
      * Load asset as subfolder of template
      *
@@ -84,8 +92,13 @@ abstract class Template_Abstract {
      * @return  self
      * @throws  \Fuel_Exception
      */
-    public function load_assets() {
+    public function load_assets($forced_load = false) {
         $folder_path = $this->folder . 'assets/';
+
+        if (false === static::$config['load_assets'] and false === $forced_load)
+        {
+            return $this;
+        }
 
         if (!\is_dir($folder_path))
         {
@@ -94,7 +107,12 @@ abstract class Template_Abstract {
         else
         {
             $folder_path = str_replace(DOCROOT, '', $folder_path);
-            \Asset::add_path($folder_path);
+
+            if (!in_array($folder_path, $this->assets))
+            {
+                \Asset::add_path($folder_path);
+                array_push($this->assets, $folder_path);
+            }
         }
 
         return $this;

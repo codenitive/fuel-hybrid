@@ -125,6 +125,8 @@ class Template_Frontend extends Template_Abstract {
      */
     public function partial($filename, $data = null)
     {
+        $this->load_assets();
+        
         $view = \Hybrid\View::factory();
         $view->set_path($this->folder);
         $view->set_filename($filename);
@@ -146,10 +148,7 @@ class Template_Frontend extends Template_Abstract {
      */
     public function render()
     {
-        if (!!static::$config['load_assets'])
-        {
-            $this->load_assets();
-        }
+        $this->load_assets();
 
         $this->view->set_path($this->folder);
         $this->view->set_filename($this->filename);
