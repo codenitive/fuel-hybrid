@@ -84,7 +84,8 @@ abstract class Template_Abstract {
      * @return  self
      * @throws  \Fuel_Exception
      */
-    public function load_assets() {
+    public function load_assets() 
+    {
         $folder_path = $this->folder . 'assets/';
 
         if (!\is_dir($folder_path))
