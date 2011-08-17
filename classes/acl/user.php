@@ -44,7 +44,7 @@ class Acl_User extends Acl_Abstract {
      * @access  public
      * @var     object
      */
-    public static $acl          = NULL;
+    public static $acl          = null;
 
     /**
      * Default value for user data
