@@ -103,7 +103,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
      */
     public function before($data = null) 
     {
-        $this->is_rest_call = \Hybrid\Restful::is_rest_call();
+        $this->is_rest_call = \Hybrid\Restserver::is_rest_call();
 
         if (true === $this->is_rest_call)
         {
@@ -158,7 +158,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
      */
     public function router($resource, $arguments) 
     {
-        $pattern = \Hybrid\Restful::$pattern;
+        $pattern = \Hybrid\Restserver::$pattern;
         
         // Remove the extension from arguments too
         $resource = preg_replace($pattern, '', $resource);
@@ -205,17 +205,17 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
     {
         if (true === $this->is_rest_call)
         {
-            $rest = \Hybrid\Restful::factory($data, $http_code)
+            $rest_server = \Hybrid\Restserver::factory($data, $http_code)
                         ->format($this->rest_format)
                         ->execute();
             
-            $this->response->body($rest->body);
-            $this->response->status = $rest->status;
+            $this->response->body($rest_server->body);
+            $this->response->status = $rest_server->status;
 
             if (true === $this->set_content_type) 
             {
                 // Set the correct format header
-                $this->response->set_header('Content-Type', \Hybrid\Restful::content_type($rest->format));
+                $this->response->set_header('Content-Type', \Hybrid\Restserver::content_type($rest_server->format));
             }
         }
         else 
@@ -259,7 +259,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
     }
     
     /**
-     * Prepare Restful
+     * Prepare Rest request
      * 
      * @access  protected
      */
@@ -270,11 +270,11 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
             $this->set_content_type = false;
         }
 
-        \Hybrid\Restful::auth();
+        \Hybrid\Restserver::auth();
     }
     
     /**
-     * Render Restful
+     * Render Rest request
      * 
      * @access  protected
      */
