@@ -57,5 +57,5 @@ return array(
         ),
     ),
     
-    'salt'                  => '',
+    'salt'                  => null,
 );
