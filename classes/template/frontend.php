@@ -110,7 +110,7 @@ class Template_Frontend extends Template_Abstract {
      * @return  self
      * @throws  \Fuel_Exception
      */
-    protected function set_folder($path = null)
+    public function set_folder($path = null)
     {
         return parent::set_folder($path);
     }
