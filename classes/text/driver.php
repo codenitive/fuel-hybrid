@@ -13,10 +13,6 @@
 
 namespace Hybrid;
 
-import('markdown/markdown', 'vendor');
-
-use \Markdown;
-
 /**
  * Hybrid 
  * 
@@ -26,33 +22,8 @@ use \Markdown;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Text_Markdown
+ * @category    Text_Driver
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Text_Markdown extends Text_Driver {
-
-    /**
-     * Construct a new instance (don't do anything right now)
-     *
-     * @access  public
-     * @return  void
-     */
-    public function __construct() {}
-
-    /**
-     * Parse markdown formatted text to HTML
-     *
-     * @access  public
-     */
-    public function parse($text = '')
-    {
-        if (empty($text) or !strval($text))
-        {
-            $text = '';
-        }
-
-        return \Markdown($text);
-    }
-
-}
+class Text_Driver {}
