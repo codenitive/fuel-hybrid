@@ -26,7 +26,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Auth_User extends Auth_Abstract {
+class Auth_User extends Auth_Driver {
 
     /**
      * method or connection used, default to 'normal'
