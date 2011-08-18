@@ -23,7 +23,7 @@ Autoloader::add_classes(array (
     'Hybrid\\View'                      => __DIR__.'/classes/view.php',
 
     'Hybrid\\Auth'                      => __DIR__.'/classes/auth.php',
-    'Hybrid\\Auth_Abstract'             => __DIR__.'/classes/auth/abstract.php',
+    'Hybrid\\Auth_Driver'               => __DIR__.'/classes/auth/driver.php',
     'Hybrid\\Auth_Connection'           => __DIR__.'/classes/auth/connection.php',
     'Hybrid\\Auth_Facebook'             => __DIR__.'/classes/auth/facebook.php',
     'Hybrid\\Auth_Facebook_Controller'  => __DIR__.'/classes/auth/facebook/controller.php',
@@ -52,11 +52,12 @@ Autoloader::add_classes(array (
     'Hybrid\\Controller_Hybrid'         => __DIR__.'/classes/controller/hybrid.php',
 
     'Hybrid\\Template'                  => __DIR__.'/classes/template.php',
-    'Hybrid\\Template_Abstract'         => __DIR__.'/classes/template/abstract.php',
+    'Hybrid\\Template_Driver'           => __DIR__.'/classes/template/driver.php',
     'Hybrid\\Template_Normal'           => __DIR__.'/classes/template/normal.php',
     'Hybrid\\Template_Frontend'         => __DIR__.'/classes/template/frontend.php',
 
     'Hybrid\\Text'                      => __DIR__.'/classes/text.php',
+    'Hybrid\\Text_Driver'               => __DIR__.'/classes/text/driver.php',
     'Hybrid\\Text_Markdown'             => __DIR__.'/classes/text/markdown.php',
 ));
 

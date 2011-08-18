@@ -13,7 +13,20 @@
 
 namespace Hybrid;
 
-abstract class Auth_Abstract {
+/**
+ * Hybrid 
+ * 
+ * A set of class that extends the functionality of FuelPHP without 
+ * affecting the standard workflow when the application doesn't actually 
+ * utilize Hybrid feature.
+ * 
+ * @package     Fuel
+ * @subpackage  Hybrid
+ * @category    Auth_Driver
+ * @author      Mior Muhammad Zaki <crynobone@gmail.com>
+ */
+
+abstract class Auth_Driver {
 
     /**
      * Redirect user based on type

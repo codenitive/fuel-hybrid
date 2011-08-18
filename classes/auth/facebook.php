@@ -26,7 +26,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Auth_Facebook extends Auth_Abstract {
+class Auth_Facebook extends Auth_Driver {
     
     /**
      * Facebook Adapter configuration
