@@ -31,6 +31,7 @@ namespace Hybrid;
  * @category    Auth
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 class Auth {
 
     /**

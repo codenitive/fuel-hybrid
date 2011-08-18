@@ -25,6 +25,7 @@ namespace Hybrid;
  * @category    Input
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 class Input {
 
     /**

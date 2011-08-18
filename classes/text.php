@@ -25,6 +25,7 @@ namespace Hybrid;
  * @category    Text
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 class Text {
     
     protected static $instances = array();

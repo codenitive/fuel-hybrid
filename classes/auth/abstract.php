@@ -16,7 +16,7 @@ namespace Hybrid;
 abstract class Auth_Abstract {
 
     /**
-     * User data
+     * Auth data
      *
      * @static
      * @access  protected
@@ -93,15 +93,15 @@ abstract class Auth_Abstract {
         switch ($type)
         {
             case 'registration' :
-                \Response::redirect(\Config::get('app.api._redirect.registration', $default_route));
+                \Response::redirect(\Config::get('app.api.redirect.registration', $default_route));
             break;
 
             case 'after_login' :
-                \Response::redirect(\Config::get('app.api._redirect.after_login', $default_route));
+                \Response::redirect(\Config::get('app.api.redirect.after_login', $default_route));
             break;
 
             case 'after_logout' :
-                \Response::redirect(\Config::get('app.api._redirect.after_logout', $default_route));
+                \Response::redirect(\Config::get('app.api.redirect.after_logout', $default_route));
             break;
 
             default :

@@ -25,6 +25,7 @@ namespace Hybrid;
  * @category    Chart_Line
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 class Chart_Line extends Chart {
 
     public function __construct() 
