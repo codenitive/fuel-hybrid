@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Fuel Hybrid Documentation</title>
+	<link href="assets/css/main.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript" src="assets/js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="assets/js/nav.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			show_nav('basic');
+		});
+	</script>
+</head>
+<body>
+
+	<header>
+		<h1>Fuel Hybrid Documentation</h1>
+	</header>
+
+	<div id="main-nav"></div>
+
+	<section id="content">
+		<h2>Welcome to Fuel Hybrid</h2>
+
+		<p>
+			A set of class that extends the functionality of FuelPHP without affecting the standard workflow when the application doesn't actually utilize Hybrid feature.
+		</p>
+
+		<h3 id="getting_started">Getting started</h3>
+
+		<ul>
+			<li>Step #1: <a href="installation/download.html">Download</a></li>
+			<li>Step #2: <a href="installation/instructions.html">Install</a></li>
+			<li>Step #3: Create sexy code</li>
+		</ul>
+
+		<h3 id="quick_install">Optional: Quick Installation</h3>
+
+		<p>
+			If you value your time and want to get things up and running in seconds instead of minutes you can use Fuel oil quick installer.
+		</p>
+
+		<h4>
+			1. Add <strong>github.com/crynobone</strong>
+		</h4>
+
+		<p>
+			Hybrid Packages can be installed and downloaded manually but with the help of the package command it can work much quicker. It does this by looking for packages within a list of sources defined in <strong>fuel/core/config/package.php</strong> and like any other config file can be edited there or copied to the <strong>fuel/app/config</strong> folder. 
+		</p>
+
+		<pre class="cli">&lt;?php
+
+return array(
+
+	/**
+	 * sources - The name of the main bootstrap file.
+	 *
+	 * Set this to false or remove if you using mod_rewrite.
+	 */
+	'sources' => array(
+		'github.com/fuel-packages',
+		'github.com/crynobone',
+	),
+
+);</pre>
+
+		<h4>2. Install Hybrid Package</h4>
+
+		<pre class="cli">$ php oil package install hybrid --direct
+Warning - fopen(http://github.com/fuel-packages/fuel-hybrid/zipball/master): failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in PKGPATH/oil/classes/package.php on line 53
+Downloading package: http://github.com/crynobone/fuel-hybrid/zipball/master
+	...
+	...
+		</pre>
+
+	</section>
+
+	<section id="footer">
+		<p>
+			<a href="http://github.com/crynobone/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+			&copy; 2010 - 2011 Mior Muhammad Zaki
+		</p>
+	</section>
+
+</body>
+</html>
