@@ -70,6 +70,8 @@ class Template {
             $name = \Config::get('app.template.default', self::DEFAULT_TEMPLATE);   
         }
 
+        $name       = \Str::lower($name);
+
         $folder     = null;
         $filename   = null;
         $type       = explode('.', strval($name));
@@ -90,10 +92,10 @@ class Template {
         $type   = $type[0];
         $name   = $type . '.' . $folder;
 
-        $driver = '\\Hybrid\\Template_' . \Str::ucfirst($type);
-
         if (!isset(static::$instances[$name]))
-        {   
+        {
+            $driver = '\\Hybrid\\Template_' . \Str::ucfirst($type);
+         
             if (\class_exists($driver)) 
             {
                 // load a new template if class exist
