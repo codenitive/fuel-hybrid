@@ -23,7 +23,7 @@ Autoloader::add_classes(array (
     'Hybrid\\View'                      => __DIR__.'/classes/view.php',
 
     'Hybrid\\Auth'                      => __DIR__.'/classes/auth.php',
-    'Hybrid\\Auth_Abstract'             => __DIR__.'/classes/auth/abstract.php',
+    'Hybrid\\Auth_Driver'               => __DIR__.'/classes/auth/driver.php',
     'Hybrid\\Auth_Connection'           => __DIR__.'/classes/auth/connection.php',
     'Hybrid\\Auth_Facebook'             => __DIR__.'/classes/auth/facebook.php',
     'Hybrid\\Auth_Facebook_Controller'  => __DIR__.'/classes/auth/facebook/controller.php',

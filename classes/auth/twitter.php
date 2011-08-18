@@ -30,7 +30,7 @@ use \tmhOAuth;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Auth_Twitter extends Auth_Abstract {
+class Auth_Twitter extends Auth_Driver {
 
     /**
      * Auth data
