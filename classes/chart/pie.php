@@ -25,6 +25,7 @@ namespace Hybrid;
  * @category    Chart_Pie
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 class Chart_Pie extends Chart {
 
     public function __construct() 

@@ -26,6 +26,7 @@ namespace Hybrid;
  * @abstract
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 abstract class Controller_Frontend extends Controller {
 
     /**

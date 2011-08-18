@@ -25,6 +25,7 @@ namespace Hybrid;
  * @category    Chart_GeoMap
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 class Chart_GeoMap extends Chart {
 
     public function __construct() 

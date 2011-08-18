@@ -25,6 +25,7 @@ namespace Hybrid;
  * @category    Html
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 class Html extends \Fuel\Core\Html {
     
     /**

@@ -31,10 +31,27 @@ namespace Hybrid;
  * @category    Auth
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 class Auth {
 
+    /**
+     * Cache auth instance so we can reuse it on multiple request eventhough 
+     * it's almost impossible to happen
+     * 
+     * @static
+     * @access  protected
+     * @var     array
+     */
     protected static $instances = array();
 
+    /**
+     * Initiate a new Auth instance
+     * 
+     * @static
+     * @access  public
+     * @return  Auth_Abstract
+     * @throws  \Fuel_Exception
+     */
     public static function factory($name)
     {
         if (\is_null($name))
@@ -62,6 +79,14 @@ class Auth {
         return static::$instances[$name];
     }
 
+    /**
+     * Return instance (or create a new one if not available yet)
+     *
+     * @static
+     * @access  public
+     * @return  Auth_Abstract
+     * @see     self::factory
+     */
     public static function instance($name)
     {
         return static::factory($name);
@@ -70,28 +95,46 @@ class Auth {
     /**
      * Enable to add salt to increase the security of the system
      *
+     * @static
      * @access  public
      * @param   string  $password
      * @return  string
      */
-    public function add_salt($password = '') 
+    public static function add_salt($password = '') 
     {
         $salt =  \Config::get('app.salt', \Config::get('crypt.crypto_key'));
 
         return \sha1($salt . $password);
     }
 
+    /**
+     * Login based on available Auth_Abstract
+     *
+     * @static
+     * @access  public
+     * @return  bool
+     * @throws  \Fuel_Exception
+     */
     public static function login($user, $password = null, $name = 'normal')
     {
         return static::factory($name)->login($user, $password);
     }
 
+    /**
+     * Logout from all loaded instances
+     *
+     * @static
+     * @access  public
+     * @return  bool
+     */
     public static function logout()
     {
         foreach (static::$instances as $instance)
         {
             $instance->logout(false);
         }
+
+        return true;
     }
 
 }

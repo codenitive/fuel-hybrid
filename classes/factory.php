@@ -25,6 +25,7 @@ namespace Hybrid;
  * @category    Factory
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 class Factory {
 
     private static $identity = null;

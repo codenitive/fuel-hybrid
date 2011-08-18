@@ -37,15 +37,7 @@ class Auth_Facebook extends Auth_Abstract {
     protected $config   = null;
 
     /**
-     * Facebook Adapter object
-     *
-     * @access  protected
-     * @var     object
-     */
-    protected $adapter  = null;
-    
-    /**
-     * User data
+     * Auth data
      *
      * @access  protected
      * @var     object|array
@@ -66,6 +58,14 @@ class Auth_Facebook extends Auth_Abstract {
      */
     protected $user     = null;
 
+    /**
+     * Get self instance from cache instead of initiating a new object if time 
+     * we need to use this object
+     *
+     * @static
+     * @access  public
+     * @return  self
+     */
     public static function instance()
     {
         return \Hybrid\Auth::instance('facebook');
@@ -104,17 +104,6 @@ class Auth_Facebook extends Auth_Abstract {
             $cookie         = \unserialize(\Crypt::decode($cookie));
             $this->auth     = (array) $cookie;
         }
-    }
-
-    /**
-     * return Facebook Object
-     *
-     * @access  public
-     * @return  object
-     */
-    public function get_adapter() 
-    {
-        return $this->adapter;
     }
 
     /**
@@ -476,6 +465,6 @@ class Auth_Facebook extends Auth_Abstract {
         {
             \Response::redirect($url, 'refresh');
         }
-        
     }
+
 }
