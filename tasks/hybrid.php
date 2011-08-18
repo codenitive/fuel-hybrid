@@ -64,23 +64,23 @@ class Hybrid {
      */
     public static function test()
     {
-        \Config::load('app', true);
+        \Config::load('app', 'app');
         
         $has_error = false;
 
-        if (true === \class_exists('\\Model_Users_Metum') and false === \Config::get('app.user_acl.use_meta', false))
+        if (true === \class_exists('\\Model_Users_Metum') and false === \Config::get('app.auth.use_meta', false))
         {
-            \Cli::write('Please set app.user_acl.use_meta to TRUE in APPPATH/config/app.php', 'red');
+            \Cli::write('Please set app.auth.use_meta to TRUE in APPPATH/config/app.php', 'red');
             $has_error = true;
         }
 
-        if (true === \class_exists('\\Model_Users_Auth') and false === \Config::get('app.user_acl.use_auth', false))
+        if (true === \class_exists('\\Model_Users_Auth') and false === \Config::get('app.auth.use_auth', false))
         {
-            \Cli::write('Please set app.user_acl.use_auth to TRUE in APPPATH/config/app.php', 'red');
+            \Cli::write('Please set app.auth.use_auth to TRUE in APPPATH/config/app.php', 'red');
             $has_error = true;
         }
 
-        if (true === \Config::get('app.user_acl.use_facebook', false))
+        if (true === \Config::get('app.auth.use_facebook', false))
         {
             if ('' === \Config::get('app.api.facebook.app_id', null))
             {
@@ -95,7 +95,7 @@ class Hybrid {
             }
         }
 
-        if (true === \Config::get('app.user_acl.use_twitter', false))
+        if (true === \Config::get('app.auth.use_twitter', false))
         {
             if ('' === \Config::get('app.api.twitter.consumer_key', ''))
             {
@@ -103,7 +103,7 @@ class Hybrid {
                 $has_error = true;
             }
 
-            if ('' === \Config::get('app.api.twitter.secret', ''))
+            if ('' === \Config::get('app.api.twitter.consumer_secret', ''))
             {
                 \Cli::write('Please provide app.api.twitter.consumer_secret in APPPATH/config/app.php', 'red');
                 $has_error = true;

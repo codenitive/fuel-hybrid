@@ -190,7 +190,7 @@ class Auth_Connection  {
      * 
      * Usage:
      * 
-     * <code>false === \Hybrid\Acl_Connection::instance()->is_logged()</code>
+     * <code>false === \Hybrid\Auth_Connection::instance()->is_logged()</code>
      *
      * @access  public
      * @return  bool
@@ -205,7 +205,7 @@ class Auth_Connection  {
      * 
      * Usage:
      * 
-     * <code>$user = \Hybrid\Acl_Connection::instance()->get();</code>
+     * <code>$user = \Hybrid\Auth_Connection::instance()->get();</code>
      *
      * @access  public
      * @param   string  $name optional key value, return all if $name is null
@@ -305,7 +305,7 @@ class Auth_Connection  {
     {
         $values             = $this->items;
         $hash               = $values['user_name'] . $values['password'];
-        $values['_hash']    = \Hybrid\Acl::add_salt($hash);
+        $values['_hash']    = \Hybrid\Auth::add_salt($hash);
 
         unset($values['password']);
 

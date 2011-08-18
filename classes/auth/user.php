@@ -98,7 +98,7 @@ class Auth_User extends Auth_Abstract {
             $this->method   = $users->method;
         }
 
-        \Hybrid\Auth_Connection::instance($this->method)->execute();
+        \Hybrid\Auth_Connection::instance($this->method)->execute($users);
     }
 
     /**
@@ -116,7 +116,7 @@ class Auth_User extends Auth_Abstract {
      */
     public function login($username, $password) 
     {
-        \Hybrid\Acl_Connection::instance('normal')->login($username, $password);
+        \Hybrid\Auth_Connection::instance('normal')->login($username, $password);
 
         return true;
     }
@@ -126,7 +126,7 @@ class Auth_User extends Auth_Abstract {
      * 
      * Usage:
      * 
-     * <code>false === \Hybrid\Acl::instance('user')->is_logged()</code>
+     * <code>false === \Hybrid\Auth::instance('user')->is_logged()</code>
      *
      * @access  public
      * @return  bool
@@ -141,7 +141,7 @@ class Auth_User extends Auth_Abstract {
      * 
      * Usage:
      * 
-     * <code>$user = \Hybrid\Acl::instance('user')->get();</code>
+     * <code>$user = \Hybrid\Auth::instance('user')->get();</code>
      *
      * @access  public
      * @param   string  $name optional key value, return all if $name is null

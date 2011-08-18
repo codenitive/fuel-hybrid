@@ -56,7 +56,7 @@ class Auth_Twitter_Controller extends Controller {
     }
 
     /**
-     * Logout from Twitter, normally for debugging purpose. Otherwise please use \Hybrid\Acl_User::logout();
+     * Logout from Twitter, normally for debugging purpose. Otherwise please use \Hybrid\Auth::instance('user')->logout();
      *
      * @access  public
      * @return  void

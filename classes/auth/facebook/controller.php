@@ -61,7 +61,7 @@ class Auth_Facebook_Controller extends Controller {
      */
     public function action_login()
     {
-        $auth       = \Hybrid\Auth::instance('faebook');
+        $auth       = \Hybrid\Auth::instance('facebook');
 
         $login      = $auth->get_url();
 
@@ -76,7 +76,7 @@ class Auth_Facebook_Controller extends Controller {
     }
 
     /**
-     * Logout from Facebook, normally for debugging purpose. Otherwise please use \Hybrid\Acl_User::logout();
+     * Logout from Facebook, normally for debugging purpose. Otherwise please use \Hybrid\Auth::instance('user')->logout();
      *
      * @access  public
      * @return  void

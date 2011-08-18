@@ -42,7 +42,7 @@ abstract class Auth_Abstract {
      * 
      * Usage:
      * 
-     * <code>false === \Hybrid\Acl::instance()->is_logged()</code>
+     * <code>false === \Hybrid\Auth::instance()->is_logged()</code>
      *
      * @access  public
      * @return  bool
@@ -57,7 +57,7 @@ abstract class Auth_Abstract {
      * 
      * Usage:
      * 
-     * <code>$user = \Hybrid\Acl::instance()->get();</code>
+     * <code>$user = \Hybrid\Auth::instance()->get();</code>
      *
      * @access  public
      * @param   string  $name optional key value, return all if $name is null
