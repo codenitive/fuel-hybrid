@@ -220,7 +220,7 @@ HELP;
                 }
                 catch (\File_Exception $e)
                 {
-                    throw new Exception("APPPATH/config/{$file}.php could not be written.");
+                    throw new \Fuel_Exception("APPPATH/config/{$file}.php could not be written.");
                 }
             break;
 
@@ -241,7 +241,7 @@ HELP;
     {
         if (true === \class_exists('\\Model_User'))
         {
-            \Cli::write("Model User already exist, skipping this process", 'red');
+            throw new \Fuel_Exception("Model User already exist, skipping this process");
         }
 
         $user_model = array(
@@ -267,7 +267,7 @@ HELP;
             $user_model[] = 'password:string[50]';
         }
 
-        if ('y' === \Cli::prompt("Would you like to install `user_meta` table?", array('y', 'n')))
+        if ('y' === \Cli::prompt("Would you like to install `users_meta` table?", array('y', 'n')))
         {
             $meta_model[] = 'users_metum';
             $meta_model[] = 'user_id:int';
@@ -288,15 +288,18 @@ HELP;
         if ('y' === \Cli::prompt("Confirm Generate Model and Migration for User?", array('y', 'n')))
         {
             \Oil\Generate::model($user_model);
+            \Oil\Generate::$create_files = array();
 
             if (!empty($auth_model))
             {
                 \Oil\Generate::model($auth_model);
+                \Oil\Generate::$create_files = array();
             }
 
             if (!empty($meta_model))
             {
                 \Oil\Generate::model($meta_model);
+                \Oil\Generate::$create_files = array();
             }
 
             if (true === $facebook)
@@ -308,12 +311,14 @@ HELP;
                     'last_name:string[100]',
                     'facebook_url:string[255]'
                 ));
+                \Oil\Generate::$create_files = array();
 
                 \Oil\Generate::model(array(
                     'users_facebook',
                     'user_id:int',
                     'facebook_id:int',
                 ));
+                \Oil\Generate::$create_files = array();
             }
 
             if (true === $twitter)
@@ -324,12 +329,14 @@ HELP;
                     'full_name:string[100]',
                     'profile_image:string[255]'
                 ));
+                \Oil\Generate::$create_files = array();
 
                 \Oil\Generate::model(array(
                     'users_twitter',
                     'user_id:int',
                     'twitter_id:int',
                 ));
+                \Oil\Generate::$create_files = array();
             }
         }
     }
