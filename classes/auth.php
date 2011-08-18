@@ -99,7 +99,7 @@ class Auth {
      * @param   string  $password
      * @return  string
      */
-    public function add_salt($password = '') 
+    public static function add_salt($password = '') 
     {
         $salt =  \Config::get('app.salt', \Config::get('crypt.crypto_key'));
 
