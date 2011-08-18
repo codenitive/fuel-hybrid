@@ -22,7 +22,7 @@ Namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Acl_Controller_Facebook
+ * @category    Auth_Twitter_Controller
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
@@ -32,54 +32,38 @@ Namespace Hybrid;
  * @package  Hybrid
  * @extends  \Hybrid\Controller
  */
-class Acl_Controller_Facebook extends \Hybrid\Controller {
+class Auth_Twitter_Controller extends Controller {
     
     /**
-     * Setup connection to Facebook API Library
+     * Setup connection to Twitter OAuth Library
      *
      * @access  public
      * @return  void
      */
     public function action_index()
     {
-        $facebook = \Hybrid\Acl_Facebook::execute();
-        $login = \Hybrid\Acl_Facebook::get_url();
+        $twitter = \Hybrid\Auth::instance('twitter')->execute();
 
-        if (null === \Hybrid\Input::get('code', null))
+        if (false === $twitter)
         {
-            \Response::redirect($login, 'refresh');
+            \Log::error('Communication with Twitter OAuth failed');
         }
     }
 
-    /**
-     * Login to Facebook API
-     * 
-     * @access  public
-     * @return  void
-     */
     public function action_login()
     {
-        $login = \Hybrid\Acl_Facebook::get_url();
-
-        if (false === \Hybrid\Acl_Facebook::is_logged() and null === \Hybrid\Input::get('code', null))
-        {
-            \Response::redirect($login, 'refresh');
-        }
-        else
-        {
-            return $this->action_index();
-        }
+        return $this->action_index();
     }
 
     /**
-     * Logout from Facebook, normally for debugging purpose. Otherwise please use \Hybrid\Acl_User::logout();
+     * Logout from Twitter, normally for debugging purpose. Otherwise please use \Hybrid\Auth::instance('user')->logout();
      *
      * @access  public
      * @return  void
      */
     public function action_reset()
     {
-        \Hybrid\Acl_Facebook::logout();
+        \Hybrid\Auth::instance('twitter')->logout();
     }
 
     /**
@@ -92,7 +76,7 @@ class Acl_Controller_Facebook extends \Hybrid\Controller {
     {
         if (\Config::get('environment', \Fuel::DEVELOPMENT))
         {
-            \Debug::dump(\Hybrid\Acl_Facebook::get(), \Hybrid\Acl_User::get());
+            \Debug::dump(\Hybrid\Auth::instance('twitter')->get(), \Hybrid\Auth::instance('user')->get());
         }
         else
         {

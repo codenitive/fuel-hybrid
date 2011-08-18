@@ -13,7 +13,7 @@
 
 namespace Hybrid;
 
-abstract class Acl_Abstract {
+abstract class Auth_Abstract {
 
     /**
      * User data
@@ -22,7 +22,7 @@ abstract class Acl_Abstract {
      * @access  protected
      * @var     object|array
      */
-    protected static $items;
+    protected $auth     = null;
 
     /**
      * Load configurations
@@ -31,7 +31,7 @@ abstract class Acl_Abstract {
      * @access  public
      * @return  void
      */
-    public static function _init()
+    protected function _initiate()
     {
         \Config::load('app', 'app');
         \Config::load('crypt', true);
@@ -42,15 +42,14 @@ abstract class Acl_Abstract {
      * 
      * Usage:
      * 
-     * <code>false === \Hybrid\Acl_User::is_logged()</code>
+     * <code>false === \Hybrid\Auth::instance()->is_logged()</code>
      *
-     * @static
      * @access  public
      * @return  bool
      */
-    public static function is_logged() 
+    public function is_logged() 
     {
-        return (static::$items['id'] > 0 ? true : false);
+        return ($this->auth['id'] > 0 ? true : false);
     }
 
     /**
@@ -58,41 +57,25 @@ abstract class Acl_Abstract {
      * 
      * Usage:
      * 
-     * <code>$user = \Hybrid\Acl_User::get();</code>
+     * <code>$user = \Hybrid\Auth::instance()->get();</code>
      *
-     * @static
      * @access  public
      * @param   string  $name optional key value, return all if $name is null
      * @return  object
      */
-    public static function get($name = null) 
+    public function get($name = null) 
     {
         if (\is_null($name)) 
         {
-            return (object) static::$items;
+            return (object) $this->auth;
         }
 
-        if (\array_key_exists($name, static::$items)) 
+        if (\array_key_exists($name, $this->auth)) 
         {
-            return static::$items[$name];
+            return $this->auth[$name];
         }
 
-        return false;
-    }
-
-    /**
-     * Enable to add salt to increase the security of the system
-     *
-     * @static
-     * @access  public
-     * @param   string  $password
-     * @return  string
-     */
-    public static function add_salt($password = '') 
-    {
-        $salt =  \Config::get('app.salt', \Config::get('crypt.crypto_key'));
-
-        return \sha1($salt . $password);
+        return null;
     }
 
     /**
