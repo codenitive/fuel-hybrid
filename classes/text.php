@@ -28,8 +28,23 @@ namespace Hybrid;
  
 class Text {
     
+    /**
+     * Cache text instance so we can reuse it on multiple request eventhough 
+     * it's almost impossible to happen
+     * 
+     * @static
+     * @access  protected
+     * @var     array
+     */
     protected static $instances = array();
 
+    /**
+     * Initiate a new Text instance
+     * 
+     * @static
+     * @access  public
+     * @return  object
+     */
     public static function factory($name = null)
     {
         if (\is_null($name))

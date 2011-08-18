@@ -26,14 +26,25 @@ use \Markdown;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Text
+ * @category    Text_Markdown
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
 class Text_Markdown {
 
+    /**
+     * Construct a new instance (don't do anything right now)
+     *
+     * @access  public
+     * @return  void
+     */
     public function __construct() {}
 
+    /**
+     * Parse markdown formatted text to HTML
+     *
+     * @access  public
+     */
     public function parse($text = '')
     {
         if (empty($text) or !strval($text))
