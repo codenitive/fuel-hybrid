@@ -16,6 +16,48 @@ namespace Hybrid;
 abstract class Auth_Abstract {
 
     /**
+     * Redirect user based on type
+     *
+     * @static
+     * @access  protected
+     * @param   string  $type
+     * @param   string  $default_route
+     * @return  void
+     * @throws  \Fuel_Exception
+     */
+    protected static function redirect($type, $default_route = '/')
+    {
+        switch ($type)
+        {
+            case 'registration' :
+                \Response::redirect(\Config::get('app.api.redirect.registration', $default_route));
+            break;
+
+            case 'after_login' :
+                \Response::redirect(\Config::get('app.api.redirect.after_login', $default_route));
+            break;
+
+            case 'after_logout' :
+                \Response::redirect(\Config::get('app.api.redirect.after_logout', $default_route));
+            break;
+
+            default :
+                throw new \Fuel_Exception("Unable to redirect type: {$type}");
+                return;
+        }
+
+        return true;
+    }
+
+    /**
+     * Adapter object
+     *
+     * @access  protected
+     * @var     object
+     */
+    protected $adapter   = null;
+
+    /**
      * Auth data
      *
      * @static
@@ -35,6 +77,17 @@ abstract class Auth_Abstract {
     {
         \Config::load('app', true);
         \Config::load('crypt', true);
+    }
+
+    /**
+     * Return Adapter Object
+     *
+     * @access  public
+     * @return  object
+     */
+    public function get_adapter() 
+    {
+        return $this->adapter;
     }
 
     /**
@@ -76,40 +129,6 @@ abstract class Auth_Abstract {
         }
 
         return null;
-    }
-
-    /**
-     * Redirect user based on type
-     *
-     * @static
-     * @access  protected
-     * @param   string  $type
-     * @param   string  $default_route
-     * @return  void
-     * @throws  \Fuel_Exception
-     */
-    protected static function redirect($type, $default_route = '/')
-    {
-        switch ($type)
-        {
-            case 'registration' :
-                \Response::redirect(\Config::get('app.api.redirect.registration', $default_route));
-            break;
-
-            case 'after_login' :
-                \Response::redirect(\Config::get('app.api.redirect.after_login', $default_route));
-            break;
-
-            case 'after_logout' :
-                \Response::redirect(\Config::get('app.api.redirect.after_logout', $default_route));
-            break;
-
-            default :
-                throw new \Fuel_Exception("Unable to redirect type: {$type}");
-                return;
-        }
-
-        return true;
     }
     
 }

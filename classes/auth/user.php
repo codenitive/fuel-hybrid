@@ -28,6 +28,12 @@ namespace Hybrid;
 
 class Auth_User extends Auth_Abstract {
 
+    /**
+     * method or connection used, default to 'normal'
+     *
+     * @access  protected
+     * @var     string
+     */
     protected $method   = 'normal';
     
     /**
@@ -55,7 +61,15 @@ class Auth_User extends Auth_Abstract {
         return $this->acl;
     }
 
-    public static function factory()
+     /**
+     * Get self instance from cache instead of initiating a new object if time 
+     * we need to use this object
+     *
+     * @static
+     * @access  public
+     * @return  self
+     */
+    public static function instance()
     {
         return \Hybrid\Auth::instance('user');
     }
@@ -87,7 +101,6 @@ class Auth_User extends Auth_Abstract {
             return;
         }
 
-
         // get user data from cookie
         $users              = \Cookie::get('_users');
 
@@ -98,7 +111,7 @@ class Auth_User extends Auth_Abstract {
             $this->method   = $users->method;
         }
 
-        \Hybrid\Auth_Connection::instance($this->method)->execute($users);
+        $this->adapter      = \Hybrid\Auth_Connection::instance($this->method)->execute($users);
     }
 
     /**
@@ -116,7 +129,7 @@ class Auth_User extends Auth_Abstract {
      */
     public function login($username, $password) 
     {
-        \Hybrid\Auth_Connection::instance('normal')->login($username, $password);
+        $this->adapter = \Hybrid\Auth_Connection::instance('normal')->login($username, $password);
 
         return true;
     }
@@ -133,7 +146,7 @@ class Auth_User extends Auth_Abstract {
      */
     public function is_logged() 
     {
-        return \Hybrid\Auth_Connection::instance($this->method)->is_logged();
+        return $this->adapter->is_logged();
     }
 
     /**
@@ -149,7 +162,7 @@ class Auth_User extends Auth_Abstract {
      */
     public function get($name = null) 
     {
-        return \Hybrid\Auth_Connection::instance($this->method)->get($name);
+        return $this->adapter->get($name);
     }
 
     /**
@@ -165,7 +178,7 @@ class Auth_User extends Auth_Abstract {
      */
     public function logout($redirect = true) 
     {
-        \Hybrid\Auth_Connection::instance('normal')->logout();
+        $this->adapter->logout();
 
         if (true === $redirect) 
         {

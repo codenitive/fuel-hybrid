@@ -28,11 +28,26 @@ Namespace Hybrid;
 
 class Auth_Normal_Connection extends Auth_Connection {
 
-    public static function factory()
+    /**
+     * Get self instance from cache instead of initiating a new object if time 
+     * we need to use this object
+     *
+     * @static
+     * @access  public
+     * @return  self
+     */
+    public static function instance()
     {
         return static::instance('normal');
     }
     
+    /**
+     * Execute to fetch user information using Facebook Auth
+     *
+     * @access  public
+     * @param   array   $items      self::items value retrieved from Cookie
+     * @return  self
+     */
     public function execute($items)
     {
         $query  = \DB::select('users.*')
@@ -66,6 +81,14 @@ class Auth_Normal_Connection extends Auth_Connection {
         return $this;
     }
 
+    /**
+     * Login using Normal Login
+     *
+     * @access  public
+     * @param   string  $username   application username or email address
+     * @param   string  $password   Raw user password, to be hashed and compared using \Hybrid\Auth::add_salt()
+     * @return  self
+     */
     public function login($username, $password)
     {
         $query = \DB::select('users.*')
@@ -113,6 +136,12 @@ class Auth_Normal_Connection extends Auth_Connection {
         return $this;
     }
 
+    /**
+     * Logout and remove Cookie
+     *
+     * @access  public
+     * @return  self
+     */
     public function logout()
     {
         $this->unregister();
