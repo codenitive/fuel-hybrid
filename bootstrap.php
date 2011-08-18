@@ -11,6 +11,7 @@
  */
 
 Autoloader::add_classes(array (
+    'Hybrid\\Acl'                       => __DIR__.'/classes/acl.php',
     'Hybrid\\Curl'                      => __DIR__.'/classes/curl.php',
     'Hybrid\\Factory'                   => __DIR__.'/classes/factory.php',
     'Hybrid\\Input'                     => __DIR__.'/classes/input.php',
@@ -20,15 +21,19 @@ Autoloader::add_classes(array (
     'Hybrid\\Restful'                   => __DIR__.'/classes/restful.php',
     'Hybrid\\Swiftmail'                 => __DIR__.'/classes/swiftmail.php',
     'Hybrid\\View'                      => __DIR__.'/classes/view.php',
-    
-    'Hybrid\\Acl'                       => __DIR__.'/classes/acl.php',
-    'Hybrid\\Acl_Abstract'              => __DIR__.'/classes/acl/abstract.php',
-    'Hybrid\\Acl_Facebook'              => __DIR__.'/classes/acl/facebook.php',
-    'Hybrid\\Acl_Twitter'               => __DIR__.'/classes/acl/twitter.php',
-    'Hybrid\\Acl_User'                  => __DIR__.'/classes/acl/user.php',
 
-    'Hybrid\\Acl_Controller_Facebook'   => __DIR__.'/classes/acl/controller/facebook.php',
-    'Hybrid\\Acl_Controller_Twitter'    => __DIR__.'/classes/acl/controller/twitter.php',
+    'Hybrid\\Auth'                      => __DIR__.'/classes/auth/driver.php',
+    'Hybrid\\Auth_Abstract'             => __DIR__.'/classes/auth/abstract.php',
+    'Hybrid\\Auth_Connection'           => __DIR__.'/classes/auth/connection.php',
+    'Hybrid\\Auth_Driver'               => __DIR__.'/classes/auth/driver.php',
+    'Hybrid\\Auth_Facebook'             => __DIR__.'/classes/auth/facebook.php',
+    'Hybrid\\Auth_Facebook_Controller'  => __DIR__.'/classes/auth/facebook/controller.php',
+    'Hybrid\\Auth_Facebook_Connection'  => __DIR__.'/classes/auth/facebook/connection.php',
+    'Hybrid\\Auth_Twitter'              => __DIR__.'/classes/auth/twitter.php',
+    'Hybrid\\Auth_Twitter_Controller'   => __DIR__.'/classes/auth/twitter/controller.php',
+    'Hybrid\\Auth_Twitter_Connection'   => __DIR__.'/classes/auth/twitter/connection.php',
+    'Hybrid\\Auth_Normal_Connection'    => __DIR__.'/classes/auth/normal/connection.php',
+    'Hybrid\\Auth_User'                 => __DIR__.'/classes/auth/user.php',
     
     'Hybrid\\Chart'                     => __DIR__.'/classes/chart.php',
     'Hybrid\\Chart_Utility'             => __DIR__.'/classes/chart/utility.php',
