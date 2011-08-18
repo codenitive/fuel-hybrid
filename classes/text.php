@@ -36,10 +36,12 @@ class Text {
             $name = '';
         }
 
-        $driver = '\\Hybrid\\Text_' . \Str::ucfirst($name);
+        $name = \Str::lower($name)
 
         if (!isset(static::$instances[$name]))
         {
+            $driver = '\\Hybrid\\Text_' . \Str::ucfirst($name);
+        
             // instance has yet to be initiated
             if (\class_exists($driver))
             {
