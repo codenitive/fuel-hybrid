@@ -27,19 +27,6 @@ Namespace Hybrid;
  */
 
 class Auth_Normal_Connection extends Auth_Connection {
-
-    /**
-     * Get self instance from cache instead of initiating a new object if time 
-     * we need to use this object
-     *
-     * @static
-     * @access  public
-     * @return  self
-     */
-    public static function instance()
-    {
-        return static::instance('normal');
-    }
     
     /**
      * Execute to fetch user information using Facebook Auth
