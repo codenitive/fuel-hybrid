@@ -99,7 +99,7 @@ class Auth_Facebook extends Auth_Abstract {
         
         $cookie             = \Cookie::get('_facebook_oauth');
 
-        if (!\is_null($oauth))
+        if (!\is_null($cookie))
         {
             $cookie         = \unserialize(\Crypt::decode($cookie));
             $this->auth     = (array) $cookie;
