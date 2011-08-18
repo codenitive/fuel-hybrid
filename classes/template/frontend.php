@@ -26,7 +26,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Template_Frontend extends Template_Abstract {
+class Template_Frontend extends Template_Driver {
 
     /**
      * Initiate a new template using factory

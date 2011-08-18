@@ -22,11 +22,11 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Template_Abstract
+ * @category    Template_Driver
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-abstract class Template_Abstract {
+abstract class Template_Driver {
 
     /**
      * Template driver configuration
