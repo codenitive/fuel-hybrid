@@ -68,6 +68,12 @@ class Hybrid {
         
         $has_error = false;
 
+        if (false === \Config::get('app.auth', false) or false === \Config::get('app._route_', false))
+        {
+            \Cli::write('Please update your APPPATH/config/app.php, you\'re running on an outdated configuration', 'red');
+            $has_error = true;
+        }
+
         if (true === \class_exists('\\Model_Users_Metum') and false === \Config::get('app.auth.use_meta', false))
         {
             \Cli::write('Please set app.auth.use_meta to TRUE in APPPATH/config/app.php', 'red');

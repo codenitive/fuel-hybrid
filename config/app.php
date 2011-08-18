@@ -50,11 +50,12 @@ return array(
             'redirect_uri'      => '',
             'scope'             => '',
         ),
-        'redirect'          => array(
-            'registration'      => 'register',
-            'after_login'       => '/',
-            'after_logout'      => '/',
-        ),
+    ),
+    
+    '_route_'           => array(
+        'registration'      => 'register',
+        'after_login'       => '/',
+        'after_logout'      => '/',
     ),
     
     'salt'                  => null,
