@@ -68,6 +68,12 @@ class Hybrid {
         
         $has_error = false;
 
+        if (false === \Config::get('app.auth', false) or false === \Config::get('app._route_', false))
+        {
+            \Cli::write('Please update your APPPATH/config/app.php, you\'re running on an outdated configuration', 'red');
+            $has_error = true;
+        }
+
         if (true === \class_exists('\\Model_Users_Metum') and false === \Config::get('app.auth.use_meta', false))
         {
             \Cli::write('Please set app.auth.use_meta to TRUE in APPPATH/config/app.php', 'red');
@@ -82,6 +88,18 @@ class Hybrid {
 
         if (true === \Config::get('app.auth.use_facebook', false))
         {
+            if (false === \class_exists('\\Model_Users_Facebook'))
+            {
+                \Cli::write('\\Model_Users_Facebook is not available', 'red');
+                $Has_error = true;    
+            }
+
+            if (false === \class_exists('\\Model_Facebook'))
+            {
+                \Cli::write('\\Model_Facebook is not available', 'red');
+                $Has_error = true;  
+            }
+
             if ('' === \Config::get('app.api.facebook.app_id', null))
             {
                 \Cli::write('Please provide app.api.facebook.app_id in APPPATH/config/app.php', 'red');
@@ -97,6 +115,18 @@ class Hybrid {
 
         if (true === \Config::get('app.auth.use_twitter', false))
         {
+            if (false === \class_exists('\\Model_Users_Twitter'))
+            {
+                \Cli::write('\\Model_Users_Twitter is not available', 'red');
+                $Has_error = true;    
+            }
+
+            if (false === \class_exists('\\Model_Twitter'))
+            {
+                \Cli::write('\\Model_Twitter is not available', 'red');
+                $Has_error = true;  
+            }
+
             if ('' === \Config::get('app.api.twitter.consumer_key', ''))
             {
                 \Cli::write('Please provide app.api.twitter.consumer_key in APPPATH/config/app.php', 'red');
