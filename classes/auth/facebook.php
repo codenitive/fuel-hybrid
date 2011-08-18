@@ -81,7 +81,7 @@ class Auth_Facebook extends Auth_Driver {
     {
         parent::_initiate();
 
-        if (\is_null($this->$adapter)) 
+        if (\is_null($this->adapter)) 
         {
             $this->config   = \Config::get('app.api.facebook');
             
@@ -172,12 +172,12 @@ class Auth_Facebook extends Auth_Driver {
             case 1 :
             case 2 :
                 unset($config['scope']);
-                return $this->$adapter->getLogoutUrl($config);
+                return $this->adapter->getLogoutUrl($config);
             break;
 
             case 0 :
             default :
-                return $this->$adapter->getLoginUrl($config);
+                return $this->adapter->getLoginUrl($config);
             break;
         }
     }
@@ -249,7 +249,7 @@ class Auth_Facebook extends Auth_Driver {
      */
     protected function access_token() 
     {
-        $this->$user                    = $this->adapter->getUser();
+        $this->user                     = $this->adapter->getUser();
 
         if ($this->user <> 0 and !\is_null($this->user) and 0 < intval($this->auth['id']))
         {
