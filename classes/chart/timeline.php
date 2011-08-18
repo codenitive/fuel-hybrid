@@ -25,6 +25,7 @@ namespace Hybrid;
  * @category    Chart_Timeline
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 class Chart_Timeline extends Chart {
 
     public function __construct() 

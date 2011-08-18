@@ -25,6 +25,7 @@ namespace Hybrid;
  * @category    Chart_Utility
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 class Chart_Utility {
 
     public static function js() 

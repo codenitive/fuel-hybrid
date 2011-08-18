@@ -50,7 +50,7 @@ return array(
             'redirect_uri'      => '',
             'scope'             => '',
         ),
-        '_redirect'         => array(
+        'redirect'          => array(
             'registration'      => 'register',
             'after_login'       => '/',
             'after_logout'      => '/',

@@ -28,17 +28,32 @@ Namespace Hybrid;
 
 class Auth_Facebook_Connection extends Auth_Connection {
     
-    public static function factory()
+    /**
+     * Get self instance from cache instead of initiating a new object if time 
+     * we need to use this object
+     *
+     * @static
+     * @access  public
+     * @return  self
+     */
+    public static function instance()
     {
         return static::instance('facebook');
     }
 
+    /**
+     * Execute to fetch user information using Facebook Auth
+     *
+     * @access  public
+     * @param   array   $items      self::items value retrieved from Cookie
+     * @return  self
+     */
     public function execute($items)
     {
         if (true !== $this->use_facebook) 
         {
             $this->unregister(true);
-            throw new \Fuel_Exception('Please enable Facebook to use \\Hybrid\\Auth_Facebook_Query');
+            throw new \Fuel_Exception('Please enable Facebook to use \\Hybrid\\Auth_Facebook_Connection');
         }
 
         $auth   = \Hybrid\Auth::instance('facebook')->get();
@@ -72,6 +87,14 @@ class Auth_Facebook_Connection extends Auth_Connection {
         return $this;
     }
 
+    /**
+     * Login using Faceook Connect
+     *
+     * @access  public
+     * @param   string  $username   application username or email address
+     * @param   string  $token      Facebook access token
+     * @return  self
+     */
     public function login($username, $token)
     {
         $query = \DB::select('users.*')
@@ -112,6 +135,12 @@ class Auth_Facebook_Connection extends Auth_Connection {
         return $this;
     }
 
+    /**
+     * Logout and remove Cookie
+     *
+     * @access  public
+     * @return  self
+     */
     public function logout()
     {
         $this->unregister();

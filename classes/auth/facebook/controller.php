@@ -32,6 +32,7 @@ Namespace Hybrid;
  * @package  Hybrid
  * @extends  \Hybrid\Controller
  */
+ 
 class Auth_Facebook_Controller extends Controller {
     
     /**

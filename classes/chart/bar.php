@@ -25,6 +25,7 @@ namespace Hybrid;
  * @category    Chart_Bar
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 class Chart_Bar extends Chart {
 
     public function __construct() 

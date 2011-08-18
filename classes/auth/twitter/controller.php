@@ -32,6 +32,7 @@ Namespace Hybrid;
  * @package  Hybrid
  * @extends  \Hybrid\Controller
  */
+ 
 class Auth_Twitter_Controller extends Controller {
     
     /**
@@ -50,6 +51,12 @@ class Auth_Twitter_Controller extends Controller {
         }
     }
 
+    /**
+     * Alias to self::action_index()
+     *
+     * @access  public
+     * @return  self::action_index()
+     */
     public function action_login()
     {
         return $this->action_index();

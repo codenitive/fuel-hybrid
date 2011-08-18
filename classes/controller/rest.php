@@ -25,6 +25,7 @@ namespace Hybrid;
  * @category    Controller_Rest
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 abstract class Controller_Rest extends \Fuel\Core\Controller {
     
     /**

@@ -28,8 +28,24 @@ Namespace Hybrid;
 
 class Auth_Connection  {
     
+    /**
+     * Cache auth connection instance so we can reuse it on multiple request eventhough 
+     * it's almost impossible to happen
+     * 
+     * @static
+     * @access  protected
+     * @var     array
+     */
     protected static $instances = array();
 
+    /**
+     * Initiate a new Auth connection instance
+     * 
+     * @static
+     * @access  public
+     * @return  Auth_Connection
+     * @throws  \Fuel_Exception
+     */
     public static function factory($name)
     {
         if (\is_null($name))
@@ -57,6 +73,14 @@ class Auth_Connection  {
         return static::$instances[$name];
     }
 
+    /**
+     * Return instance (or create a new one if not available yet)
+     *
+     * @static
+     * @access  public
+     * @return  Auth_Connection
+     * @see     self::factory
+     */
     public static function instance($name)
     {
         return static::factory($name);
@@ -226,6 +250,13 @@ class Auth_Connection  {
         return null;
     }
 
+    /**
+     * Get user's data
+     *
+     * @access  protected
+     * @param   object  $result     Database result object
+     * @return  void
+     */
     protected function fetch_user($result)
     {
         if (\is_null($result) or $result->count() < 1) 
@@ -318,7 +349,7 @@ class Auth_Connection  {
      * Delete user's authentication
      *
      * @access  protected
-     * @param   bool    $delete set to true to delete session, only when login out
+     * @param   bool    $delete     set to true to delete session, only when login out
      * @return  bool
      */
     protected function unregister($delete = false) 

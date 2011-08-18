@@ -25,6 +25,7 @@ namespace Hybrid;
  * @category    Controller_Template
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+ 
 abstract class Controller_Template extends \Fuel\Core\Controller {
 
     /**
