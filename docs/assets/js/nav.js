@@ -8,10 +8,11 @@
 //define document navigation
 var nav = {
 		"Basic": {
-			"Home":			"index.html"
+			"Home":				"index.html"
 		},
 		"Installation": {
-			"Download": 	"installation/download.html"
+			"Instructions": 	"installation/instructions.html",
+			"Download": 		"installation/download.html"
 		},
 		"Classes": {
 			

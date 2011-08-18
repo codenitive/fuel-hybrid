@@ -41,15 +41,9 @@
 			If you value your time and want to get things up and running in seconds instead of minutes you can use Fuel oil quick installer.
 		</p>
 
-		<h4>
-			1. Add <strong>github.com/crynobone</strong>
-		</h4>
-
-		<p>
-			Hybrid Packages can be installed and downloaded manually but with the help of the package command it can work much quicker. It does this by looking for packages within a list of sources defined in <strong>fuel/core/config/package.php</strong> and like any other config file can be edited there or copied to the <strong>fuel/app/config</strong> folder. 
-		</p>
-
-		<pre class="cli">&lt;?php
+		<ol>
+			<li>Add <strong>github.com/crynobone</strong>
+				<pre class="cli">&lt;?php
 
 return array(
 
@@ -63,17 +57,21 @@ return array(
 		'github.com/crynobone',
 	),
 
-);</pre>
+);
+				</pre>
+			</li>
 
-		<h4>2. Install Hybrid Package</h4>
+			<li>Install Hybrid Package
 
-		<pre class="cli">$ php oil package install hybrid --direct
+				<pre class="cli">$ php oil package install hybrid --direct
 Warning - fopen(http://github.com/fuel-packages/fuel-hybrid/zipball/master): failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
  in PKGPATH/oil/classes/package.php on line 53
 Downloading package: http://github.com/crynobone/fuel-hybrid/zipball/master
 	...
 	...
-		</pre>
+				</pre>
+			</li>
+		</ol>
 
 	</section>
 
