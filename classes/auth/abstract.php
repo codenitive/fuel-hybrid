@@ -30,15 +30,15 @@ abstract class Auth_Abstract {
         switch ($type)
         {
             case 'registration' :
-                \Response::redirect(\Config::get('app.api.redirect.registration', $default_route));
+                \Response::redirect(\Config::get('app._route_.registration', $default_route));
             break;
 
             case 'after_login' :
-                \Response::redirect(\Config::get('app.api.redirect.after_login', $default_route));
+                \Response::redirect(\Config::get('app._route_.after_login', $default_route));
             break;
 
             case 'after_logout' :
-                \Response::redirect(\Config::get('app.api.redirect.after_logout', $default_route));
+                \Response::redirect(\Config::get('app._route_.after_logout', $default_route));
             break;
 
             default :
