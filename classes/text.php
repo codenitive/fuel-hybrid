@@ -31,12 +31,17 @@ class Text {
 
     public static function factory($name = null)
     {
-        $driver = '\\Hybrid\\Text_' . $name;
+        if (\is_null($name))
+        {
+            $name = '';
+        }
+
+        $driver = '\\Hybrid\\Text_' . \Str::ucfirst($name);
 
         if (!isset(static::$instances[$name]))
         {
             // instance has yet to be initiated
-            if (class_exists($driver))
+            if (\class_exists($driver))
             {
                 static::$instances[$name] = new $driver();
             }

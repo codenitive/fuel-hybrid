@@ -22,7 +22,7 @@ Namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Acl_Controller_Twitter
+ * @category    Auth_Twitter_Controller
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
@@ -32,7 +32,7 @@ Namespace Hybrid;
  * @package  Hybrid
  * @extends  \Hybrid\Controller
  */
-class Acl_Controller_Twitter extends \Hybrid\Controller {
+class Auth_Twitter_Controller extends Controller {
     
     /**
      * Setup connection to Twitter OAuth Library
@@ -42,12 +42,17 @@ class Acl_Controller_Twitter extends \Hybrid\Controller {
      */
     public function action_index()
     {
-        $twitter = \Hybrid\Acl_Twitter::execute();
+        $twitter = \Hybrid\Auth::instance('twitter')->execute();
 
         if (false === $twitter)
         {
             \Log::error('Communication with Twitter OAuth failed');
         }
+    }
+
+    public function action_login()
+    {
+        return $this->action_index();
     }
 
     /**
@@ -58,7 +63,7 @@ class Acl_Controller_Twitter extends \Hybrid\Controller {
      */
     public function action_reset()
     {
-        \Hybrid\Acl_Twitter::logout();
+        \Hybrid\Auth::instance('twitter')->logout();
     }
 
     /**
@@ -71,7 +76,7 @@ class Acl_Controller_Twitter extends \Hybrid\Controller {
     {
         if (\Config::get('environment', \Fuel::DEVELOPMENT))
         {
-            \Debug::dump(\Hybrid\Acl_Twitter::get(), \Hybrid\Acl_User::get());
+            \Debug::dump(\Hybrid\Auth::instance('twitter')->get(), \Hybrid\Auth::instance('user')->get());
         }
         else
         {

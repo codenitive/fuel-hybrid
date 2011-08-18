@@ -22,38 +22,35 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Acl_Facebook
+ * @category    Auth_Facebook
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Acl_Facebook extends Acl_Abstract {
+class Auth_Facebook extends Auth_Abstract {
     
     /**
      * Facebook Adapter configuration
      *
-     * @static
      * @access  protected
      * @var     array
      */
-    protected static $config    = null;
+    protected $config   = null;
 
     /**
      * Facebook Adapter object
      *
-     * @static
      * @access  protected
      * @var     object
      */
-    protected static $adapter  = null;
+    protected $adapter  = null;
     
     /**
      * User data
      *
-     * @static
      * @access  protected
      * @var     object|array
      */
-    protected static $items     = array(
+    protected $auth     = array(
         'id'        => 0,
         'user_id'   => 0,
         'token'     => '',
@@ -64,70 +61,60 @@ class Acl_Facebook extends Acl_Abstract {
     /**
      * Facebook User ID
      *
-     * @static
      * @access  protected
      * @var     int
      */
-    protected static $user      = null;
+    protected $user     = null;
+
+    public static function instance()
+    {
+        return \Hybrid\Auth::instance('facebook');
+    }
 
     /**
      * Initiate a connection to Facebook SDK Class with config
      *
-     * @static
      * @access  public
      * @return  void
      */
-    public static function _init() 
+    public function __construct() 
     {
-        parent::_init();
+        parent::_initiate();
 
-        if (\is_null(static::$adapter)) 
+        if (\is_null($this->$adapter)) 
         {
-            static::$config = \Config::get('app.api.facebook');
+            $this->config   = \Config::get('app.api.facebook');
             
             $config         = array(
-                'appId'     => static::$config['app_id'],
-                'secret'    => static::$config['secret'],
+                'appId'     => $this->config['app_id'],
+                'secret'    => $this->config['secret'],
             );
 
             if (false === \Fuel::$is_cli)
             {
                 import('facebook/facebook', 'vendor');
-                static::$adapter = new \Facebook($config);
+                $this->adapter = new \Facebook($config);
             }
         }
         
-        static::factory();
-    }
-
-    /**
-     * Get cookie contain
-     *
-     * @static
-     * @access  protected
-     * @return  void
-     */
-    protected static function factory()
-    {
-        $oauth              = \Cookie::get('_facebook_oauth');
+        $cookie             = \Cookie::get('_facebook_oauth');
 
         if (!\is_null($oauth))
         {
-            $oauth          = \unserialize(\Crypt::decode($oauth));
-            static::$items  = (array) $oauth;
+            $cookie         = \unserialize(\Crypt::decode($cookie));
+            $this->auth     = (array) $cookie;
         }
     }
 
     /**
      * return Facebook Object
      *
-     * @static
      * @access  public
      * @return  object
      */
-    public static function get_adapter() 
+    public function get_adapter() 
     {
-        return static::$adapter;
+        return $this->adapter;
     }
 
     /**
@@ -136,23 +123,22 @@ class Acl_Facebook extends Acl_Abstract {
      * 2. authenticate the user with Facebook account
      * 3. verifying the user account
      *
-     * @static
      * @access  public
      * @return  bool
      */
-    public static function execute()
+    public function execute()
     {
         $status = false;
 
-        switch (\intval(static::$items['access']))
+        switch (\intval($this->auth['access']))
         {
             case 0 :
-                $status = static::access_token();
+                $status = $this->access_token();
             break;
 
             case 1 :
                 /* fetch data from database to insert or update */
-                $status = static::verify_token();
+                $status = $this->verify_token();
             break;
 
             case 2 :
@@ -168,20 +154,19 @@ class Acl_Facebook extends Acl_Abstract {
     /**
      * Get Facebook Connect Login/logout URL
      *
-     * @static
      * @access  public
      * @param   array   $option
      * @return  void
      */
-    public static function get_url($option = array())
+    public function get_url($option = array())
     {
         if (true === \Fuel::$is_cli)
         {
             return ;
         }
         
-        // we already have static::$config but we need to check if properties doesn't exist
-        $redirect_uri   = \Config::get('app.api.facebook.redirect_uri');
+        // we already have $this->config but we need to check if properties doesn't exist
+        $redirect_uri   = \Config::get('app.api.facebook.redirect_uri', '');
         $scope          = \Config::get('app.api.facebook.scope', '');
 
         $config         = array('scope' => $scope);
@@ -193,17 +178,17 @@ class Acl_Facebook extends Acl_Abstract {
 
         $config         = \array_merge($config, $option);
 
-        switch (static::$items['access'])
+        switch ($this->auth['access'])
         {
             case 1 :
             case 2 :
                 unset($config['scope']);
-                return static::$adapter->getLogoutUrl($config);
+                return $this->$adapter->getLogoutUrl($config);
             break;
 
             case 0 :
             default :
-                return static::$adapter->getLoginUrl($config);
+                return $this->$adapter->getLoginUrl($config);
             break;
         }
     }
@@ -211,27 +196,26 @@ class Acl_Facebook extends Acl_Abstract {
     /**
      * Stage 2: verifying the user account
      *
-     * @static
      * @access  protected
      * @return  bool
      */
-    protected static function verify_token() 
+    protected function verify_token() 
     {
-        static::$items['access'] = 2;
+        $this->auth['access'] = 2;
 
         $result = \DB::select('users_facebooks.*', array('users.user_name', 'username'))
                     ->from('users_facebooks')
                     ->join('users', 'LEFT')
                     ->on('users_facebooks.user_id', '=', 'users.id')
-                    ->where('users_facebooks.facebook_id', '=', static::$items['id'])
+                    ->where('users_facebooks.facebook_id', '=', $this->auth['id'])
                     ->execute();
 
         if ($result->count() < 1) 
         {
-            static::add_handler();
-            static::register();
+            $this->add_handler();
+            $this->register();
 
-            if (\intval(static::$items['user_id']) < 1) 
+            if (\intval($this->auth['user_id']) < 1) 
             {
                 static::redirect('registration');
             }
@@ -246,18 +230,20 @@ class Acl_Facebook extends Acl_Abstract {
         {
             $row = $result->current();
 
-            static::$items['user_id'] = $row['user_id'];
-            static::update_handler();
-            static::register();
+            $this->auth['user_id'] = $row['user_id'];
 
-            if (\is_null($row['user_id']) or \intval(static::$items['user_id']) < 1) 
+            $this->update_handler();
+            $this->register();
+
+            if (\is_null($row['user_id']) or \intval($this->auth['user_id']) < 1) 
             {
                 static::redirect('registration');
 
                 return true;
             }
 
-            \Hybrid\Acl_User::login($row['username'], static::$items['token'], 'facebook_oauth');
+            $this->login($row['username'], $this->auth['token']);
+
             static::redirect('after_login');
 
             return true;
@@ -269,41 +255,40 @@ class Acl_Facebook extends Acl_Abstract {
     /**
      * Stage 1: authenticate the user with twitter account
      *
-     * @static
      * @access  protected
      * @return  bool
      */
-    protected static function access_token() 
+    protected function access_token() 
     {
-        static::$user = static::$adapter->getUser();
+        $this->$user                    = $this->adapter->getUser();
 
-        if (static::$user <> 0 and !\is_null(static::$user) and 0 < intval(static::$items['id']))
+        if ($this->user <> 0 and !\is_null($this->user) and 0 < intval($this->auth['id']))
         {
-            return static::verify_access();
+            return $this->verify_access();
         }
             
         try
         {
-            static::$items['access']        = (static::$items['access'] == 0 ? 1 : static::$items['access']);
-            $profile_data                   = static::$adapter->api('/me');    
+            $this->auth['access']       = ($this->auth['access'] == 0 ? 1 : $this->auth['access']);
+            $profile_data               = $this->adapter->api('/me');    
         } 
         catch (\FacebookApiException $e)
         {
-            \Log::error('\\Hybrid\\Acl_Facebook::access_token request fail: ' . $e->getMessage());
-            static::$user                   = null;
-            static::$items['access']        = 0;
+            \Log::error('\\Hybrid\\Auth_Facebook::access_token request fail: ' . $e->getMessage());
+            $this->user                 = null;
+            $this->auth['access']       = 0;
         }
         
-        $scopes                             = explode(',', \Config::get('app.api.facebook.scope', ''));
+        $scopes                         = explode(',', \Config::get('app.api.facebook.scope', ''));
 
-        static::$items['info']              = new \stdClass();
-        $profile_data                       = (object) $profile_data;
+        $this->auth['info']             = new \stdClass();
+        $profile_data                   = (object) $profile_data;
         
-        static::$items['id']                = $profile_data->id;
-        static::$items['info']->username    = $profile_data->username;
-        static::$items['info']->first_name  = $profile_data->first_name;
-        static::$items['info']->last_name   = $profile_data->last_name;
-        static::$items['info']->link        = $profile_data->link;
+        $this->auth['id']               = $profile_data->id;
+        $this->auth['info']->username   = $profile_data->username;
+        $this->auth['info']->first_name = $profile_data->first_name;
+        $this->auth['info']->last_name  = $profile_data->last_name;
+        $this->auth['info']->link       = $profile_data->link;
 
         foreach ($scopes as $scope)
         {
@@ -311,50 +296,51 @@ class Acl_Facebook extends Acl_Abstract {
 
             if (!empty($scope))
             {
-                static::$items['info']->{$scope} = $profile_data->{$scope};
+                $this->auth['info']->{$scope} = $profile_data->{$scope};
             }
         }
 
-        static::$items['token']             = static::$adapter->getAccessToken();
+        $this->auth['token']       = $this->adapter->getAccessToken();
 
-        if (static::$items['access'] == 0)
+        if ($this->auth['access'] == 0)
         {
-            static::$items['access']        = 1;
+            $this->auth['access']  = 1;
         }
 
-        return static::verify_token();
+        return $this->verify_token();
     }
 
     /**
      * Add Facebook Handler to database
      *
-     * @static
      * @access  private
      * @return  bool
      */
-    private static function add_handler() 
+    private function add_handler() 
     {
-        $id = static::$items['id'];
+        $id         = $this->auth['id'];
 
         if (!\is_numeric($id)) 
         {
             return false;
         }
 
-        if (empty(static::$items['info'])) 
+        if (empty($this->auth['info'])) 
         {
             return false;
         }
 
         $bind = array(
             'facebook_id'   => $id,
-            'token'         => static::$items['token']
+            'token'         => $this->auth['token']
         );
 
-        if (\Hybrid\Acl_User::is_logged())
+        $auth_user  = \Hybrid\Auth::instance('user');
+
+        if (true === $auth_user->is_logged())
         {
-            $bind['user_id'] = \Hybrid\Acl_User::get('id');
-            static::$items['user_id'] = $bind['user_id'];
+            $bind['user_id']        = $auth_user->get('id');
+            $this->auth['user_id']  = $bind['user_id'];
         }
 
         \DB::insert('users_facebooks')
@@ -364,10 +350,10 @@ class Acl_Facebook extends Acl_Abstract {
         \DB::insert('facebooks')
             ->set(array(
                 'id'            => $id,
-                'facebook_name' => static::$items['info']->username,
-                'first_name'    => static::$items['info']->first_name,
-                'last_name'     => static::$items['info']->last_name,
-                'facebook_url'  => static::$items['info']->link
+                'facebook_name' => $this->auth['info']->username,
+                'first_name'    => $this->auth['info']->first_name,
+                'last_name'     => $this->auth['info']->last_name,
+                'facebook_url'  => $this->auth['info']->link
             ))
             ->execute();
 
@@ -377,32 +363,33 @@ class Acl_Facebook extends Acl_Abstract {
     /**
      * Update Facebook Handler to database
      *
-     * @static
      * @access  private
      * @return  bool
      */
-    private static function update_handler() 
+    private function update_handler() 
     {
-        $id = static::$items['id'];
+        $id         = $this->auth['id'];
 
         if (!\is_numeric($id)) 
         {
             return false;
         }
 
-        if (empty(static::$items['info'])) 
+        if (empty($this->auth['info'])) 
         {
             return false;
         }
 
         $bind = array(
-            'token' => static::$items['token']
+            'token'     => $this->auth['token']
         );
 
-        if (\Hybrid\Acl_User::is_logged() and 0 === \intval(static::$items['user_id']))
+        $auth_user  = \Hybrid\Auth::instance('user');
+
+        if ($auth_user->is_logged() and 0 === \intval($this->auth['user_id']))
         {
-            $bind['user_id'] = \Hybrid\Acl_User::get('id');
-            static::$items['user_id'] = $bind['user_id'];
+            $bind['user_id']        = $auth_user->get('id');
+            $this->auth['user_id']  = $bind['user_id'];
         }
 
         \DB::update('users_facebooks')
@@ -412,10 +399,10 @@ class Acl_Facebook extends Acl_Abstract {
 
         \DB::update('facebooks')
             ->set(array(
-                'facebook_name' => static::$items['info']->username,
-                'first_name'    => static::$items['info']->first_name,
-                'last_name'     => static::$items['info']->last_name,
-                'facebook_url'  => static::$items['info']->link
+                'facebook_name' => $this->auth['info']->username,
+                'first_name'    => $this->auth['info']->first_name,
+                'last_name'     => $this->auth['info']->last_name,
+                'facebook_url'  => $this->auth['info']->link
             ))
             ->where('id', '=', $id)
             ->execute();
@@ -426,13 +413,12 @@ class Acl_Facebook extends Acl_Abstract {
     /**
      * Register information to Session
      *
-     * @static
      * @access  protected
      * @return  bool
      */
-    protected static function register() 
+    protected function register() 
     {
-        \Cookie::set('_facebook_oauth', \Crypt::encode(\serialize((object) static::$items)));
+        \Cookie::set('_facebook_oauth', \Crypt::encode(\serialize((object) $this->auth)));
 
         return true;
     }
@@ -440,11 +426,10 @@ class Acl_Facebook extends Acl_Abstract {
     /**
      * Unregister information from Session
      *
-     * @static
      * @access  protected
      * @return  bool
      */
-    protected static function unregister() 
+    protected function unregister() 
     {
         \Cookie::delete('_facebook_oauth');
 
@@ -452,21 +437,40 @@ class Acl_Facebook extends Acl_Abstract {
     }
 
     /**
+     * Initiate user login from Facebook
+     *
+     * Usage:
+     * 
+     * <code>\Hybrid\Auth::instance('facebook')->login($username, $token);</code>
+     * 
+     * @access  public
+     * @param   string  $username
+     * @param   string  $token
+     * @return  bool
+     */
+     public function login($username, $token)
+     {
+         \Hybrid\Auth_Connection::instance('facebook')->login($username, $token);
+     }
+
+    /**
      * Initiate user login out from Facebook
      *
      * Usage:
      * 
-     * <code>\Hybrid\Acl_Facebook::logout(false);</code>
+     * <code>\Hybrid\Auth::instance('facebook')->logout(false);</code>
      * 
-     * @static
      * @access  public
      * @param   bool    $redirect
      * @return  bool
      */
-    public static function logout($redirect = true)
+    public function logout($redirect = true)
     {
-        $url = static::get_url(array('redirect_uri' => \Uri::create(static::redirect('after_logout'))));
-        static::unregister();
+        $url = $this->get_url(array(
+            'redirect_uri' => \Uri::create(static::redirect('after_logout'))
+        ));
+        
+        $this->unregister();
 
         if (true === $redirect)
         {

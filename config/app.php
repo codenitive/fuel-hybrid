@@ -30,7 +30,7 @@ return array(
         'en',
     ),
     
-    'user_acl'              => array(
+    'auth'                  => array(
         'enabled'               => true,
         'use_meta'              => true,
         'use_auth'              => true,
