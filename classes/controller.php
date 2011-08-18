@@ -56,7 +56,7 @@ abstract class Controller extends \Fuel\Core\Controller {
     public function before() 
     {
         $this->language = \Hybrid\Factory::get_language();
-        $this->user     = \Hybrid\Acl_User::get();
+        $this->user     = \Hybrid\Auth::instance('user')->get();
 
         \Event::trigger('controller_before');
 

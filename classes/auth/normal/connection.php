@@ -105,7 +105,7 @@ class Auth_Normal_Connection extends Auth_Connection {
             throw new \Fuel_Exception("User {$username} does not exist in our database");
         }
 
-        if ($this->items['password'] !== \Hybrid\Acl::add_salt($password))
+        if ($this->items['password'] !== \Hybrid\Auth::add_salt($password))
         {
             throw new \Fuel_Exception("Invalid username and password combination");
         }

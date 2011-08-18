@@ -119,7 +119,7 @@ class Acl {
             return true;
         }
 
-        $user = \Hybrid\Acl_User::get();
+        $user = \Hybrid\Auth::instance('user')->get();
 
         $type_id = array_search($type, $types);
         $length = count($types);
@@ -183,7 +183,7 @@ class Acl {
      */
     public static function has_roles($check_roles) 
     {
-        $user = \Hybrid\Acl_User::get();
+        $user = \Hybrid\Auth::instance('user')->get();
 
         if (!is_array($check_roles)) 
         {

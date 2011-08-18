@@ -78,13 +78,13 @@ class Auth_Twitter extends Auth_Abstract {
         
         $cookie         = \Cookie::get('_twitter_oauth');
 
-        if (!\is_null($oauth)) 
+        if (!\is_null($cookie)) 
         {
-            $cookie     = \unserialize(\Crypt::decode($oauth));
+            $cookie     = \unserialize(\Crypt::decode($cookie));
 
             $this->auth                             = (array) $cookie;
-            $this->adapter->config["user_token"]    = $oauth->token;
-            $this->adapter->config["user_secret"]   = $oauth->secret;
+            $this->adapter->config["user_token"]    = $cookie->token;
+            $this->adapter->config["user_secret"]   = $cookie->secret;
         }
 
         return true;
@@ -462,7 +462,7 @@ class Auth_Twitter extends Auth_Abstract {
      */
      public function login($username, $token)
      {
-         \Hybrid\Acl_Connection::instance('twitter')->login($username, $token);
+         \Hybrid\Auth_Connection::instance('twitter')->login($username, $token);
      }
 
 

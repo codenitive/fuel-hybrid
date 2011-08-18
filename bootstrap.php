@@ -22,7 +22,7 @@ Autoloader::add_classes(array (
     'Hybrid\\Swiftmail'                 => __DIR__.'/classes/swiftmail.php',
     'Hybrid\\View'                      => __DIR__.'/classes/view.php',
 
-    'Hybrid\\Auth'                      => __DIR__.'/classes/auth/driver.php',
+    'Hybrid\\Auth'                      => __DIR__.'/classes/auth.php',
     'Hybrid\\Auth_Abstract'             => __DIR__.'/classes/auth/abstract.php',
     'Hybrid\\Auth_Connection'           => __DIR__.'/classes/auth/connection.php',
     'Hybrid\\Auth_Driver'               => __DIR__.'/classes/auth/driver.php',
