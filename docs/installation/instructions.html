@@ -21,17 +21,14 @@
     <div id="main-nav"></div>
 
     <section id="content">
-        <h2>Installation Instructions</h2>
+        <h2 id="installation_instructions">Installation Instructions</h2>
 
         <p>This will create the default installation of the Fuel Hybrid in your Fuel Framework installation.</p>
 
         <ol>
             <li><a href="download.html">Download the Fuel Hybrid</a></li>
             <li>Unzip/Extract the download</li>
-            <li>Move the files to your server
-                <ul>
-                    <li>Hybrid files should be added to <strong>fuel/packages/hybrid</strong>
-                </ul>
+            <li>Move the files to your server, extracted files should be added to <strong>fuel/packages/hybrid</strong>
 <pre>/
   fuel/
     app/
@@ -54,7 +51,56 @@
 </pre>
             </li>
             <li>Copy everything from <strong>fuel/packages/hybrid/vendor</strong> to <strong>fuel/core/vendor</strong></li>
+            <li>Fuel Hybrid and Orm package need to be included in the autoload packages under <strong>fuel/app/config/config.php</strong>
+                <pre>'always_load'   => array(
+
+    /**
+     * These packages are loaded on Fuel's startup.  You can specify them in
+     * the following manner:
+     *
+     * array('auth'); // This will assume the packages are in PKGPATH
+     *
+     * // Use this format to specify the path to the package explicitly
+     * array(
+     *     array('auth' => PKGPATH.'auth/')
+     * );
+     */
+    'packages'  => array(
+        'orm',
+        'hybrid',
+    ),</pre>
+            </li>
         </ol>
+
+        <h2 id="cli_setup">Commandline Setup</h2>
+
+        <p>Once all 5 steps have been done, we can proceed with the commandline installation using oil, this step is optional but handy to copy <strong>fuel/packages/hybrid/config/app.php</strong> to <strong>fuel/app/config/app.php</strong> and at the same time configure all authentication models and migrations script.</p>
+
+        <pre class="cli">$ php oil refine hybrid --install
+Start Installation
+Created config: APPPATH/config/app.php
+Would you like to install `users_auth` table? [ y, n ]: y
+Would you like to install `users_meta` table? [ y, n ]: y
+Would you like to use Facebook Connect? [ y, n ]: y
+Would you like to use Twitter OAuth? [ y, n ]: y
+Confirm Generate Model and Migration for User? [ y, n ]: y
+    Creating model: /fuel/app/classes/model/user.php
+    Creating migration: /fuel/app/migrations/001_create_users.php
+    Creating model: /fuel/app/classes/model/users/auth.php
+    Creating migration: /fuel/app/migrations/002_create_users_auths.php
+    Creating model: /fuel/app/classes/model/users/metum.php
+    Creating migration: /fuel/app/migrations/003_create_users_meta.php
+    Creating model: /fuel/app/classes/model/facebook.php
+    Creating migration: /fuel/app/migrations/004_create_facebooks.php
+    Creating model: /fuel/app/classes/model/users/facebook.php
+    Creating migration: /fuel/app/migrations/005_create_users_facebooks.php
+    Creating model: /fuel/app/classes/model/twitter.php
+    Creating migration: /fuel/app/migrations/006_create_twitters.php
+    Creating model: /fuel/app/classes/model/users/twitter.php
+    Creating migration: /fuel/app/migrations/007_create_users_twitters.php
+</pre>
+        
+        <p class="note">All migration script will use <strong>integer[11]</strong> for primary key, you might want to change this to a higher value (especially for Facebook and Twitter integration)</p>
     </section>
     
     <section id="footer">
