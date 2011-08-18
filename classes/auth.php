@@ -129,7 +129,7 @@ class Auth {
      */
     public static function logout()
     {
-        foreach (static::$instances as $instance)
+        foreach (static::$instances as $name => $instance)
         {
             $instance->logout(false);
         }

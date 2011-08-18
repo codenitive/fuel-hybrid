@@ -110,8 +110,14 @@ class Auth_User extends Auth_Driver {
             $users          = \unserialize(\Crypt::decode($users));
             $this->method   = $users->method;
         }
+        else
+        {
+            $users          = new \stdClass();
+            $users->id      = 0;
+            $users->_hash   = '';
+        }
 
-        $this->adapter      = \Hybrid\Auth_Connection::instance($this->method)->execute($users);
+        $this->adapter      = \Hybrid\Auth_Connection::instance($this->method)->execute((array) $users);
     }
 
     /**
