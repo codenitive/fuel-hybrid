@@ -108,7 +108,7 @@ class Auth_User extends Auth_Driver {
         if (!\is_null($users)) 
         {
             $users          = \unserialize(\Crypt::decode($users));
-            $this->method   = $users->method;
+            $this->method   = (isset($users->method) ? $users->method : 'normal');
         }
         else
         {

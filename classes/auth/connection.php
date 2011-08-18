@@ -50,7 +50,7 @@ class Auth_Connection  {
     {
         if (\is_null($name))
         {
-            $name = 'user';
+            $name = 'normal';
         }
 
         $name = \Str::lower($name);
