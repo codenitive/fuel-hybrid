@@ -41,7 +41,7 @@ class Request extends \Fuel\Core\Request {
      * @access  public
      * @param   string  $uri - The URI of the request
      * @param   array   $dataset - Set a dataset for GET, POST, PUT or DELETE
-     * @return  object  The new request
+     * @return  object  \Hybrid\Request instance
      */
     public static function connect($uri, $dataset = array()) 
     {
@@ -121,7 +121,7 @@ class Request extends \Fuel\Core\Request {
      * 
      * Usage:
      * 
-     * <code>$exec = \Hybrid\Request::connector('PUT controller/model?hello=world')->execute();
+     * <code>$exec = \Hybrid\Request::connector('PUT controller/method?hello=world')->execute();
      * \Debug::dump($exec);</code>
      * 
      * @param   array|null  $method_params  An array of parameters to pass to the method being executed
