@@ -17,7 +17,7 @@ var nav = {
 		},
 
 		"Classes": {
-			"Acl": 					"classes/auth.html",
+			"Acl": 					"classes/acl.html",
 			"Curl": 				"classes/todo.html",
 			"Factory": 				"classes/todo.html",
 			"Input": 				"classes/todo.html",
