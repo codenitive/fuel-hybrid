@@ -36,7 +36,108 @@
         <pre class="php"><code>&lt;?php
 
 class Controller_Facebook extends \Hybrid\Auth_Facebook_Controller {}</code></pre>
+    
+        <article>
+            <h3>Suggested Models</h3>
 
+            <h4>Model_Facebook</h4>
+
+            <pre class="php"><code>&lt;?php
+
+class Model_Facebook extends Orm\Model {
+    
+    protected static $_properties = array(
+        'id',
+        'facebook_name',
+        'first_name',
+        'last_name',
+        'facebook_url',
+    );
+
+    protected static $_has_one = array(
+        'users_facebooks' => array(
+            'model_to' => 'Model_Users_Facebook'
+        ),
+    );
+    
+}</code></pre>
+
+            <h4>Model_Users_Facebook</h4>
+
+            <pre class="php"><code>&lt;?php
+
+class Model_Users_Facebook extends Orm\Model {
+    
+    protected static $_properties = array(
+        'id',
+        'user_id',
+        'facebook_id',
+    );
+
+    protected static $_belongs_to = array(
+        'users'     => array(
+            'model_to'  => 'Model_User',
+        ),
+        'facebooks' => array(
+            'model_to'  => 'Model_Facebook',
+        ),
+    );
+
+}</code></pre>
+
+        </article>
+
+        <article>
+            <h3>Suggested Migrations</h3>
+
+            <h4>Create_facebooks</h4>
+
+            <pre class="php"><code>&lt;?php
+
+namespace Fuel\Migrations;
+
+class Create_facebooks {
+
+    public function up()
+    {
+        \DBUtil::create_table('facebooks', array(
+            'id' => array('constraint' => 30, 'type' => 'bigint'),
+            'facebook_name' => array('constraint' => 200, 'type' => 'varchar'),
+            'first_name' => array('constraint' => 100, 'type' => 'varchar'),
+            'last_name' => array('constraint' => 100, 'type' => 'varchar'),
+            'facebook_url' => array('constraint' => 255, 'type' => 'varchar'),
+        ), array('id'));
+    }
+
+    public function down()
+    {
+        \DBUtil::drop_table('facebooks');
+    }
+}</code></pre>
+
+            <h4>Create_users_facebooks</h4>
+
+            <pre class="php"><code>&lt;?php
+
+namespace Fuel\Migrations;
+
+class Create_users_facebooks {
+
+    public function up()
+    {
+        \DBUtil::create_table('users_facebooks', array(
+            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
+            'user_id' => array('constraint' => 11, 'type' => 'int'),
+            'facebook_id' => array('constraint' => 30, 'type' => 'bigint'),
+        ), array('id'));
+    }
+
+    public function down()
+    {
+        \DBUtil::drop_table('users_facebooks');
+    }
+}</code></pre>
+        </article>
     </section>
     
     <section id="footer">
