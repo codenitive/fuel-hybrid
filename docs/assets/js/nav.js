@@ -44,14 +44,14 @@ var nav = {
 			},
 			"Examples": {
 				"User": 			"auth/todo.html",
-				"Facebook": 		"auth/todo.html",
-				"Twitter": 			"auth/todo.html" 
+				"Facebook": 		"auth/example_facebook.html",
+				"Twitter": 			"auth/example_twitter.html" 
 			}
 		},
-
+		/*
 		"Chart" : {
 			"Introduction": 		"chart/todo.html"
-		},
+		},*/
 
 		"Controller": {
 			"Introduction": 		"controller/todo.html",
@@ -62,9 +62,10 @@ var nav = {
 				"Frontend": 		"controller/todo.html"
 			},
 			"Using Template": 		"controller/todo.html",
-			"Using ACL": 			"controller/todo.html"
+			"Using ACL": 			"controller/using_acl.html"
 		},
-
+		
+		/*
 		"Template": {
 			"Introduction": 		"template/todo.html"
 		},
@@ -74,7 +75,7 @@ var nav = {
 			"Driver types": {
 				"Markdown": 		"text/todo.html"
 			}
-		},
+		},*/
 
 		"Refine": {}
 
