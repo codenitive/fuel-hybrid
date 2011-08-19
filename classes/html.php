@@ -33,7 +33,8 @@ class Html extends \Fuel\Core\Html {
      *
      * @static
      * @access  public
-     * @param   string  $content page title
+     * @param   string  $content        page title
+     * @param   array   $attributes
      * @return  string
      */
     public static function title($content = '', $attributes = array()) 

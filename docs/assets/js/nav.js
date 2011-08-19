@@ -21,7 +21,7 @@ var nav = {
 			"Curl": 				"classes/todo.html",
 			"Factory": 				"classes/todo.html",
 			"Input": 				"classes/todo.html",
-			"Html": 				"classes/todo.html",
+			"Html": 				"classes/html.html",
 			"Pagination": 			"classes/todo.html",
 			"Request": 				"classes/todo.html",
 			"Restful": 				"classes/todo.html",
