@@ -107,11 +107,101 @@ class Controller_Twitter extends \Hybrid\Auth_Twitter_Controller {}</code></pre>
         <article>
             <h3>Suggested Models</h3>
 
+            <h4>Model_Twitter</h4>
+
+            <pre class="code"><code>&lt;?php
+
+class Model_Twitter extends Orm\Model {
+    
+    protected static $_properties = array(
+        'id',
+        'twitter_name',
+        'full_name',
+        'profile_image',
+    );
+
+    protected static $_has_one = array(
+        'users_twitters' => array(
+            'model_to'      => 'Model_Users_Twitter',
+        ),
+    );
+
+}</code></pre>
+
+            <h4>Model_Users_Twitter</h4>
+
+            <pre class="code"><code>&lt;?php
+
+class Model_Users_Twitter extends Orm\Model {
+    
+    protected static $_properties = array(
+        'id',
+        'user_id',
+        'twitter_id',
+    );
+
+    protected static $_belongs_to = array(
+        'users'     => array(
+            'model_to'  => 'Model_User',
+        ),
+        'twitters'  => array(
+            'model_to'  => 'Model_Twitter',
+        ),
+    );
+
+}</code></pre>
+
         </article>
 
         <article>
             <h3>Suggested Migrations</h3>
 
+            <h4>Create_twitters</h4>
+
+            <pre class="php"><code>&lt;?php
+
+namespace Fuel\Migrations;
+
+class Create_twitters {
+
+    public function up()
+    {
+        \DBUtil::create_table('twitters', array(
+            'id' => array('constraint' => 30, 'type' => 'bigint'),
+            'twitter_name' => array('constraint' => 200, 'type' => 'varchar'),
+            'full_name' => array('constraint' => 100, 'type' => 'varchar'),
+            'profile_image' => array('constraint' => 255, 'type' => 'varchar'),
+        ), array('id'));
+    }
+
+    public function down()
+    {
+        \DBUtil::drop_table('twitters');
+    }
+}</code></pre>
+
+            <h4>Create_users_twitters</h4>
+
+            <pre class="php"><code>&lt;?php
+
+namespace Fuel\Migrations;
+
+class Create_users_twitters {
+
+    public function up()
+    {
+        \DBUtil::create_table('users_twitters', array(
+            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
+            'user_id' => array('constraint' => 11, 'type' => 'int'),
+            'twitter_id' => array('constraint' => 30, 'type' => 'bigint'),
+        ), array('id'));
+    }
+
+    public function down()
+    {
+        \DBUtil::drop_table('users_twitters');
+    }
+}</code></pre>
         </article>
 
     </section>
