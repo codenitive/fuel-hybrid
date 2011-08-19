@@ -102,7 +102,7 @@ class Acl {
     public function __construct() {}
 
     /**
-     * Verify is current user has sufficient roles to access the resources based 
+     * Verify whether current user has sufficient roles to access the resources based 
      * on available type of access.
      *
      * @static
@@ -150,7 +150,7 @@ class Acl {
     }
 
     /**
-     * Verify is current user has sufficient roles to access the resources based 
+     * Verify whether current user has sufficient roles to access the resources based 
      * on available type of access.
      *
      * @static

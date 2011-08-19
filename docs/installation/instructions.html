@@ -6,9 +6,12 @@
     <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
     <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
     <script type="text/javascript" src="../assets/js/nav.js"></script>
+    <script type="text/javascript" src="../assets/js/highlight.pack.js"></script>
     <script type="text/javascript">
         $(function() {
             show_nav('installation', '../');
+            hljs.tabReplace = '    ';
+            hljs.initHighlightingOnLoad();
         });
     </script>
 </head>
@@ -52,7 +55,7 @@
             </li>
             <li>Copy everything from <strong>fuel/packages/hybrid/vendor</strong> to <strong>fuel/core/vendor</strong></li>
             <li>Fuel Hybrid and Orm package need to be included in the autoload packages under <strong>fuel/app/config/config.php</strong>
-                <pre>'always_load'   => array(
+                <pre class="php"><code>'always_load'   => array(
 
     /**
      * These packages are loaded on Fuel's startup.  You can specify them in
@@ -68,7 +71,7 @@
     'packages'  => array(
         'orm',
         'hybrid',
-    ),</pre>
+    ),</code></pre>
             </li>
         </ol>
 

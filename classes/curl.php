@@ -29,7 +29,7 @@ namespace Hybrid;
 class Curl {
     
     /**
-     * A shortcode to initiate this class as a new object
+     * Initiate this class as a new object
      * 
      * @static
      * @access  public
@@ -62,7 +62,7 @@ class Curl {
      * @param   array   $dataset
      * @return  static 
      */
-    public static function get($uri, $dataset)
+    public static function get($uri, $dataset = array())
     {
         $dataset = array_merge(static::query_string($uri), $dataset);
         
@@ -78,7 +78,7 @@ class Curl {
      * @param   array   $dataset
      * @return  static 
      */
-    public static function post($uri, $dataset)
+    public static function post($uri, $dataset = array())
     {
         return new static($uri, $dataset, 'POST');
     }
@@ -92,7 +92,7 @@ class Curl {
      * @param   array   $dataset
      * @return  static 
      */
-    public static function put($url, $dataset)
+    public static function put($url, $dataset = array())
     {
         return new static($uri, $dataset, 'PUT');
     }
@@ -106,7 +106,7 @@ class Curl {
      * @param   array   $dataset
      * @return  static 
      */
-    public static function delete($url, $dataset)
+    public static function delete($url, $dataset = array())
     {
         return new static($uri, $dataset, 'DELETE');
     }
