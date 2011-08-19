@@ -18,15 +18,15 @@ var nav = {
 
 		"Classes": {
 			"Acl": 					"classes/acl.html",
-			"Curl": 				"classes/todo.html",
-			"Factory": 				"classes/todo.html",
-			"Input": 				"classes/todo.html",
+			"Curl": 				"classes/curl.html",
+			//"Factory": 				"classes/factory.html",
+			"Input": 				"classes/input.html",
 			"Html": 				"classes/html.html",
-			"Pagination": 			"classes/todo.html",
-			"Request": 				"classes/todo.html",
-			"Restful": 				"classes/todo.html",
-			"Swiftmail": 			"classes/todo.html",
-			"View": 				"classes/todo.html"
+			"Pagination": 			"classes/pagination.html",
+			"Request": 				"classes/request.html",
+			"Restful": 				"classes/restserver.html",
+			"Swiftmail": 			"classes/swiftmail.html",
+			"View": 				"classes/view.html"
 		},
 
 		"Auth": {
@@ -61,7 +61,8 @@ var nav = {
 				"Hybrid": 			"controller/todo.html",
 				"Frontend": 		"controller/todo.html"
 			},
-			"Using Template": 		"controller/todo.html"
+			"Using Template": 		"controller/todo.html",
+			"Using ACL": 			"controller/todo.html"
 		},
 
 		"Template": {

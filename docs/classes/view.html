@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Html Class &mdash; Fuel Hybrid Documentation</title>
+    <title>View Class &mdash; Fuel Hybrid Documentation</title>
     <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
     <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
     <script type="text/javascript" src="../assets/js/nav.js"></script>
@@ -26,24 +26,22 @@
 
     <section id="content">
         
-        <h2 id="">Html Class</h2>
+        <h2 id="">View Class</h2>
 
         <p>
-            The Html class is an HTML wrapper for nearly all HTML tags.
+            The View class acts as an object wrapper for HTML pages with embedded PHP, called "views". Variables can be assigned with the view object and referenced locally within the view.
         </p>
 
         <h5>Extends</h5>
 
         <p>
-            Html class extends <a href="http://fuelphp.com/docs/classes/html.html">\Fuel\Core\Html</a>.
+            View class extends <a href="http://fuelphp.com/docs/classes/view.html">\Fuel\Core\View</a>.
         </p>
 
         <article>
-            <h3 id="title">title($content = '', $attributes = array())</h3>
+            <h3 id="add_path()">add_path($path)</h3>
 
-            <p>
-                Generates a html title tag complete with site name from <strong>config/app.php</strong>.
-            </p>
+            <p>Set the global path, overwrite default using <strong>/app/views/</strong> folder.</p>
 
             <table class="method">
                 <tbody>
@@ -61,33 +59,26 @@
                                 <th class="description">Description</th>
                             </tr>
                             <tr>
-                                <th><kbd>$content</kbd></th>
-                                <td><pre class="php"><code>''</code></pre></td>
-                                <td>A string of page title</td>
-                            </tr>
-                            <tr>
-                                <th><kbd>$attributes</kbd></th>
-                                <td><pre class="php"><code>array()</code></pre></td>
-                                <td>An array of &lt;title&gt; attributes</td>
+                                <th><kbd>$path</kbd></th>
+                                <td><i>Required</i></td>
+                                <td>A string of valid absoluted path to view</td>
                             </tr>
                         </table>
                     </td>
                 </tr>
                 <tr>
                     <th>Returns</th>
-                    <td>string</td>
+                    <td><i>void</i></td>
                 <tr>
                     <th>Example</th>
                     <td>
-    <pre class="php"><code>\Config::load('app', 'app');
-\Config::set('app.site_name', 'FuelPHP');
+                        <pre class="php"><code>$view = \Hybrid\View::factory('index');
 
-$title = \Hybrid\Html::title('Hello');
-// return '&lt;title&gt;Hello &mdash; FuelPHP&lt;/title&gt;'
+// set folder location
+$view->set_path(DOCROOT . 'views/');
 
-$title = \Hybrid\Html::title('');
-// return '&lt;title&gt;FuelPHP&lt;/title&gt;'
-</code></pre>
+// render the view
+$this->response->body = $view->render();    // this will render DOCROOT/views/index.php</code></pre>
                     </td>
                 </tr>
                 </tbody>
