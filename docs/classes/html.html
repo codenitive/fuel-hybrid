@@ -44,6 +44,54 @@
             <p>
                 Generates a html title tag complete with site name from <strong>config/app.php</strong>.
             </p>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>
+                        <table class="parameters">
+                            <tr>
+                                <th>Param</th>
+                                <th>Default</th>
+                                <th class="description">Description</th>
+                            </tr>
+                            <tr>
+                                <th><kbd>$content</kbd></th>
+                                <td></td>
+                                <td>string of page title</td>
+                            </tr>
+                            <tr>
+                                <th><kbd>$attributes</kbd></th>
+                                <td></td>
+                                <td>array of &lt;title&gt; attributes</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>string</td>
+                <tr>
+                    <th>Example</th>
+                    <td>
+    <pre class="php"><code>\Config::load('app', 'app');
+\Config::set('app.site_name', 'FuelPHP');
+
+$title = \Hybrid\Html::title('Hello');
+// return '&lt;title&gt;Hello &mdash; FuelPHP&lt;/title&gt;'
+
+$title = \Hybrid\Html::title('');
+// return '&lt;title&gt;FuelPHP&lt;/title&gt;'
+</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </article>
     </section>
     
