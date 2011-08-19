@@ -6,9 +6,12 @@
 	<link href="assets/css/main.css" media="screen" rel="stylesheet" />
 	<script type="text/javascript" src="assets/js/jquery-1.4.4.min.js"></script>
 	<script type="text/javascript" src="assets/js/nav.js"></script>
+	<script type="text/javascript" src="assets/js/highlight.pack.js"></script>
 	<script type="text/javascript">
 		$(function() {
 			show_nav('basic');
+			hljs.tabReplace = '    ';
+			hljs.initHighlightingOnLoad();
 		});
 	</script>
 </head>
@@ -43,7 +46,7 @@
 
 		<ol>
 			<li>Add <strong>github.com/crynobone</strong>
-				<pre class="cli">&lt;?php
+				<pre class="php"><code>&lt;?php
 
 return array(
 
@@ -58,7 +61,7 @@ return array(
 	),
 
 );
-				</pre>
+				</code></pre>
 			</li>
 
 			<li>Install Hybrid Package

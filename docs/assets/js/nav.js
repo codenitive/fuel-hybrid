@@ -8,18 +8,74 @@
 //define document navigation
 var nav = {
 		"Basic": {
-			"Home":				"index.html"
+			"Home":					"index.html"
 		},
+		
 		"Installation": {
-			"Instructions": 	"installation/instructions.html",
-			"Download": 		"installation/download.html"
+			"Instructions": 		"installation/instructions.html",
+			"Download": 			"installation/download.html"
 		},
+
 		"Classes": {
-			
+			"Acl": 					"classes/auth.html",
+			"Curl": 				"classes/todo.html",
+			"Factory": 				"classes/todo.html",
+			"Input": 				"classes/todo.html",
+			"Html": 				"classes/todo.html",
+			"Pagination": 			"classes/todo.html",
+			"Request": 				"classes/todo.html",
+			"Restful": 				"classes/todo.html",
+			"Swiftmail": 			"classes/todo.html",
+			"View": 				"classes/todo.html"
 		},
+
 		"Auth": {
-			
-		}
+			"Introduction": 		"auth/introduction.html",
+			"Usage": 				"auth/usage.html",
+			"Driver types": {
+				"User":  			"auth/todo.html",
+				"Facebook": 		"auth/todo.html",
+				"Twitter": 			"auth/todo.html"
+			},
+			"Connection types": {
+				"Normal":  			"auth/todo.html",
+				"Facebook": 		"auth/todo.html",
+				"Twitter": 			"auth/todo.html"
+			},
+			"Examples": {
+				"User": 			"auth/todo.html",
+				"Facebook": 		"auth/todo.html",
+				"Twitter": 			"auth/todo.html" 
+			}
+		},
+
+		"Chart" : {
+			"Introduction": 		"chart/todo.html"
+		},
+
+		"Controller": {
+			"Introduction": 		"controller/todo.html",
+			"Usage": {
+				"Basic": 			"controller/todo.html",
+				"Rest": 			"controller/todo.html",
+				"Hybrid": 			"controller/todo.html",
+				"Frontend": 		"controller/todo.html"
+			},
+			"Using Template": 		"controller/todo.html"
+		},
+
+		"Template": {
+			"Introduction": 		"template/todo.html"
+		},
+
+		"Text": {
+			"Introduction": 		"text/todo.html",
+			"Driver types": {
+				"Markdown": 		"text/todo.html"
+			}
+		},
+
+		"Refine": {}
 
 };
 

@@ -31,12 +31,24 @@ return array(
     ),
     
     'auth'                  => array(
+        // Set application to load Auth class.
         'enabled'               => true,
+        
+        // Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
+        'use_auth'              => true, 
+        
+        // Auth to use `users_auth` table for user authentication information, useful to keep `users` table is simple as possible.                              
         'use_meta'              => true,
-        'use_auth'              => true,
-        'use_twitter'           => false,
+
+        // Auth to enable Facebook Connect. 
         'use_facebook'          => false,
+
+        // Auth to enable Twitter Oauth.
+        'use_twitter'           => false,
+
         'optional_fields'       => null,
+
+        'verified_status'       => null,
     ),
 
     'api'                   => array(
@@ -58,5 +70,6 @@ return array(
         'after_logout'      => '/',
     ),
     
+    // The salt used for password hashing.
     'salt'                  => null,
 );
