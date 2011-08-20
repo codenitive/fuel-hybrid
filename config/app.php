@@ -49,6 +49,13 @@ return array(
         'optional_fields'       => null,
 
         'verified_status'       => null,
+
+        // Auth _route_ configuration
+        '_route_'           => array(
+            'registration'      => 'register',
+            'after_login'       => '/',
+            'after_logout'      => '/',
+        ),
     ),
 
     'api'                   => array(
@@ -62,12 +69,6 @@ return array(
             'redirect_uri'      => '',
             'scope'             => '',
         ),
-    ),
-    
-    '_route_'           => array(
-        'registration'      => 'register',
-        'after_login'       => '/',
-        'after_logout'      => '/',
     ),
     
     // The salt used for password hashing.

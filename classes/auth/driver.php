@@ -43,15 +43,15 @@ abstract class Auth_Driver {
         switch ($type)
         {
             case 'registration' :
-                \Response::redirect(\Config::get('app._route_.registration', $default_route));
+                \Response::redirect(\Config::get('app.auth._route_.registration', $default_route));
             break;
 
             case 'after_login' :
-                \Response::redirect(\Config::get('app._route_.after_login', $default_route));
+                \Response::redirect(\Config::get('app.auth._route_.after_login', $default_route));
             break;
 
             case 'after_logout' :
-                \Response::redirect(\Config::get('app._route_.after_logout', $default_route));
+                \Response::redirect(\Config::get('app.auth._route_.after_logout', $default_route));
             break;
 
             default :
