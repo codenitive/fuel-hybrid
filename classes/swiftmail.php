@@ -31,12 +31,12 @@ import('swift/swift_required', 'vendor');
  class Swiftmail {
     
     /**
-     * Creates a new instance of the email driver
+     * Creates a new instance of the email driver.
      *
      * @static
      * @access  public
-     * @param   array   $config
-     * @return  Swiftmail
+     * @param   array   $config     An array to overwrite default config from config/email.php.
+     * @return  self
      */
     public static function factory($config = array())
     {
@@ -138,7 +138,7 @@ import('swift/swift_required', 'vendor');
     }
 
     /**
-     * Sets the message of the email, content type is determined by 'mailtype'
+     * Sets the message of the email, content type is determined by 'mailtype' config
      *
      * @access  public
      * @param   string  $content
@@ -321,7 +321,7 @@ import('swift/swift_required', 'vendor');
     }
 
     /**
-     * Get transport/mail debug object
+     * Get transport/mail debug object.
      *
      * @access  public
      * @return  object  containing success status, total email sent and failure during email sending
