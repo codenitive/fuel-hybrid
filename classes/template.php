@@ -100,7 +100,6 @@ class Template {
             {
                 // load a new template if class exist
                 static::$instances[$name] = new $driver($folder, $filename);
-                return static::$instances[$name];
             }
             else 
             {
