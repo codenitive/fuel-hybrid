@@ -15,6 +15,16 @@ namespace Hybrid;
 
 import('swift/swift_required', 'vendor');
 
+class Swiftmail_Debug {
+    
+    public $success     = false;
+    public $failures    = null;
+    public $total_sent  = 0;
+
+    public function __construct() {}
+
+}
+
 /**
  * Hybrid 
  * 
@@ -93,10 +103,7 @@ import('swift/swift_required', 'vendor');
         $this->config   = $config;
         $transport      = "transport_" . $config['protocol'];
 
-        $this->debugs               = new \stdClass();
-        $this->debugs->success      = false;
-        $this->debugs->failures     = null;
-        $this->debugs->total_sent   = 0;
+        $this->debugs               = new Swiftmail_Debug;
 
         if (method_exists($this, $transport))
         {
@@ -425,5 +432,4 @@ import('swift/swift_required', 'vendor');
 
         return $transport;
     }
-
 }
