@@ -91,6 +91,29 @@ class Template_Normal extends Template_Driver {
     }
 
     /**
+     * Set folder location
+     *
+     * @access  public
+     * @return  self
+     * @throws  \Fuel_Exception
+     */
+    public function set_folder($path = null)
+    {
+        $path = APPPATH . 'views/' . $path;
+
+        if (!\is_dir($path))
+        {
+            throw new \Fuel_Exception("Path {$path} does not appear to a valid folder");
+        }
+        else 
+        {
+            $this->folder = $path;
+        }
+
+        return $this;
+    }
+
+    /**
      * Load partial view
      *
      * @access  public
