@@ -99,9 +99,7 @@ class Template_Normal extends Template_Driver {
      */
     public function set_folder($path = null)
     {
-        $path = APPPATH . 'views/' . $path;
-
-        if (!\is_dir($path))
+        if (!\is_dir(APPPATH . 'views/' . $path))
         {
             throw new \Fuel_Exception("Path {$path} does not appear to a valid folder");
         }
