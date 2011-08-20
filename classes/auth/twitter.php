@@ -453,6 +453,8 @@ class Auth_Twitter extends Auth_Driver {
      public function login($username, $token)
      {
          \Hybrid\Auth_Connection::instance('twitter')->login($username, $token);
+
+         return true;
      }
 
 

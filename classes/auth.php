@@ -45,11 +45,12 @@ class Auth {
     protected static $instances = array();
 
     /**
-     * Initiate a new Auth instance
+     * Initiate a new Auth_Driver instance.
      * 
      * @static
      * @access  public
-     * @return  Auth_Abstract
+     * @param   string  $name       null to fetch the default driver, or a driver id to get a specific one
+     * @return  Auth_Driver
      * @throws  \Fuel_Exception
      */
     public static function factory($name = null)
@@ -80,12 +81,12 @@ class Auth {
     }
 
     /**
-     * Return instance (or create a new one if not available yet)
+     * Retrieves a loaded driver, when drivers are set in config the first driver will also be the default. 
      *
      * @static
      * @access  public
-     * @return  Auth_Abstract
-     * @see     self::factory
+     * @return  Auth_Driver
+     * @see     self::factory()
      */
     public static function instance($name = null)
     {
@@ -93,11 +94,11 @@ class Auth {
     }
 
     /**
-     * Enable to add salt to increase the security of the system
+     * Turn string to hash using sha1() hash with salt.
      *
      * @static
      * @access  public
-     * @param   string  $password
+     * @param   string  $password       String to be hashed
      * @return  string
      */
     public static function add_salt($password = '') 
@@ -108,20 +109,23 @@ class Auth {
     }
 
     /**
-     * Login based on available Auth_Abstract
+     * Login based on available Auth_Driver.
      *
      * @static
      * @access  public
+     * @param   string  $username       A string of either `user_name` or `email` field from table `users`.
+     * @param   string  $password       Raw `password`, or `token` from external API.
+     * @param   string  $type           Connection type string, default to 'normal'.
      * @return  bool
      * @throws  \Fuel_Exception
      */
-    public static function login($user, $password = null, $name = 'normal')
+    public static function login($username, $password, $name = 'normal')
     {
-        return static::factory($name)->login($user, $password);
+        return static::factory($name)->login($username, $password);
     }
 
     /**
-     * Logout from all loaded instances
+     * Logout from all loaded instances.
      *
      * @static
      * @access  public

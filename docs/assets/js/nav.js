@@ -43,7 +43,7 @@ var nav = {
 				"Twitter": 			"auth/todo.html"
 			},
 			"Examples": {
-				"User": 			"auth/todo.html",
+				"User": 			"auth/example_user.html",
 				"Facebook": 		"auth/example_facebook.html",
 				"Twitter": 			"auth/example_twitter.html" 
 			}
