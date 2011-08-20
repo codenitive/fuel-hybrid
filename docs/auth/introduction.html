@@ -106,6 +106,30 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>auth._route_.registration</th>
+                    <td>string</td>
+                    <td><pre class="php"><code class="php">''</code></pre></td>
+                    <td>
+                        Route path for registration.
+                    </td>
+                </tr>
+                <tr>
+                    <th>auth._route_.after_login</th>
+                    <td>string</td>
+                    <td><pre class="php"><code class="php">''</code></pre></td>
+                    <td>
+                        Route path after login.
+                    </td>
+                </tr>
+                <tr>
+                    <th>auth._route_.after_logout</th>
+                    <td>string</td>
+                    <td><pre class="php"><code class="php">''</code></pre></td>
+                    <td>
+                        Route path after logout.
+                    </td>
+                </tr>
+                <tr>
                     <th>salt</th>
                     <td>string</td>
                     <td><pre class="php"><code class="php">'put_your_salt_here'</code></pre></td>
@@ -143,6 +167,13 @@ return array(
         'optional_fields'       => null,
 
         'verified_status'       => null,
+
+        // Auth _route_ configuration
+        '_route_'           => array(
+            'registration'      => 'register',
+            'after_login'       => '/',
+            'after_logout'      => '/',
+        ),
     ),
     
     // The salt used for password hashing.
