@@ -440,6 +440,8 @@ class Auth_Facebook extends Auth_Driver {
      public function login($username, $token)
      {
          \Hybrid\Auth_Connection::instance('facebook')->login($username, $token);
+
+         return true;
      }
 
     /**

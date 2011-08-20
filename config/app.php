@@ -34,10 +34,10 @@ return array(
         // Set application to load Auth class.
         'enabled'               => true,
         
-        // Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
+        // Auth to use `users_auth` table for user meta information, useful to keep `users` table is simple as possible.
         'use_auth'              => true, 
         
-        // Auth to use `users_auth` table for user authentication information, useful to keep `users` table is simple as possible.                              
+        // Auth to use `users_meta` table for user authentication information, useful to keep `users` table is simple as possible.                              
         'use_meta'              => true,
 
         // Auth to enable Facebook Connect. 
