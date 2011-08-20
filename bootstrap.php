@@ -20,7 +20,7 @@ Autoloader::add_classes(array (
     'Hybrid\\Request'                   => __DIR__.'/classes/request.php',
     'Hybrid\\Restserver'                => __DIR__.'/classes/restserver.php',
     'Hybrid\\Swiftmail'                 => __DIR__.'/classes/swiftmail.php',
-    'Hybrid\\Swiftmail_Debug'           => __DIR__.'/classes/swiftmail.php',
+    'Hybrid\\Swiftmail_Result'          => __DIR__.'/classes/swiftmail/result.php',
     'Hybrid\\View'                      => __DIR__.'/classes/view.php',
 
     'Hybrid\\Auth'                      => __DIR__.'/classes/auth.php',

@@ -15,16 +15,6 @@ namespace Hybrid;
 
 import('swift/swift_required', 'vendor');
 
-class Swiftmail_Debug {
-    
-    public $success     = false;
-    public $failures    = null;
-    public $total_sent  = 0;
-
-    public function __construct() {}
-
-}
-
 /**
  * Hybrid 
  * 
@@ -96,14 +86,14 @@ class Swiftmail_Debug {
      * @access  protected
      * @var     object
      */
-    protected $debugs       = null;
+    protected $result       = null;
 
     public function __construct($config)
     {
         $this->config   = $config;
         $transport      = "transport_" . $config['protocol'];
 
-        $this->debugs               = new Swiftmail_Debug;
+        $this->result   = new Swiftmail_Result;
 
         if (method_exists($this, $transport))
         {
@@ -286,7 +276,7 @@ class Swiftmail_Debug {
      * Sends the email.
      *
      * @access  public
-     * @param   bool    $debug      set to TRUE will return $this->debug object instead of just the success status    
+     * @param   bool    $debug      set to TRUE will return $this->result object instead of just the success status    
      * @return  bool|object  
      */
     public function send($debug = false)
@@ -311,20 +301,20 @@ class Swiftmail_Debug {
 
         $result = $this->mailer->send($this->messager, $failure);
 
-        $this->debugs->failure = $failure;
+        $this->result->failure = $failure;
 
         if (intval($result) >= 1)
         {
-            $this->debugs->success       = true;
-            $this->debugs->total_sent    = intval($result);
+            $this->result->success       = true;
+            $this->result->total_sent    = intval($result);
         }
 
         if (false === $debug)
         {
-            return $this->debugs->success;
+            return $this->result->success;
         }
 
-        return $this->debug();
+        return $this->result();
     }
 
     /**
@@ -333,9 +323,9 @@ class Swiftmail_Debug {
      * @access  public
      * @return  object  containing success status, total email sent and failure during email sending
      */
-    public function debug()
+    public function result()
     {
-        return $this->debugs;
+        return $this->result;
     }
 
     /**
