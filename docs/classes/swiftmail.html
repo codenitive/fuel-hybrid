@@ -53,6 +53,115 @@ if (false === $mail->send())
     throw new \Fuel_Exception('Unable to send email');
 }</code></pre>
         
+        <article>
+            <h3 id="factory()">factory($config = array())</h3>
+        </article>
+
+        <article>
+            <h3 id="__construct()">__construct($config = array())</h3>
+        </article>
+        
+        <article>
+            <h3 id="subject()">subject($subject)</h3>
+        </article>
+
+        <article>
+            <h3 id="subject()">subject($subject)</h3>
+        </article>
+
+        <article>
+            <h3 id="message()">message($content)</h3>
+        </article>
+
+        <article>
+            <h3 id="text()">text($content)</h3>
+        </article>
+
+        <article>
+            <h3 id="html()">html($content)</h3>
+        </article>
+
+        <article>
+            <h3 id="to()">to($address, $name = '')</h3>
+        </article>
+
+        <article>
+            <h3 id="cc()">cc($address, $name = '')</h3>
+        </article>
+
+        <article>
+            <h3 id="bcc()">bcc($address, $name = '')</h3>
+        </article>
+
+        <article>
+            <h3 id="from()">from($address, $name = '')</h3>
+        </article>
+
+        <article>
+            <h3 id="reply_to()">reply_to($address, $name = '')</h3>
+        </article>
+
+        <article>
+            <h3 id="send()">send()</h3>
+        </article>
+
+        <article>
+            <h3 id="attach()">attach($filename, $disposition)</h3>
+
+            <p>Attaches a file in the local filesystem to the email.</p>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>\Hybrid\Swiftmail Object</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+                        <pre class="php"><code>$email->attach();</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </article>
+
+        <article>
+            <h3 id="debug()">debug()</h3>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>Object</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+                        <pre class="php"><code>$email->debug();</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </article>
 
     </section>
     
