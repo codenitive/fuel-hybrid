@@ -85,7 +85,10 @@ class Template_Normal extends Template_Driver {
      * @return  self
      * @throws  \Fuel_Exception
      */
-    private function load_assets() {}
+    public function load_assets()
+    {
+      throw new \Fuel_Exception("No asset loading for template.normal");
+    }
 
     /**
      * Load partial view
