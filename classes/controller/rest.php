@@ -70,7 +70,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      * 
      * @access  public
      */
-    public function before() 
+    public function before($data = null) 
     {
         $this->language     = \Hybrid\Factory::get_language();
         $this->user         = \Hybrid\Auth::instance('user')->get();
@@ -85,7 +85,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
         
         \Hybrid\Restserver::auth();
 
-        return parent::before();
+        return parent::before($data);
     }
 
     /**
