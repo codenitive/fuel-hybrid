@@ -101,7 +101,9 @@ class Template_Normal extends Template_Driver {
     {
         // this is not the best way of doing it, the request is not cached and going to be slow
         // if there's a lot of paths and files
-        if (empty(\Fuel::list_files('views/' . $path, '*.php'))
+        $files = \Fuel::list_files('views/' . $path, '*.php');
+
+        if (empty($files))
         {
             throw new \Fuel_Exception("Path {$path} does not appear to a valid folder or contain any View files");
         }
