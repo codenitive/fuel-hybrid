@@ -68,7 +68,7 @@ class Hybrid {
         
         $has_error = false;
 
-        if (false === \Config::get('app.auth', false) or false === \Config::get('app._route_', false))
+        if (false === \Config::get('app.auth', false) or false === \Config::get('app.auth._route_', false))
         {
             \Cli::write('Please update your APPPATH/config/app.php, you\'re running on an outdated configuration', 'red');
             $has_error = true;
