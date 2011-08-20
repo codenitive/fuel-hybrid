@@ -85,7 +85,35 @@ class Template_Normal extends Template_Driver {
      * @return  self
      * @throws  \Fuel_Exception
      */
-    private function load_assets() {}
+    public function load_assets($forced_load = false)
+    {
+      throw new \Fuel_Exception("No asset loading for \\Hybrid\\Template_Normal");
+    }
+
+    /**
+     * Set folder location
+     *
+     * @access  public
+     * @return  self
+     * @throws  \Fuel_Exception
+     */
+    public function set_folder($path = null)
+    {
+        // this is not the best way of doing it, the request is not cached and going to be slow
+        // if there's a lot of paths and files
+        $files = \Fuel::list_files('views/' . $path, '*.php');
+
+        if (empty($files))
+        {
+            throw new \Fuel_Exception("Path {$path} does not appear to a valid folder or contain any View files");
+        }
+        else 
+        {
+            $this->folder = $path;
+        }
+
+        return $this;
+    }
 
     /**
      * Load partial view

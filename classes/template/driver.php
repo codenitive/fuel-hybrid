@@ -59,7 +59,7 @@ abstract class Template_Driver {
      * @access  protected
      * @var     string
      */
-    protected $folder       = 'default';
+    protected $folder           = 'default';
 
     /**
      * Filename
@@ -67,7 +67,7 @@ abstract class Template_Driver {
      * @access  protected
      * @var     string
      */
-    protected $filename     = 'index';
+    protected $filename         = 'index';
 
     /**
      * Adapter \Fuel\Core\View
@@ -75,15 +75,15 @@ abstract class Template_Driver {
      * @access  public
      * @var     object
      */
-    public $view            = null;
+    public $view                = null;
 
      /**
      * List of loaded asset
      *
      * @access  protected
-     * @var     array
+     * @staticvar   array
      */
-    protected $assets       = array();
+    protected static $assets    = array();
 
     /**
      * Load asset as subfolder of template
@@ -110,10 +110,10 @@ abstract class Template_Driver {
         {
             $folder_path = str_replace(DOCROOT, '', $folder_path);
 
-            if (!in_array($folder_path, $this->assets))
+            if (!in_array($folder_path, static::$assets))
             {
                 \Asset::add_path($folder_path);
-                array_push($this->assets, $folder_path);
+                array_push(static::$assets, $folder_path);
             }
         }
 
