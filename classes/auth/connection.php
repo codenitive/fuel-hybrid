@@ -181,7 +181,7 @@ class Auth_Connection  {
         
         foreach ($config as $key => $value)
         {
-            if (!\property_exists('\\Hybrid\\Auth_Connection', "{$key}") or \in_array($key, $reserved_property))
+            if (!\property_exists($this, "{$key}") or \in_array($key, $reserved_property))
             {
                 continue;
             }

@@ -74,7 +74,7 @@ class View extends \Fuel\Core\View {
             case ($path = $this->find_file($file)) : break;
             case ($path = \Fuel::find_file('views', $file, '.php', false, false)) : break;
             default :
-                throw new \View_Exception('The requested view could not be found: ' . \Fuel::clean_path($file));
+                throw new \Fuel\Core\View_Exception('The requested view could not be found: ' . \Fuel::clean_path($file));
         }
 
         // Store the file path locally
@@ -93,12 +93,12 @@ class View extends \Fuel\Core\View {
      */
     protected function find_file($file) 
     {
-        if (empty(static::$_path) or !\is_file(static::$_path . $file . '.php'))
+        if (empty(static::$_path))
         {
-            return null;
+            return false;
         }
- 
-        return static::$_path . $file . '.php';
+
+        return \Fuel::find_file('views', static::$_path . $file . '.php');
     }
 
 }
