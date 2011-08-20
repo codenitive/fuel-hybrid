@@ -85,7 +85,31 @@ class Template_Normal extends Template_Driver {
      * @return  self
      * @throws  \Fuel_Exception
      */
-    private function load_assets() {}
+    public function load_assets()
+    {
+      throw new \Fuel_Exception("No asset loading for template.normal");
+    }
+
+    /**
+     * Set folder location
+     *
+     * @access  public
+     * @return  self
+     * @throws  \Fuel_Exception
+     */
+    public function set_folder($path = null)
+    {
+        if (!\is_dir(APPPATH . 'views/' . $path))
+        {
+            throw new \Fuel_Exception("Path {$path} does not appear to a valid folder");
+        }
+        else 
+        {
+            $this->folder = $path;
+        }
+
+        return $this;
+    }
 
     /**
      * Load partial view
