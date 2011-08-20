@@ -114,7 +114,7 @@ class Auth {
      * @static
      * @access  public
      * @param   string  $username       A string of either `user_name` or `email` field from table `users`.
-     * @param   string  $password       Raw `password`, or `token` from external API.
+     * @param   string  $password       An unhashed `password` or `token` string from external API.
      * @param   string  $type           Connection type string, default to 'normal'.
      * @return  bool
      * @throws  \Fuel_Exception
