@@ -46,7 +46,7 @@ class Auth_Connection  {
      * @return  Auth_Connection
      * @throws  \Fuel_Exception
      */
-    public static function factory($name)
+    public static function factory($name = null)
     {
         if (\is_null($name))
         {
@@ -81,7 +81,7 @@ class Auth_Connection  {
      * @return  Auth_Connection
      * @see     self::factory
      */
-    public static function instance($name)
+    public static function instance($name = null)
     {
         return static::factory($name);
     }
