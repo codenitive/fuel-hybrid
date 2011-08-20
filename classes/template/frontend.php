@@ -104,18 +104,6 @@ class Template_Frontend extends Template_Driver {
     }
 
     /**
-     * Set folder location
-     *
-     * @access  protected
-     * @return  self
-     * @throws  \Fuel_Exception
-     */
-    public function set_folder($path = null)
-    {
-        return parent::set_folder($path);
-    }
-
-    /**
      * Load partial view
      *
      * @access  public
