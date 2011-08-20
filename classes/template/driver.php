@@ -46,7 +46,7 @@ abstract class Template_Driver {
      */
     public static function _init()
     {
-        if (is_null(static::$config))
+        if (\is_null(static::$config))
         {
             \Config::load('app', 'app');
             static::$config = \Config::get('app.template', array());
@@ -89,10 +89,10 @@ abstract class Template_Driver {
      * Load asset as subfolder of template
      *
      * @access  public
+     * @param   bool    $forced_load
      * @return  self
      * @throws  \Fuel_Exception
      */
-
     public function load_assets($forced_load = false) 
     {
         $folder_path = $this->folder . 'assets/';
@@ -124,6 +124,7 @@ abstract class Template_Driver {
      * Set folder location
      *
      * @access  public
+     * @param   string  $path
      * @return  self
      * @throws  \Fuel_Exception
      */
@@ -145,6 +146,7 @@ abstract class Template_Driver {
      * Set filename location
      *
      * @access  public
+     * @param   string  $filename
      * @return  self
      */
     public function set_filename($filename = null)
@@ -161,6 +163,7 @@ abstract class Template_Driver {
      * Set data
      *
      * @access  public
+     * @param   array   $data
      * @return  self
      */
     public function set($data = array())

@@ -49,7 +49,7 @@ class Template_Normal extends Template_Driver {
      * Initiate a new template object
      *
      * @access  public
-     * @param   string  $theme
+     * @param   string  $folder
      * @param   string  $filename
      * @return  void
      * @throws  \Fuel_Exception
