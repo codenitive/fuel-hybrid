@@ -32,7 +32,20 @@
             Missing E-mail Class for Fuel Framework using Swiftmailer E-mail Library.
         </p>
 
-        <p class="note">TODO</p>
+        <h2 id="how-to">How To</h2>
+
+        <pre class="php"><code>\Config::load('email');
+
+$mail = \Hybrid\Swiftmail::factory();
+$mail->to('sendto@domain.com', 'Name');
+$mail->from('Sample User', 'from@domain.com'));
+$mail->subject('E-mail Title');
+$mail->message('E-mail message');
+
+if (false === $mail->send())
+{
+    throw new \Fuel_Exception('Unable to send email');
+}</code></pre>
     </section>
     
     <section id="footer">
