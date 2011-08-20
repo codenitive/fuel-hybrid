@@ -34,7 +34,7 @@
 
         <h2 id="how-to">How to</h2>
 
-        <pre class="php"><code>$acl = new \Hybrid\Acl;
+        <pre class="php"><code>$acl = \Hybrid\Acl::factory();
 
 // define roles
 $acl->add_roles('guest');
@@ -73,10 +73,10 @@ $acl->access('post', 'all');        // return false</code></pre>
         <p class="note">\Hybrid\Acl will check access (from left to right) <strong>deny</strong>, <strong>view</strong>, <strong>create</strong>, <strong>edit</strong>, <strong>delete</strong>, <strong>all</strong></p>
 
         <article>
-            <h3 id="factory()">factory()</h3>
+            <h3 id="factory()">factory($name = null)</h3>
 
             <p>
-                A shortcode to initiate \Hybrid\Acl class as a new object
+               Creates a new instance of the Auth.
             </p>
 
             <table class="method">
@@ -87,7 +87,20 @@ $acl->access('post', 'all');        // return false</code></pre>
                 </tr>
                 <tr>
                     <th>Parameters</th>
-                    <td>No</td>
+                    <td>
+                        <table class="parameters">
+                            <tbody><tr>
+                                <th>Param</th>
+                                <th>Default</th>
+                                <th class="description">Description</th>
+                            </tr>
+                            <tr>
+                                <th><kbd>$name</kbd></th>
+                                <td><pre class="php"><code>null</code></pre></td>
+                                <td>null to fetch the default driver, or a driver id to get a specific one</td>
+                            </tr>
+                        </tbody></table>
+                    </td>
                 </tr>
                 <tr>
                     <th>Returns</th>
@@ -96,8 +109,7 @@ $acl->access('post', 'all');        // return false</code></pre>
                 <tr>
                     <th>Example</th>
                     <td>
-    <pre class="php"><code>$acl = \Hybrid\Acl::factory();
-// it's equivalent to $acl = new \Hybrid\Acl;</code></pre>
+                        <pre class="php"><code>$acl = \Hybrid\Acl::factory();</code></pre>
                     </td>
                 </tr>
                 </tbody>
@@ -115,7 +127,7 @@ $acl->access('post', 'all');        // return false</code></pre>
                 <tbody>
                 <tr>
                     <th class="legend">Static</th>
-                    <td>Yes</td>
+                    <td>No</td>
                 </tr>
                 <tr>
                     <th>Parameters</th>
@@ -141,8 +153,7 @@ $acl->access('post', 'all');        // return false</code></pre>
                 <tr>
                     <th>Example</th>
                     <td>
-    <pre class="php"><code>// Full static
-\Hybrid\Acl::add_roles('guest');
+    <pre class="php"><code>\Hybrid\Acl::factory()->add_roles('guest');
 
 // Initiate an instance before adding role
 $acl = \Hybrid\Acl::factory();
@@ -167,7 +178,7 @@ $acl->add_roles(array('editor', 'moderator'));</code></pre>
                 <tbody>
                 <tr>
                     <th class="legend">Static</th>
-                    <td>Yes</td>
+                    <td>No</td>
                 </tr>
                 <tr>
                     <th>Parameters</th>
@@ -193,8 +204,7 @@ $acl->add_roles(array('editor', 'moderator'));</code></pre>
                 <tr>
                     <th>Example</th>
                     <td>
-    <pre class="php"><code>// Full static
-\Hybrid\Acl::add_resources('post');
+    <pre class="php"><code>\Hybrid\Acl::factory()->add_resources('post');
 
 // Initiate an instance before adding resources
 $acl = \Hybrid\Acl::factory();
@@ -219,7 +229,7 @@ $acl->add_resources(array('page', 'setting'));</code></pre>
                 <tbody>
                 <tr>
                     <th class="legend">Static</th>
-                    <td>Yes</td>
+                    <td>No</td>
                 </tr>
                 <tr>
                     <th>Parameters</th>
@@ -255,8 +265,7 @@ $acl->add_resources(array('page', 'setting'));</code></pre>
                 <tr>
                     <th>Example</th>
                     <td>
-    <pre class="php"><code>// Full static
-\Hybrid\Acl::allow('admin', 'post', 'all');
+    <pre class="php"><code>\Hybrid\Acl::factory()->allow('admin', 'post', 'all');
 
 // Initiate an instance before adding resources
 $acl = \Hybrid\Acl::factory();
@@ -281,7 +290,7 @@ $acl->allow('admin', array('page', 'setting'), 'all');</code></pre>
                 <tbody>
                 <tr>
                     <th class="legend">Static</th>
-                    <td>Yes</td>
+                    <td>No</td>
                 </tr>
                 <tr>
                     <th>Parameters</th>
@@ -312,8 +321,7 @@ $acl->allow('admin', array('page', 'setting'), 'all');</code></pre>
                 <tr>
                     <th>Example</th>
                     <td>
-    <pre class="php"><code>// Full static
-\Hybrid\Acl::deny('editor', 'setting');
+    <pre class="php"><code>\Hybrid\Acl::factory()->deny('editor', 'setting');
 
 // Initiate an instance before adding resources
 $acl = \Hybrid\Acl::factory();
@@ -338,7 +346,7 @@ $acl->deny('guest', array('page', 'setting'));</code></pre>
                 <tbody>
                 <tr>
                     <th class="legend">Static</th>
-                    <td>Yes</td>
+                    <td>No</td>
                 </tr>
                 <tr>
                     <th>Parameters</th>
@@ -369,7 +377,7 @@ $acl->deny('guest', array('page', 'setting'));</code></pre>
                 <tr>
                     <th>Example</th>
                     <td>
-    <pre class="php"><code>\Hybrid\Acl::access('post', 'edit');</code></pre>
+                        <pre class="php"><code>$acl->access('post', 'edit');</code></pre>
                     </td>
                 </tr>
                 </tbody>
@@ -387,7 +395,7 @@ $acl->deny('guest', array('page', 'setting'));</code></pre>
                 <tbody>
                 <tr>
                     <th class="legend">Static</th>
-                    <td>Yes</td>
+                    <td>No</td>
                 </tr>
                 <tr>
                     <th>Parameters</th>
@@ -418,7 +426,7 @@ $acl->deny('guest', array('page', 'setting'));</code></pre>
                 <tr>
                     <th>Example</th>
                     <td>
-    <pre class="php"><code>\Hybrid\Acl::access_status('post', 'edit');</code></pre>
+                        <pre class="php"><code>$acl->access_status('post', 'edit');</code></pre>
                     </td>
                 </tr>
                 </tbody>
@@ -460,7 +468,7 @@ $acl->deny('guest', array('page', 'setting'));</code></pre>
                 <tr>
                     <th>Example</th>
                     <td>
-    <pre class="php"><code>\Hybrid\Acl::has_role(array('user', 'editor'));</code></pre>
+                        <pre class="php"><code>\Hybrid\Acl::has_role(array('user', 'editor'));</code></pre>
                     </td>
                 </tr>
                 </tbody>
