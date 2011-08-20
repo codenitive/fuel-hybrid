@@ -34,22 +34,8 @@ namespace Hybrid;
  
 class Acl {
 
-    /**
-     * List of roles
-     * 
-     * @access      protected
-     * @staticvar   array
-     */
-    protected static $roles = array();
-    
-    /**
-     * List of resources
-     * 
-     * @access      protected
-     * @staticvar   array
-     */
-    protected static $resources = array();
-    
+    protected static $instances = array();
+
     /**
      * List of types
      * 
@@ -57,14 +43,6 @@ class Acl {
      * @staticvar   array
      */
     protected static $types = array('deny', 'view', 'create', 'edit', 'delete', 'all');
-    
-    /**
-     * List of ACL map between roles, resources and types
-     * 
-     * @access      protected
-     * @staticvar   array
-     */
-    protected static $acl = array();
 
     /**
      * Only called once 
@@ -82,11 +60,27 @@ class Acl {
      * 
      * @static
      * @access  public
+     * @param   string  $name
      * @return  static 
      */
-    public static function factory()
+    public static function factory($name = null)
     {
-        return new static();
+        if (\is_null($name))
+        {
+            $name = 'default';
+        }
+
+        if (!isset(static::$instances[$name]))
+        {
+            static::$instances[$name] = new static();
+        }
+
+        return static::$instances[$name];
+    }
+
+    public static function instance($name = null)
+    {
+        return static::factory($name);
     }
 
     /**
@@ -102,20 +96,44 @@ class Acl {
     public function __construct() {}
 
     /**
+     * List of roles
+     * 
+     * @access  protected
+     * @var     array
+     */
+    protected $roles = array();
+    
+    /**
+     * List of resources
+     * 
+     * @access  protected
+     * @var     array
+     */
+    protected $resources = array();
+    
+    
+    /**
+     * List of ACL map between roles, resources and types
+     * 
+     * @access  protected
+     * @var     array
+     */
+    protected $acl = array();
+
+    /**
      * Verify whether current user has sufficient roles to access the resources based 
      * on available type of access.
      *
-     * @static
      * @access  public
      * @param   mixed   $resource
      * @param   string  $type need to be any one of deny, view, create, edit, delete or all
      * @return  bool
      */
-    public static function access($resource, $type = 'view') 
+    public function access($resource, $type = 'view') 
     {
         $types = static::$types;
 
-        if (!in_array($resource, static::$resources)) 
+        if (!in_array($resource, $this->resources)) 
         {
             return true;
         }
@@ -127,19 +145,19 @@ class Acl {
 
         foreach ($user->roles as $role) 
         {
-            if (!isset(static::$acl[$role . '/' . $resource])) 
+            if (!isset($this->acl[$role . '/' . $resource])) 
             {
                 continue;
             }
 
-            if (static::$acl[$role . '/' . $resource] == $type) 
+            if ($this->acl[$role . '/' . $resource] == $type) 
             {
                 return true;
             }
 
             for ($i = ($type_id + 1); $i < $length; $i++) 
             {
-                if (static::$acl[$role . '/' . $resource] == $types[$i]) 
+                if ($this->acl[$role . '/' . $resource] == $types[$i]) 
                 {
                     return true;
                 }
@@ -153,17 +171,16 @@ class Acl {
      * Verify whether current user has sufficient roles to access the resources based 
      * on available type of access.
      *
-     * @static
      * @access  public
      * @param   mixed   $resource
      * @param   string  $type need to be any one of static::$type
      * @return  bool
      * @see     \Hybrid\Acl::access()
      */
-    public static function access_status($resource, $type = 'view') 
+    public function access_status($resource, $type = 'view') 
     {
 
-        switch (static::access($resource, $type)) 
+        switch ($this->access($resource, $type)) 
         {
             case true :
                 return 200;
@@ -210,12 +227,11 @@ class Acl {
     /**
      * Add new user roles to the this instance
      * 
-     * @static
      * @access  public
      * @param   mixed $roles
      * @return  bool
      */
-    public static function add_roles($roles = null) 
+    public function add_roles($roles = null) 
     {
         if (is_null($roles)) 
         {
@@ -224,13 +240,14 @@ class Acl {
 
         if (is_array($roles)) 
         {
-            static::$roles = static::$roles + $roles;
+            $this->roles = $this->roles + $roles;
             return true;
         }
 
         if (is_string($roles)) 
         {
-            array_push(static::$roles, trim(\Inflector::friendly_title($roles, '-', true)));
+            array_push($this->roles, trim(\Inflector::friendly_title($roles, '-', true)));
+
             return true;
         }
 
@@ -240,12 +257,11 @@ class Acl {
     /**
      * Add new resource to this instance
      * 
-     * @static
      * @access  public
      * @param   mixed   $resources
      * @return  bool
      */
-    public static function add_resources($resources = null) 
+    public function add_resources($resources = null) 
     {
         if (is_null($resources)) 
         {
@@ -254,12 +270,14 @@ class Acl {
 
         if (is_array($resources)) 
         {
-            static::$resources = static::$resources + $resources;
+            $this->resources = $this->resources + $resources;
             return true;
         }
 
-        if (is_string($resources)) {
-            array_push(static::$resources, trim(\Inflector::friendly_title($resources, '-', true)));
+        if (is_string($resources)) 
+        {
+            array_push($this->resources, trim(\Inflector::friendly_title($resources, '-', true)));
+
             return true;
         }
 
@@ -269,7 +287,6 @@ class Acl {
     /**
      * Assign single or multiple $roles + $resources to have $type access
      * 
-     * @static
      * @access  public
      * @param   mixed   $roles
      * @param   mixed   $resources
@@ -277,7 +294,7 @@ class Acl {
      * @return  bool
      * @throws  \Fuel_Exception
      */
-    public static function allow($roles, $resources, $type = 'view') 
+    public function allow($roles, $resources, $type = 'view') 
     {
         if (!in_array($type, static::$types)) 
         {
@@ -298,9 +315,10 @@ class Acl {
         {
             $role = \Inflector::friendly_title($role, '-', true);
 
-            if (!in_array($role, static::$roles)) 
+            if (!in_array($role, $this->roles)) 
             {
                 throw new \Fuel_Exception("Role {$role} does not exist.");
+
                 continue;
             }
 
@@ -308,15 +326,16 @@ class Acl {
             {
                 $resource = \Inflector::friendly_title($resource, '-', true);
 
-                if (!in_array($resource, static::$resources)) 
+                if (!in_array($resource, $this->resources)) 
                 {
                     throw new \Fuel_Exception("Resource {$resource} does not exist.");
+
                     continue;
                 }
 
                 $id = $role . '/' . $resource;
 
-                static::$acl[$id] = $type;
+                $this->acl[$id] = $type;
             }
         }
 
@@ -326,15 +345,14 @@ class Acl {
     /**
      * Shorthand function to deny access for single or multiple $roles and $resouces
      * 
-     * @static
      * @access  public
      * @param   mixed   $roles
      * @param   mixed   $resources
      * @return  bool
      */
-    public static function deny($roles, $resources) 
+    public function deny($roles, $resources) 
     {
-        return static::allow($roles, $resources, 'deny');
+        return $this->allow($roles, $resources, 'deny');
     }
 
 }

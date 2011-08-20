@@ -206,7 +206,7 @@ class Auth_Connection  {
         }
 
         // this is optional, but useful as a shorthand
-        $this->acl          = new \Hybrid\Acl;
+        $this->acl          = \Hybrid\Acl::factory();
     }
 
     /**

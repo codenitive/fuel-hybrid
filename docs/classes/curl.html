@@ -36,6 +36,13 @@
 
         <h3 id="how-to">How To</h3>
 
+        <pre class="php"><code>$google = \Hybrid\Curl::factory("GET http://google.com");
+$google->setopt(array(
+    CURLOPT_RETURNTRANSFER => 1,
+));
+
+\Debug::dump($google->execute());</code></pre>
+
         <article>
             <h3 id="factory()">factory($uri, $dataset = array())</h3>
 

@@ -53,7 +53,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      */
     final protected function acl($resource, $type = null) 
     {
-        $status = \Hybrid\Acl::access_status($resource, $type);
+        $status = \Hybrid\Acl::instance()->access_status($resource, $type);
 
         switch ($status) 
         {
