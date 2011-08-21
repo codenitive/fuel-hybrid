@@ -101,7 +101,7 @@ class Auth_Facebook_Controller extends Controller {
         }
         else
         {
-            \Request::show_404();
+            throw new \Request404Exception();
         }
     }
 
