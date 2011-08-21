@@ -192,8 +192,9 @@ class Acl {
     }
 
     /**
-     * Check if user has any of provided roles (however this should be in \Hybrid\User IMHO)
+     * Check if user has any of provided roles, deprecated and will be removed in v1.3.0
      * 
+     * @deprecated
      * @static
      * @access  public
      * @param   mixed   $check_roles
@@ -201,27 +202,7 @@ class Acl {
      */
     public static function has_roles($check_roles) 
     {
-        $user = \Hybrid\Auth::instance('user')->get();
-
-        if (!is_array($check_roles)) 
-        {
-            $check_roles = array($check_roles);
-        }
-
-        foreach ($user->roles as $role) 
-        {
-            $role = \Inflector::friendly_title($role, '-', TRUE);
-
-            foreach ($check_roles as $check_against) 
-            {
-                if ($role == $check_against) 
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+       return \Hybrid\Auth::has_roles($check_roles);
     }
 
     /**
