@@ -1,77 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset='utf-8'>
-
-  <title>codenitive/fuel-hybrid @ GitHub</title>
-
-  <style type="text/css">
-    body {
-      margin-top: 1.0em;
-      background-color: #e6df6c;
-      font-family: Helvetica, Arial, FreeSans, san-serif;
-      color: #000000;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-    h1 { font-size: 3.8em; color: #192093; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #192093; }
-    h3 { text-align: center; color: #192093; }
-    a { color: #192093; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
-  </style>
+	<meta charset="utf-8">
+	<title>Fuel Hybrid Documentation</title>
+	<link href="assets/css/main.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript" src="assets/js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="assets/js/nav.js"></script>
+	<script type="text/javascript" src="assets/js/highlight.pack.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			show_nav('basic');
+			hljs.tabReplace = '    ';
+			hljs.initHighlightingOnLoad();
+		});
+	</script>
 </head>
-
 <body>
-  <a href="http://github.com/codenitive/fuel-hybrid"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 
-  <div id="container">
+	<header>
+		<h1>Fuel Hybrid Documentation</h1>
+	</header>
 
-    <div class="download">
-      <a href="http://github.com/codenitive/fuel-hybrid/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/codenitive/fuel-hybrid/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
-    </div>
+	<div id="main-nav"></div>
 
-    <h1><a href="http://github.com/codenitive/fuel-hybrid">fuel-hybrid</a>
-      <span class="small">by <a href="http://github.com/codenitive">codenitive</a></span></h1>
+	<section id="content">
+		<h2>Welcome to Fuel Hybrid</h2>
 
-    <div class="description">
-      A collection of classes to help your code hotter than before
-    </div>
+		<p>
+			A set of class that extends the functionality of FuelPHP without affecting the standard workflow when the application doesn't actually utilize Hybrid feature.
+		</p>
 
-    <h2>Authors</h2>
-<p>crynobone (crynobone@gmail.com)<br/>Ariff Azraai (mk9206.nx@gmail.com)<br/><br/>      </p>
-<h2>Contact</h2>
-<p> (crynobone@ymail.com)<br/>      </p>
+		<h3 id="getting_started">Getting started</h3>
 
+		<ul>
+			<li>Step #1: <a href="installation/download.html">Download</a></li>
+			<li>Step #2: <a href="installation/instructions.html">Install</a></li>
+			<li>Step #3: Create sexy code</li>
+		</ul>
 
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/codenitive/fuel-hybrid/zipball/master">zip</a> or
-      <a href="http://github.com/codenitive/fuel-hybrid/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/codenitive/fuel-hybrid</pre>
-    </p>
+		<h3 id="quick_install">Optional: Quick Installation</h3>
 
-    <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/codenitive/fuel-hybrid">codenitive/fuel-hybrid</a>
-    </div>
+		<p>
+			If you value your time and want to get things up and running in seconds instead of minutes you can use Fuel oil quick installer.
+		</p>
 
-  </div>
+		<ol>
+			<li>Add <strong>github.com/mentariworks</strong>
+				<pre class="php"><code>&lt;?php
 
-  
+return array(
+
+	/**
+	 * sources - The name of the main bootstrap file.
+	 *
+	 * Set this to false or remove if you using mod_rewrite.
+	 */
+	'sources' => array(
+		'github.com/fuel-packages',
+		'github.com/mentariworks',
+	),
+
+);
+				</code></pre>
+			</li>
+
+			<li>Install Hybrid Package
+
+				<pre class="cli">$ php oil package install hybrid --direct
+Warning - fopen(http://github.com/fuel-packages/fuel-hybrid/zipball/master): failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
+ in PKGPATH/oil/classes/package.php on line 53
+Downloading package: http://github.com/mentariworks/fuel-hybrid/zipball/master
+	...
+	...
+				</pre>
+			</li>
+		</ol>
+
+	</section>
+
+	<section id="footer">
+		<p>
+			<a href="http://github.com/mentariworks/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+			&copy; 2010 - 2011 Fuel Hybrid Development Team
+		</p>
+	</section>
+
 </body>
 </html>

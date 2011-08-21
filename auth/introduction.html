@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Auth &mdash; Fuel Hybrid Documentation</title>
+    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="../assets/js/nav.js"></script>
+    <script type="text/javascript" src="../assets/js/highlight.pack.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            show_nav('auth', '../');
+            hljs.tabReplace = '    ';
+            hljs.initHighlightingOnLoad();
+        });
+    </script>
+
+</head>
+<body>
+
+    <header>
+        <h1>Fuel Hybrid Documentation</h1>
+    </header>
+
+    <div id="main-nav"></div>
+
+    <section id="content">
+        
+        <h2 id="">Auth</h2>
+
+        <p>
+            The Auth classes provides a standardized interface for authentication in Fuel. This allows our users to write their own drivers and easily integrate a new driver to work with old code by keeping the basic methods consistent.
+        </p>
+
+        <h2 id="introduction">Introduction</h2>
+
+        <p>
+            Creating an Auth package that will suit everyone or every implementation is impossible. As a framework we don't want to force how you do Auth, but we do want to facilitate you creating your own or using the work of others. This is where the Auth package comes in, which of course includes a simple implementation to get you going.
+        </p>
+
+        <h3>Configuration</h3>
+
+        <p>
+            Auth can be configured in a <strong>config/app.php</strong> file and takes the following keys:
+        </p>
+
+        <table class="config">
+            <tbody>
+                <tr class="header">
+                    <th>Param</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <th>auth.enable</th>
+                    <td>bool</td>
+                    <td><pre class="php"><code class="php">true</code></pre></td>
+                    <td>
+                        Set application to load Auth class.
+                    </td>
+                </tr>
+                <tr>
+                    <th>auth.use_meta</th>
+                    <td>bool</td>
+                    <td><pre class="php"><code>false</code></pre></td>
+                    <td>
+                        Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
+                    </td>
+                </tr>
+                <tr>
+                    <th>auth.use_auth</th>
+                    <td>bool</td>
+                    <td><pre class="php"><code>false</code></pre></td>
+                    <td>
+                        Auth to use `users_auth` table for user authentication information, useful to keep `users` table is simple as possible.
+                    </td>
+                </tr>
+                <tr>
+                    <th>auth.use_facebook</th>
+                    <td>bool</td>
+                    <td><pre class="php"><code>false</code></pre></td>
+                    <td>
+                        Auth to enable Facebook Connect.
+                </tr>
+                <tr>
+                    <th>auth.use_twitter</th>
+                    <td>bool</td>
+                    <td><pre class="php"><code>false</code></pre></td>
+                    <td>
+                        Auth to enable Twitter OAuth.
+                    </td>
+                </tr>
+                <tr>
+                    <th>auth.optional_fields</th>
+                    <td>array|null</td>
+                    <td><pre class="php"><code>null</code></pre></td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <th>auth.verified_status</th>
+                    <td>array|null</td>
+                    <td><pre class="php"><code>null</code></pre></td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <th>auth._route_.registration</th>
+                    <td>string</td>
+                    <td><pre class="php"><code class="php">''</code></pre></td>
+                    <td>
+                        Route path for registration.
+                    </td>
+                </tr>
+                <tr>
+                    <th>auth._route_.after_login</th>
+                    <td>string</td>
+                    <td><pre class="php"><code class="php">''</code></pre></td>
+                    <td>
+                        Route path after login.
+                    </td>
+                </tr>
+                <tr>
+                    <th>auth._route_.after_logout</th>
+                    <td>string</td>
+                    <td><pre class="php"><code class="php">''</code></pre></td>
+                    <td>
+                        Route path after logout.
+                    </td>
+                </tr>
+                <tr>
+                    <th>salt</th>
+                    <td>string</td>
+                    <td><pre class="php"><code class="php">'put_your_salt_here'</code></pre></td>
+                    <td>
+                        The salt used for password hashing.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>
+            Partial of your app config file should look like this:
+        </p>
+
+        <pre class="php"><code>&lt;?php
+
+return array(
+    
+    'auth'                  => array(
+        // Set application to load Auth class.
+        'enabled'               => true,
+        
+        // Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
+        'use_auth'              => true, 
+        
+        // Auth to use `users_auth` table for user authentication information, useful to keep `users` table is simple as possible.                              
+        'use_meta'              => true,
+
+        // Auth to enable Facebook Connect. 
+        'use_facebook'          => false,
+
+        // Auth to enable Twitter Oauth.
+        'use_twitter'           => false,
+        
+        'optional_fields'       => null,
+
+        'verified_status'       => null,
+
+        // Auth _route_ configuration
+        '_route_'           => array(
+            'registration'      => 'register',
+            'after_login'       => '/',
+            'after_logout'      => '/',
+        ),
+    ),
+    
+    // The salt used for password hashing.
+    'salt'                  => null,
+);</code></pre>
+
+        <h2>Auth_Driver</h2>
+
+        <p>
+            Auth_Driver work as an API interface to tell your application who is the user using varies source or vendor such as internal Data Source or external Data Source (Facebook Connect, Twitter OAuth or etc.). This mean you can build or implement as many API interface as you like.
+        </p>
+
+        <p>
+            Unlike Auth_Connection class, external source Auth_Driver only request user information when application is accessed from a specific URI. To have Auth_Driver requesting external source on every page load will decrease application performance greatly, which made it our main reason to separate the Auth_Driver and Auth_Connection.
+        </p>
+
+        <h2>Auth_Connection</h2>
+
+        <p>
+            Auth_Connection work by authenticating and verifying who is the user (using only internal Data Source) and it will be instantiated only from <strong>\Hybrid\Auth_User</strong> driver.
+        </p>
+
+        <p class="note">
+            <strong>Why just \Hybrid\Auth_User?</strong>
+            <br /><br />This is because we are authentication the user for our application, it's not mean to authenticated our user for Facebook, Twitter or etc.
+        </p>
+
+        <p>
+            In other word, this validate the use of <strong>\Hybrid\Auth_User</strong> driver as an API interface to internal Data Source.
+        </p>
+    </section>
+    
+    <section id="footer">
+        <p>
+            <a href="http://github.com/mentariworks/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+            &copy; 2010 - 2011 Fuel Hybrid Development Team
+        </p>
+    </section>
+
+</body>
+</html>
