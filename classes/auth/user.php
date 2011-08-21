@@ -54,11 +54,12 @@ class Auth_User extends Auth_Driver {
      * $role->add_recources('monkeys');</code>
      * 
      * @access  public
+     * @param   string  $name
      * @return  object
      */
-    public function acl() 
+    public function acl($name = null) 
     {
-        return $this->acl;
+        return \Hybrid\Acl::instance($name);
     }
 
      /**
@@ -89,18 +90,12 @@ class Auth_User extends Auth_Driver {
     {
         parent::_initiate();
 
-        // allow to disable user acl, would be useful when database not available
+        // allow to disable user auth, would be useful when database not available
         if (false === \Config::get('app.auth.enabled', true))
         {
             return;
         }
         
-        // This method should only be called once, but just in case that doesn't work we should return null
-        if (!\is_null($this->acl))
-        {
-            return;
-        }
-
         // get user data from cookie
         $users              = \Cookie::get('_users');
 

@@ -36,10 +36,11 @@ abstract class Controller extends \Fuel\Core\Controller {
      * @access  public
      * @param   mixed   $resource
      * @param   string  $type 
+     * @param   string  $name
      */
-    final protected function acl($resource, $type = null) 
+    final protected function acl($resource, $type = null, $name = null) 
     {
-        $status = \Hybrid\Acl::instance()->access_status($resource, $type);
+        $status = \Hybrid\Acl::instance($name)->access_status($resource, $type);
 
         switch ($status) 
         {

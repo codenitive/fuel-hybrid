@@ -174,7 +174,7 @@ class Auth_Connection  {
      */
     public function __construct()
     {
-        // load ACL configuration
+        // load Auth configuration
         $config             = \Config::get('app.auth', \Config::get('app.user_table', array()));
 
         $reserved_property  = array('optional_fields');
@@ -204,9 +204,6 @@ class Auth_Connection  {
                 $this->items[$field] = '';
             }
         }
-
-        // this is optional, but useful as a shorthand
-        $this->acl          = \Hybrid\Acl::factory();
     }
 
     /**
