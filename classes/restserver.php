@@ -489,3 +489,12 @@ class Restserver {
     }
     
 }
+
+/**
+ * @package     Fuel
+ * @subpackage  Hybrid
+ * @category    Restful
+ * @deprecated
+ * @author      Mior Muhammad Zaki <crynobone@gmail.com>
+ */
+class Restful extends Restserver {}
