@@ -103,7 +103,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
      * 
      * @access public
      */
-    public function before($data = null) 
+    public function before() 
     {
         $this->is_rest_call = \Hybrid\Restserver::is_rest_call();
 
@@ -119,7 +119,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
 
         if (false === $this->is_rest_call)
         {   
-            $this->prepare_template($data);
+            $this->prepare_template();
         }
         else 
         {
@@ -233,14 +233,11 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
      * 
      * @access  protected
      */
-    protected function prepare_template($data = null)
+    protected function prepare_template()
     {
         if (true === $this->auto_render)
         {
             $this->template = \Hybrid\Template::factory($this->template);
-
-            // Set the data to the template if provided
-            $data and $this->template->view->set_global($data);
         }
     }
     

@@ -55,14 +55,14 @@ abstract class Controller extends \Fuel\Core\Controller {
      * 
      * @access  public
      */
-    public function before($data = null) 
+    public function before() 
     {
         $this->language = \Hybrid\Factory::get_language();
         $this->user     = \Hybrid\Auth::instance('user')->get();
 
         \Event::trigger('controller_before');
 
-        return parent::before($data);
+        return parent::before();
     }
 
     /**
