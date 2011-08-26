@@ -63,7 +63,7 @@ class Acl {
      * @param   string  $name
      * @return  static 
      */
-    public static function factory($name = null)
+    public static function forge($name = null)
     {
         if (\is_null($name))
         {
@@ -78,9 +78,14 @@ class Acl {
         return static::$instances[$name];
     }
 
+    public static function factory($name = null)
+    {
+        return static::forge($name);
+    }
+
     public static function instance($name = null)
     {
-        return static::factory($name);
+        return static::forge($name);
     }
 
     /**

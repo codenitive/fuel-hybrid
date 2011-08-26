@@ -38,7 +38,7 @@ import('swift/swift_required', 'vendor');
      * @param   array   $config     An array to overwrite default config from config/email.php.
      * @return  self
      */
-    public static function factory($config = array())
+    public static function forge($config = array())
     {
         $initconfig = \Config::load('email', null, true);
         
@@ -48,6 +48,11 @@ import('swift/swift_required', 'vendor');
         }
 
         return new static($config);
+    }
+
+    public static function factory($config = array())
+    {
+        return static::forge($config);
     }
 
     /**

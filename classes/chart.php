@@ -49,9 +49,14 @@ abstract class Chart {
      * @access  public
      * @return  static 
      */
-    public static function factory() 
+    public static function forge() 
     {
         return new static();
+    }
+
+    public static function factory()
+    {
+        return static::forge();
     }
 
     protected $options  = array();

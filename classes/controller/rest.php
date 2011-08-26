@@ -137,7 +137,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      */
     protected function response($data = array(), $http_code = 200) 
     {
-        $rest_server   = \Hybrid\Restserver::factory($data, $http_code)
+        $rest_server   = \Hybrid\Restserver::forge($data, $http_code)
                     ->format($this->rest_format)
                     ->execute();
         

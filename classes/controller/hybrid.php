@@ -207,7 +207,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
     {
         if (true === $this->is_rest_call)
         {
-            $rest_server = \Hybrid\Restserver::factory($data, $http_code)
+            $rest_server = \Hybrid\Restserver::forge($data, $http_code)
                         ->format($this->rest_format)
                         ->execute();
             
@@ -237,7 +237,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
     {
         if (true === $this->auto_render)
         {
-            $this->template = \Hybrid\Template::factory($this->template);
+            $this->template = \Hybrid\Template::forge($this->template);
         }
     }
     

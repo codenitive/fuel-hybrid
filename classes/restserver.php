@@ -76,9 +76,14 @@ class Restserver {
      * @param   int     $http_code
      * @return  static 
      */
-    public static function factory($data = array(), $http_code = 200)
+    public static function forge($data = array(), $http_code = 200)
     {
         return new static($data, $http_code);
+    }
+
+    public static function factory($data = array(), $http_code = 200)
+    {
+        return static::forge($data, $http_code);
     }
     
     /**
@@ -245,7 +250,7 @@ class Restserver {
         // If the format method exists, call and return the output in that format
         if (\method_exists('\\Format', 'to_' . $format))
         {
-            $response->body = \Format::factory($this->data)->{'to_'.$format}();
+            $response->body = \Format::forge($this->data)->{'to_'.$format}();
         }
 
         // Format not supported, output directly

@@ -63,7 +63,7 @@ class Template {
      * @access  public
      * @return  Template_Abstract
      */
-    public static function factory($name = null)
+    public static function forge($name = null)
     {
         if (\is_null($name))
         {
@@ -108,6 +108,11 @@ class Template {
         }
         
         return static::$instances[$name];
+    }
+
+    public static function factory($name = null)
+    {
+        return static::forge($name);
     }
 
 }

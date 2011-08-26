@@ -53,7 +53,7 @@ class Auth {
      * @return  Auth_Driver
      * @throws  \Fuel_Exception
      */
-    public static function factory($name = null)
+    public static function forge($name = null)
     {
         if (\is_null($name))
         {
@@ -80,17 +80,22 @@ class Auth {
         return static::$instances[$name];
     }
 
+    public static function factory($name = null)
+    {
+        return static::forge($name);
+    }
+
     /**
      * Retrieves a loaded driver, when drivers are set in config the first driver will also be the default. 
      *
      * @static
      * @access  public
      * @return  Auth_Driver
-     * @see     self::factory()
+     * @see     self::forge()
      */
     public static function instance($name = null)
     {
-        return static::factory($name);
+        return static::forge($name);
     }
 
     /**
@@ -154,7 +159,7 @@ class Auth {
      */
     public static function login($username, $password, $name = 'normal')
     {
-        return static::factory($name)->login($username, $password);
+        return static::instance($name)->login($username, $password);
     }
 
     /**

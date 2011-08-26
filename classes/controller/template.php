@@ -117,7 +117,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
     {
         if (true === $this->auto_render)
         {
-            $this->template = \Hybrid\Template::factory($this->template);
+            $this->template = \Hybrid\Template::forge($this->template);
         }
     }
     

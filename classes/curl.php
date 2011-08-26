@@ -37,7 +37,7 @@ class Curl {
      * @param   array   $dataset
      * @return  static 
      */
-    public static function factory($uri, $dataset = array())
+    public static function forge($uri, $dataset = array())
     {
         $uri_segments   = explode(' ', $uri);
         $type           = 'GET';
@@ -51,6 +51,11 @@ class Curl {
         $dataset = array_merge(static::query_string($uri), $dataset);
 
         return new static($uri, $dataset, $type);
+    }
+
+    public static function factory($uri, $dataset = array())
+    {
+        return static::forge($uri, $dataset);
     }
     
     /**

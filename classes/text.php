@@ -45,7 +45,7 @@ class Text {
      * @access  public
      * @return  object
      */
-    public static function factory($name = null)
+    public static function forge($name = null)
     {
         if (\is_null($name))
         {
@@ -70,6 +70,11 @@ class Text {
         }
 
         return static::$instances[$name];
+    }
+
+    public static function factory($name = null)
+    {
+        return static::forge($name);
     }
 
 }
