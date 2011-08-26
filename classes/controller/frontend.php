@@ -51,9 +51,9 @@ abstract class Controller_Frontend extends Controller {
      * @access  public
      * @return  void
      */
-    public function before($data = null) 
+    public function before() 
     {
-        $this->prepare_template($data);
+        $this->prepare_template();
 
         return parent::before();
     }
@@ -90,17 +90,13 @@ abstract class Controller_Frontend extends Controller {
      * Prepare template
      * 
      * @access  protected
-     * @param   array   $data
      * @return  void
      */
-    protected function prepare_template($data = null)
+    protected function prepare_template()
     {
         if (true === $this->auto_render)
         {
             $this->template = \Hybrid\Template::factory($this->template);
-
-            // Set the data to the template if provided
-            $data and $this->template->view->set_global($data);
         }
     }
     
