@@ -26,11 +26,11 @@ use \Markdown;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Text_Markdown
+ * @category    Parser_Markdown
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Text_Markdown extends Text_Driver {
+class Parser_Markdown extends Text_Driver {
 
     /**
      * Construct a new instance (don't do anything right now)
