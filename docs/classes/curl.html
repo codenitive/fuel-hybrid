@@ -47,42 +47,326 @@ $google->setopt(array(
             <h3 id="factory()">factory($uri, $dataset = array())</h3>
 
             <p>Initiate this class as a new object.</p>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>
+                        <table class="parameters">
+                            <tr>
+                                <th>Param</th>
+                                <th>Default</th>
+                                <th class="description">Description</th>
+                            </tr>
+                            <tr>
+                                <th><kbd>$url</kbd></th>
+                                <td><i>Required</i></td>
+                                <td>The URI being requested (including HTTP method). If this parameter is not present, the URI class will be used to detect the URI.</td>
+                            </tr>
+                            <tr>
+                                <th><kbd>$dataset</kbd></th>
+                                <td><pre class="php"><code>array()</code></pre></td>
+                                <td>An array of GET, POST, PUT or DELETE dataset (depends on which HTTP method is called)</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>\Hybrid\Curl Object</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+    <pre class="php"><code>// GET method support query string
+$curl = \Hybrid\Curl::factory('GET http://google.com?q=hello world');
+
+// Alternatively
+$curl = \Hybrid\Curl::factory('GET http://google.com', array('q' => 'hello world'));</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </article>
 
         <article>
             <h3 id="get()">get($url, $dataset = array())</h3>
 
             <p>A shortcode to initiate this class as a new object using GET.</p>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>
+                        <table class="parameters">
+                            <tr>
+                                <th>Param</th>
+                                <th>Default</th>
+                                <th class="description">Description</th>
+                            </tr>
+                            <tr>
+                                <th><kbd>$url</kbd></th>
+                                <td><i>Required</i></td>
+                                <td>The URI being requested (without HTTP method). If this parameter is not present, the URI class will be used to detect the URI.</td>
+                            </tr>
+                            <tr>
+                                <th><kbd>$dataset</kbd></th>
+                                <td><pre class="php"><code>array()</code></pre></td>
+                                <td>An array of GET dataset</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>\Hybrid\Curl Object</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+    <pre class="php"><code>// GET method support query string
+$curl = \Hybrid\Curl::get('http://google.com', array('q' => 'hello world'));</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </article>
 
         <article>
             <h3 id="post()">post($url, $dataset = array())</h3>
 
             <p>A shortcode to initiate this class as a new object using POST.</p>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>
+                        <table class="parameters">
+                            <tr>
+                                <th>Param</th>
+                                <th>Default</th>
+                                <th class="description">Description</th>
+                            </tr>
+                            <tr>
+                                <th><kbd>$url</kbd></th>
+                                <td><i>Required</i></td>
+                                <td>The URI being requested (without HTTP method). If this parameter is not present, the URI class will be used to detect the URI.</td>
+                            </tr>
+                            <tr>
+                                <th><kbd>$dataset</kbd></th>
+                                <td><pre class="php"><code>array()</code></pre></td>
+                                <td>An array of POST dataset</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>\Hybrid\Curl Object</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+    <pre class="php"><code>// POST method support query string
+$curl = \Hybrid\Curl::post('http://google.com', array('q' => 'hello world'));</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </article>
 
         <article>
             <h3 id="put()">put($url, $dataset = array())</h3>
 
             <p>A shortcode to initiate this class as a new object using PUT.</p>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>
+                        <table class="parameters">
+                            <tr>
+                                <th>Param</th>
+                                <th>Default</th>
+                                <th class="description">Description</th>
+                            </tr>
+                            <tr>
+                                <th><kbd>$url</kbd></th>
+                                <td><i>Required</i></td>
+                                <td>The URI being requested (without HTTP method). If this parameter is not present, the URI class will be used to detect the URI.</td>
+                            </tr>
+                            <tr>
+                                <th><kbd>$dataset</kbd></th>
+                                <td><pre class="php"><code>array()</code></pre></td>
+                                <td>An array of PUT dataset</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>\Hybrid\Curl Object</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+    <pre class="php"><code>// PUT method support query string
+$curl = \Hybrid\Curl::put('http://google.com', array('q' => 'hello world'));</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </article>
 
         <article>
             <h3 id="delete()">delete($url, $dataset = array())</h3>
 
             <p>A shortcode to initiate this class as a new object using DELETE.</p>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>
+                        <table class="parameters">
+                            <tr>
+                                <th>Param</th>
+                                <th>Default</th>
+                                <th class="description">Description</th>
+                            </tr>
+                            <tr>
+                                <th><kbd>$url</kbd></th>
+                                <td><i>Required</i></td>
+                                <td>The URI being requested (without HTTP method). If this parameter is not present, the URI class will be used to detect the URI.</td>
+                            </tr>
+                            <tr>
+                                <th><kbd>$dataset</kbd></th>
+                                <td><pre class="php"><code>array()</code></pre></td>
+                                <td>An array of DELETE dataset</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>\Hybrid\Curl Object</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+    <pre class="php"><code>// DELETE method support query string
+$curl = \Hybrid\Curl::delete('http://google.com', array('q' => 'hello world'));</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
         </article>
 
         <article>
             <h3 id="setopt()">setopt($option, $value = null)</h3>
 
             <p>Set curl options.</p>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>
+                        <table class="parameters">
+                            <tr>
+                                <th>Param</th>
+                                <th>Default</th>
+                                <th class="description">Description</th>
+                            </tr>
+                            <tr>
+                                <th><kbd>$option</kbd></th>
+                                <td><i>Required</i></td>
+                                <td>Either an array (key as CURL option) or a string of CURL option name</td>
+                            </tr>
+                            <tr>
+                                <th><kbd>$value</kbd></th>
+                                <td><pre class="php"><code>''</code></pre></td>
+                                <td>Optional CURL option value (when </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>\Hybrid\Curl Object</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+    <pre class="php"><code>$curl->setopt(CURLOPT_HEADER, true);
+
+// or use array to assign multiple value
+$curl->setopt(array(
+    CURLOPT_HEADER => true,
+    CURLOPT_NOBODY => false,
+));</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </article>
 
         <article>
             <h3 id="execute()">execute()</h3>
 
             <p>Execute the Curl request and return the output.</p>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>Object</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+                        <pre class="php"><code>$curl->execute();</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </article>
 
     </section>
