@@ -70,10 +70,10 @@ var nav = {
 			"Introduction": 		"template/todo.html"
 		},
 
-		"Text": {
-			"Introduction": 		"text/todo.html",
+		"Parser": {
+			"Introduction": 		"parser/todo.html",
 			"Driver types": {
-				"Markdown": 		"text/todo.html"
+				"Markdown": 		"parser/todo.html"
 			}
 		},*/
 

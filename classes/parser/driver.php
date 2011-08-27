@@ -26,4 +26,4 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Text_Driver {}
+abstract class Parser_Driver {}

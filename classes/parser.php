@@ -22,11 +22,11 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Text
+ * @category    Parser
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Text {
+class Parser {
     
     /**
      * Cache text instance so we can reuse it on multiple request eventhough 
