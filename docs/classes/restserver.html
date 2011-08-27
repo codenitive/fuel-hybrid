@@ -38,28 +38,220 @@
 
         <p class="note">To be renamed to \Hybrid\Restserver in Fuel v1.1</p>
 
+        <h3 id="how-to">How To</h3>
+
+        <pre class="php"><code>$restserver = \Hybrid\Restful::factory(array('text' => 'Hello World'), 200);
+$restserver->format('json');
+$restserver->execute();
+</code></pre>
+
         <article>
             <h3 id="factory()">factory($data = array(), $http_code = 200)</h3>
+
+            <p>A shortcode to initiate this class as a new object.</p>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>
+                        <table class="parameters">
+                            <tr>
+                                <th>Param</th>
+                                <th>Default</th>
+                                <th class="description">Description</th>
+                            </tr>
+                            <tr>
+                                <th><kbd>$data</kbd></th>
+                                <td><pre class="php"><code>array()</code></pre></td>
+                                <td>The URI being requested (without HTTP method). If this parameter is not present, the URI class will be used to detect the URI.</td>
+                            </tr>
+                            <tr>
+                                <th><kbd>$http_code</kbd></th>
+                                <td><pre class="php"><code>200</code></pre></td>
+                                <td>An array of GET dataset</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>bool</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+                        <pre class="php"><code>$restserver = \Hybrid\Restful::factory(array('text' => 'Hello World'), 200);</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
         </article>
 
         <article>
             <h3 id="is_rest_call()">is_rest_call()</h3>
+
+            <p>Check whether current request is REST.</p>
+
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>bool</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+                        <pre class="php"><code>\Hybrid\Restful::is_rest_call();</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </article>
 
          <article>
             <h3 id="content_type()">content_type($format)</h3>
+
+            <p>Get content-type.</p>
+
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+                        <pre class="php"><code>\Hybrid\Restful::content_type('json'); // Return: application/json</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </article>
 
          <article>
             <h3 id="auth()">auth()</h3>
+
+            <p>Run authentication.</p>
+
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>void</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+                        <pre class="php"><code>\Hybrid\Restful::auth();</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </article>
 
          <article>
             <h3 id="format()">format($rest_format = '')</h3>
+
+            <p>Set the REST format.</p>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>
+                        <table class="parameters">
+                            <tr>
+                                <th>Param</th>
+                                <th>Default</th>
+                                <th class="description">Description</th>
+                            </tr>
+                            <tr>
+                                <th><kbd>$rest_format</kbd></th>
+                                <td><pre class="php"><code>''</code></pre></td>
+                                <td>A string of REST format.</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>void</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+                        <pre class="php"><code>$restserver->format('json');</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </article>
 
          <article>
             <h3 id="execute()">execute()</h3>
+
+            <p>Execute the REST request and return the output.</p>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>Object</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+                        <pre class="php"><code>$restserver->execute();</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </article>
     </section>
     
