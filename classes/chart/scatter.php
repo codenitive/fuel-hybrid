@@ -25,7 +25,7 @@ namespace Hybrid;
  * @category    Chart_Scatter
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
-class Chart_Scatter extends Table {
+class Chart_Scatter extends Chart_Driver {
 
     public function __construct() 
     {

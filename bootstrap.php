@@ -37,7 +37,7 @@ Autoloader::add_classes(array (
     'Hybrid\\Auth_User'                 => __DIR__.'/classes/auth/user.php',
     
     'Hybrid\\Chart'                     => __DIR__.'/classes/chart.php',
-    'Hybrid\\Chart_Utility'             => __DIR__.'/classes/chart/utility.php',
+    'Hybrid\\Chart_Driver'              => __DIR__.'/classes/chart/driver.php',
     'Hybrid\\Chart_Area'                => __DIR__.'/classes/chart/area.php',
     'Hybrid\\Chart_Bar'                 => __DIR__.'/classes/chart/bar.php',
     'Hybrid\\Chart_GeoMap'              => __DIR__.'/classes/chart/geomap.php',

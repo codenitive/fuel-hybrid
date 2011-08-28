@@ -26,7 +26,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Chart_Pie extends Chart {
+class Chart_Pie extends Chart_Driver {
 
     public function __construct() 
     {
