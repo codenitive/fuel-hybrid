@@ -39,6 +39,7 @@ class Factory {
      */
     public static function _init() 
     {
+        // initiate this only once
         if (!is_null(static::$identity)) 
         {
             return;

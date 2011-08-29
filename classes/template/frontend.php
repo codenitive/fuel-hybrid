@@ -94,7 +94,7 @@ class Template_Frontend extends Template_Driver {
 
         if (empty($available_folders))
         {
-            throw new \Fuel_Exception("\\Hybrid\\Template configuration is not completed");
+            throw new \Fuel_Exception("\Hybrid\Template_Driver: configuration is not completed");
         }
 
         if (is_null($theme) or $theme === '_default_')
@@ -108,7 +108,7 @@ class Template_Frontend extends Template_Driver {
         }
         else
         {
-            throw new \Fuel_Exception("Requested Template folder is not available");
+            throw new \Fuel_Exception("\Hybrid\Template_Frontend: Requested {$theme} folder is not available.");
         }
 
         return $this;

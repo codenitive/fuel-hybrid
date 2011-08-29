@@ -55,7 +55,7 @@ abstract class Auth_Driver {
             break;
 
             default :
-                throw new \Fuel_Exception("Unable to redirect type: {$type}");
+                throw new \Fuel_Exception("\Hybrid\Auth_Driver: Unable to redirect using {$type} type.");
                 return;
         }
 

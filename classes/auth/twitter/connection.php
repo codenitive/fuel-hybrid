@@ -42,7 +42,7 @@ class Auth_Twitter_Connection extends Auth_Connection {
         if (true !== $this->use_twitter) 
         {
             $this->unregister(true);
-            throw new \Fuel_Exception('Please enable Twitter to use \\Hybrid\\Auth_Twitter_Connection');
+            throw new \Fuel_Exception("\Hybrid\Auth_Twitter_Connection: Please enable Twitter.");
         }
 
         $auth   = \Hybrid\Auth::instance('twitter')->get();
@@ -115,12 +115,12 @@ class Auth_Twitter_Connection extends Auth_Connection {
 
         if ($this->items['id'] < 1)
         {
-            throw new \Fuel_Exception("User {$username} does not exist in our database");
+            throw new \Fuel_Exception("User {$username} does not exist in our database.");
         }
 
         if ($this->items['password'] !== $token)
         {
-            throw new \Fuel_Exception("Invalid Twitter token, please sign-in with Twitter again");
+            throw new \Fuel_Exception("Invalid Twitter token, please sign-in with Twitter again.");
         }
 
         $this->register();

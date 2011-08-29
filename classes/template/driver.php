@@ -104,7 +104,7 @@ abstract class Template_Driver {
 
         if (!\is_dir($folder_path))
         {
-            throw new \Fuel_Exception("Unable to load assets at {$folder_path}");
+            throw new \Fuel_Exception("\Hybrid\Template_Driver: Unable to load assets at {$folder_path}.");
         }
         else
         {
@@ -132,7 +132,7 @@ abstract class Template_Driver {
     {
         if (!\is_dir($path))
         {
-            throw new \Fuel_Exception("Path {$path} does not appear to a valid folder");
+            throw new \Fuel_Exception("\Hybrid\Template_Driver: Path {$path} does not appear to a valid folder.");
         }
         else 
         {

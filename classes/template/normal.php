@@ -98,7 +98,7 @@ class Template_Normal extends Template_Driver {
      */
     public function load_assets($forced_load = false)
     {
-      throw new \Fuel_Exception("No asset loading for \\Hybrid\\Template_Normal");
+      throw new \Fuel_Exception("\Hybrid\Template_Normal: Asset loading not available for Template_Normal.");
     }
 
     /**
@@ -116,7 +116,7 @@ class Template_Normal extends Template_Driver {
 
         if (empty($files))
         {
-            throw new \Fuel_Exception("Path {$path} does not appear to a valid folder or contain any View files");
+            throw new \Fuel_Exception("\Hybrid\Template_Normal: Path {$path} does not appear to a valid folder or contain any View files.");
         }
         else 
         {

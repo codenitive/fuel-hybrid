@@ -204,7 +204,7 @@ class Restserver {
         }
         else
         {
-            throw new \Fuel_Exception("{$rest_format} is not a valid REST format");
+            throw new \Fuel_Exception("{$rest_format} is not a valid REST format.");
         }
         
         return $this;

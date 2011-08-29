@@ -122,7 +122,7 @@ import('swift/swift_required', 'vendor');
         }
         else
         {
-            throw new \Fuel_Exception("Swiftmail protocol: " . $config['protocol'] . " does not exist");
+            throw new \Fuel_Exception("\Hybrid\Swiftmail: Transport protocol " . $config['protocol'] . " does not exist.");
         }
     }
 
@@ -362,7 +362,7 @@ import('swift/swift_required', 'vendor');
      */
     public static function dynamic_attach($contents, $filename, $disposition = 'attachment')
     {
-        throw new \Fuel_Exception("File attachment has not been implemented yet");
+        throw new \Fuel_Exception("\Hybrid\Swiftmail: Dynamic file attachment has not been implemented yet.");
 
         return $this;
     }

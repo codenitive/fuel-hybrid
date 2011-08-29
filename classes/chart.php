@@ -30,10 +30,17 @@ namespace Hybrid;
  
 class Chart {
 
+    /**
+     * Cache Chart instance so we can reuse it on multiple request.
+     * 
+     * @static
+     * @access  protected
+     * @var     array
+     */
     protected static $instances = array();
 
     /**
-     * A shortcode to initiate this class as a new object
+     * Initiate a new Chart_Driver instance.
      * 
      * @static
      * @access  public
@@ -58,16 +65,38 @@ class Chart {
             }
             else 
             {
-                throw new \Fuel_Exception("Requested {$driver} does not exist");
+                throw new \Fuel_Exception("Requested {$driver} does not exist.");
             }
         }
 
         return static::$instances[$name];
     }
 
+    /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  self::forge()
+     */
     public static function factory($name = null)
     {
         return static::forge();
+    }
+
+    /**
+     * Get cached instance, or generate new if currently not available.
+     *
+     * @static
+     * @access  public
+     * @return  Chart_Driver
+     * @see     self::forge()
+     */
+    public static function instance($name = null)
+    {
+        return static::forge($name);
     }
     
     public static function js() 

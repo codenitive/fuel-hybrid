@@ -103,13 +103,22 @@ class Template {
             }
             else 
             {
-                throw new \Fuel_Exception("Requested {$driver} does not exist");
+                throw new \Fuel_Exception("Requested {$driver} does not exist.");
             }
         }
         
         return static::$instances[$name];
     }
 
+    /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  self::forge()
+     */
     public static function factory($name = null)
     {
         return static::forge($name);

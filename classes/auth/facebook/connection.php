@@ -42,7 +42,7 @@ class Auth_Facebook_Connection extends Auth_Connection {
         if (true !== $this->use_facebook) 
         {
             $this->unregister(true);
-            throw new \Fuel_Exception('Please enable Facebook to use \\Hybrid\\Auth_Facebook_Connection');
+            throw new \Fuel_Exception("\Hybrid\Auth_Facebook_Connection: Please enable Facebook.");
         }
 
         $auth   = \Hybrid\Auth::instance('facebook')->get();
@@ -115,12 +115,12 @@ class Auth_Facebook_Connection extends Auth_Connection {
 
         if ($this->items['id'] < 1)
         {
-            throw new \Fuel_Exception("User {$username} does not exist in our database");
+            throw new \Fuel_Exception("User {$username} does not exist in our database.");
         }
 
         if ($this->items['password'] !== $token)
         {
-            throw new \Fuel_Exception("Invalid Facebook token, please sign-in with Facebook again");
+            throw new \Fuel_Exception("Invalid Facebook token, please sign-in with Facebook again.");
         }
 
         $this->register();

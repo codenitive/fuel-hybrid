@@ -68,7 +68,7 @@ class Acl {
      * @static
      * @access  public
      * @param   string  $name
-     * @return  static 
+     * @return  \Hybrid\Acl Object 
      */
     public static function forge($name = null)
     {
@@ -92,7 +92,8 @@ class Acl {
      * @static
      * @access  public
      * @param   string  $name
-     * @return  self::forge()
+     * @return  \Hybrid\Acl Object
+     * @see     self::forge()
      */
     public static function factory($name = null)
     {
@@ -105,7 +106,8 @@ class Acl {
      * @static
      * @access  public
      * @param   string   $name
-     * @return  self::forge()
+     * @return  \Hybrid\Acl Object
+     * @see     self::forge()
      */
     public static function instance($name = null)
     {
@@ -159,7 +161,7 @@ class Acl {
 
         if (!in_array($resource, $this->resources)) 
         {
-            throw new \Fuel_Exception("\Hybrid\Acl: Unable to verify unknown resource: {$resource}");
+            throw new \Fuel_Exception("\Hybrid\Acl: Unable to verify unknown resource: {$resource}.");
         }
 
         $user       = \Hybrid\Auth::instance('user')->get();

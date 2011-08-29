@@ -47,6 +47,10 @@ class Curl {
             $uri        = $uri_segments[1];
             $type       = $uri_segments[0];
         }
+        else
+        {
+            throw new \Fuel_Exception("\Hybrid\Curl: Provided {$uri} can't be processed.")
+        }
 
         $dataset = array_merge(static::query_string($uri), $dataset);
 

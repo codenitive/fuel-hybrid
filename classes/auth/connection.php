@@ -66,7 +66,7 @@ class Auth_Connection  {
             }
             else
             {
-                throw new \Fuel_Exception("Requested {$driver} does not exist");
+                throw new \Fuel_Exception("Requested {$driver} does not exist.");
             }
         }
 
