@@ -35,8 +35,7 @@ namespace Hybrid;
 class Auth {
 
     /**
-     * Cache auth instance so we can reuse it on multiple request eventhough 
-     * it's almost impossible to happen
+     * Cache Auth instance so we can reuse it on multiple request.
      * 
      * @static
      * @access  protected
@@ -80,13 +79,22 @@ class Auth {
         return static::$instances[$name];
     }
 
+    /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  self::forge()
+     */
     public static function factory($name = null)
     {
         return static::forge($name);
     }
 
     /**
-     * Retrieves a loaded driver, when drivers are set in config the first driver will also be the default. 
+     * Get cached instance, or generate new if currently not available.
      *
      * @static
      * @access  public
@@ -114,7 +122,7 @@ class Auth {
     }
 
     /**
-     * Check if user has any of provided roles (however this should be in \Hybrid\User IMHO)
+     * Check if user has any of provided roles.
      * 
      * @static
      * @access  public

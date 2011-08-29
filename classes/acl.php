@@ -35,7 +35,7 @@ namespace Hybrid;
 class Acl {
 
     /**
-     * Cache ACL instance so we can reuse it on multiple request 
+     * Cache ACL instance so we can reuse it on multiple request. 
      * 
      * @static
      * @access  protected
@@ -63,7 +63,7 @@ class Acl {
     }
     
     /**
-     * A shortcode to initiate this class as a new object
+     * Initiate a new Acl instance.
      * 
      * @static
      * @access  public
@@ -86,7 +86,7 @@ class Acl {
     }
 
     /**
-     * Shortcode to self::forge()
+     * Shortcode to self::forge().
      *
      * @deprecated  1.3.0
      * @static
@@ -100,7 +100,7 @@ class Acl {
     }
 
     /**
-     * Get cached instance, or generate new if currently not available
+     * Get cached instance, or generate new if currently not available.
      *
      * @static
      * @access  public
@@ -113,13 +113,8 @@ class Acl {
     }
 
     /**
-     * Construct and initiate static::_init method as an object
-     * 
-     * Usage:
-     * 
-     * <code>$role = new \Hybrid\Acl;
-     * $role->add_resources('hello-world');</code>
-     * 
+     * Construct a new object.
+     *
      * @access  public
      */
     public function __construct() {}
