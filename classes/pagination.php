@@ -304,42 +304,15 @@ class Pagination {
      * 
      * @static
      * @access  public
+     * @deprecated
      * @param   mixed   $values
      * @return  string 
      */
     public static function build_get_query($values) 
     {
-        $dataset = array ();
-        
-        $check_get_input = function($value, & $dataset) 
-        {
-            $data = \Hybrid\Input::get($value);
-            
-            if (empty($data))
-            {
-                return false;
-            }
-            else 
-            {
-                array_push($dataset, sprintf('%s=%s', $value, $data));
-                return;
-            }
-        };
-        
-        if (is_array($values))
-        {
-            foreach ($values as $value)
-            {
-                $check_get_input($value, $dataset);
-            }
-        }
-        else 
-        {
-            $check_get_input($values, $dataset);
-        }
-        
-        return '?' . implode('&', $dataset);
+        return \Hybrid\Uri::build_get_query($values);
     }
+
 }
 
 /* End of file pagination.php */
