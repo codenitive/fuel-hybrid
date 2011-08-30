@@ -20,6 +20,7 @@ Autoloader::add_classes(array (
     'Hybrid\\Request'                   => __DIR__.'/classes/request.php',
     'Hybrid\\Restful'                   => __DIR__.'/classes/restful.php',
     'Hybrid\\Swiftmail'                 => __DIR__.'/classes/swiftmail.php',
+    'Hybrid\\Uri'                       => __DIR__.'/classes/uri.php',
     'Hybrid\\View'                      => __DIR__.'/classes/view.php',
 
     'Hybrid\\Auth'                      => __DIR__.'/classes/auth.php',
