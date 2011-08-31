@@ -32,7 +32,7 @@ class Chart_Timeline extends Chart_Driver {
     {
         parent::__construct();
 
-        $this->set_options(\Config::get('visualization.chart.timeline', array()));
+        $this->set_options(\Config::get('chart.timeline', array()));
     }
 
     public function generate($width = '100%', $height = '300px') 

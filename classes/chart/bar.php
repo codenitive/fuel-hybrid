@@ -32,7 +32,7 @@ class Chart_Bar extends Chart_Driver {
     {
         parent::__construct();
 
-        $this->set_options(\Config::get('visualization.chart.bar', array()));
+        $this->set_options(\Config::get('chart.bar', array()));
     }
 
     public function generate($width = '100%', $height = '300px') 

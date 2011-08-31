@@ -39,7 +39,7 @@ abstract class Chart_Driver {
      */
     public static function _init() 
     {
-        \Config::load('visualization', true);
+        \Config::load('chart', true);
     }
 
     /**

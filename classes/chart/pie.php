@@ -32,7 +32,7 @@ class Chart_Pie extends Chart_Driver {
     {
         parent::__construct();
 
-        $this->set_options(\Config::get('visualization.chart.pie', array()));
+        $this->set_options(\Config::get('chart.pie', array()));
     }
 
     public function generate($width = '100%', $height = '300px') 

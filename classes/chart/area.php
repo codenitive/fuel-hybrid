@@ -32,7 +32,7 @@ class Chart_Area extends Chart_Driver {
     {
         parent::__construct();
 
-        $this->set_options(\Config::get('visualization.chart.area', array()));
+        $this->set_options(\Config::get('chart.area', array()));
     }
 
     public function generate($width = '100%', $height = '300px') 
