@@ -188,7 +188,7 @@ $auth-&gt;logout();
         </article>
 
         <article>
-            <h3 id="login()">login($username, $password, $type = 'normal')</h3>
+            <h3 id="login()">login($username, $password, $driver = 'user')</h3>
 
             <p>Login based on available Auth_Driver.</p>
 
@@ -218,9 +218,9 @@ $auth-&gt;logout();
                                 <td>An unhashed `password` or `token` string from external API.</td>
                             </tr>
                             <tr>
-                                <th><kbd>$type</kbd></th>
-                                <td><pre class="php"><code>'normal'</code></pre></td>
-                                <td>Connection type string, default to 'normal'.</td>
+                                <th><kbd>$driver</kbd></th>
+                                <td><pre class="php"><code>'user'</code></pre></td>
+                                <td>Driver type string, default to 'user'.</td>
                             </tr>
                         </tbody></table>
                     </td>
@@ -234,7 +234,7 @@ $auth-&gt;logout();
                     <td>
 <pre class="php"><code class="php">try 
 {
-    \Hybrid\Auth::login(Input::post('username'), Input::post('password'), 'normal');
+    \Hybrid\Auth::login(Input::post('username'), Input::post('password'), 'user');
 }
 catch(\Fuel_Exception $e)
 {
