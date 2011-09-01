@@ -161,13 +161,13 @@ class Auth {
      * @access  public
      * @param   string  $username       A string of either `user_name` or `email` field from table `users`.
      * @param   string  $password       An unhashed `password` or `token` string from external API.
-     * @param   string  $type           Connection type string, default to 'normal'.
+     * @param   string  $type           Driver type string, default to 'user'.
      * @return  bool
      * @throws  \Fuel_Exception
      */
-    public static function login($username, $password, $name = 'normal')
+    public static function login($username, $password, $driver = 'user')
     {
-        return static::instance($name)->login($username, $password);
+        return static::factory($driver)->login($username, $password);
     }
 
     /**
