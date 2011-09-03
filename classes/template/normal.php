@@ -134,6 +134,8 @@ class Template_Normal extends Template_Driver {
             $view->set($data);
         }
 
+        $view->set('TEMPLATE_FOLDER', $this->folder, false);
+
         return $view->render();
     }
 
@@ -147,9 +149,7 @@ class Template_Normal extends Template_Driver {
     {
         $this->view->set_filename(rtrim($this->folder, '/') . '/' . $this->filename);
         $this->view->auto_encode(static::$config['auto_encode']);
-        $this->view->set(array(
-            'template' => $this,
-        ));
+        $this->view->set('TEMPLATE_FOLDER', $this->folder, false);
 
         return $this->view->render();
     }
