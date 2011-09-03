@@ -51,8 +51,19 @@ class Template_Normal extends Template_Driver {
         return \Hybrid\Template::forge($driver);
     }
 
-    public static function factory($name)
+    /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  self::forge()
+     */
+    public static function factory($name = null)
     {
+        \Log::info("\Hybrid\Template_Normal::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Template_Normal::forge().");
+        
         return static::forge($name);
     }
 

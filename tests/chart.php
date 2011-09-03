@@ -16,7 +16,7 @@
 namespace Hybrid;
 
 /**
- * Factory class tests
+ * Chart class tests
  * 
  * @group Hybrid
  * @group Chart

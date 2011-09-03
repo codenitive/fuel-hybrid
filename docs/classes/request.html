@@ -64,7 +64,7 @@ class Controller_Credential extends \Controller_Rest {
         $password       = \Hybrid\Input::post('register_password');
         $email          = \Hybrid\Input::post('register_email');
 
-        $user           = \Model_User::factory();
+        $user           = \Model_User::forge();
 
         $user->email    = $email;
         $user->password = \Hybrid\Auth::add_salt($password);

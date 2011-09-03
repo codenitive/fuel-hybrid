@@ -51,8 +51,19 @@ class Template_Frontend extends Template_Driver {
         return \Hybrid\Template::forge($driver);
     }
 
+    /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  self::forge()
+     */
     public static function factory($name = null)
     {
+        \Log::info("\Hybrid\Template_Frontend::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Template_Frontend::forge().");
+        
         return static::forge($name);
     }
 

@@ -34,7 +34,7 @@
 
         <h2 id="how-to">How to</h2>
 
-        <pre class="php"><code>$acl = \Hybrid\Acl::factory();
+        <pre class="php"><code>$acl = \Hybrid\Acl::forge();
 
 // define roles
 $acl->add_roles('guest');
@@ -73,7 +73,7 @@ $acl->access('post', 'all');        // return false</code></pre>
         <p class="note">\Hybrid\Acl will check access (from left to right) <strong>deny</strong>, <strong>view</strong>, <strong>create</strong>, <strong>edit</strong>, <strong>delete</strong>, <strong>all</strong></p>
 
         <article>
-            <h3 id="factory()">factory($name = null)</h3>
+            <h3 id="forge()">forge($name = null)</h3>
 
             <p>
                Creates a new instance of the Auth.
@@ -109,7 +109,7 @@ $acl->access('post', 'all');        // return false</code></pre>
                 <tr>
                     <th>Example</th>
                     <td>
-                        <pre class="php"><code>$acl = \Hybrid\Acl::factory();</code></pre>
+                        <pre class="php"><code>$acl = \Hybrid\Acl::forge();</code></pre>
                     </td>
                 </tr>
                 </tbody>
@@ -153,10 +153,10 @@ $acl->access('post', 'all');        // return false</code></pre>
                 <tr>
                     <th>Example</th>
                     <td>
-    <pre class="php"><code>\Hybrid\Acl::factory()->add_roles('guest');
+    <pre class="php"><code>\Hybrid\Acl::forge()->add_roles('guest');
 
 // Initiate an instance before adding role
-$acl = \Hybrid\Acl::factory();
+$acl = \Hybrid\Acl::forge();
 $acl->add_roles('user');
 
 // Add using array
@@ -204,10 +204,10 @@ $acl->add_roles(array('editor', 'moderator'));</code></pre>
                 <tr>
                     <th>Example</th>
                     <td>
-    <pre class="php"><code>\Hybrid\Acl::factory()->add_resources('post');
+    <pre class="php"><code>\Hybrid\Acl::forge()->add_resources('post');
 
 // Initiate an instance before adding resources
-$acl = \Hybrid\Acl::factory();
+$acl = \Hybrid\Acl::forge();
 $acl->add_resources('user');
 
 // Add using array
@@ -265,10 +265,10 @@ $acl->add_resources(array('page', 'setting'));</code></pre>
                 <tr>
                     <th>Example</th>
                     <td>
-    <pre class="php"><code>\Hybrid\Acl::factory()->allow('admin', 'post', 'all');
+    <pre class="php"><code>\Hybrid\Acl::forge()->allow('admin', 'post', 'all');
 
 // Initiate an instance before adding resources
-$acl = \Hybrid\Acl::factory();
+$acl = \Hybrid\Acl::forge();
 $acl->allow('user', 'post', 'view');
 
 // Add using array
@@ -321,10 +321,10 @@ $acl->allow('admin', array('page', 'setting'), 'all');</code></pre>
                 <tr>
                     <th>Example</th>
                     <td>
-    <pre class="php"><code>\Hybrid\Acl::factory()->deny('editor', 'setting');
+    <pre class="php"><code>\Hybrid\Acl::forge()->deny('editor', 'setting');
 
 // Initiate an instance before adding resources
-$acl = \Hybrid\Acl::factory();
+$acl = \Hybrid\Acl::forge();
 $acl->deny('guest', 'post');
 
 // Add using array

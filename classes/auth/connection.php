@@ -73,8 +73,19 @@ class Auth_Connection  {
         return static::$instances[$name];
     }
 
+    /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  self::forge()
+     */
     public static function factory($name = null)
     {
+        \Log::info("\Hybrid\Auth_Connection::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Auth_Connection::forge().");
+        
         return static::forge($name);
     }
 

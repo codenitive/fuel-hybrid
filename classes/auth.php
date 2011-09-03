@@ -90,6 +90,8 @@ class Auth {
      */
     public static function factory($name = null)
     {
+        \Log::info("\Hybrid\Auth::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Auth::forge().");
+        
         return static::forge($name);
     }
 
@@ -167,7 +169,7 @@ class Auth {
      */
     public static function login($username, $password, $driver = 'user')
     {
-        return static::factory($driver)->login($username, $password);
+        return static::forge($driver)->login($username, $password);
     }
 
     /**

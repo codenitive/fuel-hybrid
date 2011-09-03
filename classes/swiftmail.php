@@ -50,8 +50,19 @@ import('swift/swift_required', 'vendor');
         return new static($config);
     }
 
+    /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   array   $config     An array to overwrite default config from config/email.php.
+     * @return  self::forge()
+     */
     public static function factory($config = array())
     {
+        \Log::info("\Hybrid\Swiftmail::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Swiftmail::forge().");
+        
         return static::forge($config);
     }
 

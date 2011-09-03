@@ -97,6 +97,8 @@ class Acl {
      */
     public static function factory($name = null)
     {
+        \Log::info("\Hybrid\Acl::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Acl::forge().");
+        
         return static::forge($name);
     }
 

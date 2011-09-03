@@ -137,7 +137,7 @@ $auth-&gt;logout();
         </article>
 
         <article>
-            <h3 id="factory()">factory($name = null);</h3>
+            <h3 id="forge()">forge($name = null);</h3>
 
             <p>Initiate a new Auth instance, alias to <a href="#instance()">\Hybrid\Auth::instance()</a>.</p>
 
@@ -172,14 +172,14 @@ $auth-&gt;logout();
                     <th>Example</th>
                     <td>
 <pre class="php"><code class="php">// Logout the default driver
-$auth = \Hybrid\Auth::factory();
+$auth = \Hybrid\Auth::forge();
 $auth-&gt;logout();
 
 // Login using the User driver
-\Hybrid\Auth::factory('user')-&gt;login(Input::post('username'), Input::post('password'));
+\Hybrid\Auth::forge('user')-&gt;login(Input::post('username'), Input::post('password'));
 
 // Or you can use
-\Hybrid\Auth_User::factory()-&gt;login(Input::post('username'), Input::post('password'));</code></pre>
+\Hybrid\Auth_User::forge()-&gt;login(Input::post('username'), Input::post('password'));</code></pre>
                     </td>
                 </tr>
                 </tbody>

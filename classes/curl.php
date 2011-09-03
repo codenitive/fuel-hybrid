@@ -57,8 +57,20 @@ class Curl {
         return new static($uri, $dataset, $type);
     }
 
+    /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   string  $uri
+     * @param   array   $dataset
+     * @return  self::forge()
+     */
     public static function factory($uri, $dataset = array())
     {
+        \Log::info("\Hybrid\Curl::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Curl::forge().");
+        
         return static::forge($uri, $dataset);
     }
     
