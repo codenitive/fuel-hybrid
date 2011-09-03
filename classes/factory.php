@@ -123,17 +123,4 @@ class Factory {
         return static::$language;
     }
 
-    /**
-     * Initiate a new View object with language setup
-     *
-     * @param   string  $file
-     * @param   mixed   $data
-     * @param   bool    $encode
-     * @return  View
-     */
-    public static function view($file, $data = null, $encode = null) 
-    {
-        return \View::factory(static::$language . DS . $file, $data, $encode);
-    }
-
 }
