@@ -145,7 +145,6 @@ class Template_Frontend extends Template_Driver {
         $this->view->auto_encode(static::$config['auto_encode']);
         $this->view->set('TEMPLATE_FOLDER', $this->folder, false);
 
-
         return $this->view->render();
     }
 
