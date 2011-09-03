@@ -124,4 +124,11 @@ class Factory {
         return static::$language;
     }
 
+    public static function import($path, $folder = 'classes')
+    {
+        $dir_path = __DIR__.'/../';
+        $path     = str_replace('/', DIRECTORY_SEPARATOR, $path);
+        require_once $dir_path.$folder.DIRECTORY_SEPARATOR.$path.'.php';
+    }
+    
 }

@@ -13,7 +13,7 @@
 
 namespace Hybrid;
 
-import('markdown/markdown', 'vendor');
+\Hybrid\Factory::import('markdown/markdown', 'vendor');
 
 use \Markdown;
 
