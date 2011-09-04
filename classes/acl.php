@@ -250,7 +250,10 @@ class Acl {
 
         if (is_array($roles)) 
         {
-            $this->roles = $this->roles + $roles;
+            foreach ($roles as $role)
+            {
+                array_push($this->roles, trim(\Inflector::friendly_title($role, '-', true)));
+            }
 
             return true;
         }
@@ -281,7 +284,10 @@ class Acl {
 
         if (is_array($resources)) 
         {
-            $this->resources = $this->resources + $resources;
+            foreach ($resources as $resource)
+            {
+                array_push($this->resources, trim(\Inflector::friendly_title($resource, '-', true)));
+            }
 
             return true;
         }
