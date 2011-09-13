@@ -132,7 +132,7 @@ class Request extends \Fuel\Core\Request {
     {
         // Since this just a imitation of curl request, \Hybrid\Input need to know the 
         // request method and data available in the connection.
-        \Hybrid\Input::connect($this->_request_method, $this->_request_data);
+        \Hybrid\Input::connect($this->request_method, $this->request_data);
 
         $execute                = parent::execute($method_params);
 
