@@ -106,28 +106,7 @@ class Request extends \Fuel\Core\Request {
      */
     public function __construct($uri, $route, $dataset = array(), $type = null) 
     {
-        /* Hack:
-         * We are unable to use __construct() since \Router::process() first param need to be an instance of \Request.
-         */ 
-        $this->route = \Router::process(new \Request($uri, $route), $route);
-
-        if ( ! $this->route)
-        {
-            return;
-        }
-
-        if ($this->route->module !== null)
-        {
-            $this->module = $this->route->module;
-            \Fuel::add_module($this->module);
-            $this->add_path(\Fuel::module_exists($this->module));
-        }
-
-        $this->directory     = $this->route->directory;
-        $this->controller    = $this->route->controller;
-        $this->action        = $this->route->action;
-        $this->method_params = $this->route->method_params;
-        $this->named_params  = $this->route->named_params;
+        parent::__construct($uri, $route);
 
         // store this construct method and data staticly
         if (!is_null($type))
