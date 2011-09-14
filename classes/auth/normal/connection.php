@@ -37,8 +37,11 @@ class Auth_Normal_Connection extends Auth_Connection {
      */
     public function execute($items)
     {
-        $this->items['_hash'] = $items['_hash'];
-
+        if (isset($items['_hash']))
+        {
+            $this->items['_hash'] = $items['_hash'];
+        }
+        
         $query  = \DB::select('users.*')
                     ->from('users')
                     ->where('users.id', '=', $items['id'])
