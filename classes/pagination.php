@@ -25,39 +25,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Pagination {
-
-    /**
-     * The current page
-     * 
-     * @access      public
-     * @staticvar   int
-     */
-    public static $current_page = null;
-
-    /**
-     * The offset that the current page starts at
-     * 
-     * @access      public
-     * @staticvar   int
-     */
-    public static $offset = 0;
-
-    /**
-     * The number of items per page
-     * 
-     * @access      public
-     * @staticvar   int
-     */
-    public static $per_page = 10;
-
-    /**
-     * The number of total pages
-     * 
-     * @access      public
-     * @staticvar   int
-     */
-    public static $total_pages = 0;
+class Pagination extends \Fuel\Core\Pagination {
 
     /**
      * @var array The HTML for the display
@@ -82,38 +50,6 @@ class Pagination {
             'next_end'       => '</a></li>',
         ),
     );
-
-    /**
-     * The total number of items
-     * 
-     * @access      protected
-     * @staticvar   int
-     */
-    protected static $total_items = 0;
-
-    /**
-     * The total number of links to show
-     * 
-     * @access      protected
-     * @staticvar   int
-     */
-    protected static $num_links = 5;
-
-    /**
-     * The URI segment containg page number
-     * 
-     * @access      protected
-     * @staticvar   int
-     */
-    protected static $uri_segment = 3;
-
-    /**
-     * The pagination URL
-     * 
-     * @access      protected
-     * @staticvar   mixed
-     */
-    protected static $pagination_url;
     
     /**
      * The pagination URL (after the page number URI segment)
@@ -122,98 +58,6 @@ class Pagination {
      * @staticvar   mixed
      */
     protected static $suffix_url;
-
-    /**
-     * Init
-     *
-     * Loads in the config and sets the variables
-     *
-     * @access  public
-     * @return  void
-     */
-    public static function _init()
-    {
-        $config = \Config::get('pagination', array());
-
-        static::set_config($config);
-    }
-
-    /**
-     * Set Config
-     *
-     * Sets the configuration for pagination
-     *
-     * @access  public
-     * @param   array   $config The configuration array
-     * @return  void
-     */
-    public static function set_config(array $config)
-    {
-        static::$current_page = null;
-        
-        foreach ($config as $key => $value)
-        {
-            if ($key == 'template')
-            {
-                static::$template = array_merge(static::$template, $config['template']);
-                continue;
-            }
-
-            static::${$key} = $value;
-        }
-
-        static::initialize();
-    }
-
-    /**
-     * Prepares vars for creating links
-     *
-     * @access  public
-     * @return  array    The pagination variables
-     */
-    protected static function initialize()
-    {
-
-        static::$total_pages = ceil(static::$total_items / static::$per_page) ?: 1;
-
-        static::$current_page = (int) \URI::segment(static::$uri_segment);
-
-        if (static::$current_page > static::$total_pages)
-        {
-            static::$current_page = static::$total_pages;
-        }
-        elseif (static::$current_page < 1)
-        {
-            static::$current_page = 1;
-        }
-
-        // The current page must be zero based so that the offset for page 1 is 0.
-        static::$offset = (static::$current_page - 1) * static::$per_page;
-    }
-
-    /**
-     * Creates the pagination links
-     *
-     * @access public
-     * @return mixed    The pagination links
-     */
-    public static function create_links()
-    {
-        if (static::$total_pages == 1)
-        {
-            return '';
-        }
-
-        \Lang::load('pagination', true);
-
-        $pagination  = static::$template['wrapper_start'];
-        $pagination .= static::prev_link(\Lang::line('pagination.previous'));
-        $pagination .= static::page_links();
-        $pagination .= static::next_link(\Lang::line('pagination.next'));
-        $pagination .= static::$template['wrapper_end'];
-
-        return $pagination;
-    }
 
     /**
      * Pagination Page Number links
