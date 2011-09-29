@@ -41,7 +41,7 @@ class Auth_Strategy_Normal extends Auth_Strategy {
     {
         parent::__construct($provider);
 
-        $this->provider = Provider_Normal::factory();
+        $this->provider = Auth_Provider_Normal::factory();
 
         return $this;
     }
