@@ -1,6 +1,6 @@
 <?php
 
-namespace Autho;
+namespace Hybrid;
 
 class Test_Auth extends \Fuel\Core\TestCase {
 
