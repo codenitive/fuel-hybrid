@@ -60,7 +60,8 @@ abstract class Auth_Strategy {
         if (is_null($this->name))
         {
             // Attempt to guess the name from the class name
-            $this->name = strtolower(str_replace('\Hybrid\Auth_Strategy_', '', get_class($this)));
+            $class_name = \Inflector::denamespace(get_class($this));
+            $this->name = strtolower(str_replace('Auth_Strategy_', '', $class_name));
         }
     }
 
