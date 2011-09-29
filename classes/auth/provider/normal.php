@@ -35,14 +35,14 @@ namespace Hybrid;
 
 class Auth_Provider_Normal {
 
-     public $data     = null;
+    public $data = null;
      /**
      * List of user fields to be used
      *
      * @access  protected
      * @var     array
      */
-     protected $optional_fields = array('status', 'full_name');
+    protected $optional_fields = array('status', 'full_name');
      
      /**
      * Allow status to login based on `users`.`status`
@@ -50,7 +50,7 @@ class Auth_Provider_Normal {
      * @access  protected
      * @var     array
      */
-     protected $allowed_status  = array('verified');
+    protected $allowed_status = array('verified');
      
      /**
      * Use `users_meta` table
@@ -58,7 +58,7 @@ class Auth_Provider_Normal {
      * @access  protected
      * @var     bool
      */
-     protected $use_meta        = true;
+    protected $use_meta = true;
      
      /**
      * Use `users_auth` table
@@ -66,7 +66,16 @@ class Auth_Provider_Normal {
      * @access  protected
      * @var     bool
      */
-     protected $use_auth        = true;
+    protected $use_auth = true;
+
+    /**
+     * Verify User Agent in Hash
+     * 
+     * @access  protected
+     * @var     bool
+     */
+    protected $verify_user_agent = false;
+
 
     public static function factory()
     {
@@ -112,6 +121,8 @@ class Auth_Provider_Normal {
                 $this->data[$field] = '';
             }
         }
+
+        $this->verify_user_agent = \Config::get('autho.verify_user_agent', $this->verify_user_agent);
     }
 
     /**
@@ -301,6 +312,12 @@ class Auth_Provider_Normal {
     {
         $values          = $this->data;
         $hash            = $values['user_name'] . $values['password'];
+
+        if ($this->verify_user_agent)
+        {
+            $hash .= \Hybrid\Input::user_agent();
+        }
+
         $values['_hash'] = Auth::add_salt($hash);
 
         unset($values['password']);
@@ -346,6 +363,11 @@ class Auth_Provider_Normal {
 
         // we validate the hash to add security to this application
         $hash = $user->user_name . $user->password_token;
+
+        if ($this->verify_user_agent)
+        {
+            $hash .= \Hybrid\Input::user_agent();
+        }
 
         if (!is_null($this->data['_hash']) and $this->data['_hash'] !== Auth::add_salt($hash)) 
         {
