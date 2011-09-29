@@ -35,8 +35,7 @@ var nav = {
 			"Schema": 				"auth/schema.html",
 			"Examples": {
 				"User": 			"auth/example_user.html",
-				"Facebook": 		"auth/example_facebook.html",
-				"Twitter": 			"auth/example_twitter.html" 
+				"OAuth/OAuth2": 	"auth/oauth.html"
 			}
 		},
 		/*

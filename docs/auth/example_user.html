@@ -35,7 +35,7 @@
         <h3>Configuration</h3>
 
         <p>
-            Auth_User can be configured in a <strong>config/app.php</strong> file and takes the following keys:
+            Auth_User can be configured in a <strong>config/autho.php</strong> file and takes the following keys:
         </p>
 
          <table class="config">
@@ -47,7 +47,7 @@
                     <th>Description</th>
                 </tr>
                 <tr>
-                    <th>auth.enabled</th>
+                    <th>normal.enabled</th>
                     <td>bool</td>
                     <td><pre class="php"><code class="php">true</code></pre></td>
                     <td>
@@ -102,7 +102,7 @@ class Controller_Credential extends \Controller_Rest {
         try 
         {
             \Hybrid\Auth::instance('user')->login($username, $password);
-            // or you can also use \Hybrid\Auth_User::instance()->login($username, $password);
+            // or you can also use \Hybrid\Auth::instance()->login($username, $password);
         }
         catch (\Fuel_Exception $e) 
         {
@@ -125,172 +125,8 @@ class Controller_Credential extends \Controller_Rest {
 }
         </code></pre>
 
-        <p class="note">'php oil refine hybrid --install' can automatically generate your model and migration files, however use below for best practice.</p>
+        <p class="note">'php oil refine autho --install' can automatically generate your model and migration files, however use <a href="schema.html">these schema</a> for best practice.</p>
 
-        <article>
-            <h3>Suggested Models</h3>
-
-            <h4>Model_User</h4>
-
-            <pre class="php"><code>&lt;?php
-
-class Model_User extends Orm\Model {
-    
-    protected static $_properties = array(
-        'id',
-        'user_name',
-        'full_name',
-        'email',
-        'status',
-    );
-
-    protected static $_has_one = array(
-        'users_auths'       => array(
-            'model_to'          => 'Model_Users_Auth',
-        ),
-        'users_facebooks'   => array(
-            'model_to'          => 'Model_Users_Facebook', 
-        ),
-        'users_meta'        => array(
-            'model_to'          => 'Model_Users_Metum',
-        ),
-        'users_twitters'    => array(
-            'model_to'          => 'Model_Users_Twitter',
-        ),
-    );
-
-}
-
-/* End of file user.php */</code></pre>
-
-            <h4>Model_Users_Auth</h4>
-
-            <pre class="php"><code>&lt;?php
-
-class Model_Users_Auth extends Orm\Model {
-    
-    protected static $_properties = array(
-        'id',
-        'user_id',
-        'password',
-    );
-
-    protected static $_belongs_to = array(
-        'users'     => array(
-            'model_to'  => 'Model_User',
-        ),
-    );
-
-}
-
-/* End of file users/auth.php */</code></pre>
-
-            <h4>Model_Users_Metum</h4>
-
-            <pre class="php"><code>&lt;?php
-
-class Model_Users_Metum extends Orm\Model {
-
-    protected static $_properties = array(
-        'id',
-        'user_id',
-        'created_at',
-        'updated_at',
-    );
-
-    protected static $_belongs_to = array(
-        'users'     => array(
-            'model_to'  => 'Model_User',
-        ),
-    );
-
-    protected static $_observers = array(
-        'Orm\Observer_CreatedAt' => array('before_insert'),
-        'Orm\Observer_UpdatedAt' => array('before_save'),
-    );
-
-}
-
-/* End of file users/metum.php */</code></pre>
-
-        </article>
-
-        <article>
-            <h3>Suggested Migrations</h3>
-
-            <h4>Create_users</h4>
-
-            <pre class="php"><code>&lt;?php
-
-namespace Fuel\Migrations;
-
-class Create_users {
-
-    public function up()
-    {
-        \DBUtil::create_table('users', array(
-            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
-            'user_name' => array('constraint' => 100, 'type' => 'varchar'),
-            'full_name' => array('constraint' => 200, 'type' => 'varchar'),
-            'email' => array('constraint' => 150, 'type' => 'varchar'),
-            'status' => array('constraint' => "'unverified','verified','banned'", 'type' => 'enum', 'default' => 'unverified'),
-        ), array('id'));
-    }
-
-    public function down()
-    {
-        \DBUtil::drop_table('users');
-    }
-}</code></pre>
-
-            <h4>Create_users_auths</h4>
-
-            <pre class="php"><code>&lt;?php
-
-namespace Fuel\Migrations;
-
-class Create_users_auths {
-
-    public function up()
-    {
-        \DBUtil::create_table('users_auths', array(
-            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
-            'user_id' => array('constraint' => 11, 'type' => 'int'),
-            'password' => array('constraint' => 50, 'type' => 'varchar'),
-        ), array('id'));
-    }
-
-    public function down()
-    {
-        \DBUtil::drop_table('users_auths');
-    }
-}</code></pre>
-
-           <h4>Create_users_meta</h4>
-           
-           <pre class="php"><code>&lt;?php
-
-namespace Fuel\Migrations;
-
-class Create_users_meta {
-
-    public function up()
-    {
-        \DBUtil::create_table('users_meta', array(
-            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
-            'user_id' => array('constraint' => 11, 'type' => 'int'),
-            'created_at' => array('constraint' => 11, 'type' => 'int'),
-            'updated_at' => array('constraint' => 11, 'type' => 'int'),
-        ), array('id'));
-    }
-
-    public function down()
-    {
-        \DBUtil::drop_table('users_meta');
-    }
-}</code></pre>
- 
-        </article>
 
     </section>
     

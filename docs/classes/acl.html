@@ -433,48 +433,6 @@ $acl->deny('guest', array('page', 'setting'));</code></pre>
             </table>
         </article>
 
-        <article>
-            <h3 id="has_roles()">has_roles($check_roles)</h3>
-
-            <p>Check if user has any of provided roles.</p>
-
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>Yes</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>
-                        <table class="parameters">
-                            <tr>
-                                <th>Param</th>
-                                <th>Default</th>
-                                <th class="description">Description</th>
-                            </tr>
-                            <tr>
-                                <th><kbd>$check_roles</kbd></th>
-                                <td><i>Required</i></td>
-                                <td>A string or an array of roles</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>bool, whether user have any of the roles</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-                        <pre class="php"><code>\Hybrid\Acl::has_role(array('user', 'editor'));</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
-
     </section>
     
     <section id="footer">
