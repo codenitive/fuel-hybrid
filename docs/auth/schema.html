@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Auth &mdash; Fuel Hybrid Documentation</title>
+    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="../assets/js/nav.js"></script>
+    <script type="text/javascript" src="../assets/js/highlight.pack.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            show_nav('auth', '../');
+            hljs.tabReplace = '    ';
+            hljs.initHighlightingOnLoad();
+        });
+    </script>
+
+</head>
+<body>
+
+    <header>
+        <h1>Fuel Hybrid Documentation</h1>
+    </header>
+
+    <div id="main-nav"></div>
+
+    <section id="content">
+        
+        <h2 id="">Auth</h2>
+
+        <p>
+            The Auth classes provides a standardized interface for authentication in Fuel. This allows our users to write their own drivers and easily integrate a new driver to work with old code by keeping the basic methods consistent.
+        </p>
+
+        <article>
+            <h3 id="toc">Suggested Schema</h3>
+
+            <p>
+                You can straight away create all the models and migrations class using Hybrid Refine (commanline interface), however below are the best practise for most development.
+            </p>
+            <ul>
+                <li><a href="#users">Users</li></li>
+                <li><a href="#users_auths">Users Auths</li></li>
+                <li><a href="#users_meta">Users Meta</li></li>
+                <li><a href="#roles">Roles</li></li>
+                <li><a href="#users_roles">Users Roles</li></li>
+                <li><a href="#authentications">Authentications</li></li>
+            </ul>
+        </arcticle>
+
+        <article>
+            <h3 id="users">Users</h3>
+            <h5 id="model_user">Model_User</h5>
+            <pre class="php"><code>&lt;?php
+
+class Model_User extends Orm\Model {
+    
+    protected static $_properties = array(
+        'id',
+        'user_name',
+        'full_name',
+        'email',
+        'status',
+    );
+
+    protected static $_has_one = array(
+        'auth' => array('model_to' => 'Model_Users_Auth'),
+        'meta' => array('model_to' => 'Model_Users_Metum'),
+    );
+
+    protected static $_has_one = array(
+        'roles'    => array('model_to' => 'Model_Users_Role'),
+        'accounts' => array('model_to' => 'Model_Authentication'),
+    );
+}
+
+/* End of file user.php */</code></pre>
+            
+            <h5 id="create_users">Create_users</h5>
+            <pre class="php"><code>&lt;?php
+
+namespace Fuel\Migrations;
+
+class Create_users {
+
+    public function up()
+    {
+        \DBUtil::create_table('users', array(
+            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
+            'user_name' => array('constraint' => 100, 'type' => 'varchar'),
+            'full_name' => array('constraint' => 200, 'type' => 'varchar'),
+            'email' => array('constraint' => 150, 'type' => 'varchar'),
+            'status' => array('constraint' => "'unverified','verified','banned'", 'type' => 'enum', 'default' => 'unverified'),
+        ), array('id'));
+    }
+
+    public function down()
+    {
+        \DBUtil::drop_table('users');
+    }
+}</code></pre>
+        </article>
+
+        <article>
+            <h3 id="users_auths">Users Auths</h3>
+            <h5 id="model_users_auth">Model_Users_Auth</h5>
+            <pre class="php"><code>&lt;?php
+
+class Model_Users_Auth extends Orm\Model {
+    
+    protected static $_properties = array(
+        'id',
+        'user_id',
+        'password',
+    );
+
+    protected static $_belongs_to = array(
+        'users'     => array('model_to'  => 'Model_User'),
+    );
+
+}
+
+/* End of file users/auth.php */</code></pre>
+
+            <h5 id="create_users_auths">Create_Users_Auths</h5>
+            <pre class="php"><code>&lt;?php
+
+namespace Fuel\Migrations;
+
+class Create_users_auths {
+
+    public function up()
+    {
+        \DBUtil::create_table('users_auths', array(
+            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
+            'user_id' => array('constraint' => 11, 'type' => 'int'),
+            'password' => array('constraint' => 50, 'type' => 'varchar'),
+        ), array('id'));
+    }
+
+    public function down()
+    {
+        \DBUtil::drop_table('users_auths');
+    }
+}</code></pre>
+
+        </article>
+
+        <article>
+            <h3 id="users_meta">Users Meta</h3>
+            <h5 id="model_users_metum">Model_Users_Metum</h5>
+            <pre class="php"><code>&lt;?php
+
+class Model_Users_Metum extends Orm\Model {
+
+    protected static $_properties = array(
+        'id',
+        'user_id',
+        'created_at',
+        'updated_at',
+    );
+
+    protected static $_belongs_to = array(
+        'users'     => array('model_to'  => 'Model_User'),
+    );
+
+    protected static $_observers = array(
+        'Orm\Observer_CreatedAt' => array('before_insert'),
+        'Orm\Observer_UpdatedAt' => array('before_save'),
+    );
+
+}
+
+/* End of file users/metum.php */</code></pre>
+
+            <h5 id="create_users_meta">Create_Users_Meta</h5>
+            <pre class="php"><code>&lt;?php
+
+namespace Fuel\Migrations;
+
+class Create_users_meta {
+
+    public function up()
+    {
+        \DBUtil::create_table('users_meta', array(
+            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
+            'user_id' => array('constraint' => 11, 'type' => 'int'),
+            'created_at' => array('constraint' => 11, 'type' => 'int'),
+            'updated_at' => array('constraint' => 11, 'type' => 'int'),
+        ), array('id'));
+    }
+
+    public function down()
+    {
+        \DBUtil::drop_table('users_meta');
+    }
+}</code></pre>
+
+        </article>
+
+        <article>
+            <h3 id="roles">Roles</h3>
+            <h5 id="model_role">Model_Role</h5>
+            <pre class="php"><code>&lt;?php
+
+class Model_Role extends Orm\Model {
+    
+    protected $_properties = array(
+        'id',
+        'name',
+        'active',
+    );
+
+    protected $_has_many = array(
+        'users' => array('model_to' => 'Model_Users_Role'),
+    );
+}
+
+/* End of file role.php */</code></pre>
+
+            <h5 id="create_roles">Create_Roles</h5>
+            <pre class="php"><code>&lt;?php
+
+namespace Fuel\Migrations;
+
+class Create_roles {
+
+    public function up()
+    {
+        \DBUtil::create_table('roles', array(
+            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
+            'name' => array('constraint' => 255, 'type' => 'varchar'),
+            'active' => array('constraint' => 1, 'type' => 'tinyint', 'default' => 1),
+        ), array('id'));
+    }
+
+    public function down()
+    {
+        \DBUtil::drop_table('roles');
+    }
+}</code></pre>
+
+        </article>
+
+        <article>
+            <h3 id="users_roles">Users Roles</h3>
+            <h5 id="model_users_role">Model_Users_Role</h5>
+            <pre class="php"><code>&lt;?php
+
+class Model_Users_Role extends Orm\Model {
+    
+    protected static $_properties = array(
+        'id',
+        'user_id',
+        'role_id',
+    );
+
+    protected static $_belongs_to = array(
+        'users' => array('model_to' => 'Model_User'),
+        'roles' => array('model_to' => 'Model_Role'),
+    );
+}
+
+/* End of file users/role.php */</code></pre>
+
+            <h5 id="create_users_roles">Create_Users_Roles</h5>
+            <pre class="php"><code>&lt;?php
+
+namespace Fuel\Migrations;
+
+class Create_users_roles {
+
+    public function up()
+    {
+        \DBUtil::create_table('users_roles', array(
+            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
+            'user_id' => array('constraint' => 11, 'type' => 'int'),
+            'role_id' => array('constraint' => 11, 'type' => 'int'),
+        ), array('id'));
+    }
+
+    public function down()
+    {
+        \DBUtil::drop_table('users_roles');
+    }
+}</code></pre>
+
+        </article>
+
+        <article>
+            <h3 id="authentications">Authentications</h3>
+            <h5 id="model_authentication">Model_Authentication</h5>
+            <pre class="php"><code>&lt;?php
+
+class Model_Authenticate extends Orm\Model {
+    protected static $_observers = array(
+        'id',
+        'user_id',
+        'provider',
+        'uid',
+        'token',
+        'secret',
+    );
+
+    protected static $_belongs_to = array(
+        'users' => array('model_to' => 'Model_User'),
+    );
+}
+
+/* End of file authenticate.php */</code></pre>
+
+            <h5 id="create_authentications">Create_Authentications</h5>
+            <pre class="php"><code>&lt;?php
+
+namespace Fuel\Migrations;
+
+class Create_authenticates {
+
+    public function up()
+    {
+        \DBUtil::create_table('authenticates', array(
+            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
+            'user_id' => array('constraint' => 11, 'type' => 'int'),
+            'provider' => array('constraint' => 50, 'type' => 'varchar'),
+            'uid' => array('constraint' => 255, 'type' => 'varchar'),
+            'token' => array('constraint' => 255, 'type' => 'varchar'),
+            'secret' => array('constraint' => 255, 'type' => 'varchar'),
+        ), array('id'));
+    }
+
+    public function down()
+    {
+        \DBUtil::drop_table('authenticates');
+    }
+}</code></pre>
+
+        </article>
+
+    </section>
+    
+    <section id="footer">
+        <p>
+            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+            &copy; 2010 - 2011 Fuel Hybrid Development Team
+        </p>
+    </section>
+
+</body>
+</html>

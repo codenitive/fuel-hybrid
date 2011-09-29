@@ -140,7 +140,7 @@ class Auth {
      * @return  bool
      * @throws  \Fuel_Exception
      */
-    public static function login($username, $password, $driver = '')
+    public static function login($username, $password, $driver = 'user')
     {
         return static::factory($driver)->login($username, $password);
     }
