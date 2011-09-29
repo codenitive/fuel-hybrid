@@ -84,8 +84,6 @@ Start Installation
 Created config: APPPATH/config/app.php
 Would you like to install `users_auth` table? [ y, n ]: y
 Would you like to install `users_meta` table? [ y, n ]: y
-Would you like to use Facebook Connect? [ y, n ]: y
-Would you like to use Twitter OAuth? [ y, n ]: y
 Confirm Generate Model and Migration for User? [ y, n ]: y
     Creating model: /fuel/app/classes/model/user.php
     Creating migration: /fuel/app/migrations/001_create_users.php
@@ -93,17 +91,13 @@ Confirm Generate Model and Migration for User? [ y, n ]: y
     Creating migration: /fuel/app/migrations/002_create_users_auths.php
     Creating model: /fuel/app/classes/model/users/metum.php
     Creating migration: /fuel/app/migrations/003_create_users_meta.php
-    Creating model: /fuel/app/classes/model/facebook.php
-    Creating migration: /fuel/app/migrations/004_create_facebooks.php
-    Creating model: /fuel/app/classes/model/users/facebook.php
-    Creating migration: /fuel/app/migrations/005_create_users_facebooks.php
-    Creating model: /fuel/app/classes/model/twitter.php
-    Creating migration: /fuel/app/migrations/006_create_twitters.php
-    Creating model: /fuel/app/classes/model/users/twitter.php
-    Creating migration: /fuel/app/migrations/007_create_users_twitters.php
+    Creating model: /fuel/app/classes/model/role.php
+    Creating migration: /fuel/app/migrations/004_create_roles.php
+    Creating model: /fuel/app/classes/model/users/role.php
+    Creating migration: /fuel/app/migrations/005_create_users_roles.php
+    Creating model: /fuel/app/classes/model/authenticate.php
+    Creating migration: /fuel/app/migrations/006_create_authenticates.php
 </pre>
-        
-        <p class="note">All migration script will use <strong>integer[11]</strong> for primary key, you might want to change this to a higher value (especially for Facebook and Twitter integration)</p>
     </section>
     
     <section id="footer">
