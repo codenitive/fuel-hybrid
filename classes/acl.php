@@ -19,21 +19,29 @@ namespace Hybrid;
  * A set of class that extends the functionality of FuelPHP without 
  * affecting the standard workflow when the application doesn't actually 
  * utilize Hybrid feature.
- * 
+ *
  * Authentication Class
  * 
  * Why another class? FuelPHP does have it's own Auth package but what Hybrid does 
  * it not defining how you structure your database but instead try to be as generic 
  * as possible so that we can support the most basic structure available
  * 
+ * 
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Acl
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
- 
-class Acl {
 
+class Acl {
+    
+    /**
+     * Cache ACL instance so we can reuse it on multiple request. 
+     * 
+     * @static
+     * @access  protected
+     * @var     array
+     */
     protected static $instances = array();
 
     /**
@@ -56,16 +64,17 @@ class Acl {
     }
     
     /**
-     * A shortcode to initiate this class as a new object
+     * Initiate a new Acl instance.
      * 
+     * @deprecated  1.3.0
      * @static
      * @access  public
      * @param   string  $name
-     * @return  static 
+     * @return  \Hybrid\Acl Object
      */
     public static function factory($name = null)
     {
-        if (\is_null($name))
+        if (is_null($name))
         {
             $name = 'default';
         }
@@ -78,22 +87,26 @@ class Acl {
         return static::$instances[$name];
     }
 
+    /**
+     * Get cached instance, or generate new if currently not available.
+     *
+     * @static
+     * @access  public
+     * @param   string   $name
+     * @return  \Hybrid\Acl Object
+     * @see     self::factory()
+     */
     public static function instance($name = null)
     {
         return static::factory($name);
     }
 
     /**
-     * Construct and initiate static::_init method as an object
-     * 
-     * Usage:
-     * 
-     * <code>$role = new \Hybrid\Acl;
-     * $role->add_resources('hello-world');</code>
-     * 
-     * @access  public
+     * Construct a new object.
+     *
+     * @access  protected
      */
-    public function __construct() {}
+    protected function __construct() {}
 
     /**
      * List of roles
@@ -101,8 +114,8 @@ class Acl {
      * @access  protected
      * @var     array
      */
-    protected $roles = array();
-    
+    protected $roles     = array();
+     
     /**
      * List of resources
      * 
@@ -110,15 +123,14 @@ class Acl {
      * @var     array
      */
     protected $resources = array();
-    
-    
+     
     /**
      * List of ACL map between roles, resources and types
      * 
      * @access  protected
      * @var     array
      */
-    protected $acl = array();
+    protected $acl       = array();
 
     /**
      * Verify whether current user has sufficient roles to access the resources based 
@@ -135,13 +147,13 @@ class Acl {
 
         if (!in_array($resource, $this->resources)) 
         {
-            return true;
+            throw new \Fuel_Exception("\Hybrid\Acl: Unable to verify unknown resource: {$resource}.");
         }
 
-        $user    = \Hybrid\Auth::instance('user')->get();
-        
-        $type_id = array_search($type, $types);
-        $length  = count($types);
+        $user       = Auth::instance('user')->get();
+
+        $type_id    = array_search($type, $types);
+        $length     = count($types);
 
         foreach ($user->roles as $role) 
         {
@@ -185,6 +197,7 @@ class Acl {
             case true :
                 return 200;
             break;
+
             case false :
                 return 401;
             break;
@@ -192,8 +205,9 @@ class Acl {
     }
 
     /**
-     * Check if user has any of provided roles (however this should be in \Hybrid\User IMHO)
+     * Check if user has any of provided roles, deprecated and will be removed in v1.3.0
      * 
+     * @deprecated
      * @static
      * @access  public
      * @param   mixed   $check_roles
@@ -201,27 +215,7 @@ class Acl {
      */
     public static function has_roles($check_roles) 
     {
-        $user = \Hybrid\Auth::instance('user')->get();
-
-        if (!is_array($check_roles)) 
-        {
-            $check_roles = array($check_roles);
-        }
-
-        foreach ($user->roles as $role) 
-        {
-            $role = \Inflector::friendly_title($role, '-', TRUE);
-
-            foreach ($check_roles as $check_against) 
-            {
-                if ($role == $check_against) 
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+       return Auth::has_roles($check_roles);
     }
 
     /**
@@ -235,7 +229,7 @@ class Acl {
     {
         if (is_null($roles)) 
         {
-            return false;
+            throw new \Fuel_Exception("\Hybrid\Acl: Can't add NULL roles.");
         }
 
         if (is_array($roles)) 
@@ -269,7 +263,7 @@ class Acl {
     {
         if (is_null($resources)) 
         {
-            return false;
+            throw new \Fuel_Exception("\Hybrid\Acl: Can't add NULL resources.");
         }
 
         if (is_array($resources)) 
@@ -306,7 +300,7 @@ class Acl {
     {
         if (!in_array($type, static::$types)) 
         {
-            return false;
+            throw new \Fuel_Exception("\Hybrid\Acl: Type {$type} does not exist.");
         }
 
         if (!is_array($roles)) 
@@ -325,7 +319,7 @@ class Acl {
 
             if (!in_array($role, $this->roles)) 
             {
-                throw new \Fuel_Exception("Role {$role} does not exist.");
+                throw new \Fuel_Exception("\Hybrid\Acl: Role {$role} does not exist.");
 
                 continue;
             }
@@ -336,7 +330,7 @@ class Acl {
 
                 if (!in_array($resource, $this->resources)) 
                 {
-                    throw new \Fuel_Exception("Resource {$resource} does not exist.");
+                    throw new \Fuel_Exception("\Hybrid\Acl: Resource {$resource} does not exist.");
 
                     continue;
                 }
