@@ -73,7 +73,7 @@ abstract class Auth_Strategy {
             throw new \Fuel_Exception(sprintf('Provider "%s" has no strategy.', $provider));
         }
         
-        $class = "Auth_Strategy_{$strategy}";
+        $class = "\Hybrid\Auth_Strategy_{$strategy}";
         return new $class($provider);
     }
 

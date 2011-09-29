@@ -45,14 +45,14 @@ class Auth_Controller extends \Controller {
 
     public function action_session($provider)
     {
-        Strategy::factory($provider)->authenticate();
+        Auth_Strategy::factory($provider)->authenticate();
     }
 
     public function action_callback($provider)
     {
-        $strategy = Strategy::factory($provider);
+        $strategy = Auth_Strategy::factory($provider);
         
-        Strategy::login_or_register($strategy);
+        Auth_Strategy::login_or_register($strategy);
     }
 
 }
