@@ -35,7 +35,7 @@
         <h3>Configuration</h3>
 
         <p>
-            Auth_User can be configured in a <strong>config/autho.php</strong> file and takes the following keys:
+            Auth_Driver_User can be configured in a <strong>config/autho.php</strong> file and takes the following keys:
         </p>
 
          <table class="config">
@@ -54,8 +54,23 @@
                         Set application to load Auth class.
                     </td>
                 </tr>
+                
                 <tr>
-                    <th>auth.use_auth</th>
+                    <th>normal.optional_fields</th>
+                    <td>array|null</td>
+                    <td><pre class="php"><code>null</code></pre></td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <th>normal.allowed_status</th>
+                    <td>array|null</td>
+                    <td><pre class="php"><code>null</code></pre></td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <th>normal.use_auth</th>
                     <td>bool</td>
                     <td><pre class="php"><code class="php">true</code></pre></td>
                     <td>
@@ -63,25 +78,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>auth.use_meta</th>
+                    <th>normal.use_meta</th>
                     <td>bool</td>
                     <td><pre class="php"><code class="php">true</code></pre></td>
                     <td>
                         Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
-                    </td>
-                </tr>
-                <tr>
-                    <th>auth.optional_fields</th>
-                    <td>array|null</td>
-                    <td><pre class="php"><code>null</code></pre></td>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
-                    <th>auth.allowed_status</th>
-                    <td>array|null</td>
-                    <td><pre class="php"><code>null</code></pre></td>
-                    <td>
                     </td>
                 </tr>
             </tbody>
@@ -122,8 +123,7 @@ class Controller_Credential extends \Controller_Rest {
         \Hybrid\Auth::logout();
     }
 
-}
-        </code></pre>
+}</code></pre>
 
         <p class="note">'php oil refine autho --install' can automatically generate your model and migration files, however use <a href="schema.html">these schema</a> for best practice.</p>
 

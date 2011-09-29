@@ -26,6 +26,7 @@ var nav = {
 			"Request": 				"classes/request.html",
 			"Restserver": 			"classes/restserver.html",
 			"Swiftmail": 			"classes/swiftmail.html",
+			"Uri": 					"classes/uri.html",
 			"View": 				"classes/view.html"
 		},
 
@@ -34,7 +35,7 @@ var nav = {
 			"Usage": 				"auth/usage.html",
 			"Schema": 				"auth/schema.html",
 			"Examples": {
-				"User": 			"auth/example_user.html",
+				"User": 			"auth/user.html",
 				"OAuth/OAuth2": 	"auth/oauth.html"
 			}
 		},

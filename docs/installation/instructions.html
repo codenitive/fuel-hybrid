@@ -53,8 +53,7 @@
   oil
 </pre>
             </li>
-            <li>Copy everything from <strong>fuel/packages/hybrid/vendor</strong> to <strong>fuel/core/vendor</strong></li>
-            <li>Fuel Hybrid and Orm package need to be included in the autoload packages under <strong>fuel/app/config/config.php</strong>
+            <li>Fuel Hybrid and Orm package need to be included in the autoload packages under <strong>APPPATH/config/config.php</strong>
                 <pre class="php"><code>'always_load'   => array(
 
     /**
@@ -77,9 +76,9 @@
 
         <h2 id="cli-setup">Commandline Setup</h2>
 
-        <p>Once all 5 steps have been done, we can proceed with the commandline installation using oil, this step is optional but handy to copy <strong>fuel/packages/hybrid/config/app.php</strong> to <strong>fuel/app/config/app.php</strong> and at the same time configure all authentication models and migrations script.</p>
+        <p>Once all 4 steps have been done, we can proceed with the commandline installation using oil, this step is optional but handy to copy <strong>fuel/packages/hybrid/config/app.php</strong> to <strong>APPPATH/config/app.php</strong>, <strong>fuel/packages/hybrid/config/autho.php</strong> to <strong>APPPATH/config/autho.php</strong> and at the same time configure all authentication models and migrations script.</p>
 
-        <pre class="cli">$ php oil refine hybrid --install
+        <pre class="cli">$ php oil refine autho --install
 Start Installation
 Created config: APPPATH/config/app.php
 Would you like to install `users_auth` table? [ y, n ]: y
