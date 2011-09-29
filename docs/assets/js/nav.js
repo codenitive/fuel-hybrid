@@ -32,16 +32,6 @@ var nav = {
 		"Auth": {
 			"Introduction": 		"auth/introduction.html",
 			"Usage": 				"auth/usage.html",
-			"Driver types": {
-				"User":  			"auth/todo.html",
-				"Facebook": 		"auth/todo.html",
-				"Twitter": 			"auth/todo.html"
-			},
-			"Connection types": {
-				"Normal":  			"auth/todo.html",
-				"Facebook": 		"auth/todo.html",
-				"Twitter": 			"auth/todo.html"
-			},
 			"Examples": {
 				"User": 			"auth/example_user.html",
 				"Facebook": 		"auth/example_facebook.html",
