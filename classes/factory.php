@@ -123,17 +123,10 @@ class Factory {
         return static::$language;
     }
 
-    /**
-     * Initiate a new View object with language setup
-     *
-     * @param   string  $file
-     * @param   mixed   $data
-     * @param   bool    $encode
-     * @return  View
-     */
-    public static function view($file, $data = null, $encode = null) 
+    public static function import($path, $folder = 'classes')
     {
-        return \View::factory(static::$language . DS . $file, $data, $encode);
+        $dir_path = __DIR__.'/../';
+        $path     = str_replace('/', DIRECTORY_SEPARATOR, $path);
+        require_once $dir_path.$folder.DIRECTORY_SEPARATOR.$path.'.php';
     }
-
 }

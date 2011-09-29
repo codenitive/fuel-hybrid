@@ -13,7 +13,7 @@
 
 Namespace Hybrid;
 
-import('tmhOAuth', 'vendor');
+\Hybrid\Factory::import('tmhOAuth', 'vendor');
 
 use \tmhOAuth;
 

@@ -92,7 +92,7 @@ class Auth_Facebook extends Auth_Driver {
 
             if (false === \Fuel::$is_cli)
             {
-                import('facebook/facebook', 'vendor');
+                \Hybrid\Factory::import('facebook/facebook', 'vendor');
                 $this->adapter = new \Facebook($config);
             }
         }
