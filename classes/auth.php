@@ -24,7 +24,7 @@ namespace Hybrid;
  * 
  * Why another class? FuelPHP does have it's own Auth package but what Hybrid does 
  * it not defining how you structure your database but instead try to be as generic 
- * as possible so that we can support the most basic structure available
+ * as possible so that we can support the most basic structure available.
  * 
  * @package     Fuel
  * @subpackage  Hybrid
@@ -58,7 +58,7 @@ class Auth {
 
         if (is_null($path))
         {
-            throw new \Fuel_Exception("\Autho\Driver: Unable to redirect using {$type} type.");
+            throw new \Fuel_Exception("\Hybrid\Auth_Driver: Unable to redirect using {$type} type.");
         }
         
         \Response::redirect($path);
@@ -77,7 +77,7 @@ class Auth {
      */
     public static function factory($name = null)
     {
-        if (\is_null($name))
+        if (is_null($name))
         {
             $name = 'user';
         }
@@ -86,9 +86,9 @@ class Auth {
 
         if (!isset(static::$instances[$name]))
         {
-            $driver = '\\Autho\\Driver_' . \Str::ucfirst($name);
+            $driver = '\\Hybrid\\Auth_Driver_' . \Str::ucfirst($name);
 
-            if (!!\class_exists($driver))
+            if (!!class_exists($driver))
             {
                 static::$instances[$name] = new $driver();
             }

@@ -74,13 +74,13 @@ class Autho {
             $has_error = true;
         }
 
-        if (true === \class_exists('\\Model_Users_Metum') and false === \Config::get('autho.normal.use_meta', false))
+        if (true === class_exists('\\Model_Users_Metum') and false === \Config::get('autho.normal.use_meta', false))
         {
             \Cli::write('Please set autho.normal.use_meta to TRUE in APPPATH/config/autho.php', 'red');
             $has_error = true;
         }
 
-        if (true === \class_exists('\\Model_Users_Auth') and false === \Config::get('autho.normal.use_auth', false))
+        if (true === class_exists('\\Model_Users_Auth') and false === \Config::get('autho.normal.use_auth', false))
         {
             \Cli::write('Please set app.auth.use_auth to TRUE in APPPATH/config/autho.php', 'red');
             $has_error = true;
@@ -137,6 +137,7 @@ HELP;
         \Cli::write("Start Installation", "green");
 
         static::install_config('autho');
+        static::install_config('app');
         static::install_user();
     }
     /**

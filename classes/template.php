@@ -65,7 +65,7 @@ class Template {
      */
     public static function factory($name = null)
     {
-        if (\is_null($name))
+        if (is_null($name))
         {
             $name = \Config::get('app.template.default', self::DEFAULT_TEMPLATE);   
         }
@@ -96,7 +96,7 @@ class Template {
         {
             $driver = '\\Hybrid\\Template_' . \Str::ucfirst($type);
          
-            if (\class_exists($driver)) 
+            if (class_exists($driver)) 
             {
                 // load a new template if class exist
                 static::$instances[$name] = new $driver($folder, $filename);

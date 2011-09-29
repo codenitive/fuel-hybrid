@@ -168,11 +168,11 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
         // If they call user, go to $this->post_user();
         $controller_method = strtolower(\Hybrid\Input::method()) . '_' . $resource;
         
-        if (\method_exists($this, $controller_method) and true === $this->is_rest_call) 
+        if (method_exists($this, $controller_method) and true === $this->is_rest_call) 
         {
             call_user_func(array($this, $controller_method));
         }
-        elseif (\method_exists($this, 'action_' . $resource)) 
+        elseif (method_exists($this, 'action_' . $resource)) 
         {
             if (true === $this->is_rest_call)
             {

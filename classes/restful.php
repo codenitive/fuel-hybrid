@@ -186,7 +186,7 @@ class Restful {
      */
     public function format($rest_format = '')
     {
-        if (\is_null($rest_format) or empty($rest_format))
+        if (is_null($rest_format) or empty($rest_format))
         {
             return $this;
         }
@@ -243,7 +243,7 @@ class Restful {
         $response->format = $format;
         
         // If the format method exists, call and return the output in that format
-        if (\method_exists('\\Format', 'to_' . $format))
+        if (method_exists('\\Format', 'to_' . $format))
         {
             $response->body = \Format::factory($this->data)->{'to_'.$format}();
         }

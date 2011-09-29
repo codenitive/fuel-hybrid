@@ -118,7 +118,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
         // If they call user, go to $this->post_user();
         $controller_method  = strtolower(\Hybrid\Input::method()) . '_' . $resource;
         
-        if (\method_exists($this, $controller_method)) 
+        if (method_exists($this, $controller_method)) 
         {
             call_user_func(array($this, $controller_method));
         }
