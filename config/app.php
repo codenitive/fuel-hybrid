@@ -30,47 +30,4 @@ return array(
         'en',
     ),
     
-    'auth'                  => array(
-        // Set application to load Auth class.
-        'enabled'               => true,
-        
-        // Auth to use `users_auth` table for user meta information, useful to keep `users` table is simple as possible.
-        'use_auth'              => true, 
-        
-        // Auth to use `users_meta` table for user authentication information, useful to keep `users` table is simple as possible.                              
-        'use_meta'              => true,
-
-        // Auth to enable Facebook Connect. 
-        'use_facebook'          => false,
-
-        // Auth to enable Twitter Oauth.
-        'use_twitter'           => false,
-
-        'optional_fields'       => null,
-
-        'verified_status'       => null,
-
-        // Auth _route_ configuration
-        '_route_'           => array(
-            'registration'      => 'register',
-            'after_login'       => '/',
-            'after_logout'      => '/',
-        ),
-    ),
-
-    'api'                   => array(
-        'twitter'               => array(
-            'consumer_key'          => '',
-            'consumer_secret'       => '',
-        ),
-        'facebook'          => array(
-            'app_id'            => '',
-            'secret'            => '',
-            'redirect_uri'      => '',
-            'scope'             => '',
-        ),
-    ),
-    
-    // The salt used for password hashing.
-    'salt'                  => null,
 );
