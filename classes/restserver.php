@@ -22,11 +22,11 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Restful
+ * @category    Restserver
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Restful {
+class Restserver {
     
     /** 
      * List all supported methods, the first will be the default format
@@ -182,7 +182,7 @@ class Restful {
      * 
      * @access  public
      * @param   string  $rest_format
-     * @return  Restful 
+     * @return  Restserver 
      */
     public function format($rest_format = '')
     {
@@ -489,3 +489,5 @@ class Restful {
     }
     
 }
+
+class Restful extends Restserver {}

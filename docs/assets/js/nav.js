@@ -24,7 +24,7 @@ var nav = {
 			"Html": 				"classes/html.html",
 			"Pagination": 			"classes/pagination.html",
 			"Request": 				"classes/request.html",
-			"Restful": 				"classes/restserver.html",
+			"Restserver": 			"classes/restserver.html",
 			"Swiftmail": 			"classes/swiftmail.html",
 			"View": 				"classes/view.html"
 		},

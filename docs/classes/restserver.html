@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Restful Class &mdash; Fuel Hybrid Documentation</title>
+    <title>Restserver Class &mdash; Fuel Hybrid Documentation</title>
     <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
     <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
     <script type="text/javascript" src="../assets/js/nav.js"></script>
@@ -26,7 +26,7 @@
 
     <section id="content">
         
-        <h2 id="">Restful Class</h2>
+        <h2 id="">Restserver Class</h2>
 
         <p>
             Rest server class for Fuel, handle JSON, XML, CVS and etc request for endless set of Controllers instead of just \Fuel\Core\Controller_Rest in Fuel Framework.
@@ -35,12 +35,10 @@
         <p>
             Normally this will only be called from within \Hybrid\Controller_Rest and \Hybrid\Controller_Hybrid.
         </p>
-
-        <p class="note">To be renamed to \Hybrid\Restserver in Fuel v1.1</p>
-
+        
         <h3 id="how-to">How To</h3>
 
-        <pre class="php"><code>$restserver = \Hybrid\Restful::factory(array('text' => 'Hello World'), 200);
+        <pre class="php"><code>$restserver = \Hybrid\Restserver::factory(array('text' => 'Hello World'), 200);
 $restserver->format('json');
 $restserver->execute();
 </code></pre>
@@ -85,7 +83,7 @@ $restserver->execute();
                 <tr>
                     <th>Example</th>
                     <td>
-                        <pre class="php"><code>$restserver = \Hybrid\Restful::factory(array('text' => 'Hello World'), 200);</code></pre>
+                        <pre class="php"><code>$restserver = \Hybrid\Restserver::factory(array('text' => 'Hello World'), 200);</code></pre>
                     </td>
                 </tr>
                 </tbody>
@@ -116,7 +114,7 @@ $restserver->execute();
                 <tr>
                     <th>Example</th>
                     <td>
-                        <pre class="php"><code>\Hybrid\Restful::is_rest_call();</code></pre>
+                        <pre class="php"><code>\Hybrid\Restserver::is_rest_call();</code></pre>
                     </td>
                 </tr>
                 </tbody>
@@ -146,7 +144,7 @@ $restserver->execute();
                 <tr>
                     <th>Example</th>
                     <td>
-                        <pre class="php"><code>\Hybrid\Restful::content_type('json'); // Return: application/json</code></pre>
+                        <pre class="php"><code>\Hybrid\Restserver::content_type('json'); // Return: application/json</code></pre>
                     </td>
                 </tr>
                 </tbody>
@@ -176,7 +174,7 @@ $restserver->execute();
                 <tr>
                     <th>Example</th>
                     <td>
-                        <pre class="php"><code>\Hybrid\Restful::auth();</code></pre>
+                        <pre class="php"><code>\Hybrid\Restserver::auth();</code></pre>
                     </td>
                 </tr>
                 </tbody>

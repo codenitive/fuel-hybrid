@@ -84,7 +84,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
             $this->set_content_type = false;
         }
         
-        \Hybrid\Restful::auth();
+        \Hybrid\Restserver::auth();
 
         return parent::before();
     }
@@ -110,7 +110,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      */
     public function router($resource, $arguments) 
     {
-        $pattern            = \Hybrid\Restful::$pattern;
+        $pattern            = \Hybrid\Restserver::$pattern;
         
         // Remove the extension from arguments too
         $resource           = preg_replace($pattern, '', $resource);
@@ -137,7 +137,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      */
     protected function response($data = array(), $http_code = 200) 
     {
-        $rest   = \Hybrid\Restful::factory($data, $http_code)
+        $rest   = \Hybrid\Restserver::factory($data, $http_code)
                     ->format($this->rest_format)
                     ->execute();
         
@@ -147,7 +147,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
         if (true === $this->set_content_type) 
         {
             // Set the correct format header
-            $this->response->set_header('Content-Type', \Hybrid\Restful::content_type($rest->format));
+            $this->response->set_header('Content-Type', \Hybrid\Restserver::content_type($rest->format));
         }
     }
 }
