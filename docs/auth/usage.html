@@ -276,8 +276,6 @@ catch(\Fuel_Exception $e)
             </table>
         </article>
 
-
-
         <article>
             <h3 id="has_roles()">has_roles($check_roles)</h3>
 
@@ -320,6 +318,53 @@ catch(\Fuel_Exception $e)
             </table>
         </article>
 
+        <article>
+            <h3 id="link_account()">link_account($user_id, $user_data</h3>
+
+            <p>Link a user with single or multiple account provider.</p>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>
+                        <table class="parameters">
+                            <tr>
+                                <th>Param</th>
+                                <th>Default</th>
+                                <th class="description">Description</th>
+                            </tr>
+                            <tr>
+                                <th><kbd>$user_id</kbd></th>
+                                <td><i>Required</i></td>
+                                <td>An interger from logged in/registered user_id</td>
+                            </tr>
+                            <tr>
+                                <th><kbd>$user_data</kbd></th>
+                                <td><i>Required</i></td>
+                                <td>An array from \Session::get('autho')</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>bool, whether user successfully linked</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+                        <pre class="php"><code>\Hybrid\Auth::link_account($registered_user_id, \Session::get('autho'));</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </article>
+        
     </section>
     
     <section id="footer">

@@ -199,7 +199,7 @@ class Restserver {
      * 
      * @access  public
      * @param   string  $rest_format
-     * @return  self 
+     * @return  Restserver 
      */
     public function format($rest_format = '')
     {

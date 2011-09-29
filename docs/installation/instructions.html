@@ -53,8 +53,7 @@
   oil
 </pre>
             </li>
-            <li>Copy everything from <strong>fuel/packages/hybrid/vendor</strong> to <strong>fuel/core/vendor</strong></li>
-            <li>Fuel Hybrid and Orm package need to be included in the autoload packages under <strong>fuel/app/config/config.php</strong>
+            <li>Fuel Hybrid and Orm package need to be included in the autoload packages under <strong>APPPATH/config/config.php</strong>
                 <pre class="php"><code>'always_load'   => array(
 
     /**
@@ -77,15 +76,13 @@
 
         <h2 id="cli-setup">Commandline Setup</h2>
 
-        <p>Once all 5 steps have been done, we can proceed with the commandline installation using oil, this step is optional but handy to copy <strong>fuel/packages/hybrid/config/app.php</strong> to <strong>fuel/app/config/app.php</strong> and at the same time configure all authentication models and migrations script.</p>
+        <p>Once all 4 steps have been done, we can proceed with the commandline installation using oil, this step is optional but handy to copy <strong>fuel/packages/hybrid/config/app.php</strong> to <strong>APPPATH/config/app.php</strong>, <strong>fuel/packages/hybrid/config/autho.php</strong> to <strong>APPPATH/config/autho.php</strong> and at the same time configure all authentication models and migrations script.</p>
 
-        <pre class="cli">$ php oil refine hybrid --install
+        <pre class="cli">$ php oil refine autho --install
 Start Installation
 Created config: APPPATH/config/app.php
 Would you like to install `users_auth` table? [ y, n ]: y
 Would you like to install `users_meta` table? [ y, n ]: y
-Would you like to use Facebook Connect? [ y, n ]: y
-Would you like to use Twitter OAuth? [ y, n ]: y
 Confirm Generate Model and Migration for User? [ y, n ]: y
     Creating model: /fuel/app/classes/model/user.php
     Creating migration: /fuel/app/migrations/001_create_users.php
@@ -93,17 +90,13 @@ Confirm Generate Model and Migration for User? [ y, n ]: y
     Creating migration: /fuel/app/migrations/002_create_users_auths.php
     Creating model: /fuel/app/classes/model/users/metum.php
     Creating migration: /fuel/app/migrations/003_create_users_meta.php
-    Creating model: /fuel/app/classes/model/facebook.php
-    Creating migration: /fuel/app/migrations/004_create_facebooks.php
-    Creating model: /fuel/app/classes/model/users/facebook.php
-    Creating migration: /fuel/app/migrations/005_create_users_facebooks.php
-    Creating model: /fuel/app/classes/model/twitter.php
-    Creating migration: /fuel/app/migrations/006_create_twitters.php
-    Creating model: /fuel/app/classes/model/users/twitter.php
-    Creating migration: /fuel/app/migrations/007_create_users_twitters.php
+    Creating model: /fuel/app/classes/model/role.php
+    Creating migration: /fuel/app/migrations/004_create_roles.php
+    Creating model: /fuel/app/classes/model/users/role.php
+    Creating migration: /fuel/app/migrations/005_create_users_roles.php
+    Creating model: /fuel/app/classes/model/authenticate.php
+    Creating migration: /fuel/app/migrations/006_create_authenticates.php
 </pre>
-        
-        <p class="note">All migration script will use <strong>integer[11]</strong> for primary key, you might want to change this to a higher value (especially for Facebook and Twitter integration)</p>
     </section>
     
     <section id="footer">

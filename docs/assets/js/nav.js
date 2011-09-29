@@ -24,28 +24,19 @@ var nav = {
 			"Html": 				"classes/html.html",
 			"Pagination": 			"classes/pagination.html",
 			"Request": 				"classes/request.html",
-			"Restful": 				"classes/restserver.html",
+			"Restserver": 			"classes/restserver.html",
 			"Swiftmail": 			"classes/swiftmail.html",
+			"Uri": 					"classes/uri.html",
 			"View": 				"classes/view.html"
 		},
 
 		"Auth": {
 			"Introduction": 		"auth/introduction.html",
 			"Usage": 				"auth/usage.html",
-			"Driver types": {
-				"User":  			"auth/todo.html",
-				"Facebook": 		"auth/todo.html",
-				"Twitter": 			"auth/todo.html"
-			},
-			"Connection types": {
-				"Normal":  			"auth/todo.html",
-				"Facebook": 		"auth/todo.html",
-				"Twitter": 			"auth/todo.html"
-			},
+			"Schema": 				"auth/schema.html",
 			"Examples": {
-				"User": 			"auth/example_user.html",
-				"Facebook": 		"auth/example_facebook.html",
-				"Twitter": 			"auth/example_twitter.html" 
+				"User": 			"auth/user.html",
+				"OAuth/OAuth2": 	"auth/oauth.html"
 			}
 		},
 		/*

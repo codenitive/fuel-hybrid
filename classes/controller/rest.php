@@ -147,6 +147,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
         if (true === $this->set_content_type) 
         {
             // Set the correct format header
+
             $this->response->set_header('Content-Type', \Hybrid\Restserver::content_type($rest_server->format));
         }
     }

@@ -41,7 +41,7 @@
         <h3>Configuration</h3>
 
         <p>
-            Auth can be configured in a <strong>config/app.php</strong> file and takes the following keys:
+            Auth can be configured in a <strong>config/autho.php</strong> file and takes the following keys:
         </p>
 
         <table class="config">
@@ -53,7 +53,7 @@
                     <th>Description</th>
                 </tr>
                 <tr>
-                    <th>auth.enable</th>
+                    <th>normal.enable</th>
                     <td>bool</td>
                     <td><pre class="php"><code class="php">true</code></pre></td>
                     <td>
@@ -61,7 +61,22 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>auth.use_meta</th>
+                    <th>normal.optional_fields</th>
+                    <td>array|null</td>
+                    <td><pre class="php"><code>null</code></pre></td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <th>normal.allowed_status</th>
+                    <td>array|null</td>
+                    <td><pre class="php"><code>null</code></pre></td>
+                    <td>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>normal.use_meta</th>
                     <td>bool</td>
                     <td><pre class="php"><code>false</code></pre></td>
                     <td>
@@ -69,70 +84,70 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>auth.use_auth</th>
+                    <th>normal.use_auth</th>
                     <td>bool</td>
                     <td><pre class="php"><code>false</code></pre></td>
                     <td>
                         Auth to use `users_auth` table for user authentication information, useful to keep `users` table is simple as possible.
                     </td>
                 </tr>
+
                 <tr>
-                    <th>auth.use_facebook</th>
-                    <td>bool</td>
-                    <td><pre class="php"><code>false</code></pre></td>
-                    <td>
-                        Auth to enable Facebook Connect.
-                </tr>
-                <tr>
-                    <th>auth.use_twitter</th>
-                    <td>bool</td>
-                    <td><pre class="php"><code>false</code></pre></td>
-                    <td>
-                        Auth to enable Twitter OAuth.
-                    </td>
-                </tr>
-                <tr>
-                    <th>auth.optional_fields</th>
-                    <td>array|null</td>
-                    <td><pre class="php"><code>null</code></pre></td>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
-                    <th>auth.allowed_status</th>
-                    <td>array|null</td>
-                    <td><pre class="php"><code>null</code></pre></td>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
-                    <th>auth._route_.registration</th>
+                    <th>urls.registration</th>
                     <td>string</td>
-                    <td><pre class="php"><code class="php">''</code></pre></td>
+                    <td><pre class="php"><code class="php">'auth/register'</code></pre></td>
                     <td>
                         Route path for registration.
                     </td>
                 </tr>
+
                 <tr>
-                    <th>auth._route_.after_login</th>
+                    <th>urls.login</th>
                     <td>string</td>
-                    <td><pre class="php"><code class="php">''</code></pre></td>
+                    <td><pre class="php"><code class="php">'auth/login'</code></pre></td>
                     <td>
-                        Route path after login.
+                        Route path for login.
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>urls.callback</th>
+                    <td>string</td>
+                    <td><pre class="php"><code class="php">'auth/callback'</code></pre></td>
+                    <td>
+                        Route path for OAuth/OAuth2 callback controller.
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>urls.registered</th>
+                    <td>string</td>
+                    <td><pre class="php"><code class="php">'auth/account'</code></pre></td>
+                    <td>
+                        Route path once registered.
                     </td>
                 </tr>
                 <tr>
-                    <th>auth._route_.after_logout</th>
+                    <th>urls.logged_in</th>
                     <td>string</td>
-                    <td><pre class="php"><code class="php">''</code></pre></td>
+                    <td><pre class="php"><code class="php">'auth/account'</code></pre></td>
                     <td>
-                        Route path after logout.
+                        Route path for logged-in.
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>link_multiple_providers</th>
+                    <td>bool</td>
+                    <td><pre class="php"><code class="php">true</code></pre></td>
+                    <td>
+                        Can multiple providers be attached to one user account.
                     </td>
                 </tr>
                 <tr>
                     <th>salt</th>
                     <td>string</td>
-                    <td><pre class="php"><code class="php">'put_your_salt_here'</code></pre></td>
+                    <td><pre class="php"><code class="php">null</code></pre></td>
                     <td>
                         The salt used for password hashing.
                     </td>
@@ -148,62 +163,78 @@
 
 return array(
     
-    'auth'                  => array(
-        // Set application to load Auth class.
-        'enabled'               => true,
-        
-        // Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
-        'use_auth'              => true, 
-        
-        // Auth to use `users_auth` table for user authentication information, useful to keep `users` table is simple as possible.                              
-        'use_meta'              => true,
-
-        // Auth to enable Facebook Connect. 
-        'use_facebook'          => false,
-
-        // Auth to enable Twitter Oauth.
-        'use_twitter'           => false,
-        
-        'optional_fields'       => null,
-
-        'allowed_status'       => null,
-
-        // Auth _route_ configuration
-        '_route_'           => array(
-            'registration'      => 'register',
-            'after_login'       => '/',
-            'after_logout'      => '/',
-        ),
+    'normal'    => array(
+        'enabled'         => true,      // Set application to load Auth class. 
+        'optional_fields' => null,      // List of user fields to be used (default to array('status', 'full_name'))
+        'allowed_status'  => null,      // Allow status to login based on `users`.`status` (default to ('verified'))
+        'use_meta'        => true,      // Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
+        'use_auth'        => true,      // Auth to use `users_auth` table for user meta information, useful to keep `users` table is simple as possible.
     ),
+
+    'urls' => array(
+        'registration' => 'auth/register',
+        'login'        => 'auth/login',
+        'callback'     => 'auth/callback',
+        
+        'registered'   => 'auth/account',
+        'logged_in'    => 'auth/account',
+    ),
+
+    /**
+     * Providers
+     * 
+     * Providers such as Facebook, Twitter, etc all use different Strategies such as oAuth, oAuth2, etc.
+     * oAuth takes a key and a secret, oAuth2 takes a (client) id and a secret, optionally a scope.
+     */
+    'providers' => array(
+        
+        'facebook' => array(
+            'id'     => '',
+            'secret' => '',
+            'scope'  => 'email,offline_access',
+        ),
+        
+        'twitter' => array(
+            'key'    => '',
+            'secret' => '',
+        ),
+
+        'dropbox' => array(
+            'key'    => '',
+            'secret' => '',
+        ),
+
+        'linkedin' => array(
+            'key'    => '',
+            'secret' => '',
+        ),
+
+        'flickr' => array(
+            'key'    => '',
+            'secret' => '',
+        ),
+
+        'youtube' => array(
+            'key'   => '',
+            'scope' => 'http://gdata.youtube.com',
+        ),
     
-    // The salt used for password hashing.
-    'salt'                  => null,
+    ),
+
+    /**
+     * link_multiple_providers
+     * 
+     * Can multiple providers be attached to one user account
+     */
+    'link_multiple_providers' => true,
+
+    'salt'      => null,
 );</code></pre>
 
-        <h2>Auth_Driver</h2>
+        <h3>What's not available</h3>
 
-        <p>
-            Auth_Driver work as an API interface to tell your application who is the user using varies source or vendor such as internal Data Source or external Data Source (Facebook Connect, Twitter OAuth or etc.). This mean you can build or implement as many API interface as you like.
-        </p>
+        <p class="note">It doesn't provide the MVC process/flow of registration, login and logout.</p>
 
-        <p>
-            Unlike Auth_Connection class, external source Auth_Driver only request user information when application is accessed from a specific URI. To have Auth_Driver requesting external source on every page load will decrease application performance greatly, which made it our main reason to separate the Auth_Driver and Auth_Connection.
-        </p>
-
-        <h2>Auth_Connection</h2>
-
-        <p>
-            Auth_Connection work by authenticating and verifying who is the user (using only internal Data Source) and it will be instantiated only from <strong>\Hybrid\Auth_User</strong> driver.
-        </p>
-
-        <p class="note">
-            <strong>Why just \Hybrid\Auth_User?</strong>
-            <br /><br />This is because we are authentication the user for our application, it's not mean to authenticated our user for Facebook, Twitter or etc.
-        </p>
-
-        <p>
-            In other word, this validate the use of <strong>\Hybrid\Auth_User</strong> driver as an API interface to internal Data Source.
-        </p>
     </section>
     
     <section id="footer">
