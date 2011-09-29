@@ -21,7 +21,7 @@ namespace Fuel\Tasks;
  *
  * @package  hybrid
  */
-class Hybrid {
+class Autho {
 
     /**
      * Send command with runtime option:
@@ -64,85 +64,31 @@ class Hybrid {
      */
     public static function test()
     {
-        \Config::load('app', 'app');
+        \Config::load('autho', 'autho');
         
         $has_error = false;
 
-        if (false === \Config::get('app.auth', false) or false === \Config::get('app.auth._route_', false))
+        if (false === \Config::get('autho.normal', false))
         {
-            \Cli::write('Please update your APPPATH/config/app.php, you\'re running on an outdated configuration', 'red');
+            \Cli::write('Please update your APPPATH/config/autho.php, you\'re running on an outdated configuration', 'red');
             $has_error = true;
         }
 
-        if (true === \class_exists('\\Model_Users_Metum') and false === \Config::get('app.auth.use_meta', false))
+        if (true === class_exists('\\Model_Users_Metum') and false === \Config::get('autho.normal.use_meta', false))
         {
-            \Cli::write('Please set app.auth.use_meta to TRUE in APPPATH/config/app.php', 'red');
+            \Cli::write('Please set autho.normal.use_meta to TRUE in APPPATH/config/autho.php', 'red');
             $has_error = true;
         }
 
-        if (true === \class_exists('\\Model_Users_Auth') and false === \Config::get('app.auth.use_auth', false))
+        if (true === class_exists('\\Model_Users_Auth') and false === \Config::get('autho.normal.use_auth', false))
         {
-            \Cli::write('Please set app.auth.use_auth to TRUE in APPPATH/config/app.php', 'red');
+            \Cli::write('Please set app.auth.use_auth to TRUE in APPPATH/config/autho.php', 'red');
             $has_error = true;
         }
 
-        if (true === \Config::get('app.auth.use_facebook', false))
+        if ('' === \Config::get('autho.salt', ''))
         {
-            if (false === \class_exists('\\Model_Users_Facebook'))
-            {
-                \Cli::write('\\Model_Users_Facebook is not available', 'red');
-                $Has_error = true;    
-            }
-
-            if (false === \class_exists('\\Model_Facebook'))
-            {
-                \Cli::write('\\Model_Facebook is not available', 'red');
-                $Has_error = true;  
-            }
-
-            if ('' === \Config::get('app.api.facebook.app_id', null))
-            {
-                \Cli::write('Please provide app.api.facebook.app_id in APPPATH/config/app.php', 'red');
-                $has_error = true;
-            }
-
-            if ('' === \Config::get('app.api.facebook.secret', null))
-            {
-                \Cli::write('Please provide app.api.facebook.secret in APPPATH/config/app.php', 'red');
-                $has_error = true;
-            }
-        }
-
-        if (true === \Config::get('app.auth.use_twitter', false))
-        {
-            if (false === \class_exists('\\Model_Users_Twitter'))
-            {
-                \Cli::write('\\Model_Users_Twitter is not available', 'red');
-                $Has_error = true;    
-            }
-
-            if (false === \class_exists('\\Model_Twitter'))
-            {
-                \Cli::write('\\Model_Twitter is not available', 'red');
-                $Has_error = true;  
-            }
-
-            if ('' === \Config::get('app.api.twitter.consumer_key', ''))
-            {
-                \Cli::write('Please provide app.api.twitter.consumer_key in APPPATH/config/app.php', 'red');
-                $has_error = true;
-            }
-
-            if ('' === \Config::get('app.api.twitter.consumer_secret', ''))
-            {
-                \Cli::write('Please provide app.api.twitter.consumer_secret in APPPATH/config/app.php', 'red');
-                $has_error = true;
-            }
-        }
-
-        if ('' === \Config::get('app.salt', ''))
-        {
-            \Cli::write('Please provide app.salt secret key in APPPATH/config/app.php', 'red');
+            \Cli::write('Please provide autho.salt secret key in APPPATH/config/autho.php', 'red');
             $has_error = true;
         }
 
@@ -164,7 +110,7 @@ class Hybrid {
         echo <<<HELP
 
 Usage:
-  php oil refine hybrid
+  php oil refine autho
 
 Runtime options:
   -h, [--help]      # Show option
@@ -172,7 +118,7 @@ Runtime options:
   -t, [--test]      # Test installation to match configuration
 
 Description:
-  The 'oil refine hybrid' command can be used in several ways to facilitate quick development, help with
+  The 'oil refine autho' command can be used in several ways to facilitate quick development, help with
   user database generation and installation
 
 HELP;
@@ -190,7 +136,8 @@ HELP;
     {
         \Cli::write("Start Installation", "green");
 
-        static::install_config();
+        static::install_config('autho');
+        static::install_config('app');
         static::install_user();
     }
     /**
@@ -200,12 +147,11 @@ HELP;
      * @access  protected
      * @return  void
      */
-    protected static function install_config()
+    protected static function install_config($file = 'autho')
     {
-        $file = 'app';
         $path = APPPATH.'config'.DS.$file.'.php';
 
-        $content = file_get_contents(PKGPATH.'hybrid/config/app.php');
+        $content = file_get_contents(PKGPATH.'autho/config/'.$file.'.php');
 
         switch(true)
         {
@@ -253,8 +199,6 @@ HELP;
 
         $auth_model = array();
         $meta_model = array();
-        $facebook   = false;
-        $twitter    = false;
 
         if ('y' === \Cli::prompt("Would you like to install `users_auth` table?", array('y', 'n')))
         {
@@ -273,20 +217,11 @@ HELP;
             $meta_model[] = 'user_id:int';
         }
 
-        if ('y' === \Cli::prompt("Would you like to use Facebook Connect?", array('y', 'n')))
-        {
-            $facebook   = true;
-        }
-
-        if ('y' === \Cli::prompt("Would you like to use Twitter OAuth?", array('y', 'n')))
-        {
-            $twitter    = true;
-        }
-
         $user_model[] = 'status:enum[]';
 
         if ('y' === \Cli::prompt("Confirm Generate Model and Migration for User?", array('y', 'n')))
         {
+
             \Oil\Generate::model($user_model);
             \Oil\Generate::$create_files = array();
 
@@ -302,42 +237,29 @@ HELP;
                 \Oil\Generate::$create_files = array();
             }
 
-            if (true === $facebook)
-            {
-                \Oil\Generate::model(array(
-                    'facebook',
-                    'facebook_name:string[200]',
-                    'first_name:string[100]',
-                    'last_name:string[100]',
-                    'facebook_url:string[255]'
-                ));
-                \Oil\Generate::$create_files = array();
+            \Oil\Generate::model(array(
+                'role',
+                'name:string',
+                'active:tinyint[1]',
+            ));
+            \Oil\Generate::$create_files = array();
 
-                \Oil\Generate::model(array(
-                    'users_facebook',
-                    'user_id:int',
-                    'facebook_id:int',
-                ));
-                \Oil\Generate::$create_files = array();
-            }
+            \Oil\Generate::model(array(
+                'users_role',
+                'user_id:int',
+                'role_id:int',
+            ));
+            \Oil\Generate::$create_files = array();
 
-            if (true === $twitter)
-            {
-                \Oil\Generate::model(array(
-                    'twitter',
-                    'twitter_name:string[200]',
-                    'full_name:string[100]',
-                    'profile_image:string[255]'
-                ));
-                \Oil\Generate::$create_files = array();
-
-                \Oil\Generate::model(array(
-                    'users_twitter',
-                    'user_id:int',
-                    'twitter_id:int',
-                ));
-                \Oil\Generate::$create_files = array();
-            }
+            \Oil\Generate::model(array(
+                'authenticate',
+                'user_id:int',
+                'provider:string[50]',
+                'uid:string',
+                'token:string',
+                'secret:string',
+            ));
+            \Oil\Generate::$create_files = array();
         }
     }
 }

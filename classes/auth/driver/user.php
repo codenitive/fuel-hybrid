@@ -19,22 +19,21 @@ namespace Hybrid;
  * A set of class that extends the functionality of FuelPHP without 
  * affecting the standard workflow when the application doesn't actually 
  * utilize Hybrid feature.
+ *
+ * Authentication Class
+ * 
+ * Why another class? FuelPHP does have it's own Auth package but what Hybrid does 
+ * it not defining how you structure your database but instead try to be as generic 
+ * as possible so that we can support the most basic structure available
+ * 
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Auth_User
+ * @category    Auth_Driver_User
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Auth_User extends Auth_Driver {
-
-    /**
-     * method or connection used, default to 'normal'
-     *
-     * @access  protected
-     * @var     string
-     */
-    protected $method   = 'normal';
+class Auth_Driver_User extends Auth_Driver {
     
     /**
      * Adapter to \Hybrid\Acl
@@ -42,7 +41,9 @@ class Auth_User extends Auth_Driver {
      * @access  public
      * @var     object
      */
-    public $acl          = null;
+    public $acl         = null;
+    
+    protected $provider = null;
 
     /**
      * Get Acl\Role object, it's a quick way of get and use \Acl\Role without having to 
@@ -59,7 +60,9 @@ class Auth_User extends Auth_Driver {
      */
     public function acl($name = null) 
     {
-        return \Hybrid\Acl::instance($name);
+        $this->acl = Acl::instance($name);
+
+        return $this->acl;
     }
 
      /**
@@ -72,7 +75,20 @@ class Auth_User extends Auth_Driver {
      */
     public static function instance()
     {
-        return \Hybrid\Auth::instance('user');
+        return Auth::instance('user');
+    }
+
+    /**
+     * Load configurations
+     *
+     * @static 
+     * @access  public
+     * @return  void
+     */
+    public static function _init()
+    {
+        \Config::load('autho', 'autho');
+        \Config::load('crypt', true);
     }
 
     /**
@@ -88,54 +104,19 @@ class Auth_User extends Auth_Driver {
      */
     public function __construct() 
     {
-        parent::_initiate();
-
         // allow to disable user auth, would be useful when database not available
-        if (false === \Config::get('app.auth.enabled', true))
+        if (false === \Config::get('autho.normal.enabled', true))
         {
             return;
         }
-        
-        // get user data from cookie
-        $users              = \Cookie::get('_users');
 
-        // user data shouldn't be null if there user authentication available, if not populate from default
-        if (!\is_null($users)) 
-        {
-            $users          = \unserialize(\Crypt::decode($users));
-            $this->method   = (isset($users->method) ? $users->method : 'normal');
-        }
-        else
-        {
-            $users          = new \stdClass();
-            $users->id      = 0;
-            $users->_hash   = '';
-        }
+        $this->strategy = Auth_Strategy::factory('normal')->authenticate();
 
-        $this->adapter      = \Hybrid\Auth_Connection::instance($this->method)->execute((array) $users);
+        // short-hand variable
+        $this->provider = $this->strategy->provider;
     }
 
     /**
-     * Login user using normal authentication (username and password)
-     * 
-     * Usage:
-     * 
-     * <code>$login = \Hybrid\Auth::instance('user')->login('someone', 'password');</code>
-     * 
-     * @access  public
-     * @param   string  $username
-     * @param   string  $password
-     * @return  bool
-     * @throws  \Fuel_Exception
-     */
-    public function login($username, $password) 
-    {
-        $this->adapter = \Hybrid\Auth_Connection::instance('normal')->login($username, $password);
-
-        return true;
-    }
-
-     /**
      * Return TRUE/FALSE whether visitor is logged in to the system
      * 
      * Usage:
@@ -145,9 +126,9 @@ class Auth_User extends Auth_Driver {
      * @access  public
      * @return  bool
      */
-    public function is_logged() 
+    public function is_logged()
     {
-        return $this->adapter->is_logged();
+        return ($this->provider->data['id'] >= 1 ? true : false);
     }
 
     /**
@@ -161,9 +142,49 @@ class Auth_User extends Auth_Driver {
      * @param   string  $name optional key value, return all if $name is null
      * @return  object
      */
-    public function get($name = null) 
+    public function get($name = null)
     {
-        return $this->adapter->get($name);
+        if (is_null($name)) 
+        {
+            return (object) $this->provider->data;
+        }
+
+        if (array_key_exists($name, $this->provider->data)) 
+        {
+            return $this->provider->data[$name];
+        }
+
+        return null;
+    }
+
+    /**
+     * Login user using normal authentication (username and password)
+     * 
+     * @access  public
+     * @param   string  $username
+     * @param   string  $password
+     * @return  bool
+     * @throws  \Fuel_Exception
+     */
+    public function login($username, $password) 
+    {
+        $this->provider->login($username, $password);
+        return true;
+    }
+
+    /**
+     * Login user using OAuth/OAuth2 token authentication (token and secret)
+     * 
+     * @access  public
+     * @param   string  $token
+     * @param   string  $secret
+     * @return  bool
+     * @throws  \Fuel_Exception
+     */
+    public function login_token($token, $secret) 
+    {
+        $this->provider->login_token($token, $secret);
+        return true;
     }
 
     /**
@@ -171,20 +192,30 @@ class Auth_User extends Auth_Driver {
      *
      * Usage:
      * 
-     * <code>\Hybrid\Auth::instance('user')->logout(false);</code>
+     * <code>\Hybrid\Auth::instance('user')->logout();</code>
      * 
      * @access  public
-     * @param   bool    $redirect
      * @return  bool
      */
     public function logout($redirect = true) 
     {
-        $this->adapter->logout();
+        $this->provider->logout();
+        return true;
+    }
 
-        if (true === $redirect) 
+    public function link_account($user_data)
+    {
+        if (true !== Auth::link_account($this->provider->data['id'], $user_data))
         {
-            static::redirect('after_logout');
+            return false;
         }
+
+        $credential = $user_data['credentials'];
+
+        $this->provider->data['accounts'][$credential['provider']] = array(
+            'token'  => $credential['token'],
+            'secret' => $credential['secret'],
+        );
 
         return true;
     }

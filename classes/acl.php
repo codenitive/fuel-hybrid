@@ -19,21 +19,22 @@ namespace Hybrid;
  * A set of class that extends the functionality of FuelPHP without 
  * affecting the standard workflow when the application doesn't actually 
  * utilize Hybrid feature.
- * 
+ *
  * Authentication Class
  * 
  * Why another class? FuelPHP does have it's own Auth package but what Hybrid does 
  * it not defining how you structure your database but instead try to be as generic 
  * as possible so that we can support the most basic structure available
  * 
+ * 
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Acl
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
- 
-class Acl {
 
+class Acl {
+    
     /**
      * Cache ACL instance so we can reuse it on multiple request. 
      * 
@@ -65,6 +66,7 @@ class Acl {
     /**
      * Initiate a new Acl instance.
      * 
+     * @deprecated  1.3.0
      * @static
      * @access  public
      * @param   string  $name
@@ -72,7 +74,7 @@ class Acl {
      */
     public static function forge($name = null)
     {
-        if (\is_null($name))
+        if (is_null($name))
         {
             $name = 'default';
         }
@@ -119,9 +121,9 @@ class Acl {
     /**
      * Construct a new object.
      *
-     * @access  public
+     * @access  protected
      */
-    public function __construct() {}
+    protected function __construct() {}
 
     /**
      * List of roles
@@ -129,8 +131,8 @@ class Acl {
      * @access  protected
      * @var     array
      */
-    protected $roles = array();
-    
+    protected $roles     = array();
+     
     /**
      * List of resources
      * 
@@ -138,15 +140,14 @@ class Acl {
      * @var     array
      */
     protected $resources = array();
-    
-    
+     
     /**
      * List of ACL map between roles, resources and types
      * 
      * @access  protected
      * @var     array
      */
-    protected $acl = array();
+    protected $acl       = array();
 
     /**
      * Verify whether current user has sufficient roles to access the resources based 
@@ -166,7 +167,7 @@ class Acl {
             throw new \Fuel_Exception("\Hybrid\Acl: Unable to verify unknown resource: {$resource}.");
         }
 
-        $user       = \Hybrid\Auth::instance('user')->get();
+        $user       = Auth::instance('user')->get();
 
         $type_id    = array_search($type, $types);
         $length     = count($types);
@@ -231,7 +232,7 @@ class Acl {
      */
     public static function has_roles($check_roles) 
     {
-       return \Hybrid\Auth::has_roles($check_roles);
+       return Auth::has_roles($check_roles);
     }
 
     /**

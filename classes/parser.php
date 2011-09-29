@@ -47,7 +47,7 @@ class Parser {
      */
     public static function forge($name = null)
     {
-        if (\is_null($name))
+        if (is_null($name))
         {
             $name = '';
         }
@@ -59,7 +59,7 @@ class Parser {
             $driver = '\\Hybrid\\Parser_' . \Str::ucfirst($name);
         
             // instance has yet to be initiated
-            if (\class_exists($driver))
+            if (class_exists($driver))
             {
                 static::$instances[$name] = new $driver();
             }

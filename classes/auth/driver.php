@@ -19,6 +19,13 @@ namespace Hybrid;
  * A set of class that extends the functionality of FuelPHP without 
  * affecting the standard workflow when the application doesn't actually 
  * utilize Hybrid feature.
+ *
+ * Authentication Class
+ * 
+ * Why another class? FuelPHP does have it's own Auth package but what Hybrid does 
+ * it not defining how you structure your database but instead try to be as generic 
+ * as possible so that we can support the most basic structure available
+ * 
  * 
  * @package     Fuel
  * @subpackage  Hybrid
@@ -29,47 +36,13 @@ namespace Hybrid;
 abstract class Auth_Driver {
 
     /**
-     * Redirect user based on type
-     *
-     * @static
-     * @access  protected
-     * @param   string  $type
-     * @param   string  $default_route
-     * @return  void
-     * @throws  \Fuel_Exception
-     */
-    protected static function redirect($type, $default_route = '/')
-    {
-        switch ($type)
-        {
-            case 'registration' :
-                \Response::redirect(\Config::get('app.auth._route_.registration', $default_route));
-            break;
-
-            case 'after_login' :
-                \Response::redirect(\Config::get('app.auth._route_.after_login', $default_route));
-            break;
-
-            case 'after_logout' :
-                \Response::redirect(\Config::get('app.auth._route_.after_logout', $default_route));
-            break;
-
-            default :
-                throw new \Fuel_Exception("\Hybrid\Auth_Driver: Unable to redirect using {$type} type.");
-                return;
-        }
-
-        return true;
-    }
-
-    /**
      * Adapter object
      *
      * @access  protected
      * @var     object
      */
-    protected $adapter   = null;
-
+    protected $strategy  = null;
+    
     /**
      * Auth data
      *
@@ -77,31 +50,7 @@ abstract class Auth_Driver {
      * @access  protected
      * @var     object|array
      */
-    protected $auth     = null;
-
-    /**
-     * Load configurations
-     *
-     * @static 
-     * @access  public
-     * @return  void
-     */
-    protected function _initiate()
-    {
-        \Config::load('app', 'app');
-        \Config::load('crypt', true);
-    }
-
-    /**
-     * Return Adapter Object
-     *
-     * @access  public
-     * @return  object
-     */
-    public function get_adapter() 
-    {
-        return $this->adapter;
-    }
+    protected $data     = null;
 
     /**
      * Return TRUE/FALSE whether visitor is logged in to the system
@@ -113,9 +62,9 @@ abstract class Auth_Driver {
      * @access  public
      * @return  bool
      */
-    public function is_logged() 
+    public function is_logged()
     {
-        return ($this->auth['id'] > 0 ? true : false);
+        return ($this->data['id'] > 0 ? true : false);
     }
 
     /**
@@ -129,19 +78,18 @@ abstract class Auth_Driver {
      * @param   string  $name optional key value, return all if $name is null
      * @return  object
      */
-    public function get($name = null) 
+    public function get($name = null)
     {
-        if (\is_null($name)) 
+        if (is_null($name))
         {
-            return (object) $this->auth;
+            return (object) $this->data;
         }
-
-        if (\array_key_exists($name, $this->auth)) 
+        elseif (array_key_exists($name, $this->data))
         {
-            return $this->auth[$name];
+            return $this->data[$name];
         }
 
         return null;
     }
-    
+
 }
