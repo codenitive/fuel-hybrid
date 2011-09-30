@@ -149,7 +149,7 @@ class Template_Normal extends Template_Driver {
     {
         $view = \View::forge();
         $view->set_filename(rtrim($this->folder, '/') . '/' . $filename);
-        $view->auto_encode(static::$config['auto_encode']);
+        $view->auto_filter(static::$config['auto_filter']);
 
         if (is_array($data) and count($data) > 0)
         {
@@ -171,7 +171,7 @@ class Template_Normal extends Template_Driver {
     public function render()
     {
         $this->view->set_filename(rtrim($this->folder, '/') . '/' . $this->filename);
-        $this->view->auto_encode(static::$config['auto_encode']);
+        $this->view->auto_filter(static::$config['auto_filter']);
 
         $this->view->set('TEMPLATE_FOLDER', $this->folder, false);
         $this->view->set('template', $this, false);
