@@ -260,38 +260,5 @@ class Auth {
 
         return true;
     }
-
-    /**
-     * Check if user has any of provided roles (however this should be in \Hybrid\User IMHO)
-     * 
-     * @static
-     * @access  public
-     * @param   mixed   $check_roles
-     * @return  bool 
-     */
-    public static function has_roles($roles)
-    {
-        $user = static::instance('user')->get();
-
-        if (!is_array($check_roles)) 
-        {
-            $check_roles = array($check_roles);
-        }
-
-        foreach ($user->roles as $role) 
-        {
-            $role = \Inflector::friendly_title($role, '-', TRUE);
-
-            foreach ($check_roles as $check_against) 
-            {
-                if ($role == $check_against) 
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
     
 }
