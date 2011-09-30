@@ -25,9 +25,9 @@ class Autho {
 
     /**
      * Send command with runtime option:
-     *      php oil refine hybrid --install
-     *      php oil refine hybrid --help
-     *      php oil refine hybrid --test
+     *      php oil refine autho --install
+     *      php oil refine autho --help
+     *      php oil refine autho --test
      *
      * @static
      * @access  public
@@ -252,7 +252,7 @@ HELP;
             \Oil\Generate::$create_files = array();
 
             \Oil\Generate::model(array(
-                'authenticate',
+                'authentication',
                 'user_id:int',
                 'provider:string[50]',
                 'uid:string',
