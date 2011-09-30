@@ -93,12 +93,18 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      * This method will be called after we route to the destinated method
      * 
      * @access  public
+     * @param   mixed   $response
      */
-    public function after() 
+    public function after($response) 
     {
         \Event::trigger('controller_after');
         
-        return parent::after();
+        if (! $response instanceof \Response)
+        {
+            $response = $this->response;    
+        }
+
+        return parent::after($response);
     }
 
     /**
@@ -147,7 +153,6 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
         if (true === $this->set_content_type) 
         {
             // Set the correct format header
-
             $this->response->set_header('Content-Type', \Hybrid\Restserver::content_type($rest_server->format));
         }
     }
