@@ -43,13 +43,23 @@ class Auth_Controller extends \Controller {
         \Config::load('autho', 'autho');
     }
 
-    public function action_session($provider)
+    public function action_session($provider = array())
     {
+        if (empty($provider))
+        {
+            throw new \Request404Exception();
+        }
+
         Auth_Strategy::factory($provider)->authenticate();
     }
 
-    public function action_callback($provider)
+    public function action_callback($provider = array())
     {
+        if (empty($provider))
+        {
+            throw new \Request404Exception();
+        }
+        
         $strategy = Auth_Strategy::factory($provider);
         
         Auth_Strategy::login_or_register($strategy);

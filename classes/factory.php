@@ -95,8 +95,8 @@ class Factory {
         } 
         else 
         {
-            $request = \Request::forge(\Config::get('routes._maintenance_mode_'))->execute();
-            exit($request->send_headers()->response());
+            $request = \Request::factory(\Config::get('routes._maintenance_mode_'))->execute();
+            exit($request->response());
         }
     }
 
