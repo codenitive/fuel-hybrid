@@ -96,7 +96,10 @@ class Factory {
         else 
         {
             $request = \Request::factory(\Config::get('routes._maintenance_mode_'))->execute();
-            exit($request->response());
+            $response = $request->response();
+            $response->send(true);
+            \Event::shutdown();
+            exit();
         }
     }
 
