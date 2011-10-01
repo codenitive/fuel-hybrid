@@ -195,4 +195,14 @@ abstract class Template_Driver {
      */
     public abstract function render();
 
+    /**
+     * Render self::view
+     *
+     * @access  public
+     */
+    public function __toString()
+    {
+        return $this->render();
+    }
+
 }
