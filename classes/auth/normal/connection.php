@@ -37,6 +37,8 @@ class Auth_Normal_Connection extends Auth_Connection {
      */
     public function execute($items)
     {
+        $this->items['_hash'] = '';
+
         if (isset($items['_hash']))
         {
             $this->items['_hash'] = $items['_hash'];
@@ -119,11 +121,13 @@ class Auth_Normal_Connection extends Auth_Connection {
 
         if ($this->items['id'] < 1)
         {
+            $this->reset();
             throw new \Fuel_Exception("User {$username} does not exist in our database");
         }
 
         if ($this->items['password'] !== \Hybrid\Auth::add_salt($password))
         {
+            $this->reset();
             throw new \Fuel_Exception("Invalid username and password combination");
         }
 
