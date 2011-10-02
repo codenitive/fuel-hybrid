@@ -237,11 +237,13 @@ class Auth_Provider_Normal {
 
         if ($this->data['id'] < 1)
         {
+            $this->reset();
             throw new \Fuel_Exception("User {$username} does not exist in our database");
         }
 
         if ($this->data['password'] !== Auth::add_salt($password))
         {
+            $this->reset();
             throw new \Fuel_Exception("Invalid username and password combination");
         }
 
@@ -369,7 +371,7 @@ class Auth_Provider_Normal {
             $hash .= \Hybrid\Input::user_agent();
         }
 
-        if (!is_null($this->data['_hash']) and $this->data['_hash'] !== Auth::add_salt($hash)) 
+        if (is_null($this->data['_hash']) or $this->data['_hash'] !== Auth::add_salt($hash)) 
         {
             return $this->reset();
         }
