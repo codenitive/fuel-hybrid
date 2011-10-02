@@ -39,12 +39,13 @@ class Factory {
      */
     public static function _init() 
     {
+        // initiate this only once
         if (!is_null(static::$identity)) 
         {
             return;
         }
         
-        \Config::load('app', true);
+        \Config::load('app', 'app');
 
         static::$identity = \Config::get('app.identity');
 
@@ -95,7 +96,10 @@ class Factory {
         else 
         {
             $request = \Request::factory(\Config::get('routes._maintenance_mode_'))->execute();
-            exit($request->send_headers()->response());
+            $response = $request->response();
+            $response->send(true);
+            \Event::shutdown();
+            exit();
         }
     }
 
@@ -129,4 +133,5 @@ class Factory {
         $path     = str_replace('/', DIRECTORY_SEPARATOR, $path);
         require_once $dir_path.$folder.DIRECTORY_SEPARATOR.$path.'.php';
     }
+    
 }

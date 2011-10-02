@@ -26,13 +26,13 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Chart_Area extends Chart {
+class Chart_Area extends Chart_Driver {
 
     public function __construct() 
     {
         parent::__construct();
 
-        $this->set_options(\Config::get('visualization.chart.area', array()));
+        $this->set_options(\Config::get('chart.area', array()));
     }
 
     public function generate($width = '100%', $height = '300px') 

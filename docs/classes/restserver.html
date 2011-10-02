@@ -35,16 +35,16 @@
         <p>
             Normally this will only be called from within \Hybrid\Controller_Rest and \Hybrid\Controller_Hybrid.
         </p>
-        
+
         <h3 id="how-to">How To</h3>
 
-        <pre class="php"><code>$restserver = \Hybrid\Restserver::factory(array('text' => 'Hello World'), 200);
+        <pre class="php"><code>$restserver = \Hybrid\Restserver::forge(array('text' => 'Hello World'), 200);
 $restserver->format('json');
 $restserver->execute();
 </code></pre>
 
         <article>
-            <h3 id="factory()">factory($data = array(), $http_code = 200)</h3>
+            <h3 id="forge()">forge($data = array(), $http_code = 200)</h3>
 
             <p>A shortcode to initiate this class as a new object.</p>
 
@@ -83,7 +83,7 @@ $restserver->execute();
                 <tr>
                     <th>Example</th>
                     <td>
-                        <pre class="php"><code>$restserver = \Hybrid\Restserver::factory(array('text' => 'Hello World'), 200);</code></pre>
+                        <pre class="php"><code>$restserver = \Hybrid\Restserver::forge(array('text' => 'Hello World'), 200);</code></pre>
                     </td>
                 </tr>
                 </tbody>

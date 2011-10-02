@@ -68,4 +68,9 @@ return array(
     'link_multiple_providers' => true,
 
     'salt'      => null,
+
+    /**
+     * Verify User Agent in Hash
+     */
+    'verify_user_agent' => false,
 );

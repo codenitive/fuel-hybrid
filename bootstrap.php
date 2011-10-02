@@ -21,6 +21,7 @@ Autoloader::add_classes(array (
     'Hybrid\\Restful'              => __DIR__.'/classes/restserver.php',
     'Hybrid\\Restserver'           => __DIR__.'/classes/restserver.php',
     'Hybrid\\Swiftmail'            => __DIR__.'/classes/swiftmail.php',
+    'Hybrid\\Swiftmail_Result'     => __DIR__.'/classes/swiftmail/result.php',
     'Hybrid\\Uri'                  => __DIR__.'/classes/uri.php',
     'Hybrid\\View'                 => __DIR__.'/classes/view.php',
     
@@ -37,7 +38,7 @@ Autoloader::add_classes(array (
     'Hybrid\\Auth_Strategy_OAuth2' => __DIR__.'/classes/auth/strategy/oauth2.php',
     
     'Hybrid\\Chart'                => __DIR__.'/classes/chart.php',
-    'Hybrid\\Chart_Utility'        => __DIR__.'/classes/chart/utility.php',
+    'Hybrid\\Chart_Driver'         => __DIR__.'/classes/chart/driver.php',
     'Hybrid\\Chart_Area'           => __DIR__.'/classes/chart/area.php',
     'Hybrid\\Chart_Bar'            => __DIR__.'/classes/chart/bar.php',
     'Hybrid\\Chart_GeoMap'         => __DIR__.'/classes/chart/geomap.php',

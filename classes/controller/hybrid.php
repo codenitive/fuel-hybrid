@@ -80,7 +80,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
     final protected function acl($resource, $type = null, $name = null) 
     {
         $status = \Hybrid\Acl::instance($name)->access_status($resource, $type);
-
+        
         switch ($status) 
         {
             case 401 :
@@ -133,21 +133,22 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
      * This method will be called after we route to the destinated method
      * 
      * @access  public
+     * @param   mixed   $response
      */
-    public function after() 
+    public function after($response) 
     {
         \Event::trigger('controller_after');
         
         if (false === $this->is_rest_call)
         {
-            $this->render_template();
+            $response = $this->render_template($response);
         }
         else 
         {
-            $this->render_rest();
+            $response = $this->render_rest($response);
         }
 
-        return parent::after();
+        return parent::after($response);
     }
 
     /**
@@ -207,17 +208,17 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
     {
         if (true === $this->is_rest_call)
         {
-            $rest = \Hybrid\Restserver::factory($data, $http_code)
+            $rest_server = \Hybrid\Restserver::forge($data, $http_code)
                         ->format($this->rest_format)
                         ->execute();
             
-            $this->response->body($rest->body);
-            $this->response->status = $rest->status;
+            $this->response->body($rest_server->body);
+            $this->response->status = $rest_server->status;
 
             if (true === $this->set_content_type) 
             {
                 // Set the correct format header
-                $this->response->set_header('Content-Type', \Hybrid\Restserver::content_type($rest->format));
+                $this->response->set_header('Content-Type', \Hybrid\Restserver::content_type($rest_server->format));
             }
         }
         else 
@@ -237,7 +238,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
     {
         if (true === $this->auto_render)
         {
-            $this->template = \Hybrid\Template::factory($this->template);
+            $this->template = \Hybrid\Template::forge($this->template);
         }
     }
     
@@ -245,20 +246,23 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
      * Render the template
      * 
      * @access  protected
+     * @param   mixed   $response
      */
-    protected function render_template()
+    protected function render_template($response)
     {
         //we dont want to accidentally change our site_name
         $this->template->set(array('site_name' => \Config::get('app.site_name')));
         
-        if (true === $this->auto_render)
+        if (true === $this->auto_render and ! $response instanceof \Response)
         {
-            $this->response->body($this->template->render());
+            $response = \Response::forge($this->template, $this->response->status);
         }
+
+        return $response;
     }
     
     /**
-     * Prepare Restful
+     * Prepare Rest request
      * 
      * @access  protected
      */
@@ -273,10 +277,19 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
     }
     
     /**
-     * Render Restful
+     * Render Rest request
      * 
      * @access  protected
+     * @param   mixed   $response
      */
-    protected function render_rest() {}
+    protected function render_rest($response) 
+    {
+        if (! $response instanceof \Response)
+        {
+            $response = $this->response;    
+        }
+
+        return $response;
+    }
     
 }

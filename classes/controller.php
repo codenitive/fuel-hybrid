@@ -70,11 +70,11 @@ abstract class Controller extends \Fuel\Core\Controller {
      * 
      * @access  public
      */
-    public function after() 
+    public function after($response) 
     {
         \Event::trigger('controller_after');
 
-        return parent::after();
+        return parent::after($response);
     }
 
 }

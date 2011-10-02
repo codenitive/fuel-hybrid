@@ -53,7 +53,7 @@ class Template {
      */
     public static function _init()
     {
-        \Config::load('app', true);
+        \Config::load('app', 'app');
     }
 
     /**
@@ -63,7 +63,7 @@ class Template {
      * @access  public
      * @return  Template_Abstract
      */
-    public static function factory($name = null)
+    public static function forge($name = null)
     {
         if (is_null($name))
         {
@@ -100,15 +100,30 @@ class Template {
             {
                 // load a new template if class exist
                 static::$instances[$name] = new $driver($folder, $filename);
-                return static::$instances[$name];
             }
             else 
             {
-                throw new \Fuel_Exception("Requested {$driver} does not exist");
+                throw new \Fuel_Exception("Requested {$driver} does not exist.");
             }
         }
         
         return static::$instances[$name];
+    }
+
+    /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  self::forge()
+     */
+    public static function factory($name = null)
+    {
+        \Log::info("\Hybrid\Template::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Template::forge().");
+        
+        return static::forge($name);
     }
 
 }

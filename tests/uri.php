@@ -16,10 +16,10 @@
 namespace Hybrid;
 
 /**
- * Factory class tests
+ * Uri class tests
  * 
  * @group Hybrid
- * @group Factory
+ * @group Uri
  */
 class Test_Uri extends \Fuel\Core\TestCase {
     

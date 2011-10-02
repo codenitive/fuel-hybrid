@@ -70,9 +70,9 @@ class Acl {
      * @static
      * @access  public
      * @param   string  $name
-     * @return  \Hybrid\Acl Object
+     * @return  \Hybrid\Acl Object 
      */
-    public static function factory($name = null)
+    public static function forge($name = null)
     {
         if (is_null($name))
         {
@@ -88,17 +88,34 @@ class Acl {
     }
 
     /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  \Hybrid\Acl Object
+     * @see     self::forge()
+     */
+    public static function factory($name = null)
+    {
+        \Log::info("\Hybrid\Acl::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Acl::forge().");
+        
+        return static::forge($name);
+    }
+
+    /**
      * Get cached instance, or generate new if currently not available.
      *
      * @static
      * @access  public
      * @param   string   $name
      * @return  \Hybrid\Acl Object
-     * @see     self::factory()
+     * @see     self::forge()
      */
     public static function instance($name = null)
     {
-        return static::factory($name);
+        return static::forge($name);
     }
 
     /**

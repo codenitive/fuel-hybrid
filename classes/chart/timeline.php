@@ -26,13 +26,13 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Chart_Timeline extends Chart {
+class Chart_Timeline extends Chart_Driver {
 
     public function __construct() 
     {
         parent::__construct();
 
-        $this->set_options(\Config::get('visualization.chart.timeline', array()));
+        $this->set_options(\Config::get('chart.timeline', array()));
     }
 
     public function generate($width = '100%', $height = '300px') 

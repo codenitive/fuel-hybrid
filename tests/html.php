@@ -16,7 +16,7 @@
 namespace Hybrid;
 
 /**
- * Factory class tests
+ * Html class tests
  * 
  * @group Hybrid
  * @group Html

@@ -29,20 +29,42 @@ namespace Hybrid;
 class Template_Frontend extends Template_Driver {
 
     /**
-     * Initiate a new template using factory
+     * Initiate a new template using forge
      *
      * Example:
-     * <code>$template = \Hybrid\Template_Frontend::factory();</code>
+     * <code>$template = \Hybrid\Template_Frontend::forge();</code>
      *
      * @static
      * @access  public
-     * @param   string  $theme
-     * @param   string  $filename
+     * @param   string  $name
      * @return  void
      */
-    public static function factory($folder = null, $filename = null)
+    public static function forge($name = null)
     {
-        return new static($folder, $filename);
+        $driver = 'frontend';
+        
+        if (!is_null($name) and !empty($name))
+        {
+            $driver .= ".{$name}";
+        }
+
+        return \Hybrid\Template::forge($driver);
+    }
+
+    /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  self::forge()
+     */
+    public static function factory($name = null)
+    {
+        \Log::info("\Hybrid\Template_Frontend::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Template_Frontend::forge().");
+        
+        return static::forge($name);
     }
 
     /**
@@ -67,7 +89,7 @@ class Template_Frontend extends Template_Driver {
             $this->set_filename(static::$config['default_filename']);
         }
 
-        $this->view = \Hybrid\View::factory();
+        $this->view = \Hybrid\View::forge();
     }
 
     /**
@@ -83,7 +105,7 @@ class Template_Frontend extends Template_Driver {
 
         if (empty($available_folders))
         {
-            throw new \Fuel_Exception("\\Hybrid\\Template configuration is not completed");
+            throw new \Fuel_Exception("\Hybrid\Template_Driver: configuration is not completed");
         }
 
         if (is_null($theme) or $theme === '_default_')
@@ -97,7 +119,7 @@ class Template_Frontend extends Template_Driver {
         }
         else
         {
-            throw new \Fuel_Exception("Requested Template folder is not available");
+            throw new \Fuel_Exception("\Hybrid\Template_Frontend: Requested {$theme} folder is not available.");
         }
 
         return $this;
@@ -115,10 +137,10 @@ class Template_Frontend extends Template_Driver {
     {
         $this->load_assets();
         
-        $view = \Hybrid\View::factory();
+        $view = \Hybrid\View::forge();
         $view->set_path($this->folder);
         $view->set_filename($filename);
-        $view->auto_encode(static::$config['auto_encode']);
+        $view->auto_filter(static::$config['auto_filter']);
 
         if (is_array($data) and count($data) > 0)
         {
@@ -143,7 +165,7 @@ class Template_Frontend extends Template_Driver {
 
         $this->view->set_path($this->folder);
         $this->view->set_filename($this->filename);
-        $this->view->auto_encode(static::$config['auto_encode']);
+        $this->view->auto_filter(static::$config['auto_filter']);
 
         $this->view->set('TEMPLATE_FOLDER', $this->folder, false);
         $this->view->set('template', $this, false);

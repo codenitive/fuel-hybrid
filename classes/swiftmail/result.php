@@ -22,15 +22,16 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Chart_Utility
+ * @category    Swiftmail_Result
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
- 
-class Chart_Utility {
 
-    public static function js() 
-    {
-        return '<script type="text/javascript" src="https://www.google.com/jsapi"></script>';
-    }
+class Swiftmail_Result {
+
+    public $success     = false;
+    public $failures    = null;
+    public $total_sent  = 0;
+
+    public function __construct() {}
 
 }

@@ -38,7 +38,7 @@ namespace Hybrid;
      * @param   array   $config     An array to overwrite default config from config/email.php.
      * @return  self
      */
-    public static function factory($config = array())
+    public static function forge($config = array())
     {
         $initconfig = \Config::load('email', null, true);
         
@@ -48,6 +48,22 @@ namespace Hybrid;
         }
 
         return new static($config);
+    }
+
+    /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   array   $config     An array to overwrite default config from config/email.php.
+     * @return  self::forge()
+     */
+    public static function factory($config = array())
+    {
+        \Log::info("\Hybrid\Swiftmail::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Swiftmail::forge().");
+        
+        return static::forge($config);
     }
 
     /**
@@ -86,17 +102,14 @@ namespace Hybrid;
      * @access  protected
      * @var     object
      */
-    protected $debugs       = null;
+    protected $result       = null;
 
     public function __construct($config)
     {
         $this->config   = $config;
         $transport      = "transport_" . $config['protocol'];
 
-        $this->debugs               = new \stdClass();
-        $this->debugs->success      = false;
-        $this->debugs->failures     = null;
-        $this->debugs->total_sent   = 0;
+        $this->result   = new Swiftmail_Result;
 
         if (method_exists($this, $transport))
         {
@@ -120,7 +133,7 @@ namespace Hybrid;
         }
         else
         {
-            throw new \Fuel_Exception("Swiftmail protocol: " . $config['protocol'] . " does not exist");
+            throw new \Fuel_Exception("\Hybrid\Swiftmail: Transport protocol " . $config['protocol'] . " does not exist.");
         }
     }
 
@@ -279,7 +292,7 @@ namespace Hybrid;
      * Sends the email.
      *
      * @access  public
-     * @param   bool    $debug      set to TRUE will return $this->debug object instead of just the success status    
+     * @param   bool    $debug      set to TRUE will return $this->result object instead of just the success status    
      * @return  bool|object  
      */
     public function send($debug = false)
@@ -304,20 +317,20 @@ namespace Hybrid;
 
         $result = $this->mailer->send($this->messager, $failure);
 
-        $this->debugs->failure = $failure;
+        $this->result->failure = $failure;
 
         if (intval($result) >= 1)
         {
-            $this->debugs->success       = true;
-            $this->debugs->total_sent    = intval($result);
+            $this->result->success       = true;
+            $this->result->total_sent    = intval($result);
         }
 
         if (false === $debug)
         {
-            return $this->debugs->success;
+            return $this->result->success;
         }
 
-        return $this->debug();
+        return $this->result();
     }
 
     /**
@@ -326,9 +339,9 @@ namespace Hybrid;
      * @access  public
      * @return  object  containing success status, total email sent and failure during email sending
      */
-    public function debug()
+    public function result()
     {
-        return $this->debugs;
+        return $this->result;
     }
 
     /**
@@ -360,7 +373,7 @@ namespace Hybrid;
      */
     public static function dynamic_attach($contents, $filename, $disposition = 'attachment')
     {
-        throw new \Fuel_Exception("File attachment has not been implemented yet");
+        throw new \Fuel_Exception("\Hybrid\Swiftmail: Dynamic file attachment has not been implemented yet.");
 
         return $this;
     }
@@ -425,5 +438,4 @@ namespace Hybrid;
 
         return $transport;
     }
-
 }

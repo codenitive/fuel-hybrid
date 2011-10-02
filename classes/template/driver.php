@@ -46,7 +46,7 @@ abstract class Template_Driver {
      */
     public static function _init()
     {
-        if (is_null(static::$config))
+        if (\is_null(static::$config))
         {
             \Config::load('app', 'app');
             static::$config = \Config::get('app.template', array());
@@ -89,6 +89,7 @@ abstract class Template_Driver {
      * Load asset as subfolder of template
      *
      * @access  public
+     * @param   bool    $forced_load
      * @return  self
      * @throws  \Fuel_Exception
      */
@@ -103,7 +104,7 @@ abstract class Template_Driver {
 
         if (!\is_dir($folder_path))
         {
-            throw new \Fuel_Exception("Unable to load assets at {$folder_path}");
+            throw new \Fuel_Exception("\Hybrid\Template_Driver: Unable to load assets at {$folder_path}.");
         }
         else
         {
@@ -123,6 +124,7 @@ abstract class Template_Driver {
      * Set folder location
      *
      * @access  public
+     * @param   string  $path
      * @return  self
      * @throws  \Fuel_Exception
      */
@@ -130,7 +132,7 @@ abstract class Template_Driver {
     {
         if (!\is_dir($path))
         {
-            throw new \Fuel_Exception("Path {$path} does not appear to a valid folder");
+            throw new \Fuel_Exception("\Hybrid\Template_Driver: Path {$path} does not appear to a valid folder.");
         }
         else 
         {
@@ -144,6 +146,7 @@ abstract class Template_Driver {
      * Set filename location
      *
      * @access  public
+     * @param   string  $filename
      * @return  self
      */
     public function set_filename($filename = null)
@@ -160,6 +163,7 @@ abstract class Template_Driver {
      * Set data
      *
      * @access  public
+     * @param   array   $data
      * @return  self
      */
     public function set($data = array())
@@ -190,5 +194,15 @@ abstract class Template_Driver {
      * @access  public
      */
     public abstract function render();
+
+    /**
+     * Render self::view
+     *
+     * @access  public
+     */
+    public function __toString()
+    {
+        return $this->render();
+    }
 
 }

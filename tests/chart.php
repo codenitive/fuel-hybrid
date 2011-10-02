@@ -16,13 +16,13 @@
 namespace Hybrid;
 
 /**
- * Factory class tests
+ * Chart class tests
  * 
  * @group Hybrid
- * @group Chart_Utility
+ * @group Chart
  */
 
- class Test_Chart_Utility extends \Fuel\Core\TestCase {
+ class Test_Chart extends \Fuel\Core\TestCase {
  	
  	public function setup()
  	{
@@ -32,7 +32,7 @@ namespace Hybrid;
  	public function test_js()
  	{
  		$expected 	= '<script type="text/javascript" src="https://www.google.com/jsapi"></script>';
- 		$output 	= \Hybrid\Chart_Utility::js();
+ 		$output 	= \Hybrid\Chart::js();
 
  		$this->assertEquals($expected, $output);
  	}

@@ -36,7 +36,7 @@
 
         <h3 id="how-to">How To</h3>
 
-        <pre class="php"><code>$google = \Hybrid\Curl::factory("GET http://google.com");
+        <pre class="php"><code>$google = \Hybrid\Curl::forge("GET http://google.com");
 $google->setopt(array(
     CURLOPT_RETURNTRANSFER => 1,
 ));
@@ -44,7 +44,7 @@ $google->setopt(array(
 \Debug::dump($google->execute());</code></pre>
 
         <article>
-            <h3 id="factory()">factory($uri, $dataset = array())</h3>
+            <h3 id="forge()">forge($uri, $dataset = array())</h3>
 
             <p>Initiate this class as a new object.</p>
 
@@ -84,10 +84,10 @@ $google->setopt(array(
                     <th>Example</th>
                     <td>
     <pre class="php"><code>// GET method support query string
-$curl = \Hybrid\Curl::factory('GET http://google.com?q=hello world');
+$curl = \Hybrid\Curl::forge('GET http://google.com?q=hello world');
 
 // Alternatively
-$curl = \Hybrid\Curl::factory('GET http://google.com', array('q' => 'hello world'));</code></pre>
+$curl = \Hybrid\Curl::forge('GET http://google.com', array('q' => 'hello world'));</code></pre>
                     </td>
                 </tr>
                 </tbody>

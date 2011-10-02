@@ -35,7 +35,7 @@ namespace Hybrid;
 class Auth {
     
     /**
-     * Cache auth instance so we can reuse it on multiple request
+     * Cache Auth instance so we can reuse it on multiple request.
      * 
      * @static
      * @access  protected
@@ -75,7 +75,7 @@ class Auth {
      * @return  Auth_Driver
      * @throws  \Fuel_Exception
      */
-    public static function factory($name = null)
+    public static function forge($name = null)
     {
         if (is_null($name))
         {
@@ -102,16 +102,32 @@ class Auth {
     }
 
     /**
-     * Retrieves a loaded driver, when drivers are set in config the first driver will also be the default. 
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  self::forge()
+     */
+    public static function factory($name = null)
+    {
+        \Log::info("\Hybrid\Auth::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Auth::forge().");
+        
+        return static::forge($name);
+    }
+
+    /**
+     * Get cached instance, or generate new if currently not available.
      *
      * @static
      * @access  public
      * @return  Auth_Driver
-     * @see     self::factory()
+     * @see     self::forge()
      */
     public static function instance($name = null)
     {
-        return static::factory($name);
+        return static::forge($name);
     }
 
     /**
@@ -130,6 +146,39 @@ class Auth {
     }
 
     /**
+     * Check if user has any of provided roles.
+     * 
+     * @static
+     * @access  public
+     * @param   mixed   $check_roles
+     * @return  bool 
+     */
+    public static function has_roles($check_roles) 
+    {
+        $user = static::instance('user')->get();
+
+        if (!is_array($check_roles)) 
+        {
+            $check_roles = array($check_roles);
+        }
+
+        foreach ($user->roles as $role) 
+        {
+            $role = \Inflector::friendly_title($role, '-', TRUE);
+
+            foreach ($check_roles as $check_against) 
+            {
+                if ($role == $check_against) 
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Login based on available Auth_Driver.
      *
      * @static
@@ -142,7 +191,7 @@ class Auth {
      */
     public static function login($username, $password, $driver = 'user')
     {
-        return static::factory($driver)->login($username, $password);
+        return static::forge($driver)->login($username, $password);
     }
 
     /**
@@ -210,39 +259,6 @@ class Auth {
         }
 
         return true;
-    }
-
-    /**
-     * Check if user has any of provided roles (however this should be in \Hybrid\User IMHO)
-     * 
-     * @static
-     * @access  public
-     * @param   mixed   $check_roles
-     * @return  bool 
-     */
-    public static function has_roles($roles)
-    {
-        $user = static::instance('user')->get();
-
-        if (!is_array($check_roles)) 
-        {
-            $check_roles = array($check_roles);
-        }
-
-        foreach ($user->roles as $role) 
-        {
-            $role = \Inflector::friendly_title($role, '-', TRUE);
-
-            foreach ($check_roles as $check_against) 
-            {
-                if ($role == $check_against) 
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
     
 }

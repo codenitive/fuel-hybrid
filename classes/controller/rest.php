@@ -93,12 +93,18 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      * This method will be called after we route to the destinated method
      * 
      * @access  public
+     * @param   mixed   $response
      */
-    public function after() 
+    public function after($response) 
     {
         \Event::trigger('controller_after');
         
-        return parent::after();
+        if (! $response instanceof \Response)
+        {
+            $response = $this->response;    
+        }
+
+        return parent::after($response);
     }
 
     /**
@@ -137,17 +143,17 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      */
     protected function response($data = array(), $http_code = 200) 
     {
-        $rest   = \Hybrid\Restserver::factory($data, $http_code)
+        $rest_server   = \Hybrid\Restserver::forge($data, $http_code)
                     ->format($this->rest_format)
                     ->execute();
         
-        $this->response->body($rest->body);
-        $this->response->status     = $rest->status;
+        $this->response->body($rest_server->body);
+        $this->response->status     = $rest_server->status;
         
         if (true === $this->set_content_type) 
         {
             // Set the correct format header
-            $this->response->set_header('Content-Type', \Hybrid\Restserver::content_type($rest->format));
+            $this->response->set_header('Content-Type', \Hybrid\Restserver::content_type($rest_server->format));
         }
     }
 }
