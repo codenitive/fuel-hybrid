@@ -371,7 +371,7 @@ class Auth_Provider_Normal {
             $hash .= \Hybrid\Input::user_agent();
         }
 
-        if (is_null($this->data['_hash']) or $this->data['_hash'] !== Auth::add_salt($hash)) 
+        if (!is_null($this->data['_hash']) and $this->data['_hash'] !== Auth::add_salt($hash)) 
         {
             return $this->reset();
         }
