@@ -40,7 +40,7 @@ namespace Hybrid;
      */
     public static function forge($config = array())
     {
-        $initconfig = \Config::load('email', null, true);
+        $initconfig = \Config::load('email', 'email', true);
         
         if (is_array($config) && is_array($initconfig))
         {
