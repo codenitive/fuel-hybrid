@@ -113,7 +113,14 @@ abstract class Controller_Frontend extends Controller {
         
         if (true === $this->auto_render and ! $response instanceof \Response)
         {
-            $response = \Response::forge($this->template, $this->response->status);
+            $status   = null;
+
+            if ($this->response instanceof \Response)
+            {
+                $status = $this->response->status;
+            }
+
+            $response = \Response::forge($this->template, $status);
         }
 
         return $response;
