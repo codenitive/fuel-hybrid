@@ -171,24 +171,24 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
         
         if (method_exists($this, $controller_method) and true === $this->is_rest_call) 
         {
-            return call_user_func(array($this, $controller_method));
+            call_user_func(array($this, $controller_method));
         }
         elseif (method_exists($this, 'action_' . $resource)) 
         {
             if (true === $this->is_rest_call)
             {
                 $this->response->status = 404;
-                return $this->response;
+                return;
             }
 
-            return call_user_func(array($this, 'action_' . $resource), $arguments);
+            call_user_func(array($this, 'action_' . $resource), $arguments);
         }
         else 
         {
             if (true === $this->is_rest_call)
             {
                 $this->response->status = 404;
-                return $this->response;
+                return;
             }
             else
             {
@@ -227,8 +227,6 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
             
             $this->template->set($data);
         }
-
-        return $this->response;
     }
     
     /**

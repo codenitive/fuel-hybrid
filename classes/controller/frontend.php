@@ -71,8 +71,6 @@ abstract class Controller_Frontend extends Controller {
         $this->response->status = $http_code;
 
         $this->template->set($data);
-
-        return $this->response;
     }
 
     /**

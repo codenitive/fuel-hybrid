@@ -126,12 +126,12 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
         
         if (method_exists($this, $controller_method)) 
         {
-            return call_user_func(array($this, $controller_method));
+            call_user_func(array($this, $controller_method));
         }
         else 
         {
             $this->response->status = 404;
-            return $this->response;
+            return ;
         }
     }
 
@@ -155,7 +155,5 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
             // Set the correct format header
             $this->response->set_header('Content-Type', Restserver::content_type($rest_server->format));
         }
-
-        return $this->response;
     }
 }
