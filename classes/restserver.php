@@ -318,18 +318,18 @@ class Restserver {
         $password = null;
 
         // mod_php
-        if (\Hybrid\Input::server('PHP_AUTH_USER'))
+        if (Input::server('PHP_AUTH_USER'))
         {
-            $username = \Hybrid\Input::server('PHP_AUTH_USER');
-            $password = \Hybrid\Input::server('PHP_AUTH_PW');
+            $username = Input::server('PHP_AUTH_USER');
+            $password = Input::server('PHP_AUTH_PW');
         }
 
         // most other servers
-        elseif (\Hybrid\Input::server('HTTP_AUTHENTICATION'))
+        elseif (Input::server('HTTP_AUTHENTICATION'))
         {
-            if (strpos(strtolower(\Hybrid\Input::server('HTTP_AUTHENTICATION')), 'basic') === 0)
+            if (strpos(strtolower(Input::server('HTTP_AUTHENTICATION')), 'basic') === 0)
             {
-                list($username, $password) = explode(':', base64_decode(substr(\Hybrid\Input::server('HTTP_AUTHORIZATION'), 6)));
+                list($username, $password) = explode(':', base64_decode(substr(Input::server('HTTP_AUTHORIZATION'), 6)));
             }
         }
 
@@ -350,13 +350,13 @@ class Restserver {
         $uniqid = uniqid(""); // Empty argument for backward compatibility
         // We need to test which server authentication variable to use
         // because the PHP ISAPI module in IIS acts different from CGI
-        if (\Hybrid\Input::server('PHP_AUTH_DIGEST'))
+        if (Input::server('PHP_AUTH_DIGEST'))
         {
-            $digest_string = \Hybrid\Input::server('PHP_AUTH_DIGEST');
+            $digest_string = Input::server('PHP_AUTH_DIGEST');
         }
-        elseif (\Hybrid\Input::server('HTTP_AUTHORIZATION'))
+        elseif (Input::server('HTTP_AUTHORIZATION'))
         {
-            $digest_string = \Hybrid\Input::server('HTTP_AUTHORIZATION');
+            $digest_string = Input::server('HTTP_AUTHORIZATION');
         }
         else
         {
@@ -385,7 +385,7 @@ class Restserver {
 
         // This is the valid response expected
         $A1             = md5($digest['username'] . ':' . \Config::get('rest.realm') . ':' . $valid_pass);
-        $A2             = md5(strtoupper(\Hybrid\Input::method()) . ':' . $digest['uri']);
+        $A2             = md5(strtoupper(Input::method()) . ':' . $digest['uri']);
         $valid_response = md5($A1 . ':' . $digest['nonce'] . ':' . $digest['nc'] . ':' . $digest['cnonce'] . ':' . $digest['qop'] . ':' . $A2);
 
         if ($digest['response'] != $valid_response)
@@ -406,19 +406,19 @@ class Restserver {
     protected static function detect_format()
     {
         // A format has been passed as an argument in the URL and it is supported
-        if (\Hybrid\Input::get_post('format') and static::$supported_formats[\Hybrid\Input::get_post('format')])
+        if (Input::get_post('format') and static::$supported_formats[Input::get_post('format')])
         {
-            return \Hybrid\Input::get_post('format');
+            return Input::get_post('format');
         }
 
         // Otherwise, check the HTTP_ACCEPT (if it exists and we are allowed)
-        if (\Config::get('rest.ignore_http_accept') === false and \Hybrid\Input::server('HTTP_ACCEPT'))
+        if (\Config::get('rest.ignore_http_accept') === false and Input::server('HTTP_ACCEPT'))
         {
             // Check all formats against the HTTP_ACCEPT header
             foreach (array_keys(static::$supported_formats) as $format)
             {
                 // Has this format been requested?
-                if (strpos(\Hybrid\Input::server('HTTP_ACCEPT'), $format) !== false)
+                if (strpos(Input::server('HTTP_ACCEPT'), $format) !== false)
                 {
                     // If not HTML or XML assume its right and send it on its way
                     if ($format != 'html' and $format != 'xml')
@@ -430,13 +430,13 @@ class Restserver {
                     else
                     {
                         // If it is truely HTML, it wont want any XML
-                        if ($format == 'html' and strpos(\Hybrid\Input::server('HTTP_ACCEPT'), 'xml') === false)
+                        if ($format == 'html' and strpos(Input::server('HTTP_ACCEPT'), 'xml') === false)
                         {
                             return $format;
                         }
 
                         // If it is truely XML, it wont want any HTML
-                        elseif ($format == 'xml' and strpos(\Hybrid\Input::server('HTTP_ACCEPT'), 'html') === false)
+                        elseif ($format == 'xml' and strpos(Input::server('HTTP_ACCEPT'), 'html') === false)
                         {
                             return $format;
                         }
@@ -455,7 +455,7 @@ class Restserver {
      */
     protected static function detect_lang()
     {
-        if (!$lang = \Hybrid\Input::server('HTTP_ACCEPT_LANGUAGE'))
+        if (!$lang = Input::server('HTTP_ACCEPT_LANGUAGE'))
         {
             return null;
         }

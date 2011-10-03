@@ -160,7 +160,7 @@ class Pagination extends \Fuel\Core\Pagination {
      */
     public static function build_get_query($values) 
     {
-        return \Hybrid\Uri::build_get_query($values);
+        return Uri::build_get_query($values);
     }
 
 }

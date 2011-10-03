@@ -13,7 +13,7 @@
 
 namespace Hybrid;
 
-\Hybrid\Factory::import('swift/swift_required', 'vendor');
+Factory::import('swift/swift_required', 'vendor');
 
 /**
  * Hybrid 

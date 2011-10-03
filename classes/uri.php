@@ -42,7 +42,7 @@ class Uri extends \Fuel\Core\Uri {
         
         $check_get_input = function($value, & $dataset) 
         {
-            $data = \Hybrid\Input::get($value);
+            $data = Input::get($value);
             
             if (empty($data))
             {

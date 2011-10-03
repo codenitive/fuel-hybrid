@@ -48,7 +48,7 @@ class Template_Frontend extends Template_Driver {
             $driver .= ".{$name}";
         }
 
-        return \Hybrid\Template::forge($driver);
+        return Template::forge($driver);
     }
 
     /**
@@ -89,7 +89,7 @@ class Template_Frontend extends Template_Driver {
             $this->set_filename(static::$config['default_filename']);
         }
 
-        $this->view = \Hybrid\View::forge();
+        $this->view = View::forge();
     }
 
     /**
@@ -137,7 +137,7 @@ class Template_Frontend extends Template_Driver {
     {
         $this->load_assets();
         
-        $view = \Hybrid\View::forge();
+        $view = View::forge();
         $view->set_path($this->folder);
         $view->set_filename($filename);
         $view->auto_filter(static::$config['auto_filter']);

@@ -93,9 +93,9 @@ class Auth_Provider_Normal {
         $this->reset();
 
         // load Auth configuration
-        $config             = \Config::get('autho.normal', array());
-
-        $reserved_property  = array('optional_fields');
+        $config            = \Config::get('autho.normal', array());
+        
+        $reserved_property = array('optional_fields');
         
         foreach ($config as $key => $value)
         {
@@ -150,7 +150,7 @@ class Auth_Provider_Normal {
             'gender'    => '',
             'status'    => null,
             'roles'     => array('0' => 'guest'),
-            'accounts'   => array(),
+            'accounts'  => array(),
         );
 
         return $this;
@@ -170,7 +170,7 @@ class Auth_Provider_Normal {
             $this->data['_hash'] = $data['_hash'];
         }
 
-        $query  = \DB::select('users.*')
+        $query = \DB::select('users.*')
             ->from('users')
             ->where('users.id', '=', $data['id'])
             ->limit(1);
@@ -193,7 +193,7 @@ class Auth_Provider_Normal {
                 ->on('users_meta.user_id', '=', 'users.id');    
         }
         
-        $result     = $query->as_object()->execute();
+        $result = $query->as_object()->execute();
 
         $this->fetch_user($result);
 
@@ -261,11 +261,11 @@ class Auth_Provider_Normal {
     public function login_token($token, $secret)
     {
         $query = \DB::select('users.*')
-                ->from('users')
-                ->join('authentications')
-                ->on('authentications.user_id', '=', 'users.id')
-                ->where('authentications.token', '=', $token)
-                ->where('authentications.secret', '=', $secret);
+            ->from('users')
+            ->join('authentications')
+            ->on('authentications.user_id', '=', 'users.id')
+            ->where('authentications.token', '=', $token)
+            ->where('authentications.secret', '=', $secret);
         
         if (true === $this->use_auth)
         {
@@ -318,12 +318,12 @@ class Auth_Provider_Normal {
      */
     protected function verify_token()
     {
-        $values          = $this->data;
-        $hash            = $values['user_name'] . $values['password'];
+        $values = $this->data;
+        $hash   = $values['user_name'] . $values['password'];
 
         if ($this->verify_user_agent)
         {
-            $hash .= \Hybrid\Input::user_agent();
+            $hash .= Input::user_agent();
         }
 
         $values['_hash'] = Auth::add_salt($hash);
@@ -374,7 +374,7 @@ class Auth_Provider_Normal {
 
         if ($this->verify_user_agent)
         {
-            $hash .= \Hybrid\Input::user_agent();
+            $hash .= Input::user_agent();
         }
 
         if (!is_null($this->data['_hash']) and $this->data['_hash'] !== Auth::add_salt($hash)) 
@@ -415,14 +415,14 @@ class Auth_Provider_Normal {
             $data['' . $role->id] = \Inflector::friendly_title($role->name, '-', true);
         }
             
-        $this->data['roles']     = $data;
+        $this->data['roles'] = $data;
 
         return true;
     }
 
     protected function fetch_linked_accounts()
     {
-        $data  = array();
+        $data = array();
         
         $accounts = \DB::select('*')
             ->from('authentications')
@@ -433,12 +433,12 @@ class Auth_Provider_Normal {
         foreach ($accounts as $account) 
         {
             $data['' . $account->provider] = array(
-                'token' => $account->token,
+                'token'  => $account->token,
                 'secret' => $account->secret,
             );
         }
             
-        $this->data['accounts']     = $data;
+        $this->data['accounts'] = $data;
 
         return true;
     }

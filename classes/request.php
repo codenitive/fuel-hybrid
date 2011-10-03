@@ -46,7 +46,7 @@ class Request extends \Fuel\Core\Request {
     public static function connect($uri, $dataset = array()) 
     {
         $uri_segments   = explode(' ', $uri);
-        $type           = \Hybrid\Input::method();
+        $type           = Input::method();
 
         if (in_array(strtoupper($uri_segments[0]), array('DELETE', 'POST', 'PUT', 'GET'))) 
         {
@@ -135,13 +135,13 @@ class Request extends \Fuel\Core\Request {
     {
         // Since this just a imitation of curl request, \Hybrid\Input need to know the 
         // request method and data available in the connection.
-        \Hybrid\Input::connect($this->request_method, $this->request_data);
+        Input::connect($this->request_method, $this->request_data);
 
         $execute = parent::execute($method_params);
 
         // We need to clean-up any request object transfered to \Hybrid\Input so that
         // any following request to \Hybrid\Input will redirected to \Fuel\Core\Input
-        \Hybrid\Input::disconnect();
+        Input::disconnect();
         $this->request_method   = '';
         $this->request_data     = array();
 

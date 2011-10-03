@@ -48,7 +48,7 @@ class Template_Normal extends Template_Driver {
             $driver .= ".{$name}";
         }
 
-        return \Hybrid\Template::forge($driver);
+        return Template::forge($driver);
     }
 
     /**

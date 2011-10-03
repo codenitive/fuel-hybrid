@@ -97,7 +97,7 @@ abstract class Controller_Frontend extends Controller {
     {
         if (true === $this->auto_render)
         {
-            $this->template = \Hybrid\Template::forge($this->template);
+            $this->template = Template::forge($this->template);
         }
     }
     
