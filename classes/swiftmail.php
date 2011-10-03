@@ -40,7 +40,7 @@ namespace Hybrid;
      */
     public static function forge($config = array())
     {
-        $initconfig = \Config::load('email', null, true);
+        $initconfig = \Config::load('email', 'email', true);
         
         if (is_array($config) && is_array($initconfig))
         {
@@ -61,7 +61,7 @@ namespace Hybrid;
      */
     public static function factory($config = array())
     {
-        \Log::info("\Hybrid\Swiftmail::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Swiftmail::forge().");
+        \Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
         
         return static::forge($config);
     }

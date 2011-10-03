@@ -64,7 +64,7 @@ abstract class Chart_Driver {
      */
     public static function factory()
     {
-        \Log::info("\Hybrid\Chart_Driver::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Chart_Driver::forge().");
+        \Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
         
         return static::forge();
     }

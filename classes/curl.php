@@ -69,7 +69,7 @@ class Curl {
      */
     public static function factory($uri, $dataset = array())
     {
-        \Log::info("\Hybrid\Curl::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Curl::forge().");
+        \Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
         
         return static::forge($uri, $dataset);
     }

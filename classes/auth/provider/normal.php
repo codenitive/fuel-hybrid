@@ -77,9 +77,15 @@ class Auth_Provider_Normal {
     protected $verify_user_agent = false;
 
 
-    public static function factory()
+    public static function forge()
     {
         return new static();
+    }
+
+    public static function factory()
+    {
+        \Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
+        return static::forge();
     }
 
     protected function __construct()
