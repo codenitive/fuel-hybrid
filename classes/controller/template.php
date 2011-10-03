@@ -133,14 +133,8 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
         
         if (true === $this->auto_render and ! $response instanceof \Response)
         {
-            $status   = null;
-
-            if ($this->response instanceof \Response)
-            {
-                $status = $this->response->status;
-            }
-
-            $response = \Response::forge($this->template, $status);
+            $response       = $this->response;
+            $response->body = $this->template;
         }
 
         return $response;

@@ -73,9 +73,9 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      */
     public function before() 
     {
-        $this->language     = \Hybrid\Factory::get_language();
-        $this->user         = \Hybrid\Auth::instance('user')->get();
-        \Fuel::$profiling   = false;
+        $this->language   = \Hybrid\Factory::get_language();
+        $this->user       = \Hybrid\Auth::instance('user')->get();
+        \Fuel::$profiling = false;
 
         \Event::trigger('controller_before');
         
@@ -99,7 +99,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
     {
         \Event::trigger('controller_after');
         
-        if (! $response instanceof \Response)
+        if ( ! $response instanceof \Response)
         {
             $response = $this->response;    
         }
@@ -126,12 +126,12 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
         
         if (method_exists($this, $controller_method)) 
         {
-            call_user_func(array($this, $controller_method));
+            return call_user_func(array($this, $controller_method));
         }
         else 
         {
             $this->response->status = 404;
-            return;
+            return $this->response;
         }
     }
 
@@ -144,16 +144,18 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
     protected function response($data = array(), $http_code = 200) 
     {
         $rest_server   = \Hybrid\Restserver::forge($data, $http_code)
-                    ->format($this->rest_format)
-                    ->execute();
+            ->format($this->rest_format)
+            ->execute();
         
-        $this->response->body($rest_server->body);
-        $this->response->status     = $rest_server->status;
+        $this->response->body   = $rest_server->body;
+        $this->response->status = $rest_server->status;
         
         if (true === $this->set_content_type) 
         {
             // Set the correct format header
             $this->response->set_header('Content-Type', \Hybrid\Restserver::content_type($rest_server->format));
         }
+
+        return $this->response;
     }
 }

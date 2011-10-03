@@ -71,6 +71,8 @@ abstract class Controller_Frontend extends Controller {
         $this->response->status = $http_code;
 
         $this->template->set($data);
+
+        return $this->response;
     }
 
     /**
@@ -113,14 +115,8 @@ abstract class Controller_Frontend extends Controller {
         
         if (true === $this->auto_render and ! $response instanceof \Response)
         {
-            $status   = null;
-
-            if ($this->response instanceof \Response)
-            {
-                $status = $this->response->status;
-            }
-
-            $response = \Response::forge($this->template, $status);
+            $response       = $this->response;
+            $response->body = $this->template;
         }
 
         return $response;

@@ -112,8 +112,8 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
             \Fuel::$profiling = false;
         }
 
-        $this->language     = \Hybrid\Factory::get_language();
-        $this->user         = \Hybrid\Auth::instance('user')->get();
+        $this->language = \Hybrid\Factory::get_language();
+        $this->user     = \Hybrid\Auth::instance('user')->get();
 
         \Event::trigger('controller_before');
 
@@ -161,34 +161,34 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
      */
     public function router($resource, $arguments) 
     {
-        $pattern = \Hybrid\Restserver::$pattern;
+        $pattern           = \Hybrid\Restserver::$pattern;
         
         // Remove the extension from arguments too
-        $resource = preg_replace($pattern, '', $resource);
+        $resource          = preg_replace($pattern, '', $resource);
         
         // If they call user, go to $this->post_user();
         $controller_method = strtolower(\Hybrid\Input::method()) . '_' . $resource;
         
         if (method_exists($this, $controller_method) and true === $this->is_rest_call) 
         {
-            call_user_func(array($this, $controller_method));
+            return call_user_func(array($this, $controller_method));
         }
         elseif (method_exists($this, 'action_' . $resource)) 
         {
             if (true === $this->is_rest_call)
             {
                 $this->response->status = 404;
-                return;
+                return $this->response;
             }
 
-            call_user_func(array($this, 'action_' . $resource), $arguments);
+            return call_user_func(array($this, 'action_' . $resource), $arguments);
         }
         else 
         {
             if (true === $this->is_rest_call)
             {
                 $this->response->status = 404;
-                return;
+                return $this->response;
             }
             else
             {
@@ -209,10 +209,10 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
         if (true === $this->is_rest_call)
         {
             $rest_server = \Hybrid\Restserver::forge($data, $http_code)
-                        ->format($this->rest_format)
-                        ->execute();
+                ->format($this->rest_format)
+                ->execute();
             
-            $this->response->body($rest_server->body);
+            $this->response->body   = $rest_server->body;
             $this->response->status = $rest_server->status;
 
             if (true === $this->set_content_type) 
@@ -227,6 +227,8 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
             
             $this->template->set($data);
         }
+
+        return $this->response;
     }
     
     /**
@@ -255,14 +257,8 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
         
         if (true === $this->auto_render and ! $response instanceof \Response)
         {
-            $status   = null;
-
-            if ($this->response instanceof \Response)
-            {
-                $status = $this->response->status;
-            }
-
-            $response = \Response::forge($this->template, $status);
+            $response       = $this->response;
+            $response->body = $this->template;
         }
 
         return $response;
@@ -291,7 +287,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller {
      */
     protected function render_rest($response) 
     {
-        if (! $response instanceof \Response)
+        if ( ! $response instanceof \Response)
         {
             $response = $this->response;    
         }
