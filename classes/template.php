@@ -121,7 +121,7 @@ class Template {
      */
     public static function factory($name = null)
     {
-        \Log::info("\Hybrid\Template::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Template::forge().");
+        \Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
         
         return static::forge($name);
     }

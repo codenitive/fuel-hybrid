@@ -93,7 +93,7 @@ class Restserver {
      */
     public static function factory($data = array(), $http_code = 200)
     {
-        \Log::info("\Hybrid\Restserver::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Restserver::forge().");
+        \Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
         
         return static::forge($data, $http_code);
     }

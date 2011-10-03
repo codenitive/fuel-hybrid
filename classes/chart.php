@@ -83,7 +83,7 @@ class Chart {
      */
     public static function factory($name = null)
     {
-        \Log::info("\Hybrid\Chart::factory() already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Chart::forge().");
+        \Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
         
         return static::forge($name);
     }

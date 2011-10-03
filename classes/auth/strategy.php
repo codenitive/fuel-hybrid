@@ -65,7 +65,7 @@ abstract class Auth_Strategy {
         }
     }
 
-    public static function factory($provider)
+    public static function forge($provider)
     {
         $strategy = \Arr::get(static::$providers, $provider);
         
@@ -76,6 +76,13 @@ abstract class Auth_Strategy {
         
         $class = "\Hybrid\Auth_Strategy_{$strategy}";
         return new $class($provider);
+    }
+
+    public static function factory($provider)
+    {
+        \Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
+
+        return static::forge($provider);
     }
 
     public static function login_or_register($strategy)
