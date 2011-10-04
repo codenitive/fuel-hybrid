@@ -151,7 +151,7 @@ HELP;
     {
         $path = APPPATH.'config'.DS.$file.'.php';
 
-        $content = file_get_contents(PKGPATH.'autho/config/'.$file.'.php');
+        $content = file_get_contents(PKGPATH.'hybrid/config/'.$file.'.php');
 
         switch(true)
         {
