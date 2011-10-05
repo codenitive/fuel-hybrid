@@ -27,7 +27,7 @@ use \Textile;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Parser_Textile
- * @author      Mior Muhammad Zaki <crynobone@gmail.com>
+ * @author      Ignacio Muñoz Fernandez <nmunozfernandez@gmail.com>
  */
  
 class Parser_Textile extends Parser_Driver {
