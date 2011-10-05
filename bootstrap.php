@@ -13,6 +13,7 @@
 Autoloader::add_classes(array (
     'Hybrid\\Acl'                  => __DIR__.'/classes/acl.php',
     'Hybrid\\Curl'                 => __DIR__.'/classes/curl.php',
+    'Hybrid\\Cli'				   => __DIR__.'/classes/cli.php',
     'Hybrid\\Factory'              => __DIR__.'/classes/factory.php',
     'Hybrid\\Input'                => __DIR__.'/classes/input.php',
     'Hybrid\\Html'                 => __DIR__.'/classes/html.php',
