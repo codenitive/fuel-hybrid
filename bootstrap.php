@@ -57,6 +57,7 @@ Autoloader::add_classes(array (
     'Hybrid\\Parser'               => __DIR__.'/classes/parser.php',
     'Hybrid\\Parser_Driver'        => __DIR__.'/classes/parser/driver.php',
     'Hybrid\\Parser_Markdown'      => __DIR__.'/classes/parser/markdown.php',
+    'Hybrid\\Parser_Textile'       => __DIR__.'/classes/parser/textile.php',
     
     'Hybrid\\Template'             => __DIR__.'/classes/template.php',
     'Hybrid\\Template_Driver'      => __DIR__.'/classes/template/driver.php',
