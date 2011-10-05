@@ -32,7 +32,7 @@ use \Textile;
  
 class Parser_Textile extends Parser_Driver {
 
-	private $parser;
+    private $parser;
     /**
      * Construct a new instance (don't do anything right now)
      *
@@ -40,10 +40,10 @@ class Parser_Textile extends Parser_Driver {
      * @return  void
      */
     public function __construct() 
-	{
-		$this->parser = new Textile();
-	}
-	
+    {
+        $this->parser = new Textile();
+    }
+    
     /**
      * Parse textile formatted text to HTML
      *

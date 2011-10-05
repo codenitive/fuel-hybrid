@@ -39,7 +39,7 @@ class Parser_Bbcode extends Parser_Driver {
      * @return  void
      */
     public function __construct() {}
-	
+    
     /**
      * Parse bbcode formatted text to HTML
      *
@@ -52,7 +52,7 @@ class Parser_Bbcode extends Parser_Driver {
             $text = '';
         }
 
-		$decoda = new Decoda($text);
+        $decoda = new Decoda($text);
         return $decoda->parse();
     }
 
