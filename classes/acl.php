@@ -131,7 +131,7 @@ class Acl {
      * @access  protected
      * @var     array
      */
-    protected $roles     = array();
+    protected $roles     = array('guest');
      
     /**
      * List of resources

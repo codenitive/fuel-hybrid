@@ -410,6 +410,14 @@ class Auth_Provider_Normal {
             ->as_object()
             ->execute();
 
+        // set a default roles if user not authenticated
+        if (1 > count($roles))
+        {
+            $this->data['roles'] = array('0' => 'guest');
+            return true;
+        }
+
+        // link all available roles for this user
         foreach ($roles as $role) 
         {
             $data['' . $role->id] = \Inflector::friendly_title($role->name, '-', true);
