@@ -187,10 +187,7 @@ class Curl {
     {
         if (is_array($option))
         {
-            foreach ($option as $key => $value)
-            {
-                curl_setopt($this->adapter, $key, $value);
-            }
+            curl_setopt_array($this->adapter, $option);
         }
         elseif (is_string($option) and isset($value))
         {
