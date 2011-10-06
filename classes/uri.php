@@ -34,9 +34,10 @@ class Uri extends \Fuel\Core\Uri {
      * @static
      * @access  public
      * @param   mixed   $values
+     * @param   string  $start_with     Default string set to ?
      * @return  string 
      */
-    public static function build_get_query($values) 
+    public static function build_get_query($values, $start_with = '?') 
     {
         $dataset = array ();
         
@@ -67,7 +68,7 @@ class Uri extends \Fuel\Core\Uri {
             $check_get_input($values, $dataset);
         }
         
-        return '?' . implode('&', $dataset);
+        return $start_with . implode('&', $dataset);
     }
     
 }
