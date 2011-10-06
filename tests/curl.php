@@ -19,13 +19,6 @@ namespace Hybrid;
  * A set of class that extends the functionality of FuelPHP without 
  * affecting the standard workflow when the application doesn't actually 
  * utilize Hybrid feature.
- *
- * Authentication Class
- * 
- * Why another class? FuelPHP does have it's own Auth package but what Hybrid does 
- * it not defining how you structure your database but instead try to be as generic 
- * as possible so that we can support the most basic structure available
- * 
  * 
  * @package     Fuel
  * @subpackage  Hybrid
