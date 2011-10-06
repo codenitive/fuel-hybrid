@@ -290,19 +290,19 @@ class Acl {
             throw new \Fuel_Exception("\Hybrid\Acl: Can't add NULL resources.");
         }
 
+
+        if ( ! is_array($resources)) 
+        {
+            $resources = array($resources);
+        }
+
         if (is_array($resources)) 
         {
             foreach ($resources as $resource)
             {
-                array_push($this->resources, trim(\Inflector::friendly_title($resource, '-', true)));
+                $resource = trim(\Inflector::friendly_title($resource, '-', true));
+                array_push($this->resources, $resource);
             }
-
-            return true;
-        }
-
-        if (is_string($resources)) 
-        {
-            array_push($this->resources, trim(\Inflector::friendly_title($resources, '-', true)));
 
             return true;
         }
