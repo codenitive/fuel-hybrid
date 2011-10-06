@@ -31,22 +31,22 @@ class Test_Acl extends \Fuel\Core\TestCase {
             return;
         }
 
-        $acl = \Hybrid\Acl::instance('mock');
-
+        $acl      = \Hybrid\Acl::instance('mock');
+        
         $expected = true;
-        $output = $acl->access('blog', 'view');
+        $output   = $acl->access('blog', 'view');
         $this->assertEquals($expected, $output);
-
+        
         $expected = false;
-        $output = $acl->access('blog', 'edit');
+        $output   = $acl->access('blog', 'edit');
         $this->assertEquals($expected, $output);
-
+        
         $expected = false;
-        $output = $acl->access('forum', 'view');
+        $output   = $acl->access('forum', 'view');
         $this->assertEquals($expected, $output);
-
+        
         $expected = false;
-        $output = $acl->access('news', 'view');
+        $output   = $acl->access('news', 'view');
         $this->assertEquals($expected, $output);
     }
 
@@ -57,22 +57,22 @@ class Test_Acl extends \Fuel\Core\TestCase {
             return;
         }
         
-        $acl = \Hybrid\Acl::instance('mock');
-
+        $acl      = \Hybrid\Acl::instance('mock');
+        
         $expected = 200;
-        $output = $acl->access_status('blog', 'view');
+        $output   = $acl->access_status('blog', 'view');
         $this->assertEquals($expected, $output);
-
+        
         $expected = 401;
-        $output = $acl->access_status('blog', 'edit');
+        $output   = $acl->access_status('blog', 'edit');
         $this->assertEquals($expected, $output);
-
+        
         $expected = 401;
-        $output = $acl->access_status('forum', 'view');
+        $output   = $acl->access_status('forum', 'view');
         $this->assertEquals($expected, $output);
-
+        
         $expected = 401;
-        $output = $acl->access_status('news', 'view');
+        $output   = $acl->access_status('news', 'view');
         $this->assertEquals($expected, $output);
     }
     
