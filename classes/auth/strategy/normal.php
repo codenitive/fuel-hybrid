@@ -52,7 +52,7 @@ class Auth_Strategy_Normal extends Auth_Strategy {
         $users              = \Cookie::get('_users');
 
         // user data shouldn't be null if there user authentication available, if not populate from default
-        if (!is_null($users)) 
+        if ( ! is_null($users)) 
         {
             $users          = unserialize(\Crypt::decode($users));
         }

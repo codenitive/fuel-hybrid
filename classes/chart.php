@@ -48,14 +48,14 @@ class Chart {
      */
     public static function forge($name = null) 
     {
-        if (\is_null($name))
+        if (is_null($name))
         {
             $name = 'default';
         }
 
         $name   = \Str::lower($name);
 
-        if (!isset(static::$instances[$name]))
+        if ( ! isset(static::$instances[$name]))
         {
             $driver = '\\Hybrid\\Chart_' . ucfirst($name);
             
@@ -101,8 +101,16 @@ class Chart {
         return static::forge($name);
     }
     
+    /**
+     * Load Google JavaSript API Library
+     *
+     * @static
+     * @access  public
+     * @return  string
+     */
     public static function js() 
     {
         return '<script type="text/javascript" src="https://www.google.com/jsapi"></script>';
     }
+
 }

@@ -79,7 +79,7 @@ class Acl {
             $name = 'default';
         }
 
-        if (!isset(static::$instances[$name]))
+        if ( ! isset(static::$instances[$name]))
         {
             static::$instances[$name] = new static();
         }
@@ -162,7 +162,7 @@ class Acl {
     {
         $types = static::$types;
 
-        if (!in_array($resource, $this->resources)) 
+        if ( ! in_array($resource, $this->resources)) 
         {
             throw new \Fuel_Exception("\Hybrid\Acl: Unable to verify unknown resource: {$resource}.");
         }
@@ -174,7 +174,7 @@ class Acl {
 
         foreach ($user->roles as $role) 
         {
-            if (!isset($this->acl[$role . '/' . $resource])) 
+            if ( ! isset($this->acl[$role . '/' . $resource])) 
             {
                 continue;
             }
@@ -315,17 +315,17 @@ class Acl {
      */
     public function allow($roles, $resources, $type = 'view') 
     {
-        if (!in_array($type, static::$types)) 
+        if ( ! in_array($type, static::$types)) 
         {
             throw new \Fuel_Exception("\Hybrid\Acl: Type {$type} does not exist.");
         }
 
-        if (!is_array($roles)) 
+        if ( ! is_array($roles)) 
         {
             $roles = array($roles);
         }
 
-        if (!is_array($resources)) 
+        if ( ! is_array($resources)) 
         {
             $resources = array($resources);
         }
@@ -334,7 +334,7 @@ class Acl {
         {
             $role = \Inflector::friendly_title($role, '-', true);
 
-            if (!in_array($role, $this->roles)) 
+            if ( ! in_array($role, $this->roles)) 
             {
                 throw new \Fuel_Exception("\Hybrid\Acl: Role {$role} does not exist.");
 

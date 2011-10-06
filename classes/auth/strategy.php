@@ -69,7 +69,7 @@ abstract class Auth_Strategy {
     {
         $strategy = \Arr::get(static::$providers, $provider);
         
-        if (!$strategy)
+        if ( ! $strategy)
         {
             throw new \Fuel_Exception(sprintf('Provider "%s" has no strategy.', $provider));
         }

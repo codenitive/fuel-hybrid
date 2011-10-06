@@ -99,7 +99,7 @@ class Auth_Provider_Normal {
         
         foreach ($config as $key => $value)
         {
-            if (!property_exists($this, $key) or in_array($key, $reserved_property))
+            if ( ! property_exists($this, $key) or in_array($key, $reserved_property))
             {
                 continue;
             }
@@ -113,7 +113,7 @@ class Auth_Provider_Normal {
             \Config::set("autho.normal.{$key}", $value);
         }
 
-        if (!isset($config['optional_fields']) or !is_array($config['optional_fields']))
+        if ( ! isset($config['optional_fields']) or ! is_array($config['optional_fields']))
         {
             $config['optional_fields'] = array();
         }
@@ -363,7 +363,7 @@ class Auth_Provider_Normal {
     
         $user = $result->current();
 
-        if (!in_array($user->status, $this->allowed_status)) 
+        if ( ! in_array($user->status, $this->allowed_status)) 
         {
             // only verified user can login to this application
             return $this->reset();
@@ -377,7 +377,7 @@ class Auth_Provider_Normal {
             $hash .= Input::user_agent();
         }
 
-        if (!is_null($this->data['_hash']) and $this->data['_hash'] !== Auth::add_salt($hash)) 
+        if ( ! is_null($this->data['_hash']) and $this->data['_hash'] !== Auth::add_salt($hash)) 
         {
             return $this->reset();
         }
@@ -389,7 +389,7 @@ class Auth_Provider_Normal {
         
         foreach ($this->optional_fields as $property)
         {
-            if (!property_exists($user, $property))
+            if ( ! property_exists($user, $property))
             {
                 continue;
             }

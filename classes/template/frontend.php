@@ -43,7 +43,7 @@ class Template_Frontend extends Template_Driver {
     {
         $driver = 'frontend';
         
-        if (!is_null($name) and !empty($name))
+        if ( ! is_null($name) and ! empty($name))
         {
             $driver .= ".{$name}";
         }
@@ -80,7 +80,7 @@ class Template_Frontend extends Template_Driver {
     {
         $this->set_theme($theme);
 
-        if (!empty($filename) and $filename !== '_default_')
+        if ( ! empty($filename) and $filename !== '_default_')
         {
             $this->set_filename($filename);
         }

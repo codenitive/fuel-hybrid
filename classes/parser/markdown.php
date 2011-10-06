@@ -47,7 +47,7 @@ class Parser_Markdown extends Parser_Driver {
      */
     public function parse($text = '')
     {
-        if (empty($text) or !strval($text))
+        if (empty($text) or ! strval($text))
         {
             $text = '';
         }
