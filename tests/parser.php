@@ -19,15 +19,15 @@ namespace Hybrid;
  * A set of class that extends the functionality of FuelPHP without 
  * affecting the standard workflow when the application doesn't actually 
  * utilize Hybrid feature.
- *
+ * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Parser_Markdown
+ * @category    Parser
  * @category    Test
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Test_Parser_Markdown extends \Fuel\Core\TestCase {
+class Test_Parser extends \Fuel\Core\TestCase {
     
     /**
      * Setup the test
@@ -38,22 +38,26 @@ class Test_Parser_Markdown extends \Fuel\Core\TestCase {
     }
 
     /**
-     * Test Parser_Markdown::parse()
+     * Test Parser::forge();
      *
      * @test
      */
-    public function test_parse()
+    public function test_forge()
     {
-        $text = "Hello world
+        $output = Parser::forge('markdown');
 
-* Thank you";
-        $output   = Parser::forge('markdown')->parse($text);
-        $expected = "<p>Hello world</p>
-
-<ul>
-<li>Thank you</li>
-</ul>
-";
-        $this->assertEquals($expected, $output);
+        $this->assertTrue($output instanceof \Hybrid\Parser_Markdown);
     }
+    
+    /**
+     * Test Parser::forge() given invalid driver
+     *
+     * @test
+     * @expectedException \Fuel_Exception
+     */
+    public function test_forge_expected_exception_given_invalid_driver()
+    {
+        Parser::forge('html');
+    }
+    
 }

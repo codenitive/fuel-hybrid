@@ -22,13 +22,13 @@ namespace Hybrid;
  *
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Parser_Markdown
+ * @category    Template
  * @category    Test
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Test_Parser_Markdown extends \Fuel\Core\TestCase {
-    
+class Test_Template extends \Fuel\Core\TestCase {
+
     /**
      * Setup the test
      */
@@ -38,22 +38,26 @@ class Test_Parser_Markdown extends \Fuel\Core\TestCase {
     }
 
     /**
-     * Test Parser_Markdown::parse()
+     * Test Template::forge();
      *
      * @test
      */
-    public function test_parse()
+    public function test_forge()
     {
-        $text = "Hello world
-
-* Thank you";
-        $output   = Parser::forge('markdown')->parse($text);
-        $expected = "<p>Hello world</p>
-
-<ul>
-<li>Thank you</li>
-</ul>
-";
-        $this->assertEquals($expected, $output);
+        $output = Template::forge('normal');
+        
+        $this->assertTrue($output instanceof \Hybrid\Template_Normal); 
     }
+
+    /**
+     * Test Template::forge() given invalid driver
+     *
+     * @test
+     * @expectedException \Fuel_Exception
+     */
+    public function test_forge_expected_exception_given_invalid_driver()
+    {
+        Template::forge('helloworld');
+    }
+
 }

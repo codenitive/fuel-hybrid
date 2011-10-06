@@ -164,5 +164,3 @@ class Pagination extends \Fuel\Core\Pagination {
     }
 
 }
-
-/* End of file pagination.php */

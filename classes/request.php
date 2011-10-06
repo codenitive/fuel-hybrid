@@ -69,7 +69,7 @@ class Request extends \Fuel\Core\Request {
 
         static::$active = new static($uri, true, $dataset, $type);
 
-        if (!static::$main) 
+        if ( ! static::$main) 
         {
             logger(\Fuel::L_INFO, 'Setting main Request', __METHOD__);
             static::$main = static::$active;
@@ -109,7 +109,7 @@ class Request extends \Fuel\Core\Request {
         parent::__construct($uri, $route);
 
         // store this construct method and data staticly
-        if (!is_null($type))
+        if ( ! is_null($type))
         {
             $this->request_method = $type;
             $this->request_data   = $dataset;

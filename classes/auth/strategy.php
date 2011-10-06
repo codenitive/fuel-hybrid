@@ -30,7 +30,7 @@ namespace Hybrid;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Auth_Strategy
- * @author      Mior Muhammad Zaki <crynobone@gmail.com>
+ * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
 abstract class Auth_Strategy {
@@ -69,7 +69,7 @@ abstract class Auth_Strategy {
     {
         $strategy = \Arr::get(static::$providers, $provider);
         
-        if (!$strategy)
+        if ( ! $strategy)
         {
             throw new \Fuel_Exception(sprintf('Provider "%s" has no strategy.', $provider));
         }

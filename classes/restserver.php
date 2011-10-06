@@ -36,13 +36,13 @@ class Restserver {
      * @var     array 
      */
     protected static $supported_formats = array(
-        'xml'           => 'application/xml',
-        'rawxml'        => 'application/xml',
-        'json'          => 'application/json',
-        'serialized'    => 'application/vnd.php.serialized',
-        'php'           => 'text/plain',
-        'html'          => 'text/html',
-        'csv'           => 'application/csv'
+        'xml'        => 'application/xml',
+        'rawxml'     => 'application/xml',
+        'json'       => 'application/json',
+        'serialized' => 'application/vnd.php.serialized',
+        'php'        => 'text/plain',
+        'html'       => 'text/html',
+        'csv'        => 'application/csv'
     );
     
     /**
@@ -131,7 +131,7 @@ class Restserver {
      */
     public static function content_type($format)
     {
-        if (!array_key_exists($format, static::$supported_formats))
+        if ( ! array_key_exists($format, static::$supported_formats))
         {
             $format = 'html';
         }
@@ -292,7 +292,7 @@ class Restserver {
 
         $valid_logins = & \Config::get('rest.valid_logins');
 
-        if (!array_key_exists($username, $valid_logins))
+        if ( ! array_key_exists($username, $valid_logins))
         {
             return false;
         }
@@ -333,7 +333,7 @@ class Restserver {
             }
         }
 
-        if (!static::check_login($username, $password))
+        if ( ! static::check_login($username, $password))
         {
             static::force_login();
         }
@@ -375,7 +375,7 @@ class Restserver {
         preg_match_all('@(username|nonce|uri|nc|cnonce|qop|response)=[\'"]?([^\'",]+)@', $digest_string, $matches);
         $digest = array_combine($matches[1], $matches[2]);
 
-        if (!array_key_exists('username', $digest) or !static::check_login($digest['username']))
+        if ( ! array_key_exists('username', $digest) or ! static::check_login($digest['username']))
         {
             static::force_login($uniqid);
         }
@@ -455,7 +455,7 @@ class Restserver {
      */
     protected static function detect_lang()
     {
-        if (!$lang = Input::server('HTTP_ACCEPT_LANGUAGE'))
+        if ( ! $lang = Input::server('HTTP_ACCEPT_LANGUAGE'))
         {
             return null;
         }

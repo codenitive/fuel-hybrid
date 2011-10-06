@@ -46,7 +46,7 @@ class Input {
      */
     public static function connect($method = '', $data = array()) 
     {
-        if (!empty($method)) 
+        if ( ! empty($method)) 
         {
             static::$request = (object) array('method' => $method, 'data' => $data);
         }
@@ -77,12 +77,12 @@ class Input {
         $default            = null;
         $index              = null;
         
-        if (!is_null(static::$request) and static::$request->method !== '') 
+        if ( ! is_null(static::$request) and static::$request->method !== '') 
         {
             $using_hybrid   = true;
         }
 
-        if (!$using_hybrid and $name == 'method') 
+        if ( ! $using_hybrid and $name == 'method') 
         {
             return call_user_func(array('\\Input', 'method'));
         }

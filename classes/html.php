@@ -54,7 +54,7 @@ class Html extends \Fuel\Core\Html {
     {
         $title = \Config::get('app.site_name');
 
-        if (!empty($content) and is_string($content)) 
+        if ( ! empty($content) and is_string($content)) 
         {
             $title = sprintf('%s &mdash; %s', $content, $title);
         }
@@ -105,7 +105,7 @@ class Html extends \Fuel\Core\Html {
      */
     public static function header($content = '', $attr = array())
     {
-        if(static::$html5)
+        if (static::$html5)
         {
             return html_tag('header', $attr, $content);
         }
