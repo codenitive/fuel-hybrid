@@ -5,6 +5,7 @@ A set of class that extends the functionality of FuelPHP without affecting the s
 
 * Mior Muhammad Zaki 
 * Arif Azraai
+* Ignacio Muñoz Fernandez
 
 ## Documentation
 
