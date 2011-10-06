@@ -30,7 +30,7 @@ namespace Hybrid;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Auth_Strategy
- * @author      Mior Muhammad Zaki <crynobone@gmail.com>
+ * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
 abstract class Auth_Strategy {
