@@ -264,6 +264,7 @@ class Acl {
             foreach ($roles as $role)
             {
                 $role = trim(\Inflector::friendly_title($role, '-', true));
+
                 if ( ! in_array($role, $this->roles))
                 {
                     array_push($this->roles, $role);
@@ -301,7 +302,11 @@ class Acl {
             foreach ($resources as $resource)
             {
                 $resource = trim(\Inflector::friendly_title($resource, '-', true));
-                array_push($this->resources, $resource);
+                
+                if ( ! in_array($resource, $this->resources))
+                {
+                    array_push($this->resources, $resource);
+                }
             }
 
             return true;
