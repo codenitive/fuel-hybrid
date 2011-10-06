@@ -46,19 +46,24 @@ class Test_Acl extends \Fuel\Core\TestCase {
         \Package::load('hybrid');
 
         $acl = Acl::forge('mock');
-
         $acl->add_roles('guest');
         $acl->add_resources(array('blog', 'forum', 'news'));
         $acl->allow('guest', array('blog'), 'view');
         $acl->deny('guest', 'forum');
         $user_table = \DB::list_tables('users');
+        
 
         if(empty($user_table))
         {
-            $this->enable_test = false;
+            $this->markTestSkipped('User table is not available');
         }
     }
 
+    /**
+     * Test Acl::forge()
+     *
+     * @test
+     */
     public function test_forge()
     {
         $output = Acl::forge('mock');
@@ -73,11 +78,6 @@ class Test_Acl extends \Fuel\Core\TestCase {
      */
     public function test_access()
     {
-        if ( ! $this->enable_test)
-        {
-            return;
-        }
-
         $acl      = Acl::instance('mock');
         
         $expected = true;
@@ -103,12 +103,7 @@ class Test_Acl extends \Fuel\Core\TestCase {
      * @test
      */
     public function test_access_status()
-    {
-        if ( ! $this->enable_test)
-        {
-            return;
-        }
-        
+    {   
         $acl      = Acl::instance('mock');
         
         $expected = 200;

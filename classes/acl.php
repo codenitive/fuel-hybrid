@@ -172,6 +172,11 @@ class Acl {
         $type_id    = array_search($type, $types);
         $length     = count($types);
 
+        if (empty($user->roles) and in_array('guest', $this->roles))
+        {
+            array_push($user->roles, 'guest');
+        }
+
         foreach ($user->roles as $role) 
         {
             if ( ! isset($this->acl[$role . '/' . $resource])) 
@@ -249,19 +254,21 @@ class Acl {
             throw new \Fuel_Exception("\Hybrid\Acl: Can't add NULL roles.");
         }
 
+        if (is_string($roles)) 
+        {
+            $roles = array($roles);
+        }
+        
         if (is_array($roles)) 
         {
             foreach ($roles as $role)
             {
-                array_push($this->roles, trim(\Inflector::friendly_title($role, '-', true)));
+                $role = trim(\Inflector::friendly_title($role, '-', true));
+                if ( ! in_array($role, $this->roles))
+                {
+                    array_push($this->roles, $role);
+                }
             }
-
-            return true;
-        }
-
-        if (is_string($roles)) 
-        {
-            array_push($this->roles, trim(\Inflector::friendly_title($roles, '-', true)));
 
             return true;
         }
