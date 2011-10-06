@@ -25,7 +25,7 @@ class Test_Html extends \Fuel\Core\TestCase {
     
     public function setup() 
     {
-        \Fuel::add_package('hybrid');
+        \Package::load('hybrid');
         \Config::set('app.site_name', 'FuelPHP');
     }
 

@@ -26,7 +26,7 @@ namespace Hybrid;
  	
  	public function setup()
  	{
- 		\Fuel::add_package('hybrid');
+ 		\Package::load('hybrid');
  	}
 
  	public function test_js()

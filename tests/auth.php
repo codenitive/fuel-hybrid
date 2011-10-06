@@ -6,7 +6,7 @@ class Test_Auth extends \Fuel\Core\TestCase {
 
     public function setup()
     {
-        \Fuel::add_package('hybrid');
+        \Package::load('hybrid');
         \Config::load('autho', 'autho');
         \Config::set('autho.salt', '12345');
     }

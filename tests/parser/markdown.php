@@ -6,7 +6,7 @@ class Test_Parser_Markdown extends \Fuel\Core\TestCase {
     
     public function setup()
     {
-        \Fuel::add_package('hybrid');
+        \Package::load('hybrid');
     }
 
     public function test_parse()
