@@ -1,16 +1,51 @@
 <?php
 
+/**
+ * Fuel is a fast, lightweight, community driven PHP5 framework.
+ *
+ * @package    Fuel
+ * @version    1.0
+ * @author     Fuel Development Team
+ * @license    MIT License
+ * @copyright  2010 - 2011 Fuel Development Team
+ * @link       http://fuelphp.com
+ */
+
 namespace Hybrid;
+
+/**
+ * Hybrid 
+ * 
+ * A set of class that extends the functionality of FuelPHP without 
+ * affecting the standard workflow when the application doesn't actually 
+ * utilize Hybrid feature.
+ *
+ * Authentication Class
+ * 
+ * Why another class? FuelPHP does have it's own Auth package but what Hybrid does 
+ * it not defining how you structure your database but instead try to be as generic 
+ * as possible so that we can support the most basic structure available
+ * 
+ * 
+ * @package     Fuel
+ * @subpackage  Hybrid
+ * @category    Acl
+ * @category    Test
+ * @author      Mior Muhammad Zaki <crynobone@gmail.com>
+ */
 
 class Test_Acl extends \Fuel\Core\TestCase {
     
     private $enable_test = true;
 
+    /**
+     * Setup the test
+     */
     public function setup()
     {
         \Package::load('hybrid');
 
-        $acl = \Hybrid\Acl::forge('mock');
+        $acl = Acl::forge('mock');
 
         $acl->add_roles('guest');
         $acl->add_resources(array('blog', 'forum', 'news'));
@@ -24,6 +59,18 @@ class Test_Acl extends \Fuel\Core\TestCase {
         }
     }
 
+    public function test_forge()
+    {
+        $output = Acl::forge('mock');
+
+        $this->assertTrue($output instanceof \Hybrid\Acl);
+    }
+
+    /**
+     * Test Acl::access();
+     *
+     * @test
+     */
     public function test_access()
     {
         if ( ! $this->enable_test)
@@ -31,7 +78,7 @@ class Test_Acl extends \Fuel\Core\TestCase {
             return;
         }
 
-        $acl      = \Hybrid\Acl::instance('mock');
+        $acl      = Acl::instance('mock');
         
         $expected = true;
         $output   = $acl->access('blog', 'view');
@@ -50,14 +97,19 @@ class Test_Acl extends \Fuel\Core\TestCase {
         $this->assertEquals($expected, $output);
     }
 
-    public function test_status()
+    /**
+     * Test Acl::access_status();
+     *
+     * @test
+     */
+    public function test_access_status()
     {
         if ( ! $this->enable_test)
         {
             return;
         }
         
-        $acl      = \Hybrid\Acl::instance('mock');
+        $acl      = Acl::instance('mock');
         
         $expected = 200;
         $output   = $acl->access_status('blog', 'view');

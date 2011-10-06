@@ -29,45 +29,42 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Factory
+ * @category    Parser
  * @category    Test
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Test_Factory extends \Fuel\Core\TestCase {
+class Test_Parser extends \Fuel\Core\TestCase {
     
     /**
      * Setup the test
      */
-    public function setup() 
+    public function setup()
     {
         \Package::load('hybrid');
     }
 
     /**
-     * Test Factory::get_language();
+     * Test Parser::forge();
      *
      * @test
      */
-    public function test_language() 
+    public function test_forge()
     {
-        $expected = \Config::get('language');
-        $output   = Factory::get_language();
-        
-        $this->assertEquals($expected, $output);
+        $output = Parser::forge('markdown');
+
+        $this->assertTrue($output instanceof \Hybrid\Parser_Markdown);
     }
     
     /**
-     * Test Factory::get_identity();
+     * Test Parser::forge() given invalid driver
      *
      * @test
+     * @expectedException \Fuel_Exception
      */
-    public function test_identity() 
+    public function test_forge_expected_exception_given_invalid_driver()
     {
-        $expected = \Config::get('app.identity');
-        $output = \Hybrid\Factory::get_identity();
-        
-        $this->assertEquals($expected, $output);
+        Parser::forge('html');
     }
-
+    
 }

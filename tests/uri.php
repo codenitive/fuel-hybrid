@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Fuel
- *
  * Fuel is a fast, lightweight, community driven PHP5 framework.
  *
  * @package    Fuel
@@ -16,13 +14,31 @@
 namespace Hybrid;
 
 /**
- * Uri class tests
+ * Hybrid 
  * 
- * @group Hybrid
- * @group Uri
+ * A set of class that extends the functionality of FuelPHP without 
+ * affecting the standard workflow when the application doesn't actually 
+ * utilize Hybrid feature.
+ *
+ * Authentication Class
+ * 
+ * Why another class? FuelPHP does have it's own Auth package but what Hybrid does 
+ * it not defining how you structure your database but instead try to be as generic 
+ * as possible so that we can support the most basic structure available
+ * 
+ * 
+ * @package     Fuel
+ * @subpackage  Hybrid
+ * @category    Uri
+ * @category    Test
+ * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+
 class Test_Uri extends \Fuel\Core\TestCase {
     
+    /**
+     * Setup the test
+     */
     public function setup() 
     {
         \Fuel::add_package('hybrid');
@@ -34,23 +50,23 @@ class Test_Uri extends \Fuel\Core\TestCase {
         );
     }
 
+    /**
+     * Test Uri::build_get_query()
+     *
+     * @test
+     */
     public function test_build_get_query() 
     {
         $output = \Hybrid\Uri::build_get_query(array('foo', 'hello'));
         $expected = '?foo=bar&hello=world';
-
         $this->assertEquals($expected, $output);
 
         $output = \Hybrid\Uri::build_get_query(array('foo', 'unavailable'));
         $expected = '?foo=bar';
-
         $this->assertEquals($expected, $output);
-    }
-    public function test_build_get_query_given_empty() 
-    {
+    
         $output = \Hybrid\Uri::build_get_query(array('unavailable'));
         $expected = '?';
-
         $this->assertEquals($expected, $output);
     }
 
