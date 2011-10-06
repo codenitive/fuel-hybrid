@@ -71,7 +71,15 @@
                     <td>String</td>
                 <tr>
                     <th>Example</th>
-                    <td></td>
+                    <td><pre class="php"><code>&lt;?php
+$_GET = array(
+    'hello' => 'world',
+    'foo'   => 'bar',
+    'fuel'  => 'php',
+);
+
+echo \Hybrid\Uri::build_get_query(array('foo', 'hello')); // return '?foo=bar&amp;hello=world'
+</code></pre></td>
                 </tr>
                 </tbody>
             </table>
