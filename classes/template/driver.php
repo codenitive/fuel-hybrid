@@ -46,7 +46,7 @@ abstract class Template_Driver {
      */
     public static function _init()
     {
-        if (\is_null(static::$config))
+        if (is_null(static::$config))
         {
             \Config::load('app', 'app');
             static::$config = \Config::get('app.template', array());
@@ -130,7 +130,7 @@ abstract class Template_Driver {
      */
     public function set_folder($path = null)
     {
-        if (!\is_dir($path))
+        if ( ! \is_dir($path))
         {
             throw new \Fuel_Exception("\Hybrid\Template_Driver: Path {$path} does not appear to a valid folder.");
         }
@@ -151,7 +151,7 @@ abstract class Template_Driver {
      */
     public function set_filename($filename = null)
     {
-        if (!empty($filename))
+        if ( ! empty($filename))
         {
             $this->filename = $filename;
         }

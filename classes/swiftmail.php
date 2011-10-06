@@ -273,12 +273,12 @@ Factory::import('swift/swift_required', 'vendor');
      */
     protected function add_multiple_recipients($type, $address, $name = '')
     {
-        if (!isset($this->recipients[$type]))
+        if ( ! isset($this->recipients[$type]))
         {
             throw new \Fuel_Exception("Recipient type: {$type} does not exist");
         }
 
-        if (!empty($name))
+        if ( ! empty($name))
         {
             $this->recipients[$type][$address] = $name; 
         }
@@ -426,12 +426,12 @@ Factory::import('swift/swift_required', 'vendor');
 
         $transport = new \Swift_SmtpTransport($smtp_host, $smtp_port, $ssl);
 
-        if (!empty($smtp_user))
+        if ( ! empty($smtp_user))
         {
             $transport->setUsername($smtp_user);
         }
 
-        if (!empty($smtp_pass))
+        if ( ! empty($smtp_pass))
         {
             $transport->setPassword($smtp_pass);
         }

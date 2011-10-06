@@ -84,11 +84,11 @@ class Auth {
 
         $name = \Str::lower($name);
 
-        if (!isset(static::$instances[$name]))
+        if ( ! isset(static::$instances[$name]))
         {
             $driver = '\\Hybrid\\Auth_Driver_' . \Str::ucfirst($name);
 
-            if (!!class_exists($driver))
+            if ( !! class_exists($driver))
             {
                 static::$instances[$name] = new $driver();
             }
@@ -157,7 +157,7 @@ class Auth {
     {
         $user = static::instance('user')->get();
 
-        if (!is_array($check_roles)) 
+        if ( ! is_array($check_roles)) 
         {
             $check_roles = array($check_roles);
         }
@@ -213,13 +213,13 @@ class Auth {
 
     public static function link_account($user_id, $user_data)
     {
-        if (empty($user_data) or !isset($user_data['credentials']))
+        if (empty($user_data) or ! isset($user_data['credentials']))
         {
             return ;
         }
         
         // some provider does not have secret key
-        if (!isset($user_data['credentials']['secret']))
+        if ( ! isset($user_data['credentials']['secret']))
         {
             $user_data['credentials']['secret'] = null;
         }
@@ -239,23 +239,23 @@ class Auth {
         if (\DB::count_last_query() > 0)
         {
             \DB::update('authentications')->set(array(
-                'uid'      => $user_data['credentials']['uid'],
-                'token'    => $user_data['credentials']['token'],
-                'secret'   => $user_data['credentials']['secret'],
-            ))
-            ->where('user_id', '=', $user_id)
-            ->where('provider', '=', $user_data['credentials']['provider'])
-            ->execute();
+                    'uid'      => $user_data['credentials']['uid'],
+                    'token'    => $user_data['credentials']['token'],
+                    'secret'   => $user_data['credentials']['secret'],
+                ))
+                ->where('user_id', '=', $user_id)
+                ->where('provider', '=', $user_data['credentials']['provider'])
+                ->execute();
         }
         else
         {
             \DB::insert('authentications')->set(array(
-                'user_id'  => $user_id,
-                'provider' => $user_data['credentials']['provider'],
-                'uid'      => $user_data['credentials']['uid'],
-                'token'    => $user_data['credentials']['token'],
-                'secret'   => $user_data['credentials']['secret'],
-            ))->execute();
+                    'user_id'  => $user_id,
+                    'provider' => $user_data['credentials']['provider'],
+                    'uid'      => $user_data['credentials']['uid'],
+                    'token'    => $user_data['credentials']['token'],
+                    'secret'   => $user_data['credentials']['secret'],
+                ))->execute();
         }
 
         return true;

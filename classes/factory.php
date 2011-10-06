@@ -40,7 +40,7 @@ class Factory {
     public static function _init() 
     {
         // initiate this only once
-        if (!is_null(static::$identity)) 
+        if ( ! is_null(static::$identity)) 
         {
             return;
         }
@@ -56,7 +56,7 @@ class Factory {
 
         $lang = \Session::get(static::$identity . '_lang');
 
-        if (!is_null($lang)) 
+        if ( ! is_null($lang)) 
         {
             \Config::set('language', $lang);
             static::$language = $lang;
@@ -127,6 +127,13 @@ class Factory {
         return static::$language;
     }
 
+    /**
+     * Import file to actually look inside current hybrid folder instead
+     *
+     * @static
+     * @access  public
+     * @return  void
+     */
     public static function import($path, $folder = 'classes')
     {
         $dir_path = __DIR__.'/../';
