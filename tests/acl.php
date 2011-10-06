@@ -4,6 +4,8 @@ namespace Hybrid;
 
 class Test_Acl extends \Fuel\Core\TestCase {
     
+    private $enable_test = true;
+
     public function setup()
     {
         \Package::load('hybrid');
@@ -14,11 +16,17 @@ class Test_Acl extends \Fuel\Core\TestCase {
         $acl->add_resources(array('blog', 'forum', 'news'));
         $acl->allow('guest', array('blog'), 'view');
         $acl->deny('guest', 'forum');
+        $user_table = \DB::list_tables('users');
+
+        if(empty($user_table))
+        {
+            $this->enable_test = false;
+        }
     }
 
     public function test_access()
     {
-        if ( ! class_exists('\\Model_User'))
+        if ( ! $this->enable_test)
         {
             return;
         }
@@ -44,7 +52,7 @@ class Test_Acl extends \Fuel\Core\TestCase {
 
     public function test_status()
     {
-        if ( ! class_exists('\\Model_User'))
+        if ( ! $this->enable_test)
         {
             return;
         }
