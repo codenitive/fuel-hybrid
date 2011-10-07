@@ -183,10 +183,4 @@ class Config extends \Fuel\Core\Config
 		return static::$drivers;
 	}
 	
-	protected static function check_extension($string)
-	{
-		
-		$string = substr($string, 0, 3);
-		
-	}
 }
