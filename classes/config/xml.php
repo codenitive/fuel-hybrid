@@ -27,5 +27,16 @@ namespace Hybrid;
  */
 class Config_Xml extends Config_Driver
 {
-
+	public function load($file)
+	{
+		return \Format::forge(file_get_contents($file), 'xml')->to_array();
+	}
+	
+	/**
+	 * 
+	 */
+	public function save()
+	{
+		
+	}
 }

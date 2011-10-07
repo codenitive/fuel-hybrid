@@ -29,7 +29,7 @@ class Config_Yml extends Config_Driver
 	
 	public function load($file)
 	{
-		return \Format::forge(\Fuel::load($file), 'yaml')->to_array();
+		return \Format::forge(file_get_contents($file), 'yaml')->to_array();
 	}
 	
 	/**

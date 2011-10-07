@@ -27,5 +27,16 @@ namespace Hybrid;
  */
 class Config_Ini extends Config_Driver
 {
-
+	public function load($file)
+	{
+		return parse_ini_file($file, true, INI_SCANNER_NORMAL);
+	}
+	
+	/**
+	 * 
+	 */
+	public function save()
+	{
+		
+	}
 }
