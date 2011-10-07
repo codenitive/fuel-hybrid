@@ -50,8 +50,6 @@ class Config extends \Fuel\Core\Config
 		{
 			static::$drivers[$name] = new $driver;
 		}
-		
-		\Debug::dump(static::$drivers);
 	}
 	
 	
@@ -71,7 +69,6 @@ class Config extends \Fuel\Core\Config
 		elseif(is_string($file) and in_array(strtolower(substr($file, 0, 3)), array_keys(static::$drivers)))
 		{
 			$ext = substr(strtolower($file), 0, 3);
-			var_dump($ext);
 			$file = str_replace($ext.'::', "", $file);
 			if($paths = \Fuel::find_file('config', $file, '.'.$ext, true))
 			{
@@ -79,11 +76,12 @@ class Config extends \Fuel\Core\Config
 				// the app can override anything.
 				$paths = array_reverse($paths);
 				
-				var_dump(file_get_contents($paths[0]));
-				exit;
+
 				foreach ($paths as $path)
 				{
-					$config = $overwrite ? array_merge($config, static::$drivers[$ext]->load($path)) : \Arr::merge($config, static::$drivers[$path]->load($file));
+					$filepath = $paths[0];
+					$ext = substr(strrchr($filepath,'.'),1);
+					$config = $overwrite ? array_merge($config, static::$drivers[$ext]->load($filepath)) : \Arr::merge($config, static::$drivers[$ext]->load($filepath));
 				}
 			}
 		}
@@ -95,16 +93,15 @@ class Config extends \Fuel\Core\Config
 				$paths = array_merge($paths, array_reverse(\Fuel::find_file('config', $file, '.'.$ext, true)));
 			}
 			
-			if(count($paths) > 0)
+
+			foreach ($paths as $path)
 			{
 				$filepath = $paths[0];
 				$ext = substr(strrchr($filepath,'.'),1);
 				$config = $overwrite ? array_merge($config, static::$drivers[$ext]->load($filepath)) : \Arr::merge($config, static::$drivers[$ext]->load($filepath));
-			}
-			
-			
+			}			
 		}
-		\Debug::dump($config);
+		
 		if ($group === null)
 		{
 			static::$items = $reload ? $config : ($overwrite ? array_merge(static::$items, $config) : \Arr::merge(static::$items, $config));
