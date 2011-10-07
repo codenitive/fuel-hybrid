@@ -26,32 +26,11 @@ namespace Hybrid;
  */
 class Config_Php extends Config_Driver
 {
-	/**
-	 * File extensions this is only applied to file system config type
-	 * 
-	 * @access protected
-	 * @var string
-	 */
-	protected $extension = 'php';
-	
-	/**
-	 * Load prefix to specify from where it loads the config file in first instance
-	 * 
-	 * @access protected
-	 * @var string
-	 */
-	protected $load_prefix	= 'php';
-	
+
 	
 	public function load($file)
 	{
-		
-		var_dump($file);
-		
-		$configs = array();
-		
-		// always return these two values	
-		return array('file' => $filename, 'configs' => $configs);
+		return \Fuel::load($file);
 	}
 	
 	/**

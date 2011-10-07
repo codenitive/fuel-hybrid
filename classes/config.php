@@ -13,9 +13,6 @@
 
 namespace Hybrid;
 
-use \Fuel\Core\Inflector,
-	\Fuel\Core\Fuel_Exception;
-
 /**
  * Hybrid 
  * 
@@ -35,14 +32,14 @@ class Config extends \Fuel\Core\Config
 	 * 
 	 * @var array
 	 */
-	static protected $drivers = array(
-			'php' => 'Config_Php',
-			'yml' => 'Config_Yml',
-			'xml' => 'Config_Xml',
-			'ini' => 'Config_Ini',
-			'db'  => 'Config_Db',
-			'redis' => 'Config_Redis',
-			'mongo' => 'Config_Mongo',
+	static public $drivers = array(
+			'php' => '\\Hybrid\\Config_Php',
+			'yml' => '\\Hybrid\\Config_Yml',
+			'xml' => '\\Hybrid\\Config_Xml',
+			'ini' => '\\Hybrid\\Config_Ini',
+			'db'  => '\\Hybrid\\Config_Db',
+			'redis' => '\\Hybrid\\Config_Redis',
+			'mongo' => '\\Hybrid\\Config_Mongo',
 	);
 	
 	
@@ -51,10 +48,10 @@ class Config extends \Fuel\Core\Config
 		$available_drivers = array();
 		foreach(static::$drivers as $name => $driver)
 		{
-			$available_drivers[$name] = new $driver();
+			static::$drivers[$name] = new $driver;
 		}
 		
-		static::$drivers = $available_drivers;
+		\Debug::dump(static::$drivers);
 	}
 	
 	
@@ -65,6 +62,7 @@ class Config extends \Fuel\Core\Config
 			return false;
 		}
 		
+		$config = array();
 		// check if is a direct include file
 		if (is_array($file))
 		{
@@ -72,17 +70,20 @@ class Config extends \Fuel\Core\Config
 		}
 		elseif(is_string($file) and in_array(strtolower(substr($file, 0, 3)), array_keys(static::$drivers)))
 		{
-			$ext = strtolower(substr($file, 0, 3));
-			$file = str_replace($ext.'::');
-			
+			$ext = substr(strtolower($file), 0, 3);
+			var_dump($ext);
+			$file = str_replace($ext.'::', "", $file);
 			if($paths = \Fuel::find_file('config', $file, '.'.$ext, true))
 			{
 				// Reverse the file list so that we load the core configs first and
 				// the app can override anything.
 				$paths = array_reverse($paths);
+				
+				var_dump(file_get_contents($paths[0]));
+				exit;
 				foreach ($paths as $path)
 				{
-					$config = $overwrite ? array_merge($config, static::$drivers[$ext]->load($file)) : \Arr::merge($config, static::$drivers[$ext]->load($file));
+					$config = $overwrite ? array_merge($config, static::$drivers[$ext]->load($path)) : \Arr::merge($config, static::$drivers[$path]->load($file));
 				}
 			}
 		}
@@ -94,16 +95,16 @@ class Config extends \Fuel\Core\Config
 				$paths = array_merge($paths, array_reverse(\Fuel::find_file('config', $file, '.'.$ext, true)));
 			}
 			
-			if(!count($paths) > 0)
+			if(count($paths) > 0)
 			{
-				$file = $paths[0];
-				$ext = end(explode("."), $paths[0]);
-				$config = $overwrite ? array_merge($config, static::$drivers[$ext]->load($file)) : \Arr::merge($config, static::$drivers[$ext]->load($file));
+				$filepath = $paths[0];
+				$ext = substr(strrchr($filepath,'.'),1);
+				$config = $overwrite ? array_merge($config, static::$drivers[$ext]->load($filepath)) : \Arr::merge($config, static::$drivers[$ext]->load($filepath));
 			}
 			
 			
 		}
-		
+		\Debug::dump($config);
 		if ($group === null)
 		{
 			static::$items = $reload ? $config : ($overwrite ? array_merge(static::$items, $config) : \Arr::merge(static::$items, $config));
@@ -141,7 +142,7 @@ class Config extends \Fuel\Core\Config
 		$driver_class = strtolower($driver_class);
 		if(!$driver_class === "")
 		{
-			$driver_class = 'model_'.$drivername;
+			$driver_class = 'config_'.$drivername;
 		}
 		
 		if(!class_exists($driver_class) and get_parent_class($driver_class) === "Config_Driver")

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Fuel is a fast, lightweight, community driven PHP5 framework.
  *
@@ -27,5 +26,17 @@ namespace Hybrid;
  */
 class Config_Yml extends Config_Driver
 {
-
+	
+	public function load($file)
+	{
+		return \Format::forge(\Fuel::load($file), 'yaml')->to_array();
+	}
+	
+	/**
+	 * 
+	 */
+	public function save()
+	{
+		
+	}
 }
