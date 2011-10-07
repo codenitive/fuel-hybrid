@@ -42,7 +42,7 @@ Factory::import('swift/swift_required', 'vendor');
     {
         $initconfig = \Config::load('email', 'email', true);
         
-        if (is_array($config) && is_array($initconfig))
+        if (is_array($config) and is_array($initconfig))
         {
             $config = array_merge($initconfig, $config);
         }
@@ -89,11 +89,11 @@ Factory::import('swift/swift_required', 'vendor');
      * @var     array
      */
     protected $recipients   = array(
-        'to'        => array(),
-        'bcc'       => array(),
-        'cc'        => array(),
-        'from'      => array(),
-        'reply_to'  => array(),
+        'to'       => array(),
+        'bcc'      => array(),
+        'cc'       => array(),
+        'from'     => array(),
+        'reply_to' => array(),
     );
 
     /**
@@ -106,10 +106,10 @@ Factory::import('swift/swift_required', 'vendor');
 
     public function __construct($config)
     {
-        $this->config   = $config;
-        $transport      = "transport_" . $config['protocol'];
-
-        $this->result   = new Swiftmail_Result;
+        $this->config = $config;
+        $transport    = "transport_" . $config['protocol'];
+        
+        $this->result = new Swiftmail_Result;
 
         if (method_exists($this, $transport))
         {
@@ -300,19 +300,13 @@ Factory::import('swift/swift_required', 'vendor');
         $this->messager->setTo($this->recipients['to']);
         $this->messager->setFrom($this->recipients['from']);
 
-        if (count($this->recipients['reply_to']) > 0)
+        foreach (array('reply_to', 'cc', 'bcc') as $type)
         {
-            $this->messager->setReplyTo($this->recipients['reply_to']);
-        }
-
-        if (count($this->recipients['cc']) > 0)
-        {
-            $this->messager->setCc($this->recipients['cc']);
-        }
-
-        if (count($this->recipients['bcc']) > 0)
-        {
-            $this->messager->setBcc($this->recipients['bcc']);
+            if (count($this->recipients[$type]) > 0)
+            {
+                $method = 'set'.\Inflector::camelize($type);
+                $this->messenger->{$method}($this->recipients[$type]);
+            }
         }
 
         $result = $this->mailer->send($this->messager, $failure);
@@ -321,8 +315,8 @@ Factory::import('swift/swift_required', 'vendor');
 
         if (intval($result) >= 1)
         {
-            $this->result->success       = true;
-            $this->result->total_sent    = intval($result);
+            $this->result->success    = true;
+            $this->result->total_sent = intval($result);
         }
 
         if (false === $debug)
