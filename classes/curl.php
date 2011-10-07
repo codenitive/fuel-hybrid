@@ -49,7 +49,7 @@ class Curl {
         }
         else
         {
-            throw new \Fuel_Exception("\Hybrid\Curl: Provided {$uri} can't be processed.")
+            throw new \Fuel_Exception("\Hybrid\Curl: Provided {$uri} can't be processed.");
         }
 
         $dataset = array_merge(static::query_string($uri), $dataset);
