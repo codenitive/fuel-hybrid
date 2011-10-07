@@ -45,25 +45,25 @@ class Request extends \Fuel\Core\Request {
      */
     public static function connect($uri, $dataset = array()) 
     {
-        $uri_segments   = explode(' ', $uri);
-        $type           = Input::method();
+        $uri_segments = explode(' ', $uri);
+        $type         = Input::method();
 
         if (in_array(strtoupper($uri_segments[0]), array('DELETE', 'POST', 'PUT', 'GET'))) 
         {
-            $uri        = $uri_segments[1];
-            $type       = $uri_segments[0];
+            $uri  = $uri_segments[1];
+            $type = $uri_segments[0];
         }
 
-        $query_dataset  = array();
-        $query_string   = parse_url($uri);
+        $query_dataset = array();
+        $query_string  = parse_url($uri);
 
         if (isset($query_string['query'])) 
         {
-            $uri        = $query_string['path'];
+            $uri = $query_string['path'];
             parse_str($query_string['query'], $query_dataset);
         }
 
-        $dataset        = array_merge($query_dataset, $dataset);
+        $dataset = array_merge($query_dataset, $dataset);
 
         logger(\Fuel::L_INFO, 'Creating a new Request with URI = "' . $uri . '"', __METHOD__);
 
