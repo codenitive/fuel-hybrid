@@ -38,6 +38,27 @@ class Config_Php extends Config_Driver
 	 */
 	public function save()
 	{
-		
+		$content = <<<CONF
+<?php
+/**
+ * Fuel is a fast, lightweight, community driven PHP5 framework.
+ *
+ * @package		Fuel
+ * @version		1.0
+ * @author		Fuel Development Team
+ * @license		MIT License
+ * @copyright	2011 Fuel Development Team
+ * @link		http://fuelphp.com
+ */
+
+
+CONF;
+		$content .= 'return '.str_replace('  ', "\t", var_export($config, true)).';';
+		$content .= <<<CONF
+
+
+
+CONF;
+		return $content;
 	}
 }
