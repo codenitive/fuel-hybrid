@@ -142,12 +142,12 @@ class Curl {
      */
     protected static function query_string($uri)
     {
-        $query_dataset  = array();
-        $query_string   = parse_url($uri);
-
+        $query_dataset = array();
+        $query_string  = parse_url($uri);
+        
         if (isset($query_string['query'])) 
         {
-            $uri        = $query_string['path'];
+            $uri = $query_string['path'];
             parse_str($query_string['query'], $query_dataset);
         }
         
@@ -169,10 +169,26 @@ class Curl {
      */
     public function __construct($uri, $dataset = array(), $type = 'GET')
     {
-        $this->request_uri      = $uri;
-        $this->request_method   = $type;
-        $this->request_data     = $dataset;
-        $this->adapter          = curl_init();
+        $this->request_uri    = $uri;
+        $this->request_method = $type;
+        $this->request_data   = $dataset;
+        $this->adapter        = curl_init();
+
+        $option = array();
+
+        switch ($type)
+        {
+            case 'GET' :
+                $option[CURLOPT_HTTPGET] = true;
+            break;
+            
+            case 'POST' :
+                $option[CURLOPT_POST]       = true;
+                $option[CURLOPT_POSTFIELDS] = $dataset;
+            break;   
+        }
+
+        $this->setopt($option);
     }
     
     /**
@@ -205,15 +221,15 @@ class Curl {
      */
     public function execute()
     {
-        $uri                = $this->request_uri . '?' . http_build_query($this->request_data, '', '&');
+        $uri              = $this->request_uri . '?' . http_build_query($this->request_data, '', '&');
         curl_setopt($this->adapter, CURLOPT_URL, $uri); 
         
-        $info               = curl_getinfo($this->adapter);
+        $info             = curl_getinfo($this->adapter);
         
-        $response           = new \stdClass();
-        $response->body     = $response->raw_body = curl_exec($this->adapter);
-        $response->status   = $info['http_code'];
-        $response->info     = $info;
+        $response         = new \stdClass();
+        $response->body   = $response->raw_body = curl_exec($this->adapter);
+        $response->status = $info['http_code'];
+        $response->info   = $info;
         
         // clean up curl session
         curl_close($this->adapter);
