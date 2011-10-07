@@ -47,8 +47,12 @@ Autoloader::add_classes(array (
     'Hybrid\\Chart_Pie'            => __DIR__.'/classes/chart/pie.php',
     'Hybrid\\Chart_Scatter'        => __DIR__.'/classes/chart/scatter.php',
     'Hybrid\\Chart_Table'          => __DIR__.'/classes/chart/table.php',
-    'Hybrid\\Chart_Timeline'       => __DIR__.'/classes/chart/timeline.php',
-    
+    'Hybrid\\Chart_Timeline'       => __DIR__.'/classes/chart/timeline.php',    
+	
+	'Hybrid\\Config'           	   => __DIR__.'/classes/config.php',
+	'Hybrid\\Config_Driver'		   => __DIR__.'/classes/config/driver.php',
+	'Hybrid\\Config_Php'		   => __DIR__.'/classes/config/php.php',
+	
     'Hybrid\\Controller'           => __DIR__.'/classes/controller.php',
     'Hybrid\\Controller_Frontend'  => __DIR__.'/classes/controller/frontend.php',
     'Hybrid\\Controller_Template'  => __DIR__.'/classes/controller/template.php',
