@@ -37,9 +37,6 @@ class Config extends \Fuel\Core\Config
 			'yml' => '\\Hybrid\\Config_Yml',
 			'xml' => '\\Hybrid\\Config_Xml',
 			'ini' => '\\Hybrid\\Config_Ini',
-			'db'  => '\\Hybrid\\Config_Db',
-			'redis' => '\\Hybrid\\Config_Redis',
-			'mongo' => '\\Hybrid\\Config_Mongo',
 	);
 	
 	
@@ -61,12 +58,15 @@ class Config extends \Fuel\Core\Config
 		}
 		
 		$config = array();
+		$ext = strtolower(substr($file, 0, 3));
+		
+		
 		// check if is a direct include file
 		if (is_array($file))
 		{
 			$config = $file;
 		}
-		elseif(is_string($file) and in_array(strtolower(substr($file, 0, 3)), array_keys(static::$drivers)))
+		elseif(is_string($file) and in_array($ext, array_keys(static::$drivers)) and strpos($file, $ext.'::'))
 		{
 			$ext = substr(strtolower($file), 0, 3);
 			$file = str_replace($ext.'::', "", $file);
@@ -87,6 +87,7 @@ class Config extends \Fuel\Core\Config
 		}
 		else 
 		{
+			$file = str_replace($ext.'::', '', $file);
 			$paths = array();
 			foreach(static::$drivers as $ext => $driver)
 			{
@@ -123,6 +124,62 @@ class Config extends \Fuel\Core\Config
 		return $config;
 		
 	}
+	
+	public static function save($file, $config)
+	{
+		if ( ! is_array($config))
+		{
+			if ( ! isset(static::$items[$config]))
+			{
+				return false;
+			}
+			$config = static::$items[$config];
+		}
+		
+		$ext = strtolower(substr($file, 0, 3));			
+		if(in_array($ext, array_keys(static::$drivers)) and strpos($file, $ext.'::'))
+		{			
+			$content = static::$drivers[$ext]->save($config);	
+		}
+		else 
+		{
+			$file = str_replace($ext.'::', '', $file);
+			$ext = 'php';
+			$content = static::$drivers[$ext]->save($config);	
+		}
+		
+		if ( ! $path = \Fuel::find_file('config', $file, '.'.$ext))
+		{
+			if ($pos = strripos($file, '::'))
+			{
+				// get the namespace path
+				if ($path = \Autoloader::namespace_path('\\'.ucfirst(substr($file, 0, $pos))))
+				{
+					// strip the namespace from the filename
+					$file = substr($file, $pos+2);
+
+					// strip the classes directory as we need the module root
+					// and construct the filename
+					$path = substr($path,0, -8).'config'.DS.$file.'.'.$ext;
+
+				}
+				else
+				{
+					// invalid namespace requested
+					return false;
+				}
+			}
+
+		}
+		
+		// make sure we have a fallback
+		$path or $path = APPPATH.'config'.DS.$file.'.'.$ext;
+
+		$path = pathinfo($path);
+
+		return \File::update($path['dirname'], $path['basename'], $content);
+	}
+	
 	/**
 	 * Used to register a new config driver class
 	 * 
