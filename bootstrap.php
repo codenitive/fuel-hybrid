@@ -55,9 +55,6 @@ Autoloader::add_classes(array (
 	'Hybrid\\Config_Yml'		   => __DIR__.'/classes/config/yml.php',
 	'Hybrid\\Config_Ini'		   => __DIR__.'/classes/config/ini.php',
 	'Hybrid\\Config_Xml'		   => __DIR__.'/classes/config/xml.php',
-	'Hybrid\\Config_Db'		   	   => __DIR__.'/classes/config/db.php',
-	'Hybrid\\Config_Mongo'		   => __DIR__.'/classes/config/mongo.php',
-	'Hybrid\\Config_Redis'		   => __DIR__.'/classes/config/redis.php',
 	
     'Hybrid\\Controller'           => __DIR__.'/classes/controller.php',
     'Hybrid\\Controller_Frontend'  => __DIR__.'/classes/controller/frontend.php',
