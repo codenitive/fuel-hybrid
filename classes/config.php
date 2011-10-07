@@ -13,8 +13,8 @@
 
 namespace Hybrid;
 
-use Fuel\Core\Inflector,
-	Fuel\Core\Fuel_Exception;
+use \Fuel\Core\Inflector,
+	\Fuel\Core\Fuel_Exception;
 
 /**
  * Hybrid 
