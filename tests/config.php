@@ -21,7 +21,6 @@ namespace Hybrid;
  * @group Hybrid
  * @group Config
  */
-class Config_Testdriver
 class Test_Config extends \Fuel\Core\TestCase 
 {
  	
