@@ -55,6 +55,8 @@ Autoloader::add_classes(array (
     'Hybrid\\Controller_Rest'      => __DIR__.'/classes/controller/rest.php',
     'Hybrid\\Controller_Hybrid'    => __DIR__.'/classes/controller/hybrid.php',
     
+	'Hybrid\\Currency'			   => __DIR__.'/classes/currency.php',
+	
     'Hybrid\\Parser'               => __DIR__.'/classes/parser.php',
     'Hybrid\\Parser_Driver'        => __DIR__.'/classes/parser/driver.php',
     'Hybrid\\Parser_Markdown'      => __DIR__.'/classes/parser/markdown.php',
@@ -66,5 +68,4 @@ Autoloader::add_classes(array (
     'Hybrid\\Template_Normal'      => __DIR__.'/classes/template/normal.php',
     'Hybrid\\Template_Frontend'    => __DIR__.'/classes/template/frontend.php',
 ));
-
 /* End of file bootstrap.php */
