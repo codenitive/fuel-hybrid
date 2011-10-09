@@ -193,73 +193,36 @@ Factory::import('swift/swift_required', 'vendor');
     }
 
     /**
-     * Adds a direct recipient
+     * Alias to to(), cc(), bcc(), reply_to(), from()
      *
      * @access  public
-     * @param   string  $address    A single email
-     * @param   string  $name       Recipient name
-     * @return  self
+     * @param   string  $name  Should be one of the available recipients
+     * @param   array   $args   
      */
-    public function to($address, $name = '') {
-        $this->add_multiple_recipients('to', $address, $name);
+    public function __call($name, $args)
+    {
+        if (array_key_exists($name, $this->recipients))
+        {
+            $email_name    = null;
+            $email_address = null;
 
-        return $this;
-    }
+            switch (true)
+            {
+                case count($args) > 1 :
+                    $email_name    = $args[2];
+                case count($args) > 0 :
+                    $email_address = $args[0];
+                break;
+            }
 
-    /**
-     * Adds a carbon copy recipient
-     *
-     * @access  public
-     * @param   string  $address    A single email
-     * @param   string  $name       Recipient name
-     * @return  self
-     */
-    public function cc($address, $name = '') {
-        $this->add_multiple_recipients('cc', $address, $name);
+            $this->add_multiple_recipients($name, $email_address, $email_name);
 
-        return $this;
-    }
-
-    /**
-     * Adds a blind carbon copy recipient
-     *
-     * @access  public
-     * @param   string  $address    A single email
-     * @param   string  $name       Recipient name
-     * @return  self
-     */
-    public function bcc($address, $name = '') {
-        $this->add_multiple_recipients('bcc', $address, $name);
-
-        return $this;
-    }
-
-    /**
-     * Adds a direct sender
-     *
-     * @access  public
-     * @param   string  $address    A single email
-     * @param   string  $name       Recipient name
-     * @return  self
-     */
-    public function from($address, $name = '') {
-        $this->add_multiple_recipients('from', $address, $name);
-
-        return $this;
-    }
-
-    /**
-     * Adds a direct reply-to
-     *
-     * @access  public
-     * @param   string  $address    A single email
-     * @param   string  $name       Recipient name
-     * @return  self
-     */
-    public function reply_to($address, $name = '') {
-        $this->add_multiple_recipients('reply_to', $address, $name);
-
-        return $this;
+            return $this;
+        }
+        else
+        {
+            throw new \Fuel_Exception("\Hybrid\Swiftmail::{$name} method does not exist.");
+        }
     }
 
     /**
@@ -275,7 +238,7 @@ Factory::import('swift/swift_required', 'vendor');
     {
         if ( ! isset($this->recipients[$type]))
         {
-            throw new \Fuel_Exception("Recipient type: {$type} does not exist");
+            throw new \Fuel_Exception("\Hybrid\Swiftmail: Recipient type {$type} does not exist");
         }
 
         if ( ! empty($name))
