@@ -10,6 +10,11 @@
  * @link       http://fuelphp.com
  */
 
+/*
+ * Uncomment this line to override all core classes with Hybrid classes
+ */
+//Autoloader::add_core_namespace('Hybrid');
+ 
 Autoloader::add_classes(array (
     'Hybrid\\Acl'                  => __DIR__.'/classes/acl.php',
     'Hybrid\\Curl'                 => __DIR__.'/classes/curl.php',
