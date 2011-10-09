@@ -24,7 +24,7 @@ namespace Hybrid;
  * @subpackage  Hybrid
  * @category    Factory
  * @category    Test
- * @author      Mior Muhammad Zaki <crynobone@gmail.com>
+ * @author      Ignacio Muñoz Fernandez <nmunozfernandez@gmail.com>
  */
 
 class Test_Factory extends \Fuel\Core\TestCase 
