@@ -181,9 +181,7 @@ class Currency
      */
 	public static function forge($amount, $from = null, $round = 2)
 	{
-		
-		
-		return new static($amount, $from);
+		return new static($amount, $from, $round);
 	}
 	
 	/**
@@ -197,11 +195,11 @@ class Currency
 	 * @param integer $round automatic round the currency, defaults to 2 digits
      * @return  self::forge()
      */
-	public static function factory($amount, $from = null)
+	public static function factory($amount, $from = null, $round = 2)
 	{
 		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
         
-        return static::forge($name);
+        return static::forge($amount, $from, $round);
 	}
 	
 	protected $round;
