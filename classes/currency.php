@@ -285,15 +285,17 @@ class Currency
      * @return  float
      * @throws  \FuelException
      */
-    public function convert_to($currency)
+    public function convert_to($to_currency)
     {
-        if ( ! array_key_exists($currency, static::$currencies))
+        $from_currency = $this->from;
+
+        if ( ! array_key_exists($to_currency, static::$currencies))
         {
             throw new \FuelException(__CLASS__." Currency {$currency} does not exists.");
         }
 
         // This is no brainer, does not need to convert if from and to currency is the same.
-        if ($this->from === $currency)
+        if ($from_currency === $to_currency)
         {
             return (float) $this->amount;
         }
@@ -302,9 +304,9 @@ class Currency
         $this->fetch_currency_rate($this->from);
 
         // we fetch the latest currency but if for instance there no conversion rate available between the two, throw an exception
-        if ( ! array_key_exists($currency, $this->currency_rate))
+        if ( ! array_key_exists($to_currency, $this->currency_rate))
         {
-            throw new \FuelException(__CLASS__." Currency {$currency} is not available to convert from ".$this->from);
+            throw new \FuelException(__CLASS__." Currency {$to_currency} is not available to convert from {$from_currency}");
         }
 
         return (float) round($this->amount * $this->currency_rates[$currency], $this->round);
