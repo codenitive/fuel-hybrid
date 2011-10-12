@@ -27,7 +27,7 @@ namespace Hybrid;
  * @author      Ignacio Muñoz Fernandez <nmunozfernandez@gmail.com>
  */
 
-class Test_Factory extends \Fuel\Core\TestCase 
+class Test_Currency extends \Fuel\Core\TestCase 
 {
     /**
      * Setup the test
