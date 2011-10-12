@@ -115,60 +115,6 @@ class Currency
     public static $currencies_value = array();
     
     /**
-     * Autoload for Currency, it loads all currency data from service provider
-     * 
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function _init()
-    {
-        try
-        {
-            static::$currencies_value = \Cache::get('currency.'.static::$default);
-        }
-        catch(\CacheNotFoundException $e)
-        {   
-            $search = array('{AMOUNT}', '{FROM}', '{TO}');
-            
-            if (function_exists('curl_init'))
-            {
-                foreach (static::$currencies as $cur => $name)
-                {
-                    $replace = array('1', static::$default, $cur);
-                    $curl = curl_init();
-                    curl_setopt($curl, CURLOPT_BINARYTRANSFER, 1);
-                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($curl, CURLOPT_MAXREDIRS, 5);
-                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                    curl_setopt($curl, CURLOPT_HEADER, 0);
-                    curl_setopt($curl, CURLOPT_USERAGENT, 'Fuel PHP framework - Agent class (http://fuelphp.com)');                 
-                    curl_setopt($curl, CURLOPT_URL, str_replace($search, $replace, static::$service));
-                    $data = curl_exec($curl);
-                    curl_close($curl);
-                    $data = explode('"', $data);
-                    $data = explode(' ', $data[3]);
-                    var_dump($data[0]); 
-                    $data = $data[0];
-                    static::$currencies_value[$cur] = (float) $data;
-                }
-            }
-            else
-            {
-                foreach (static::$currencies as $cur => $name)
-                {
-                    $replace = array('1', static::$default, $cur);
-                    $data = file_get_contents(str_replace($search, $replace, static::$service));
-                    $data = \Format::forge($data, 'json')->to_array();
-                    static::$currencies_value[$cur] = (float) $data['rhs'];
-                }
-            }
-            
-            \Cache::set('currency.'.static::$default, static::$currencies_value);
-        }
-    }
-    
-    /**
      * Initiate a new Currency class
      * 
      * @static
@@ -220,7 +166,93 @@ class Currency
         }
         
         $this->amount = (float)$amount;
+        $this->fetch_currency_rate($this->from);
+
         return $this;
+    }
+
+    /**
+     * Loads all currency rate data from service provider
+     * 
+     * @static
+     * @access public
+     * @return void
+     */
+    protected function fetch_currency_rate($from)
+    {
+        if ( ! array_key_exists($from, static::$currencies))
+        {
+            throw new \FuelException("\Hybrid\Currency: Unable to use unknown currency {$from}");
+        }
+
+        try
+        {
+            static::$currencies_value = \Cache::get('currency.'.$from);
+            throw new \CacheNotFoundException();
+        }
+        catch(\CacheNotFoundException $e)
+        {   
+            $search = array('{AMOUNT}', '{FROM}', '{TO}');
+            
+            
+            foreach (static::$currencies as $cur => $name)
+            {
+                $replace = array('1', $from, $cur);
+                
+                if (function_exists('curl_init'))
+                {
+                    $data = Curl::get(str_replace($search, $replace, static::$service))
+                        ->setopt(array(
+                            CURLOPT_BINARYTRANSFER => 1,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_MAXREDIRS      => 5,
+                            CURLOPT_HEADER         => 0,
+                            CURLOPT_USERAGENT      => "Fuel PHP framework - \Hybrid\Currency class",
+                        ))
+                        ->execute();
+
+                    $body = $data->body;
+                }
+                else 
+                {
+                    $body = file_get_contents(str_replace($search, $replace, static::$service));     
+                }
+                
+                foreach (array("lhs", "rhs", "error", "icc") as $key)
+                {
+                    $body = str_replace($key.":", '"'.$key.'":', $body);
+                }
+                
+                $data = json_decode($body);
+                
+                if ( ! is_null($data) and $data->icc !== false)
+                {
+                    $conversion = \Format::forge($body, 'json')->to_array();
+                    $tmp        = explode(' ', $conversion['rhs']);
+                    $rate       = array_shift($tmp);
+
+                    static::$currencies_value[$cur] = (float) $rate;
+                }
+            }
+
+            \Cache::set('currency.'.$from, static::$currencies_value);
+        }
+    }
+
+    public function convert_to($currency)
+    {
+        if ( ! array_key_exists($currency, static::$currencies))
+        {
+            throw new \FuelException(__CLASS__." Currency {$currency} dont exists.");
+        }
+
+        // doesn't need to convert if from and to currency is the same.
+        if ($this->from === $currency)
+        {
+            return (float) $this->amount;
+        }
+
+        return (float) round($this->amount * static::$currencies_value[$currency], $this->round);
     }
     
     public function __call($method, $args)
@@ -229,22 +261,14 @@ class Currency
         {
             throw new \FuelException(__CLASS__.'::'.$method.' not exists, use ::to_{currency}');
         }
-        
-        $currency = strtoupper(str_replace('to_', '', $method));        
-        if ( ! array_key_exists($currency, static::$currencies))
+        else
         {
-            throw new \FuelException(__CLASS__." Currency $currency dont exists");
+            $currency = strtoupper(str_replace('to_', '', $method));
+            return $this->convert_to($currency);
         }
         
-        
-        if ($this->from === static::$default)
-        {
-            return (float) round($this->amount * static::$currencies_value[$currency], $this->round);
-        }
-
-        $val = $this->amount / static::$currencies_value[$this->from];
-        return (float) round($val * static::$currencies_value[$currency], $this->round);
-        
+        // shouldn't be possible to reach here
         return (float) 0;
     }
+
 }
