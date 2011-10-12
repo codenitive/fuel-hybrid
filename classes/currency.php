@@ -30,14 +30,14 @@ class Currency
     /**
      * @static
      * @access  protected
-     * @var     Default currency
+     * @var     string  Default currency
      */
     protected static $default = 'EUR';
     
     /**
      * @static
      * @access  protected
-     * @var     List of available currencies
+     * @var     array   List of available currencies
      */
     protected static $currencies = array(
         'EUR' => 'Euro', 
@@ -122,7 +122,7 @@ class Currency
     /**
      * @static
      * @access  protected
-     * @var     Use google API service
+     * @var     string  Use google API service
      */
     protected static $service = "http://www.google.com/ig/calculator?hl=en&q={AMOUNT}{FROM}=?{TO}";
     
@@ -134,7 +134,7 @@ class Currency
      * @param   float   $amount amount to convert
      * @param   string  $from Currency to convert from
      * @param   int     $round automatic round the currency, defaults to 2 digits
-     * @return  Currency
+     * @return  object  Currency
      */
     public static function forge($amount, $from = null, $round = 2)
     {
@@ -161,26 +161,48 @@ class Currency
 
     /**
      * @access  protected
-     * @var     Currency rates
+     * @var     array   Currency rates
      */
     protected $currency_rates = array();
     
+    /**
+     * @access  protected
+     * @var     int     Precision rounding
+     */
     protected $round;
     
+    /**
+     * @access  protected
+     * @var     string  Currency of self::$amount
+     */
     protected $from;
     
+    /**
+     * @access  protected
+     * @var     Given amount
+     */
     protected $amount = 0.00;
     
+    /**
+     * Construct a new instance
+     *
+     * @access  protected
+     * @param   float   $amount amount to convert
+     * @param   string  $from Currency to convert from
+     * @param   int     $round automatic round the currency, defaults to 2 digits
+     * @return  object  Currency
+     */
     public function __construct($amount, $from = null, $round = 2)
     {
+        // in situation where from is null, set from to default
         if ($from === null or ! $from)
         {
-            $from = strtoupper(static::$default);
+            $from = static::$default;
         }
         
         $this->from   = strtoupper($from);
         $this->round  = $round;
-        $this->amount = (float)$amount;
+        $this->amount = (float) $amount;
 
         return $this;
     }
@@ -190,7 +212,7 @@ class Currency
      * 
      * @access protected
      * @param   string  $from_currency A string name of currency available in static::$currencies
-     * @return void
+     * @return  void
      */
     protected function fetch_currency_rate($from_currency)
     {
@@ -204,7 +226,7 @@ class Currency
             $this->currency_rates = \Cache::get('hybrid.currency.'.$from_currency);
             throw new \CacheNotFoundException();
         }
-        catch(\CacheNotFoundException $e)
+        catch (\CacheNotFoundException $e)
         {   
             $search = array('{AMOUNT}', '{FROM}', '{TO}');
             
@@ -267,30 +289,40 @@ class Currency
     {
         if ( ! array_key_exists($currency, static::$currencies))
         {
-            throw new \FuelException(__CLASS__." Currency {$currency} dont exists.");
+            throw new \FuelException(__CLASS__." Currency {$currency} does not exists.");
         }
 
-        $this->fetch_currency_rate($this->from);
-
-        if ( ! array_key_exists($currency, $this->currency_rate))
-        {
-            throw new \FuelException(__CLASS__." Currency {$currency} is not available to convert from ".$this->from);
-        }
-
-        // doesn't need to convert if from and to currency is the same.
+        // This is no brainer, does not need to convert if from and to currency is the same.
         if ($this->from === $currency)
         {
             return (float) $this->amount;
         }
 
+        // fetch currency rate from provider, or load from cache if it's available
+        $this->fetch_currency_rate($this->from);
+
+        // we fetch the latest currency but if for instance there no conversion rate available between the two, throw an exception
+        if ( ! array_key_exists($currency, $this->currency_rate))
+        {
+            throw new \FuelException(__CLASS__." Currency {$currency} is not available to convert from ".$this->from);
+        }
+
         return (float) round($this->amount * $this->currency_rates[$currency], $this->round);
     }
     
+    /**
+     * Capture magic method, at the moment expect on to_{currency}()
+     *
+     * @access  public
+     * @return  float
+     * @see     self::convert_to()
+     * @throws  \FuelException
+     */
     public function __call($method, $args)
     {
         if ( ! strpos(strtolower($method), 'to_') === 0)
         {
-            throw new \FuelException(__CLASS__.'::'.$method.' not exists, use ::to_{currency}().');
+            throw new \FuelException(__CLASS__.'::'.$method.' does not exists, use ::to_{currency}().');
         }
         
         $currency = strtoupper(str_replace('to_', '', $method));
