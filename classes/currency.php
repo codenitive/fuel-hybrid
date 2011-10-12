@@ -112,7 +112,7 @@ class Currency
     
     protected static $service = "http://www.google.com/ig/calculator?hl=en&q={AMOUNT}{FROM}=?{TO}";
     
-    public static $currencies_value = array();
+    protected $currencies_value = array();
     
     /**
      * Initiate a new Currency class
