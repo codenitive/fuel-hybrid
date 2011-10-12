@@ -30,8 +30,8 @@ use \Markdown;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Parser_Markdown extends Parser_Driver {
-
+class Parser_Markdown extends Parser_Driver 
+{
     /**
      * Construct a new instance (don't do anything right now)
      *

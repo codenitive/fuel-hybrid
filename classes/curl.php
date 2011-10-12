@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Curl {
-    
+class Curl 
+{    
     /**
      * Initiate this class as a new object
      * 
@@ -49,7 +49,7 @@ class Curl {
         }
         else
         {
-            throw new \Fuel_Exception("\Hybrid\Curl: Provided {$uri} can't be processed.");
+            throw new \FuelException("\Hybrid\Curl: Provided {$uri} can't be processed.");
         }
 
         $dataset = array_merge(static::query_string($uri), $dataset);

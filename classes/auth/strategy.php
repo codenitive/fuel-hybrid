@@ -33,8 +33,8 @@ namespace Hybrid;
  * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
-abstract class Auth_Strategy {
-
+abstract class Auth_Strategy 
+{
     public $provider = null;
     public $config   = array();
     public $name     = null;
@@ -71,7 +71,7 @@ abstract class Auth_Strategy {
         
         if ( ! $strategy)
         {
-            throw new \Fuel_Exception(sprintf('Provider "%s" has no strategy.', $provider));
+            throw new \FuelException(sprintf('Provider "%s" has no strategy.', $provider));
         }
         
         $class = "\Hybrid\Auth_Strategy_{$strategy}";
@@ -121,7 +121,7 @@ abstract class Auth_Strategy {
             {
                 $providers = array_keys($accounts);
 
-                throw new \Fuel_Exception(sprintf('This user is already linked to "%s".', $providers[0]));
+                throw new \FuelException(sprintf('This user is already linked to "%s".', $providers[0]));
             }
         }
         // The user exists, so send him on his merry way as a user
@@ -133,7 +133,7 @@ abstract class Auth_Strategy {
                 // credentials ok, go right in
                 Auth::redirect('logged_in');
             }
-            catch (\Fuel_Exception $e)
+            catch (Auth_Exception $e)
             {
                 switch ($strategy->name)
                 {

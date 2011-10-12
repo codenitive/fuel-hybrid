@@ -33,8 +33,8 @@ namespace Hybrid;
  * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
-class Auth_Strategy_OAuth extends Auth_Strategy {
-    
+class Auth_Strategy_OAuth extends Auth_Strategy 
+{    
     public $provider;
     
     public function authenticate()

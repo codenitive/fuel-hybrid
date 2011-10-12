@@ -25,8 +25,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Pagination extends \Fuel\Core\Pagination {
-
+class Pagination extends \Fuel\Core\Pagination 
+{
     /**
      * @var array The HTML for the display
      */

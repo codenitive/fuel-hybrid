@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Factory {
-
+class Factory 
+{
     private static $identity = null;
     private static $language = 'en';
 
@@ -75,7 +75,7 @@ class Factory {
      * 
      * @static
      * @access  protected
-     * @throws  \Fuel_Exception
+     * @throws  \FuelException
      */
     protected static function maintenance_mode() 
     {
@@ -85,13 +85,13 @@ class Factory {
 
         if ($call_count > 1) 
         {
-            throw new \Fuel_Exception('It appears your _maintenance_mode_ route is incorrect.  Multiple Recursion has happened.');
+            throw new \FuelException('It appears your _maintenance_mode_ route is incorrect.  Multiple Recursion has happened.');
         }
 
 
         if (\Config::get('routes._maintenance_mode_') === null) 
         {
-            throw new \Fuel_Exception('It appears your _maintenance_mode_ route is null.');
+            throw new \FuelException('It appears your _maintenance_mode_ route is null.');
         } 
         else 
         {

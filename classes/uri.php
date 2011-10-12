@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Uri extends \Fuel\Core\Uri {
-
+class Uri extends \Fuel\Core\Uri 
+{
     /**
      * Build query string
      * 

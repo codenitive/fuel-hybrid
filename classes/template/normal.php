@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Template_Normal extends Template_Driver {
-
+class Template_Normal extends Template_Driver 
+{
     /**
      * Initiate a new template using factory
      *
@@ -74,7 +74,6 @@ class Template_Normal extends Template_Driver {
      * @param   string  $folder
      * @param   string  $filename
      * @return  void
-     * @throws  \Fuel_Exception
      */
     public function __construct($folder = null, $filename = null)
     {
@@ -105,11 +104,11 @@ class Template_Normal extends Template_Driver {
      *
      * @access  private
      * @return  self
-     * @throws  \Fuel_Exception
+     * @throws  \FuelException
      */
     public function load_assets($forced_load = false)
     {
-      throw new \Fuel_Exception("\Hybrid\Template_Normal: Asset loading not available for Template_Normal.");
+      throw new \FuelException("\Hybrid\Template_Normal: Asset loading not available for Template_Normal.");
     }
 
     /**
@@ -117,7 +116,7 @@ class Template_Normal extends Template_Driver {
      *
      * @access  public
      * @return  self
-     * @throws  \Fuel_Exception
+     * @throws  \FuelException
      */
     public function set_folder($path = null)
     {
@@ -127,7 +126,7 @@ class Template_Normal extends Template_Driver {
 
         if (empty($files))
         {
-            throw new \Fuel_Exception("\Hybrid\Template_Normal: Path {$path} does not appear to a valid folder or contain any View files.");
+            throw new \FuelException("\Hybrid\Template_Normal: Path {$path} does not appear to a valid folder or contain any View files.");
         }
         else 
         {

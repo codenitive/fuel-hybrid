@@ -29,8 +29,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-abstract class Chart_Driver {
-
+abstract class Chart_Driver 
+{
     /**
      * Load config file
      * 

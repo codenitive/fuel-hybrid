@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-abstract class Template_Driver {
-
+abstract class Template_Driver 
+{
     /**
      * Template driver configuration
      *
@@ -91,7 +91,7 @@ abstract class Template_Driver {
      * @access  public
      * @param   bool    $forced_load
      * @return  self
-     * @throws  \Fuel_Exception
+     * @throws  \FuelException
      */
     public function load_assets($forced_load = false) 
     {
@@ -104,7 +104,7 @@ abstract class Template_Driver {
 
         if (!\is_dir($folder_path))
         {
-            throw new \Fuel_Exception("\Hybrid\Template_Driver: Unable to load assets at {$folder_path}.");
+            throw new \FuelException("\Hybrid\Template_Driver: Unable to load assets at {$folder_path}.");
         }
         else
         {
@@ -126,13 +126,13 @@ abstract class Template_Driver {
      * @access  public
      * @param   string  $path
      * @return  self
-     * @throws  \Fuel_Exception
+     * @throws  \FuelException
      */
     public function set_folder($path = null)
     {
         if ( ! \is_dir($path))
         {
-            throw new \Fuel_Exception("\Hybrid\Template_Driver: Path {$path} does not appear to a valid folder.");
+            throw new \FuelException("\Hybrid\Template_Driver: Path {$path} does not appear to a valid folder.");
         }
         else 
         {

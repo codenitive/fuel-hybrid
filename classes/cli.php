@@ -26,20 +26,20 @@ namespace Hybrid;
  * @abstract
  * @author      Ignacio Muñoz Fernandez <nmunozfernandez@gmail.com>
  */
-class cli extends \Fuel\Core\Cli
+
+class Cli extends \Fuel\Core\Cli 
 {
-	
-	/**
-	 * An alias for Cli::write() to output $text only when specify -v or --verbose options
-	 * 
-	 * @access public
-	 * @param	string|array	$text	the text to output, or array of lines
-	 */
-	public static function verbose($text = '', $foreground = null, $background = null)
-	{
-		if(static::option('v') !== null or static::option('verbose') !== null)
-		{
-			static::write($text, $foreground, $background);
-		}
-	}
+    /**
+     * An alias for Cli::write() to output $text only when specify -v or --verbose options
+     * 
+     * @access public
+     * @param   string|array    $text   the text to output, or array of lines
+     */
+    public static function verbose($text = '', $foreground = null, $background = null)
+    {
+        if (static::option('v') !== null or static::option('verbose') !== null)
+        {
+            static::write($text, $foreground, $background);
+        }
+    }
 }

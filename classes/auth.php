@@ -32,8 +32,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Auth {
-    
+class Auth 
+{    
     /**
      * Cache Auth instance so we can reuse it on multiple request.
      * 
@@ -50,7 +50,7 @@ class Auth {
      * @access  protected
      * @param   string  $type
      * @return  void
-     * @throws  \Fuel_Exception
+     * @throws  \FuelException
      */
     public static function redirect($type)
     {
@@ -58,7 +58,7 @@ class Auth {
 
         if (is_null($path))
         {
-            throw new \Fuel_Exception("\Hybrid\Auth_Driver: Unable to redirect using {$type} type.");
+            throw new \FuelException("\Hybrid\Auth_Driver: Unable to redirect using {$type} type.");
         }
         
         \Response::redirect($path);
@@ -73,7 +73,7 @@ class Auth {
      * @access  public
      * @param   string  $name       null to fetch the default driver, or a driver id to get a specific one
      * @return  Auth_Driver
-     * @throws  \Fuel_Exception
+     * @throws  \FuelException
      */
     public static function forge($name = null)
     {
@@ -94,7 +94,7 @@ class Auth {
             }
             else
             {
-                throw new \Fuel_Exception("Requested {$driver} does not exist.");
+                throw new \FuelException("Requested {$driver} does not exist.");
             }
         }
 
@@ -187,7 +187,7 @@ class Auth {
      * @param   string  $password       An unhashed `password` or `token` string from external API.
      * @param   string  $driver         Driver type string, default to 'user'.
      * @return  bool
-     * @throws  \Fuel_Exception
+     * @throws  \FuelException
      */
     public static function login($username, $password, $driver = 'user')
     {

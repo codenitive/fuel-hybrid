@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Html extends \Fuel\Core\Html {
-
+class Html extends \Fuel\Core\Html 
+{
     /**
      * Generates a html heading tag
      *

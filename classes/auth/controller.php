@@ -33,8 +33,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Auth_Controller extends \Controller {
-    
+class Auth_Controller extends \Controller 
+{    
     public function before()
     {
         parent::before();

@@ -33,8 +33,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Acl {
-    
+class Acl 
+{    
     /**
      * Cache ACL instance so we can reuse it on multiple request. 
      * 
@@ -164,7 +164,7 @@ class Acl {
 
         if ( ! in_array($resource, $this->resources)) 
         {
-            throw new \Fuel_Exception("\Hybrid\Acl: Unable to verify unknown resource: {$resource}.");
+            throw new \FuelException("\Hybrid\Acl: Unable to verify unknown resource: {$resource}.");
         }
 
         $user       = Auth::instance('user')->get();
@@ -251,7 +251,7 @@ class Acl {
     {
         if (is_null($roles)) 
         {
-            throw new \Fuel_Exception("\Hybrid\Acl: Can't add NULL roles.");
+            throw new \FuelException("\Hybrid\Acl: Can't add NULL roles.");
         }
 
         if (is_string($roles)) 
@@ -288,7 +288,7 @@ class Acl {
     {
         if (is_null($resources)) 
         {
-            throw new \Fuel_Exception("\Hybrid\Acl: Can't add NULL resources.");
+            throw new \FuelException("\Hybrid\Acl: Can't add NULL resources.");
         }
 
 
@@ -323,13 +323,13 @@ class Acl {
      * @param   mixed   $resources
      * @param   string  $type
      * @return  bool
-     * @throws  \Fuel_Exception
+     * @throws  \FuelException
      */
     public function allow($roles, $resources, $type = 'view') 
     {
         if ( ! in_array($type, static::$types)) 
         {
-            throw new \Fuel_Exception("\Hybrid\Acl: Type {$type} does not exist.");
+            throw new \FuelException("\Hybrid\Acl: Type {$type} does not exist.");
         }
 
         if ( ! is_array($roles)) 
@@ -348,7 +348,7 @@ class Acl {
 
             if ( ! in_array($role, $this->roles)) 
             {
-                throw new \Fuel_Exception("\Hybrid\Acl: Role {$role} does not exist.");
+                throw new \FuelException("\Hybrid\Acl: Role {$role} does not exist.");
 
                 continue;
             }
@@ -359,7 +359,7 @@ class Acl {
 
                 if (!in_array($resource, $this->resources)) 
                 {
-                    throw new \Fuel_Exception("\Hybrid\Acl: Resource {$resource} does not exist.");
+                    throw new \FuelException("\Hybrid\Acl: Resource {$resource} does not exist.");
 
                     continue;
                 }

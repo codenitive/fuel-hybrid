@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Input {
-
+class Input 
+{
     /**
      * Store \Hybrid\Request object (if available)
      * 

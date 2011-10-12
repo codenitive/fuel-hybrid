@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Restserver {
-    
+class Restserver 
+{    
     /** 
      * List all supported methods, the first will be the default format
      * 
@@ -216,7 +216,7 @@ class Restserver {
         }
         else
         {
-            throw new \Fuel_Exception("\Hybrid\Restserver: {$rest_format} is not a valid REST format.");
+            throw new \FuelException("\Hybrid\Restserver: {$rest_format} is not a valid REST format.");
         }
         
         return $this;

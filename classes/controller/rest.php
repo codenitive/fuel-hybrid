@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-abstract class Controller_Rest extends \Fuel\Core\Controller {
-    
+abstract class Controller_Rest extends \Fuel\Core\Controller 
+{    
     /**
      * Rest format to be used
      * 

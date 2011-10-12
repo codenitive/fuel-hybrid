@@ -27,8 +27,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-abstract class Controller extends \Fuel\Core\Controller {
-
+abstract class Controller extends \Fuel\Core\Controller 
+{
     /**
      * Run ACL check and redirect user automatically if user doesn't have the privilege
      * 

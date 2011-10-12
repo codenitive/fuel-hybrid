@@ -27,8 +27,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-abstract class Controller_Frontend extends Controller {
-
+abstract class Controller_Frontend extends Controller 
+{
     /**
      * Page template
      * 

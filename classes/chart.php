@@ -28,8 +28,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Chart {
-
+class Chart 
+{
     /**
      * Cache Chart instance so we can reuse it on multiple request.
      * 
@@ -65,7 +65,7 @@ class Chart {
             }
             else 
             {
-                throw new \Fuel_Exception("Requested {$driver} does not exist.");
+                throw new \FuelException("Requested {$driver} does not exist.");
             }
         }
 

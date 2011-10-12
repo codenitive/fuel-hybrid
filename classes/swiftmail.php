@@ -28,8 +28,8 @@ Factory::import('swift/swift_required', 'vendor');
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
- class Swiftmail {
-    
+class Swiftmail 
+{   
     /**
      * Creates a new instance of the email driver.
      *
@@ -133,7 +133,7 @@ Factory::import('swift/swift_required', 'vendor');
         }
         else
         {
-            throw new \Fuel_Exception("\Hybrid\Swiftmail: Transport protocol " . $config['protocol'] . " does not exist.");
+            throw new \FuelException("\Hybrid\Swiftmail: Transport protocol " . $config['protocol'] . " does not exist.");
         }
     }
 
@@ -221,7 +221,7 @@ Factory::import('swift/swift_required', 'vendor');
         }
         else
         {
-            throw new \Fuel_Exception("\Hybrid\Swiftmail::{$name} method does not exist.");
+            throw new \FuelException("\Hybrid\Swiftmail::{$name} method does not exist.");
         }
     }
 
@@ -238,7 +238,7 @@ Factory::import('swift/swift_required', 'vendor');
     {
         if ( ! isset($this->recipients[$type]))
         {
-            throw new \Fuel_Exception("\Hybrid\Swiftmail: Recipient type {$type} does not exist");
+            throw new \FuelException("\Hybrid\Swiftmail: Recipient type {$type} does not exist");
         }
 
         if ( ! empty($name))
@@ -330,7 +330,7 @@ Factory::import('swift/swift_required', 'vendor');
      */
     public static function dynamic_attach($contents, $filename, $disposition = 'attachment')
     {
-        throw new \Fuel_Exception("\Hybrid\Swiftmail: Dynamic file attachment has not been implemented yet.");
+        throw new \FuelException("\Hybrid\Swiftmail: Dynamic file attachment has not been implemented yet.");
 
         return $this;
     }

@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Chart_Line extends Chart_Driver {
-
+class Chart_Line extends Chart_Driver 
+{
     public function __construct() 
     {
         parent::__construct();
@@ -65,4 +65,3 @@ SCRIPT;
     }
 
 }
-

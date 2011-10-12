@@ -33,8 +33,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Auth_Provider_Normal {
-
+class Auth_Provider_Normal 
+{
     public $data = null;
      /**
      * List of user fields to be used
@@ -244,13 +244,13 @@ class Auth_Provider_Normal {
         if ($this->data['id'] < 1)
         {
             $this->reset();
-            throw new \Fuel_Exception("User {$username} does not exist in our database");
+            throw new Auth_Exception("User {$username} does not exist in our database");
         }
 
         if ($this->data['password'] !== Auth::add_salt($password))
         {
             $this->reset();
-            throw new \Fuel_Exception("Invalid username and password combination");
+            throw new Auth_Exception("Invalid username and password combination");
         }
 
         $this->verify_token();
@@ -296,7 +296,7 @@ class Auth_Provider_Normal {
 
         if ($this->data['id'] < 1)
         {
-            throw new \Fuel_Exception("User does not exist in our database");
+            throw new Auth_Exception("User does not exist in our database");
         }
 
         $this->verify_token();
