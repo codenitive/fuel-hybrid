@@ -56,4 +56,5 @@ class Test_Parser_Markdown extends \Fuel\Core\TestCase {
 ";
         $this->assertEquals($expected, $output);
     }
+    
 }

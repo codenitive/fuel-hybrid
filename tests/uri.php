@@ -27,8 +27,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Test_Uri extends \Fuel\Core\TestCase {
-    
+class Test_Uri extends \Fuel\Core\TestCase 
+{    
     /**
      * Setup the test
      */

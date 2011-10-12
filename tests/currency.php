@@ -36,10 +36,10 @@ class Test_Factory extends \Fuel\Core\TestCase
     {
         \Package::load('hybrid');
     }
-	
-	public function test_forge()
-	{
-		//@todo make the test when the curl class is released
-	}
+    
+    public function test_forge()
+    {
+        //@todo make the test when the curl class is released
+    }
+
 }
-	
