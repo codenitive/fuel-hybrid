@@ -181,6 +181,14 @@ class Curl
             case 'GET' :
                 $option[CURLOPT_HTTPGET] = true;
             break;
+
+            case 'PUT' :
+                $dataset = (is_array($dataset) ? http_build_query($dataset) : $dataset);
+                $option[CURLOPT_CUSTOMREQUEST]  = 'PUT';
+                $option[CURLOPT_RETURNTRANSFER] = true;
+                $option[CURLOPT_HTTPHEADER]     = array('Content-Type: ' . strlen($dataset));
+                $option[CURLOPT_POSTFIELDS]     = $dataset;a
+            break;
             
             case 'POST' :
                 $option[CURLOPT_POST]       = true;
