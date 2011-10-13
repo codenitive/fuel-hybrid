@@ -33,8 +33,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-abstract class Auth_Driver {
-
+abstract class Auth_Driver 
+{
     /**
      * Adapter object
      *

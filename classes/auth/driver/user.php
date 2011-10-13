@@ -33,8 +33,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Auth_Driver_User extends Auth_Driver {
-    
+class Auth_Driver_User extends Auth_Driver 
+{    
     /**
      * Adapter to \Hybrid\Acl
      *
@@ -110,7 +110,7 @@ class Auth_Driver_User extends Auth_Driver {
             return;
         }
 
-        $this->strategy = Auth_Strategy::factory('normal')->authenticate();
+        $this->strategy = Auth_Strategy::forge('normal')->authenticate();
 
         // short-hand variable
         $this->provider = $this->strategy->provider;
@@ -164,7 +164,6 @@ class Auth_Driver_User extends Auth_Driver {
      * @param   string  $username
      * @param   string  $password
      * @return  bool
-     * @throws  \Fuel_Exception
      */
     public function login($username, $password) 
     {
@@ -179,7 +178,6 @@ class Auth_Driver_User extends Auth_Driver {
      * @param   string  $token
      * @param   string  $secret
      * @return  bool
-     * @throws  \Fuel_Exception
      */
     public function login_token($token, $secret) 
     {

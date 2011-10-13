@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Factory {
-
+class Factory 
+{
     private static $identity = null;
     private static $language = 'en';
 
@@ -40,7 +40,7 @@ class Factory {
     public static function _init() 
     {
         // initiate this only once
-        if (!is_null(static::$identity)) 
+        if ( ! is_null(static::$identity)) 
         {
             return;
         }
@@ -54,9 +54,9 @@ class Factory {
             static::maintenance_mode();
         }
 
-        $lang = \Session::get(static::$identity . '_lang');
+        $lang = \Session::get(static::$identity.'_lang');
 
-        if (!is_null($lang)) 
+        if ( ! is_null($lang)) 
         {
             \Config::set('language', $lang);
             static::$language = $lang;
@@ -75,7 +75,7 @@ class Factory {
      * 
      * @static
      * @access  protected
-     * @throws  \Fuel_Exception
+     * @throws  \FuelException
      */
     protected static function maintenance_mode() 
     {
@@ -85,13 +85,13 @@ class Factory {
 
         if ($call_count > 1) 
         {
-            throw new \Fuel_Exception('It appears your _maintenance_mode_ route is incorrect.  Multiple Recursion has happened.');
+            throw new \FuelException('It appears your _maintenance_mode_ route is incorrect.  Multiple Recursion has happened.');
         }
 
 
         if (\Config::get('routes._maintenance_mode_') === null) 
         {
-            throw new \Fuel_Exception('It appears your _maintenance_mode_ route is null.');
+            throw new \FuelException('It appears your _maintenance_mode_ route is null.');
         } 
         else 
         {
@@ -127,6 +127,15 @@ class Factory {
         return static::$language;
     }
 
+    /**
+     * Import file to actually look inside current hybrid folder instead
+     *
+     * @static
+     * @access  public
+     * @param   string  $path
+     * @param   string  $folder
+     * @return  void
+     */
     public static function import($path, $folder = 'classes')
     {
         $dir_path = __DIR__.'/../';

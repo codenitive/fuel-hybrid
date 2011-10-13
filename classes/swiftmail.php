@@ -13,7 +13,7 @@
 
 namespace Hybrid;
 
-\Hybrid\Factory::import('swift/swift_required', 'vendor');
+Factory::import('swift/swift_required', 'vendor');
 
 /**
  * Hybrid 
@@ -28,8 +28,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
- class Swiftmail {
-    
+class Swiftmail 
+{   
     /**
      * Creates a new instance of the email driver.
      *
@@ -42,7 +42,7 @@ namespace Hybrid;
     {
         $initconfig = \Config::load('email', 'email', true);
         
-        if (is_array($config) && is_array($initconfig))
+        if (is_array($config) and is_array($initconfig))
         {
             $config = array_merge($initconfig, $config);
         }
@@ -89,11 +89,11 @@ namespace Hybrid;
      * @var     array
      */
     protected $recipients   = array(
-        'to'        => array(),
-        'bcc'       => array(),
-        'cc'        => array(),
-        'from'      => array(),
-        'reply_to'  => array(),
+        'to'       => array(),
+        'bcc'      => array(),
+        'cc'       => array(),
+        'from'     => array(),
+        'reply_to' => array(),
     );
 
     /**
@@ -106,10 +106,10 @@ namespace Hybrid;
 
     public function __construct($config)
     {
-        $this->config   = $config;
-        $transport      = "transport_" . $config['protocol'];
-
-        $this->result   = new Swiftmail_Result;
+        $this->config = $config;
+        $transport    = "transport_".$config['protocol'];
+        
+        $this->result = new Swiftmail_Result;
 
         if (method_exists($this, $transport))
         {
@@ -133,7 +133,7 @@ namespace Hybrid;
         }
         else
         {
-            throw new \Fuel_Exception("\Hybrid\Swiftmail: Transport protocol " . $config['protocol'] . " does not exist.");
+            throw new \FuelException("\Hybrid\Swiftmail: Transport protocol ".$config['protocol']." does not exist.");
         }
     }
 
@@ -193,73 +193,36 @@ namespace Hybrid;
     }
 
     /**
-     * Adds a direct recipient
+     * Alias to to(), cc(), bcc(), reply_to(), from()
      *
      * @access  public
-     * @param   string  $address    A single email
-     * @param   string  $name       Recipient name
-     * @return  self
+     * @param   string  $name  Should be one of the available recipients
+     * @param   array   $args   
      */
-    public function to($address, $name = '') {
-        $this->add_multiple_recipients('to', $address, $name);
+    public function __call($name, $args)
+    {
+        if (array_key_exists($name, $this->recipients))
+        {
+            $email_name    = null;
+            $email_address = null;
 
-        return $this;
-    }
+            switch (true)
+            {
+                case count($args) > 1 :
+                    $email_name    = $args[2];
+                case count($args) > 0 :
+                    $email_address = $args[0];
+                break;
+            }
 
-    /**
-     * Adds a carbon copy recipient
-     *
-     * @access  public
-     * @param   string  $address    A single email
-     * @param   string  $name       Recipient name
-     * @return  self
-     */
-    public function cc($address, $name = '') {
-        $this->add_multiple_recipients('cc', $address, $name);
+            $this->add_multiple_recipients($name, $email_address, $email_name);
 
-        return $this;
-    }
-
-    /**
-     * Adds a blind carbon copy recipient
-     *
-     * @access  public
-     * @param   string  $address    A single email
-     * @param   string  $name       Recipient name
-     * @return  self
-     */
-    public function bcc($address, $name = '') {
-        $this->add_multiple_recipients('bcc', $address, $name);
-
-        return $this;
-    }
-
-    /**
-     * Adds a direct sender
-     *
-     * @access  public
-     * @param   string  $address    A single email
-     * @param   string  $name       Recipient name
-     * @return  self
-     */
-    public function from($address, $name = '') {
-        $this->add_multiple_recipients('from', $address, $name);
-
-        return $this;
-    }
-
-    /**
-     * Adds a direct reply-to
-     *
-     * @access  public
-     * @param   string  $address    A single email
-     * @param   string  $name       Recipient name
-     * @return  self
-     */
-    public function reply_to($address, $name = '') {
-        $this->add_multiple_recipients('reply_to', $address, $name);
-
-        return $this;
+            return $this;
+        }
+        else
+        {
+            throw new \FuelException("\Hybrid\Swiftmail::{$name} method does not exist.");
+        }
     }
 
     /**
@@ -273,12 +236,12 @@ namespace Hybrid;
      */
     protected function add_multiple_recipients($type, $address, $name = '')
     {
-        if (!isset($this->recipients[$type]))
+        if ( ! isset($this->recipients[$type]))
         {
-            throw new \Fuel_Exception("Recipient type: {$type} does not exist");
+            throw new \FuelException("\Hybrid\Swiftmail: Recipient type {$type} does not exist");
         }
 
-        if (!empty($name))
+        if ( ! empty($name))
         {
             $this->recipients[$type][$address] = $name; 
         }
@@ -300,19 +263,13 @@ namespace Hybrid;
         $this->messager->setTo($this->recipients['to']);
         $this->messager->setFrom($this->recipients['from']);
 
-        if (count($this->recipients['reply_to']) > 0)
+        foreach (array('reply_to', 'cc', 'bcc') as $type)
         {
-            $this->messager->setReplyTo($this->recipients['reply_to']);
-        }
-
-        if (count($this->recipients['cc']) > 0)
-        {
-            $this->messager->setCc($this->recipients['cc']);
-        }
-
-        if (count($this->recipients['bcc']) > 0)
-        {
-            $this->messager->setBcc($this->recipients['bcc']);
+            if (count($this->recipients[$type]) > 0)
+            {
+                $method = 'set'.\Inflector::camelize($type);
+                $this->messenger->{$method}($this->recipients[$type]);
+            }
         }
 
         $result = $this->mailer->send($this->messager, $failure);
@@ -321,8 +278,8 @@ namespace Hybrid;
 
         if (intval($result) >= 1)
         {
-            $this->result->success       = true;
-            $this->result->total_sent    = intval($result);
+            $this->result->success    = true;
+            $this->result->total_sent = intval($result);
         }
 
         if (false === $debug)
@@ -373,7 +330,7 @@ namespace Hybrid;
      */
     public static function dynamic_attach($contents, $filename, $disposition = 'attachment')
     {
-        throw new \Fuel_Exception("\Hybrid\Swiftmail: Dynamic file attachment has not been implemented yet.");
+        throw new \FuelException("\Hybrid\Swiftmail: Dynamic file attachment has not been implemented yet.");
 
         return $this;
     }
@@ -387,7 +344,7 @@ namespace Hybrid;
      */
     protected function transport_sendmail($config)
     {
-        return new \Swift_SendmailTransport($config['sendmail_path'] . ' -oi -t');
+        return new \Swift_SendmailTransport($config['sendmail_path'].' -oi -t');
     }
 
     /**
@@ -426,12 +383,12 @@ namespace Hybrid;
 
         $transport = new \Swift_SmtpTransport($smtp_host, $smtp_port, $ssl);
 
-        if (!empty($smtp_user))
+        if ( ! empty($smtp_user))
         {
             $transport->setUsername($smtp_user);
         }
 
-        if (!empty($smtp_pass))
+        if ( ! empty($smtp_pass))
         {
             $transport->setPassword($smtp_pass);
         }

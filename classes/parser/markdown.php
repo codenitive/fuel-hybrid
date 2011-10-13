@@ -13,7 +13,7 @@
 
 namespace Hybrid;
 
-\Hybrid\Factory::import('markdown/markdown', 'vendor');
+Factory::import('markdown/markdown', 'vendor');
 
 use \Markdown;
 
@@ -30,8 +30,8 @@ use \Markdown;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Parser_Markdown extends Parser_Driver {
-
+class Parser_Markdown extends Parser_Driver 
+{
     /**
      * Construct a new instance (don't do anything right now)
      *
@@ -47,7 +47,7 @@ class Parser_Markdown extends Parser_Driver {
      */
     public function parse($text = '')
     {
-        if (empty($text) or !strval($text))
+        if (empty($text) or ! strval($text))
         {
             $text = '';
         }

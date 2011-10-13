@@ -10,9 +10,15 @@
  * @link       http://fuelphp.com
  */
 
+/*
+ * Uncomment this line to override all core classes with Hybrid classes
+ */
+//Autoloader::add_core_namespace('Hybrid');
+ 
 Autoloader::add_classes(array (
     'Hybrid\\Acl'                  => __DIR__.'/classes/acl.php',
     'Hybrid\\Curl'                 => __DIR__.'/classes/curl.php',
+    'Hybrid\\Cli'                  => __DIR__.'/classes/cli.php',
     'Hybrid\\Factory'              => __DIR__.'/classes/factory.php',
     'Hybrid\\Input'                => __DIR__.'/classes/input.php',
     'Hybrid\\Html'                 => __DIR__.'/classes/html.php',
@@ -27,6 +33,7 @@ Autoloader::add_classes(array (
     
     'Hybrid\\Auth'                 => __DIR__.'/classes/auth.php',
     'Hybrid\\Auth_Controller'      => __DIR__.'/classes/auth/controller.php',
+    'Hybrid\\Auth_Exception'       => __DIR__.'/classes/auth/exception.php',
     'Hybrid\\Auth_Provider_Normal' => __DIR__.'/classes/auth/provider/normal.php',
     
     'Hybrid\\Auth_Driver'          => __DIR__.'/classes/auth/driver.php',
@@ -54,14 +61,17 @@ Autoloader::add_classes(array (
     'Hybrid\\Controller_Rest'      => __DIR__.'/classes/controller/rest.php',
     'Hybrid\\Controller_Hybrid'    => __DIR__.'/classes/controller/hybrid.php',
     
+    'Hybrid\\Currency'             => __DIR__.'/classes/currency.php',
+    
     'Hybrid\\Parser'               => __DIR__.'/classes/parser.php',
     'Hybrid\\Parser_Driver'        => __DIR__.'/classes/parser/driver.php',
     'Hybrid\\Parser_Markdown'      => __DIR__.'/classes/parser/markdown.php',
+    'Hybrid\\Parser_Textile'       => __DIR__.'/classes/parser/textile.php',
+    'Hybrid\\Parser_Bbcode'        => __DIR__.'/classes/parser/bbcode.php',
     
     'Hybrid\\Template'             => __DIR__.'/classes/template.php',
     'Hybrid\\Template_Driver'      => __DIR__.'/classes/template/driver.php',
     'Hybrid\\Template_Normal'      => __DIR__.'/classes/template/normal.php',
     'Hybrid\\Template_Frontend'    => __DIR__.'/classes/template/frontend.php',
 ));
-
 /* End of file bootstrap.php */
