@@ -47,7 +47,7 @@ class Test_Auth extends \Fuel\Core\TestCase {
     public function test_add_salt()
     {
         $string   = 'helloworld123';
-        $expected = sha1('12345' . $string);
+        $expected = sha1('12345'.$string);
         $output   = Auth::add_salt($string);
 
         $this->assertEquals($expected, $output);

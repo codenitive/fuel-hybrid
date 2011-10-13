@@ -122,7 +122,7 @@ class Template_Normal extends Template_Driver
     {
         // this is not the best way of doing it, the request is not cached and going to be slow
         // if there's a lot of paths and files
-        $files = \Fuel::list_files('views/' . $path, '*.php');
+        $files = \Fuel::list_files('views/'.$path, '*.php');
 
         if (empty($files))
         {
@@ -147,7 +147,7 @@ class Template_Normal extends Template_Driver
     public function partial($filename, $data = null)
     {
         $view = \View::forge();
-        $view->set_filename(rtrim($this->folder, '/') . '/' . $filename);
+        $view->set_filename(rtrim($this->folder, '/').'/'.$filename);
         $view->auto_filter(static::$config['auto_filter']);
 
         if (is_array($data) and count($data) > 0)
@@ -169,7 +169,7 @@ class Template_Normal extends Template_Driver
      */
     public function render()
     {
-        $this->view->set_filename(rtrim($this->folder, '/') . '/' . $this->filename);
+        $this->view->set_filename(rtrim($this->folder, '/').'/'.$this->filename);
         $this->view->auto_filter(static::$config['auto_filter']);
 
         $this->view->set('TEMPLATE_FOLDER', $this->folder, false);

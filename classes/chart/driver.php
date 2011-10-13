@@ -188,7 +188,7 @@ abstract class Chart_Driver
                     $key = sprintf("'%s'", $key);
                 }
 
-                $dataset .= "data.setValue({$x}, {$y}, " . $key . ");\r\n";
+                $dataset .= "data.setValue({$x}, {$y}, ".$key.");\r\n";
 
                 foreach ($value as $k => $v) 
                 {
@@ -200,7 +200,7 @@ abstract class Chart_Driver
             }
         }
         
-        $this->rows .= "data.addRows(" . $x . ");\r\n{$dataset}";
+        $this->rows .= "data.addRows(".$x.");\r\n{$dataset}";
     }
 
     /**
@@ -213,7 +213,7 @@ abstract class Chart_Driver
     protected function parse_date($date) 
     {
         $key = strtotime($date);
-        return 'new Date(' . date('Y', $key) . ', ' . (date('m', $key) - 1) . ', ' . date('d', $key) . ')';
+        return 'new Date('.date('Y', $key).', '.(date('m', $key) - 1).', '.date('d', $key).')';
     }
 
     /**

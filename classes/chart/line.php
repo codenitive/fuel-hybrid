@@ -45,7 +45,7 @@ class Chart_Line extends Chart_Driver
 
         $options    = json_encode($this->options);
 
-        $id         = 'linechart_' . md5($columns . $rows . time() . microtime());
+        $id         = 'linechart_'.md5($columns.$rows.time().microtime());
 
         return <<<SCRIPT
 <div id="{$id}"></div>

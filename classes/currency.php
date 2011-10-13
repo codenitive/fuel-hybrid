@@ -131,9 +131,9 @@ class Currency
      * 
      * @static
      * @access  public
-     * @param   float   $amount amount to convert
-     * @param   string  $from Currency to convert from
-     * @param   int     $round automatic round the currency, defaults to 2 digits
+     * @param   float   $amount     amount to convert
+     * @param   string  $from       Currency to convert from
+     * @param   int     $round      automatic round the currency, defaults to 2 digits
      * @return  object  Currency
      */
     public static function forge($amount, $from = null, $round = 2)
@@ -147,9 +147,9 @@ class Currency
      * @deprecated  1.3.0
      * @static
      * @access  public
-     * @param   float   $amount amount to convert
-     * @param   string  $from Currency to convert from
-     * @param   int     $round automatic round the currency, defaults to 2 digits
+     * @param   float   $amount     amount to convert
+     * @param   string  $from       Currency to convert from
+     * @param   int     $round      automatic round the currency, defaults to 2 digits
      * @return  self::forge()
      */
     public static function factory($amount, $from = null, $round = 2)
@@ -187,9 +187,9 @@ class Currency
      * Construct a new instance
      *
      * @access  protected
-     * @param   float   $amount amount to convert
-     * @param   string  $from Currency to convert from
-     * @param   int     $round automatic round the currency, defaults to 2 digits
+     * @param   float   $amount     amount to convert
+     * @param   string  $from       Currency to convert from
+     * @param   int     $round      automatic round the currency, defaults to 2 digits
      * @return  object  Currency
      */
     public function __construct($amount, $from = null, $round = 2)
@@ -210,8 +210,8 @@ class Currency
     /**
      * Loads all currency rate data from service provider
      * 
-     * @access protected
-     * @param   string  $from_currency A string name of currency available in static::$currencies
+     * @access  protected
+     * @param   string  $from_currency  A string name of currency available in static::$currencies
      * @return  void
      */
     protected function fetch_currency_rate($from_currency)
@@ -281,7 +281,7 @@ class Currency
      * Convert to a currency
      *
      * @access  public
-     * @param   str     $currency A string name of currency available in static::$currencies
+     * @param   str     $currency   A string name of currency available in static::$currencies
      * @return  float
      * @throws  \FuelException
      */

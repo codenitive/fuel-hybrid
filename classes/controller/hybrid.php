@@ -167,13 +167,13 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
         $resource          = preg_replace($pattern, '', $resource);
         
         // If they call user, go to $this->post_user();
-        $controller_method = strtolower(Input::method()) . '_' . $resource;
+        $controller_method = strtolower(Input::method()).'_'.$resource;
         
         if (method_exists($this, $controller_method) and true === $this->is_rest_call) 
         {
             call_user_func(array($this, $controller_method));
         }
-        elseif (method_exists($this, 'action_' . $resource)) 
+        elseif (method_exists($this, 'action_'.$resource)) 
         {
             if (true === $this->is_rest_call)
             {
@@ -181,7 +181,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
                 return;
             }
 
-            call_user_func(array($this, 'action_' . $resource), $arguments);
+            call_user_func(array($this, 'action_'.$resource), $arguments);
         }
         else 
         {

@@ -95,7 +95,7 @@ abstract class Template_Driver
      */
     public function load_assets($forced_load = false) 
     {
-        $folder_path = $this->folder . 'assets/';
+        $folder_path = $this->folder.'assets/';
 
         if (false === static::$config['load_assets'] and false === $forced_load)
         {

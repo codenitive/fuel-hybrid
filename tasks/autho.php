@@ -17,7 +17,7 @@ namespace Fuel\Tasks;
 
 /**
  * Setup commandline:
- *      php oil refine hybrid
+ *      php oil refine autho
  *
  * @package  hybrid
  */
@@ -35,9 +35,9 @@ class Autho {
      */
     public static function run()
     {
-        $install    = \Cli::option('i') or \Cli::option('install');
-        $help       = \Cli::option('h') or \Cli::option('help');
-        $test       = \Cli::option('t') or \Cli::option('test');
+        $install = \Cli::option('i') or \Cli::option('install');
+        $help    = \Cli::option('h') or \Cli::option('help');
+        $test    = \Cli::option('t') or \Cli::option('test');
 
         switch (true)
         {
@@ -45,12 +45,13 @@ class Autho {
                 static::install();
             break;
 
-            case $help :
-                static::help();
-            break;
-
             case $test :
                 static::test();
+            break;
+
+            case $help :
+            default :
+                static::help();
             break;
         }
     }
@@ -166,7 +167,7 @@ HELP;
                 }
                 catch (\File_Exception $e)
                 {
-                    throw new \Fuel_Exception("APPPATH/config/{$file}.php could not be written.");
+                    throw new \FuelException("APPPATH/config/{$file}.php could not be written.");
                 }
             break;
 
@@ -187,7 +188,7 @@ HELP;
     {
         if (true === \class_exists('\\Model_User'))
         {
-            throw new \Fuel_Exception("Model User already exist, skipping this process");
+            throw new \FuelException("Model User already exist, skipping this process");
         }
 
         $user_model = array(

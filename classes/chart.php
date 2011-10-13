@@ -57,7 +57,7 @@ class Chart
 
         if ( ! isset(static::$instances[$name]))
         {
-            $driver = '\\Hybrid\\Chart_' . ucfirst($name);
+            $driver = '\\Hybrid\\Chart_'.ucfirst($name);
             
             if (class_exists($driver))
             {

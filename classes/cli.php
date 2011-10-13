@@ -22,8 +22,7 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Controller
- * @abstract
+ * @category    Cli
  * @author      Ignacio Muñoz Fernandez <nmunozfernandez@gmail.com>
  */
 
@@ -32,7 +31,7 @@ class Cli extends \Fuel\Core\Cli
     /**
      * An alias for Cli::write() to output $text only when specify -v or --verbose options
      * 
-     * @access public
+     * @access  public
      * @param   string|array    $text   the text to output, or array of lines
      */
     public static function verbose($text = '', $foreground = null, $background = null)

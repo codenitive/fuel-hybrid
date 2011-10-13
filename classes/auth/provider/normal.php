@@ -319,7 +319,7 @@ class Auth_Provider_Normal
     protected function verify_token()
     {
         $values = $this->data;
-        $hash   = $values['user_name'] . $values['password'];
+        $hash   = $values['user_name'].$values['password'];
 
         if ($this->verify_user_agent)
         {
@@ -370,7 +370,7 @@ class Auth_Provider_Normal
         }
 
         // we validate the hash to add security to this application
-        $hash = $user->user_name . $user->password_token;
+        $hash = $user->user_name.$user->password_token;
 
         if ($this->verify_user_agent)
         {
@@ -420,7 +420,7 @@ class Auth_Provider_Normal
         // link all available roles for this user
         foreach ($roles as $role) 
         {
-            $data['' . $role->id] = \Inflector::friendly_title($role->name, '-', true);
+            $data[strval($role->id)] = \Inflector::friendly_title($role->name, '-', true);
         }
             
         $this->data['roles'] = $data;
@@ -440,7 +440,7 @@ class Auth_Provider_Normal
 
         foreach ($accounts as $account) 
         {
-            $data['' . $account->provider] = array(
+            $data[strval($account->provider)] = array(
                 'token'  => $account->token,
                 'secret' => $account->secret,
             );

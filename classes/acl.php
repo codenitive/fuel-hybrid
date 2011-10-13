@@ -70,7 +70,7 @@ class Acl
      * @static
      * @access  public
      * @param   string  $name
-     * @return  \Hybrid\Acl Object 
+     * @return  object  Acl
      */
     public static function forge($name = null)
     {
@@ -94,7 +94,7 @@ class Acl
      * @static
      * @access  public
      * @param   string  $name
-     * @return  \Hybrid\Acl Object
+     * @return  object  Acl
      * @see     self::forge()
      */
     public static function factory($name = null)
@@ -109,8 +109,8 @@ class Acl
      *
      * @static
      * @access  public
-     * @param   string   $name
-     * @return  \Hybrid\Acl Object
+     * @param   string  $name
+     * @return  object  Acl
      * @see     self::forge()
      */
     public static function instance($name = null)
@@ -155,7 +155,7 @@ class Acl
      *
      * @access  public
      * @param   mixed   $resource
-     * @param   string  $type need to be any one of deny, view, create, edit, delete or all
+     * @param   string  $type       need to be any one of deny, view, create, edit, delete or all
      * @return  bool
      */
     public function access($resource, $type = 'view') 
@@ -179,19 +179,19 @@ class Acl
 
         foreach ($user->roles as $role) 
         {
-            if ( ! isset($this->acl[$role . '/' . $resource])) 
+            if ( ! isset($this->acl[$role.'/'.$resource])) 
             {
                 continue;
             }
 
-            if ($this->acl[$role . '/' . $resource] == $type) 
+            if ($this->acl[$role.'/'.$resource] == $type) 
             {
                 return true;
             }
 
             for ($i = ($type_id + 1); $i < $length; $i++) 
             {
-                if ($this->acl[$role . '/' . $resource] == $types[$i]) 
+                if ($this->acl[$role.'/'.$resource] == $types[$i]) 
                 {
                     return true;
                 }
@@ -207,9 +207,9 @@ class Acl
      *
      * @access  public
      * @param   mixed   $resource
-     * @param   string  $type need to be any one of static::$type
+     * @param   string  $type       need to be any one of static::$type
      * @return  bool
-     * @see     \Hybrid\Acl::access()
+     * @see     self::access()
      */
     public function access_status($resource, $type = 'view') 
     {
@@ -244,7 +244,7 @@ class Acl
      * Add new user roles to the this instance
      * 
      * @access  public
-     * @param   mixed $roles
+     * @param   mixed   $roles
      * @return  bool
      */
     public function add_roles($roles = null) 
@@ -364,7 +364,7 @@ class Acl
                     continue;
                 }
 
-                $id = $role . '/' . $resource;
+                $id = $role.'/'.$resource;
 
                 $this->acl[$id] = $type;
             }

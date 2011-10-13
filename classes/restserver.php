@@ -260,7 +260,7 @@ class Restserver
         $response->format = $format;
         
         // If the format method exists, call and return the output in that format
-        if (method_exists('\\Format', 'to_' . $format))
+        if (method_exists('\\Format', 'to_'.$format))
         {
             $response->body = \Format::forge($this->data)->{'to_'.$format}();
         }
@@ -384,9 +384,9 @@ class Restserver
         $valid_pass     = $valid_logins[$digest['username']];
 
         // This is the valid response expected
-        $A1             = md5($digest['username'] . ':' . \Config::get('rest.realm') . ':' . $valid_pass);
-        $A2             = md5(strtoupper(Input::method()) . ':' . $digest['uri']);
-        $valid_response = md5($A1 . ':' . $digest['nonce'] . ':' . $digest['nc'] . ':' . $digest['cnonce'] . ':' . $digest['qop'] . ':' . $A2);
+        $A1             = md5($digest['username'].':'.\Config::get('rest.realm').':'.$valid_pass);
+        $A2             = md5(strtoupper(Input::method()).':'.$digest['uri']);
+        $valid_response = md5($A1.':'.$digest['nonce'].':'.$digest['nc'].':'.$digest['cnonce'].':'.$digest['qop'].':'.$A2);
 
         if ($digest['response'] != $valid_response)
         {
@@ -495,11 +495,11 @@ class Restserver
 
         if (\Config::get('rest.auth') == 'basic')
         {
-            header('WWW-Authenticate: Basic realm="' . \Config::get('rest.realm') . '"');
+            header('WWW-Authenticate: Basic realm="'.\Config::get('rest.realm').'"');
         }
         elseif (\Config::get('rest.auth') == 'digest')
         {
-            header('WWW-Authenticate: Digest realm="' . \Config::get('rest.realm') . '" qop="auth" nonce="' . $nonce . '" opaque="' . md5(\Config::get('rest.realm')) . '"');
+            header('WWW-Authenticate: Digest realm="'.\Config::get('rest.realm').'" qop="auth" nonce="'.$nonce.'" opaque="'.md5(\Config::get('rest.realm')).'"');
         }
 
         exit('Not authorized.');

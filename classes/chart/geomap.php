@@ -45,7 +45,7 @@ class Chart_GeoMap extends Chart_Driver
 
         $options    = json_encode($this->options);
 
-        $id         = 'geomap_' . md5($columns . $rows . time() . microtime());
+        $id         = 'geomap_'.md5($columns.$rows.time().microtime());
 
         return <<<SCRIPT
 <div id="{$id}" style="width:{$width}px; height:{$height}px;"></div>

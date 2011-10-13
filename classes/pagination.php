@@ -84,12 +84,12 @@ class Pagination extends \Fuel\Core\Pagination
         {
             if (static::$current_page == $i)
             {
-                $pagination .= static::$template['active_start'] . $i . static::$template['active_end'];
+                $pagination .= static::$template['active_start'].$i.static::$template['active_end'];
             }
             else
             {
                 $url = ($i == 1) ? '' : '/'.$i;
-                $pagination .= static::$template['page_start'] . \Html::anchor(rtrim(static::$pagination_url, '/') . $url . '/' . static::$suffix_url, $i) . static::$template['page_end'];
+                $pagination .= static::$template['page_start'].\Html::anchor(rtrim(static::$pagination_url, '/').$url.'/'.static::$suffix_url, $i).static::$template['page_end'];
             }
         }
 
@@ -113,12 +113,12 @@ class Pagination extends \Fuel\Core\Pagination
 
         if (static::$current_page == static::$total_pages)
         {
-            return static::$template['disabled']['next_start'] . $value . static::$template['next_mark'] . static::$template['disabled']['next_end'];
+            return static::$template['disabled']['next_start'].$value.static::$template['next_mark'].static::$template['disabled']['next_end'];
         }
         else
         {
             $next_page = static::$current_page + 1;
-            return static::$template['next_start'] . \Html::anchor(rtrim(static::$pagination_url, '/') . '/' . $next_page . '/'. static::$suffix_url, $value . static::$template['next_mark']) . static::$template['next_end'];
+            return static::$template['next_start'].\Html::anchor(rtrim(static::$pagination_url, '/').'/'.$next_page.'/'. static::$suffix_url, $value.static::$template['next_mark']).static::$template['next_end'];
         }
     }
 
@@ -139,13 +139,13 @@ class Pagination extends \Fuel\Core\Pagination
 
         if (static::$current_page == 1)
         {
-            return static::$template['disabled']['previous_start'] . static::$template['previous_mark'] . $value . static::$template['disabled']['previous_end'];
+            return static::$template['disabled']['previous_start'].static::$template['previous_mark'].$value.static::$template['disabled']['previous_end'];
         }
         else
         {
             $previous_page = static::$current_page - 1;
-            $previous_page = ($previous_page == 1) ? '' : '/' . $previous_page;
-            return static::$template['previous_start'] . \Html::anchor(rtrim(static::$pagination_url, '/') . $previous_page . '/' . static::$suffix_url, static::$template['previous_mark'] . $value) . static::$template['previous_end'];
+            $previous_page = ($previous_page == 1) ? '' : '/'.$previous_page;
+            return static::$template['previous_start'].\Html::anchor(rtrim(static::$pagination_url, '/').$previous_page.'/'.static::$suffix_url, static::$template['previous_mark'].$value).static::$template['previous_end'];
         }
     }
     

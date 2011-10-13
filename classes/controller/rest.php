@@ -122,7 +122,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
         $resource           = preg_replace($pattern, '', $resource);
         
         // If they call user, go to $this->post_user();
-        $controller_method  = strtolower(Input::method()) . '_' . $resource;
+        $controller_method  = strtolower(Input::method()).'_'.$resource;
         
         if (method_exists($this, $controller_method)) 
         {

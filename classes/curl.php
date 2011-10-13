@@ -221,7 +221,7 @@ class Curl
      */
     public function execute()
     {
-        $uri              = $this->request_uri . '?' . http_build_query($this->request_data, '', '&');
+        $uri              = $this->request_uri.'?'.http_build_query($this->request_data, '', '&');
         curl_setopt($this->adapter, CURLOPT_URL, $uri); 
         
         $info             = curl_getinfo($this->adapter);

@@ -86,7 +86,7 @@ class Auth
 
         if ( ! isset(static::$instances[$name]))
         {
-            $driver = '\\Hybrid\\Auth_Driver_' . \Str::ucfirst($name);
+            $driver = '\\Hybrid\\Auth_Driver_'.\Str::ucfirst($name);
 
             if ( !! class_exists($driver))
             {
@@ -142,7 +142,7 @@ class Auth
     {
         $salt = \Config::get('autho.salt', \Config::get('crypt.crypto_key'));
 
-        return \sha1($salt . $string);
+        return \sha1($salt.$string);
     }
 
     /**

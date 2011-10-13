@@ -63,6 +63,13 @@ class Input
         static::$request = null;
     }
 
+    /**
+     * Magic method to handle every static method available in \Fuel\Core\Input
+     *
+     * @static
+     * @access  public
+     * @return  mixed
+     */
     public static function __callStatic($name, $args) 
     {
         // If $request is null, it's a request from \Fuel\Core\Request so use it instead

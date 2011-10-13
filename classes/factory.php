@@ -54,7 +54,7 @@ class Factory
             static::maintenance_mode();
         }
 
-        $lang = \Session::get(static::$identity . '_lang');
+        $lang = \Session::get(static::$identity.'_lang');
 
         if ( ! is_null($lang)) 
         {
@@ -132,6 +132,8 @@ class Factory
      *
      * @static
      * @access  public
+     * @param   string  $path
+     * @param   string  $folder
      * @return  void
      */
     public static function import($path, $folder = 'classes')

@@ -107,7 +107,7 @@ class Swiftmail
     public function __construct($config)
     {
         $this->config = $config;
-        $transport    = "transport_" . $config['protocol'];
+        $transport    = "transport_".$config['protocol'];
         
         $this->result = new Swiftmail_Result;
 
@@ -133,7 +133,7 @@ class Swiftmail
         }
         else
         {
-            throw new \FuelException("\Hybrid\Swiftmail: Transport protocol " . $config['protocol'] . " does not exist.");
+            throw new \FuelException("\Hybrid\Swiftmail: Transport protocol ".$config['protocol']." does not exist.");
         }
     }
 
@@ -344,7 +344,7 @@ class Swiftmail
      */
     protected function transport_sendmail($config)
     {
-        return new \Swift_SendmailTransport($config['sendmail_path'] . ' -oi -t');
+        return new \Swift_SendmailTransport($config['sendmail_path'].' -oi -t');
     }
 
     /**

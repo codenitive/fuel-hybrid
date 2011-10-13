@@ -65,7 +65,7 @@ class Request extends \Fuel\Core\Request
 
         $dataset = array_merge($query_dataset, $dataset);
 
-        logger(\Fuel::L_INFO, 'Creating a new Request with URI = "' . $uri . '"', __METHOD__);
+        logger(\Fuel::L_INFO, 'Creating a new Request with URI = "'.$uri.'"', __METHOD__);
 
         static::$active = new static($uri, true, $dataset, $type);
 

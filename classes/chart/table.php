@@ -45,7 +45,7 @@ class Chart_Table extends Chart_Driver
 
         $options    = json_encode($this->options);
 
-        $id         = 'table_' . md5($columns . $rows . time());
+        $id         = 'table_'.md5($columns.$rows.time());
 
         return <<<SCRIPT
 <div id="{$id}" style="width:{$width}; height:{$height};"></div>
