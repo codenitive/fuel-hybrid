@@ -37,9 +37,64 @@ class Test_Currency extends \Fuel\Core\TestCase
         \Package::load('hybrid');
     }
     
+    /**
+     * Test Currency::forge();
+     *
+     * @test
+     */
     public function test_forge()
     {
-        //@todo make the test when the curl class is released
+        $output = Currency::forge(1, 'USD');
+
+        $this->assertTrue($output instanceof \Hybrid\Currency);
+    }
+
+    /**
+     * Test Currency::convert_to(); given same currency
+     *
+     * @test
+     */
+    public function test_convert_to_given_same_currency()
+    {
+        $output = Currency::forge(1, 'USD')->convert_to('USD');
+        $expected = (float) 1;
+
+        $this->assertEquals($excepted, $output);
+    }
+
+    /**
+     * Test Currency::to_{currency}(); given same currency
+     *
+     * @test
+     */
+    public function test_to_currency_given_same_currency()
+    {
+        $output = Currency::forge(1, 'USD')->to_usd();
+        $expected = (float) 1;
+
+        $this->assertEquals($excepted, $output);
+    }
+
+    /**
+     * Test Currency::fetch_currency_rate(); given invalid currency
+     *
+     * @test
+     * @expectedException \FuelException
+     */
+    public function test_fetch_currency_rate_expected_exception_given_invalid_currency()
+    {
+        Currency::forge(1, 'Foo')->convert_to('USD');
+    }
+
+    /**
+     * Test Currency::convert_to(); given invalid currency
+     *
+     * @test
+     * @expectedException \FuelException
+     */
+    public function test_convert_to_expected_exception_given_invalid_currency()
+    {
+        Currency::forge(1, 'USD')->convert_to('Foo');
     }
 
 }
