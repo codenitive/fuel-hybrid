@@ -44,7 +44,15 @@ class Test_Acl extends \Fuel\Core\TestCase
         $acl->allow('guest', array('blog'), 'view');
         $acl->deny('guest', 'forum');
         
-        $user_table = \DB::list_tables('users');
+        try
+        {
+            $user_table = \DB::list_tables('users');
+        }
+        catch (\FuelException $e)
+        {
+            // in case when list table is not supported by Database Connection
+            $user_table = array();
+        }
 
         if (empty($user_table))
         {

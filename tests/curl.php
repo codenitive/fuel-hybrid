@@ -53,7 +53,7 @@ class Test_Curl extends \Fuel\Core\TestCase
      * Test Curl::forge() given invalid driver
      *
      * @test
-     * @expectedException \Fuel_Exception
+     * @expectedException \FuelException
      */
     public function test_forge_expected_exception_given_invalid_method()
     {

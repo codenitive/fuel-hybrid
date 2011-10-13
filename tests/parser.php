@@ -53,7 +53,7 @@ class Test_Parser extends \Fuel\Core\TestCase
      * Test Parser::forge() given invalid driver
      *
      * @test
-     * @expectedException \Fuel_Exception
+     * @expectedException \FuelException
      */
     public function test_forge_expected_exception_given_invalid_driver()
     {
