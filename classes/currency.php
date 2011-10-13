@@ -291,7 +291,7 @@ class Currency
 
         if ( ! array_key_exists($to_currency, static::$currencies))
         {
-            throw new \FuelException(__CLASS__." Currency {$currency} does not exists.");
+            throw new \FuelException(__CLASS__." Currency {$to_currency} does not exists.");
         }
 
         // This is no brainer, does not need to convert if from and to currency is the same.
