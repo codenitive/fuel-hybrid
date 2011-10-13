@@ -59,7 +59,7 @@ class Test_Currency extends \Fuel\Core\TestCase
         $output = Currency::forge(1, 'USD')->convert_to('USD');
         $expected = (float) 1;
 
-        $this->assertEquals($excepted, $output);
+        $this->assertEquals($expected, $output);
     }
 
     /**
@@ -72,7 +72,7 @@ class Test_Currency extends \Fuel\Core\TestCase
         $output = Currency::forge(1, 'USD')->to_usd();
         $expected = (float) 1;
 
-        $this->assertEquals($excepted, $output);
+        $this->assertEquals($expected, $output);
     }
 
     /**
