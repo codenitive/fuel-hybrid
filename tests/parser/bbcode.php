@@ -35,7 +35,6 @@ class Test_Parser_Bbcode extends \Fuel\Core\TestCase
     public function setup()
     {
         \Fuel::add_package('hybrid');
-        $this->markTestSkipped('Parser_Bbcode does not work at the moment');
     }
 
     /**

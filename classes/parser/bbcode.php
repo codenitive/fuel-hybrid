@@ -53,7 +53,7 @@ class Parser_Bbcode extends Parser_Driver
         }
 
         $decoda = new Decoda($text);
-        return $decoda->parse();
+        return $decoda->parse(true);
     }
 
 }
