@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-abstract class Controller_Template extends \Fuel\Core\Controller {
-
+abstract class Controller_Template extends \Fuel\Core\Controller 
+{
     /**
      * Page template
      * 
@@ -54,7 +54,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
      */
     final protected function acl($resource, $type = null, $name = null) 
     {
-        $status = \Hybrid\Acl::instance($name)->access_status($resource, $type);
+        $status = Acl::instance($name)->access_status($resource, $type);
 
         switch ($status) 
         {
@@ -71,8 +71,8 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
      */
     public function before() 
     {
-        $this->language     = \Hybrid\Factory::get_language();
-        $this->user         = \Hybrid\Auth::instance('user')->get();
+        $this->language     = Factory::get_language();
+        $this->user         = Auth::instance('user')->get();
 
         \Event::trigger('controller_before');
         
@@ -116,7 +116,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
     {
         if (true === $this->auto_render)
         {
-            $this->template = \Hybrid\Template::forge($this->template);
+            $this->template = Template::forge($this->template);
         }
     }
     
@@ -133,7 +133,8 @@ abstract class Controller_Template extends \Fuel\Core\Controller {
         
         if (true === $this->auto_render and ! $response instanceof \Response)
         {
-            $response = \Response::forge($this->template, $this->response->status);
+            $response       = $this->response;
+            $response->body = $this->template;
         }
 
         return $response;

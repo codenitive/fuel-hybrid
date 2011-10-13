@@ -27,8 +27,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-abstract class Controller_Frontend extends Controller {
-
+abstract class Controller_Frontend extends Controller 
+{
     /**
      * Page template
      * 
@@ -95,7 +95,7 @@ abstract class Controller_Frontend extends Controller {
     {
         if (true === $this->auto_render)
         {
-            $this->template = \Hybrid\Template::forge($this->template);
+            $this->template = Template::forge($this->template);
         }
     }
     
@@ -113,7 +113,8 @@ abstract class Controller_Frontend extends Controller {
         
         if (true === $this->auto_render and ! $response instanceof \Response)
         {
-            $response = \Response::forge($this->template, $this->response->status);
+            $response       = $this->response;
+            $response->body = $this->template;
         }
 
         return $response;

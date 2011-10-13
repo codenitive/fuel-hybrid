@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-abstract class Controller_Rest extends \Fuel\Core\Controller {
-    
+abstract class Controller_Rest extends \Fuel\Core\Controller 
+{    
     /**
      * Rest format to be used
      * 
@@ -54,7 +54,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      */
     final protected function acl($resource, $type = null, $name = null) 
     {
-        $status = \Hybrid\Acl::instance($name)->access_status($resource, $type);
+        $status = Acl::instance($name)->access_status($resource, $type);
 
         switch ($status) 
         {
@@ -73,18 +73,18 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      */
     public function before() 
     {
-        $this->language     = \Hybrid\Factory::get_language();
-        $this->user         = \Hybrid\Auth::instance('user')->get();
-        \Fuel::$profiling   = false;
+        $this->language   = Factory::get_language();
+        $this->user       = Auth::instance('user')->get();
+        \Fuel::$profiling = false;
 
         \Event::trigger('controller_before');
         
-        if (\Hybrid\Request::main() !== \Hybrid\Request::active()) 
+        if (Request::main() !== Request::active()) 
         {
             $this->set_content_type = false;
         }
         
-        \Hybrid\Restserver::auth();
+        Restserver::auth();
 
         return parent::before();
     }
@@ -99,7 +99,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
     {
         \Event::trigger('controller_after');
         
-        if (! $response instanceof \Response)
+        if ( ! $response instanceof \Response)
         {
             $response = $this->response;    
         }
@@ -116,13 +116,13 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      */
     public function router($resource, $arguments) 
     {
-        $pattern            = \Hybrid\Restserver::$pattern;
+        $pattern            = Restserver::$pattern;
         
         // Remove the extension from arguments too
         $resource           = preg_replace($pattern, '', $resource);
         
         // If they call user, go to $this->post_user();
-        $controller_method  = strtolower(\Hybrid\Input::method()) . '_' . $resource;
+        $controller_method  = strtolower(Input::method()).'_'.$resource;
         
         if (method_exists($this, $controller_method)) 
         {
@@ -131,7 +131,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
         else 
         {
             $this->response->status = 404;
-            return;
+            return ;
         }
     }
 
@@ -143,17 +143,17 @@ abstract class Controller_Rest extends \Fuel\Core\Controller {
      */
     protected function response($data = array(), $http_code = 200) 
     {
-        $rest_server   = \Hybrid\Restserver::forge($data, $http_code)
-                    ->format($this->rest_format)
-                    ->execute();
+        $rest_server   = Restserver::forge($data, $http_code)
+            ->format($this->rest_format)
+            ->execute();
         
-        $this->response->body($rest_server->body);
-        $this->response->status     = $rest_server->status;
+        $this->response->body   = $rest_server->body;
+        $this->response->status = $rest_server->status;
         
         if (true === $this->set_content_type) 
         {
             // Set the correct format header
-            $this->response->set_header('Content-Type', \Hybrid\Restserver::content_type($rest_server->format));
+            $this->response->set_header('Content-Type', Restserver::content_type($rest_server->format));
         }
     }
 }

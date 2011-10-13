@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Chart_Bar extends Chart_Driver {
-
+class Chart_Bar extends Chart_Driver 
+{
     public function __construct() 
     {
         parent::__construct();
@@ -45,7 +45,7 @@ class Chart_Bar extends Chart_Driver {
 
         $options    = json_encode($this->options);
 
-        $id         = 'barchart_' . md5($columns . $rows . time() . microtime());
+        $id         = 'barchart_'.md5($columns.$rows.time().microtime());
 
         return <<<SCRIPT
 <div id="{$id}"></div>

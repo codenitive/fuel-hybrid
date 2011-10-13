@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Fuel
- *
  * Fuel is a fast, lightweight, community driven PHP5 framework.
  *
  * @package    Fuel
@@ -16,26 +14,47 @@
 namespace Hybrid;
 
 /**
- * Factory class tests
+ * Hybrid 
  * 
- * @group Hybrid
- * @group Factory
+ * A set of class that extends the functionality of FuelPHP without 
+ * affecting the standard workflow when the application doesn't actually 
+ * utilize Hybrid feature.
+ *
+ * @package     Fuel
+ * @subpackage  Hybrid
+ * @category    Factory
+ * @category    Test
+ * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
-class Test_Factory extends \Fuel\Core\TestCase {
-    
+
+class Test_Factory extends \Fuel\Core\TestCase 
+{    
+    /**
+     * Setup the test
+     */
     public function setup() 
     {
-        \Fuel::add_package('hybrid');
+        \Package::load('hybrid');
     }
 
+    /**
+     * Test Factory::get_language();
+     *
+     * @test
+     */
     public function test_language() 
     {
         $expected = \Config::get('language');
-        $output = \Hybrid\Factory::get_language();
+        $output   = Factory::get_language();
         
         $this->assertEquals($expected, $output);
     }
     
+    /**
+     * Test Factory::get_identity();
+     *
+     * @test
+     */
     public function test_identity() 
     {
         $expected = \Config::get('app.identity');

@@ -30,11 +30,11 @@ namespace Hybrid;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Auth_Strategy_OAuth2
- * @author      Mior Muhammad Zaki <crynobone@gmail.com>
+ * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
-class Auth_Strategy_OAuth2 extends Auth_Strategy {
-    
+class Auth_Strategy_OAuth2 extends Auth_Strategy 
+{    
     public $provider;
     
     public function authenticate()

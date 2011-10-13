@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Parser &mdash; Fuel Hybrid Documentation</title>
+    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="../assets/js/nav.js"></script>
+    <script type="text/javascript" src="../assets/js/highlight.pack.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            show_nav('text', '../');
+            hljs.tabReplace = '    ';
+            hljs.initHighlightingOnLoad();
+        });
+    </script>
+
+</head>
+<body>
+
+    <header>
+        <h1>Fuel Hybrid Documentation</h1>
+    </header>
+
+    <div id="main-nav"></div>
+
+    <section id="content">
+        
+        <h2 id="">Parser Class</h2>
+
+        <p>The View class acts as an object wrapper for HTML formatted string written using format such as Markdown, Textile, BBCode or etc.</p>
+
+        <article>
+            <h3>forge($name = null)</h3>
+
+            <table class="method">
+                <tbody>
+                <tr>
+                    <th class="legend">Static</th>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <th>Parameters</th>
+                    <td>
+                        <table class="parameters">
+                            <tbody><tr>
+                                <th>Param</th>
+                                <th>Default</th>
+                                <th class="description">Description</th>
+                            </tr>
+                            <tr>
+                                <th><kbd>$name</kbd></th>
+                                <td><pre class="php"><code>null</code></pre></td>
+                                <td>null to fetch the default driver, or a driver id to get a specific one</td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Returns</th>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <th>Example</th>
+                    <td>
+<pre class="php"><code class="php">// Initiate markdown parser
+$markdown = \Hybrid\Parser::forge('markdown');
+
+echo $markdown->parse('### Hello world'); // return '&lt;h3&gt;Hello World&lt;/h3&gt;'
+
+echo $markdown->parse('Some ```other code```'); // return 'Some &lt;code&gt;Hello World&lt;/code&gt;'</code></pre>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </article>
+
+        <article>
+            <h3>Available Drivers:</h3>
+            <ul>
+                <li>Parser_Markdown</li>
+                <li>Parser_Textile</li>
+                <li>Parser_BBCode</li>
+        </article>
+    </section>
+    
+    <section id="footer">
+        <p>
+            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+            &copy; 2010 - 2011 Fuel Hybrid Development Team
+        </p>
+    </section>
+
+</body>
+</html>

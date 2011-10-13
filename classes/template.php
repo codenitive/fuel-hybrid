@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Template {
-
+class Template 
+{
     /**
      * Default template driver
      *
@@ -90,11 +90,11 @@ class Template {
         }
         
         $type   = $type[0];
-        $name   = $type . '.' . $folder;
+        $name   = $type.'.'.$folder;
 
-        if (!isset(static::$instances[$name]))
+        if ( ! isset(static::$instances[$name]))
         {
-            $driver = '\\Hybrid\\Template_' . \Str::ucfirst($type);
+            $driver = '\\Hybrid\\Template_'.\Str::ucfirst($type);
          
             if (class_exists($driver)) 
             {

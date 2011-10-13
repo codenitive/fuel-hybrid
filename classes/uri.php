@@ -26,23 +26,24 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Uri extends \Fuel\Core\Uri {
-
+class Uri extends \Fuel\Core\Uri 
+{
     /**
      * Build query string
      * 
      * @static
      * @access  public
      * @param   mixed   $values
+     * @param   string  $start_with     Default string set to ?
      * @return  string 
      */
-    public static function build_get_query($values) 
+    public static function build_get_query($values, $start_with = '?') 
     {
         $dataset = array ();
         
         $check_get_input = function($value, & $dataset) 
         {
-            $data = \Hybrid\Input::get($value);
+            $data = Input::get($value);
             
             if (empty($data))
             {
@@ -67,7 +68,7 @@ class Uri extends \Fuel\Core\Uri {
             $check_get_input($values, $dataset);
         }
         
-        return '?' . implode('&', $dataset);
+        return $start_with.implode('&', $dataset);
     }
     
 }

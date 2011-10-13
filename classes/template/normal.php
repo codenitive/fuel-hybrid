@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Template_Normal extends Template_Driver {
-
+class Template_Normal extends Template_Driver 
+{
     /**
      * Initiate a new template using factory
      *
@@ -43,12 +43,12 @@ class Template_Normal extends Template_Driver {
     {
         $driver = 'normal';
         
-        if (!is_null($name) and !empty($name))
+        if ( ! is_null($name) and ! empty($name))
         {
             $driver .= ".{$name}";
         }
 
-        return \Hybrid\Template::forge($driver);
+        return Template::forge($driver);
     }
 
     /**
@@ -74,12 +74,11 @@ class Template_Normal extends Template_Driver {
      * @param   string  $folder
      * @param   string  $filename
      * @return  void
-     * @throws  \Fuel_Exception
      */
     public function __construct($folder = null, $filename = null)
     {
         // Assets shouldn't be added in APPPATH/views at all
-        if (!empty($folder) and $folder !== '_default_')
+        if ( ! empty($folder) and $folder !== '_default_')
         {
             $this->set_folder($folder);
         }
@@ -88,7 +87,7 @@ class Template_Normal extends Template_Driver {
             $this->set_folder(static::$config['default_folder']);
         }
 
-        if (!empty($filename) and $filename !== '_default_')
+        if ( ! empty($filename) and $filename !== '_default_')
         {
             $this->set_filename($filename);
         }
@@ -105,11 +104,11 @@ class Template_Normal extends Template_Driver {
      *
      * @access  private
      * @return  self
-     * @throws  \Fuel_Exception
+     * @throws  \FuelException
      */
     public function load_assets($forced_load = false)
     {
-      throw new \Fuel_Exception("\Hybrid\Template_Normal: Asset loading not available for Template_Normal.");
+      throw new \FuelException("\Hybrid\Template_Normal: Asset loading not available for Template_Normal.");
     }
 
     /**
@@ -117,17 +116,17 @@ class Template_Normal extends Template_Driver {
      *
      * @access  public
      * @return  self
-     * @throws  \Fuel_Exception
+     * @throws  \FuelException
      */
     public function set_folder($path = null)
     {
         // this is not the best way of doing it, the request is not cached and going to be slow
         // if there's a lot of paths and files
-        $files = \Fuel::list_files('views/' . $path, '*.php');
+        $files = \Fuel::list_files('views/'.$path, '*.php');
 
         if (empty($files))
         {
-            throw new \Fuel_Exception("\Hybrid\Template_Normal: Path {$path} does not appear to a valid folder or contain any View files.");
+            throw new \FuelException("\Hybrid\Template_Normal: Path {$path} does not appear to a valid folder or contain any View files.");
         }
         else 
         {
@@ -148,7 +147,7 @@ class Template_Normal extends Template_Driver {
     public function partial($filename, $data = null)
     {
         $view = \View::forge();
-        $view->set_filename(rtrim($this->folder, '/') . '/' . $filename);
+        $view->set_filename(rtrim($this->folder, '/').'/'.$filename);
         $view->auto_filter(static::$config['auto_filter']);
 
         if (is_array($data) and count($data) > 0)
@@ -170,7 +169,7 @@ class Template_Normal extends Template_Driver {
      */
     public function render()
     {
-        $this->view->set_filename(rtrim($this->folder, '/') . '/' . $this->filename);
+        $this->view->set_filename(rtrim($this->folder, '/').'/'.$this->filename);
         $this->view->auto_filter(static::$config['auto_filter']);
 
         $this->view->set('TEMPLATE_FOLDER', $this->folder, false);

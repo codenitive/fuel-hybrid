@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class View extends \Fuel\Core\View {
-
+class View extends \Fuel\Core\View 
+{
     /**
      * @static
      * @access  protected
@@ -63,18 +63,18 @@ class View extends \Fuel\Core\View {
      * 
      * @static
      * @access  public
-     * @param   string  $file view filename
+     * @param   string  $file   a string of view filename
      * @return  self
-     * @throws  Fuel_Exception
+     * @throws  FuelException
      */
     public function set_filename($file) 
     {
         switch (true) 
         {
-            case ($path = $this->find_file($file)) : break;
+            case ($path = \Fuel::find_file('views', static::$file_path.$file.'.php')) : break;
             case ($path = \Fuel::find_file('views', $file, '.php', false, false)) : break;
             default :
-                throw new \Fuel_Exception('The requested view could not be found: ' . \Fuel::clean_path($file));
+                throw new \FuelException('The requested view could not be found: '.\Fuel::clean_path($file));
         }
 
         // Store the file path locally
@@ -98,7 +98,7 @@ class View extends \Fuel\Core\View {
             return false;
         }
 
-        return \Fuel::find_file('views', static::$file_path . $file . '.php');
+        return \Fuel::find_file('views', static::$file_path.$file.'.php');
     }
 
 }

@@ -33,8 +33,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Auth_Provider_Normal {
-
+class Auth_Provider_Normal 
+{
     public $data = null;
      /**
      * List of user fields to be used
@@ -93,13 +93,13 @@ class Auth_Provider_Normal {
         $this->reset();
 
         // load Auth configuration
-        $config             = \Config::get('autho.normal', array());
-
-        $reserved_property  = array('optional_fields');
+        $config            = \Config::get('autho.normal', array());
+        
+        $reserved_property = array('optional_fields');
         
         foreach ($config as $key => $value)
         {
-            if (!property_exists($this, $key) or in_array($key, $reserved_property))
+            if ( ! property_exists($this, $key) or in_array($key, $reserved_property))
             {
                 continue;
             }
@@ -113,7 +113,7 @@ class Auth_Provider_Normal {
             \Config::set("autho.normal.{$key}", $value);
         }
 
-        if (!isset($config['optional_fields']) or !is_array($config['optional_fields']))
+        if ( ! isset($config['optional_fields']) or ! is_array($config['optional_fields']))
         {
             $config['optional_fields'] = array();
         }
@@ -150,7 +150,7 @@ class Auth_Provider_Normal {
             'gender'    => '',
             'status'    => null,
             'roles'     => array('0' => 'guest'),
-            'accounts'   => array(),
+            'accounts'  => array(),
         );
 
         return $this;
@@ -170,7 +170,7 @@ class Auth_Provider_Normal {
             $this->data['_hash'] = $data['_hash'];
         }
 
-        $query  = \DB::select('users.*')
+        $query = \DB::select('users.*')
             ->from('users')
             ->where('users.id', '=', $data['id'])
             ->limit(1);
@@ -193,7 +193,7 @@ class Auth_Provider_Normal {
                 ->on('users_meta.user_id', '=', 'users.id');    
         }
         
-        $result     = $query->as_object()->execute();
+        $result = $query->as_object()->execute();
 
         $this->fetch_user($result);
 
@@ -244,13 +244,13 @@ class Auth_Provider_Normal {
         if ($this->data['id'] < 1)
         {
             $this->reset();
-            throw new \Fuel_Exception("User {$username} does not exist in our database");
+            throw new Auth_Exception("User {$username} does not exist in our database");
         }
 
         if ($this->data['password'] !== Auth::add_salt($password))
         {
             $this->reset();
-            throw new \Fuel_Exception("Invalid username and password combination");
+            throw new Auth_Exception("Invalid username and password combination");
         }
 
         $this->verify_token();
@@ -261,11 +261,11 @@ class Auth_Provider_Normal {
     public function login_token($token, $secret)
     {
         $query = \DB::select('users.*')
-                ->from('users')
-                ->join('authentications')
-                ->on('authentications.user_id', '=', 'users.id')
-                ->where('authentications.token', '=', $token)
-                ->where('authentications.secret', '=', $secret);
+            ->from('users')
+            ->join('authentications')
+            ->on('authentications.user_id', '=', 'users.id')
+            ->where('authentications.token', '=', $token)
+            ->where('authentications.secret', '=', $secret);
         
         if (true === $this->use_auth)
         {
@@ -296,7 +296,7 @@ class Auth_Provider_Normal {
 
         if ($this->data['id'] < 1)
         {
-            throw new \Fuel_Exception("User does not exist in our database");
+            throw new Auth_Exception("User does not exist in our database");
         }
 
         $this->verify_token();
@@ -318,12 +318,12 @@ class Auth_Provider_Normal {
      */
     protected function verify_token()
     {
-        $values          = $this->data;
-        $hash            = $values['user_name'] . $values['password'];
+        $values = $this->data;
+        $hash   = $values['user_name'].$values['password'];
 
         if ($this->verify_user_agent)
         {
-            $hash .= \Hybrid\Input::user_agent();
+            $hash .= Input::user_agent();
         }
 
         $values['_hash'] = Auth::add_salt($hash);
@@ -363,21 +363,21 @@ class Auth_Provider_Normal {
     
         $user = $result->current();
 
-        if (!in_array($user->status, $this->allowed_status)) 
+        if ( ! in_array($user->status, $this->allowed_status)) 
         {
             // only verified user can login to this application
             return $this->reset();
         }
 
         // we validate the hash to add security to this application
-        $hash = $user->user_name . $user->password_token;
+        $hash = $user->user_name.$user->password_token;
 
         if ($this->verify_user_agent)
         {
-            $hash .= \Hybrid\Input::user_agent();
+            $hash .= Input::user_agent();
         }
 
-        if (!is_null($this->data['_hash']) and $this->data['_hash'] !== Auth::add_salt($hash)) 
+        if ( ! is_null($this->data['_hash']) and $this->data['_hash'] !== Auth::add_salt($hash)) 
         {
             return $this->reset();
         }
@@ -389,7 +389,7 @@ class Auth_Provider_Normal {
         
         foreach ($this->optional_fields as $property)
         {
-            if (!property_exists($user, $property))
+            if ( ! property_exists($user, $property))
             {
                 continue;
             }
@@ -410,19 +410,27 @@ class Auth_Provider_Normal {
             ->as_object()
             ->execute();
 
+        // set a default roles if user not authenticated
+        if (1 > count($roles))
+        {
+            $this->data['roles'] = array('0' => 'guest');
+            return true;
+        }
+
+        // link all available roles for this user
         foreach ($roles as $role) 
         {
-            $data['' . $role->id] = \Inflector::friendly_title($role->name, '-', true);
+            $data[strval($role->id)] = \Inflector::friendly_title($role->name, '-', true);
         }
             
-        $this->data['roles']     = $data;
+        $this->data['roles'] = $data;
 
         return true;
     }
 
     protected function fetch_linked_accounts()
     {
-        $data  = array();
+        $data = array();
         
         $accounts = \DB::select('*')
             ->from('authentications')
@@ -432,13 +440,13 @@ class Auth_Provider_Normal {
 
         foreach ($accounts as $account) 
         {
-            $data['' . $account->provider] = array(
-                'token' => $account->token,
+            $data[strval($account->provider)] = array(
+                'token'  => $account->token,
                 'secret' => $account->secret,
             );
         }
             
-        $this->data['accounts']     = $data;
+        $this->data['accounts'] = $data;
 
         return true;
     }

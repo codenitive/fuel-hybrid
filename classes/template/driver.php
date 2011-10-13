@@ -26,8 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-abstract class Template_Driver {
-
+abstract class Template_Driver 
+{
     /**
      * Template driver configuration
      *
@@ -46,7 +46,7 @@ abstract class Template_Driver {
      */
     public static function _init()
     {
-        if (\is_null(static::$config))
+        if (is_null(static::$config))
         {
             \Config::load('app', 'app');
             static::$config = \Config::get('app.template', array());
@@ -91,11 +91,11 @@ abstract class Template_Driver {
      * @access  public
      * @param   bool    $forced_load
      * @return  self
-     * @throws  \Fuel_Exception
+     * @throws  \FuelException
      */
     public function load_assets($forced_load = false) 
     {
-        $folder_path = $this->folder . 'assets/';
+        $folder_path = $this->folder.'assets/';
 
         if (false === static::$config['load_assets'] and false === $forced_load)
         {
@@ -104,7 +104,7 @@ abstract class Template_Driver {
 
         if (!\is_dir($folder_path))
         {
-            throw new \Fuel_Exception("\Hybrid\Template_Driver: Unable to load assets at {$folder_path}.");
+            throw new \FuelException("\Hybrid\Template_Driver: Unable to load assets at {$folder_path}.");
         }
         else
         {
@@ -126,13 +126,13 @@ abstract class Template_Driver {
      * @access  public
      * @param   string  $path
      * @return  self
-     * @throws  \Fuel_Exception
+     * @throws  \FuelException
      */
     public function set_folder($path = null)
     {
-        if (!\is_dir($path))
+        if ( ! \is_dir($path))
         {
-            throw new \Fuel_Exception("\Hybrid\Template_Driver: Path {$path} does not appear to a valid folder.");
+            throw new \FuelException("\Hybrid\Template_Driver: Path {$path} does not appear to a valid folder.");
         }
         else 
         {
@@ -151,7 +151,7 @@ abstract class Template_Driver {
      */
     public function set_filename($filename = null)
     {
-        if (!empty($filename))
+        if ( ! empty($filename))
         {
             $this->filename = $filename;
         }
