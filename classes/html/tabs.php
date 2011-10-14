@@ -22,7 +22,7 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Html
+ * @category    Html_Tabs
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
@@ -67,8 +67,9 @@ namespace Hybrid;
             $content = '';
         }
 
-        $data = array(
+        $data = (object) array(
             'title'   => $title,
+            'slug'    => \Inflector::friendly_title($title, '-', true),
             'content' => $content,
         );
 
@@ -91,7 +92,20 @@ namespace Hybrid;
 
     public function render()
     {
-        
+        $title   = '<ul class="tabs">';
+        $content = '<div class="pill-content">';
+
+        foreach ($this->tabs as $count => $tab)
+        {
+            $active = ($count === 0 ? 'class="active"' : '');
+            $title .= \Str::tr('<li :active><a href="#:slug">:title</a></li>', array('active' => $active, 'slug' => $tab->slug, 'title' => $tab->title));
+            $content .= \Str::tr('<div :active id=":slug">:content</div>', array('active' => $active, 'slug' => $tab->slug, 'content' => $tab->content));
+        }
+
+        $title   .= '</ul>';
+        $content .= '</div>';
+
+        return '<div id="tab_'.ltrim($this->name, 'tab_').'">'.$title.$content.'</div>';
     }
 
  }
