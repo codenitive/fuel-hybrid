@@ -235,7 +235,7 @@ class Currency
             {
                 $replace = array('1', $from_currency, $cur);
                 
-                if (function_exists('curl_init'))
+                try
                 {
                     $data = Curl::get(str_replace($search, $replace, static::$service))
                         ->setopt(array(
@@ -249,7 +249,7 @@ class Currency
 
                     $body = $data->body;
                 }
-                else 
+                catch (\FuelException $e)
                 {
                     $body = file_get_contents(str_replace($search, $replace, static::$service));     
                 }

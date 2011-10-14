@@ -169,6 +169,11 @@ class Curl
      */
     public function __construct($uri, $dataset = array(), $type = 'GET')
     {
+        if ( ! function_exists('curl_init'))
+        {
+            throw new \FuelException("\Hybrid\Curl: curl_init() is not available.")
+        }
+
         $this->request_uri    = $uri;
         $this->request_method = $type;
         $this->request_data   = $dataset;
