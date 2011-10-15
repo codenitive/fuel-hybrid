@@ -40,7 +40,7 @@ class Swiftmail
      */
     public static function forge($config = array())
     {
-        $initconfig = \Config::load('email', 'email', true);
+        $initconfig = \Config::load('swiftmail', 'switftmail', true);
         
         if (is_array($config) and is_array($initconfig))
         {

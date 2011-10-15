@@ -34,11 +34,11 @@
 
         <h3>Information</h3>
 
-        <p>Swiftmail can be configured in a <strong>config/email.php</strong> file and takes the following keys: </p>
+        <p>Swiftmail can be configured in a <strong>config/swiftmail.php</strong> file and takes the following keys: </p>
 
         <h2 id="how-to">How To</h2>
 
-        <pre class="php"><code>\Config::load('email');
+        <pre class="php"><code>\Config::load('swiftmail');
 
 $mail = \Hybrid\Swiftmail::forge();
 $mail->to('to@domain.com', 'Name');
