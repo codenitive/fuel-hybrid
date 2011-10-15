@@ -125,6 +125,18 @@ class Currency
      * @var     string  Use google API service
      */
     protected static $service = "http://www.google.com/ig/calculator?hl=en&q={AMOUNT}{FROM}=?{TO}";
+
+    /**
+     * Only load the configuration once
+     *
+     * @static
+     * @access  public
+     */
+    public static function _init()
+    {
+        \Config::load('hybrid', 'hybrid');
+        static::$default = \Config::get('hybrid.currency.default', static::$default);
+    }
     
     /**
      * Initiate a new Currency class
@@ -273,7 +285,7 @@ class Currency
                 }
             }
 
-            \Cache::set('hybrid.currency.'.$from_currency, $this->currency_rates);
+            \Cache::set('hybrid.currency.'.$from_currency, $this->currency_rates, \Config::get('hybrid.currency.cache.expiration'));
         }
     }
 

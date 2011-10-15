@@ -48,8 +48,8 @@ abstract class Template_Driver
     {
         if (null === static::$config)
         {
-            \Config::load('app', 'app');
-            static::$config = \Config::get('app.template', array());
+            \Config::load('hybrid', 'hybrid');
+            static::$config = \Config::get('hybrid.template', array());
         }
     }
 
