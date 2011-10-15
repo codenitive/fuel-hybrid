@@ -141,7 +141,7 @@ abstract class Chart_Driver
      */
     public function set_options($name, $value = '') 
     {
-        if (is_null($name)) 
+        if (null === $name) 
         {
             return false;
         }

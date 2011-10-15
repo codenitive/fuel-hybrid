@@ -32,7 +32,7 @@ namespace Hybrid;
 
     public static function forge($name = null, $config = array())
     {
-        if (is_null($name))
+        if (null === $name)
         {
             $name = 'default';
         }

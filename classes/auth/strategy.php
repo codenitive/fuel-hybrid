@@ -57,7 +57,7 @@ abstract class Auth_Strategy
         
         $this->config   = \Config::get("autho.providers.{$provider}");
         
-        if (is_null($this->name))
+        if (null === $this->name)
         {
             // Attempt to guess the name from the class name
             $class_name = \Inflector::denamespace(get_class($this));

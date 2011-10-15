@@ -104,7 +104,7 @@ class Auth_Provider_Normal
                 continue;
             }
 
-            if (is_null($value))
+            if (null === $value)
             {
                 continue;
             }
@@ -356,7 +356,7 @@ class Auth_Provider_Normal
 
     protected function fetch_user($result)
     {
-        if (is_null($result) or $result->count() < 1) 
+        if (null === $result or $result->count() < 1) 
         {
             return $this->reset();
         } 
@@ -377,12 +377,20 @@ class Auth_Provider_Normal
             $hash .= Input::user_agent();
         }
 
-        if ( ! is_null($this->data['_hash']) and $this->data['_hash'] !== Auth::add_salt($hash)) 
+        if (null !== $this->data['_hash'] and $this->data['_hash'] !== Auth::add_salt($hash)) 
         {
             return $this->reset();
         }
 
-        $this->data['id']        = $user->user_id;
+        if ( ! $this->use_meta and ! $this->use_auth)
+        {
+            $this->data['id'] = $user->id;
+        }
+        else
+        {
+            $this->data['id'] = $user->user_id;
+        }
+        
         $this->data['user_name'] = $user->user_name;
         $this->data['email']     = $user->email;
         $this->data['password']  = $user->password_token;

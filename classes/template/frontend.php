@@ -42,8 +42,9 @@ class Template_Frontend extends Template_Driver
     public static function forge($name = null)
     {
         $driver = 'frontend';
-        
-        if ( ! is_null($name) and ! empty($name))
+        $name   = strtolower($name);
+
+        if ( ! empty($name))
         {
             $driver .= ".{$name}";
         }
@@ -79,7 +80,7 @@ class Template_Frontend extends Template_Driver
     {
         $this->set_theme($theme);
 
-        if ( ! empty($filename) and $filename !== '_default_')
+        if ( ! empty($filename) and '_default_' !== $filename)
         {
             $this->set_filename($filename);
         }
@@ -107,7 +108,7 @@ class Template_Frontend extends Template_Driver
             throw new \FuelException("\Hybrid\Template_Driver: configuration is not completed");
         }
 
-        if (is_null($theme) or $theme === '_default_')
+        if (null === $theme or '_default_' === $theme)
         {
             $theme = 'default';
         }

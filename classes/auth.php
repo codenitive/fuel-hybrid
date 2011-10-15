@@ -56,7 +56,7 @@ class Auth
     {
         $path = \Config::get("autho.urls.{$type}");
 
-        if (is_null($path))
+        if (null === $path)
         {
             throw new \FuelException("\Hybrid\Auth_Driver: Unable to redirect using {$type} type.");
         }
@@ -77,7 +77,7 @@ class Auth
      */
     public static function forge($name = null)
     {
-        if (is_null($name))
+        if (null === $name)
         {
             $name = 'user';
         }

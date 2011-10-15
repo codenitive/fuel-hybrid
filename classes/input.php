@@ -84,7 +84,7 @@ class Input
         $default      = null;
         $index        = null;
         
-        if ( ! is_null(static::$request) and static::$request->method !== '') 
+        if (null !== static::$request and static::$request->method !== '') 
         {
             $using_hybrid = true;
         }
@@ -109,7 +109,7 @@ class Input
         }
 
         // Reach this point but $index is null (which isn't be so we should just return the default value) 
-        if (is_null($index)) 
+        if (null === $index) 
         {
             return $default;
         }

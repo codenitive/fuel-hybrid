@@ -74,7 +74,7 @@ class Acl
      */
     public static function forge($name = null)
     {
-        if (is_null($name))
+        if (null === $name)
         {
             $name = 'default';
         }
@@ -249,7 +249,7 @@ class Acl
      */
     public function add_roles($roles = null) 
     {
-        if (is_null($roles)) 
+        if (null === $roles) 
         {
             throw new \FuelException("\Hybrid\Acl: Can't add NULL roles.");
         }
@@ -286,7 +286,7 @@ class Acl
      */
     public function add_resources($resources = null) 
     {
-        if (is_null($resources)) 
+        if (null === $resources) 
         {
             throw new \FuelException("\Hybrid\Acl: Can't add NULL resources.");
         }

@@ -109,7 +109,7 @@ class Request extends \Fuel\Core\Request
         parent::__construct($uri, $route);
 
         // store this construct method and data staticly
-        if ( ! is_null($type))
+        if (null !== $type)
         {
             $this->request_method = $type;
             $this->request_data   = $dataset;

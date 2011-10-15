@@ -263,7 +263,7 @@ class Currency
                 // need to decode this first
                 $data = json_decode($body);
                 
-                if ( ! is_null($data) and $data->icc !== false)
+                if (null !== $data and false !== $data->icc)
                 {
                     $conversion = \Format::forge($body, 'json')->to_array();
                     $tmp        = explode(' ', $conversion['rhs']);
