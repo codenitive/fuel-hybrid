@@ -22,11 +22,11 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Html_Tabs
+ * @category    Tabs
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
- class Html_Tabs {
+ class Tabs {
     
     protected static $instances = array();
 
@@ -45,6 +45,11 @@ namespace Hybrid;
         return static::$instances[$name];
     }
 
+    public static function instance($name)
+    {
+        return static::forge($name);
+    }
+
     protected $tabs   = array();
     protected $name   = null;
     protected $config = array();
@@ -55,11 +60,21 @@ namespace Hybrid;
         $this->config = array_merge($this->config, $config);
     }
 
-    public function add($title, $content = '', $default = false)
+    public function append($title, $content = '')
+    {
+        return $this->add($title, $content, false);
+    }
+
+    public function prepend($title, $content = '')
+    {
+        return $this->add($title, $content, true);
+    }
+
+    public function add($title, $content = '', $prepend = false)
     {
         if (empty($title))
         {
-            throw new \Fuel_Exception("\Hybrid\Html_Tabs: Unable to add empty tab.");
+            throw new \FuelException("\Hybrid\Tabs: Unable to add empty tab.");
         }
 
         if (empty($content) or ! strval($content))
@@ -73,7 +88,7 @@ namespace Hybrid;
             'content' => $content,
         );
 
-        if (true === $default)
+        if (true === $prepend)
         {
             array_shift($this->tabs, $data);
         }
