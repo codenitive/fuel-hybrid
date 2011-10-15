@@ -66,7 +66,6 @@ class Acl
     /**
      * Initiate a new Acl instance.
      * 
-     * @deprecated  1.3.0
      * @static
      * @access  public
      * @param   string  $name

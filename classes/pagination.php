@@ -152,9 +152,9 @@ class Pagination extends \Fuel\Core\Pagination
     /**
      * Build query string
      * 
+     * @deprecated
      * @static
      * @access  public
-     * @deprecated
      * @param   mixed   $values
      * @return  string 
      */
