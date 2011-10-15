@@ -171,7 +171,7 @@ class Curl
     {
         if ( ! function_exists('curl_init'))
         {
-            throw new \FuelException("\Hybrid\Curl: curl_init() is not available.")
+            throw new \FuelException("\Hybrid\Curl: curl_init() is not available.");
         }
 
         $this->request_uri    = $uri;
