@@ -143,11 +143,6 @@ abstract class Chart_Driver
      */
     public function set_options($name, $value = '') 
     {
-        if (null === $name or empty($name)) 
-        {
-            throw new \FuelException(__METHOD__.' require \$name to be set.');
-        }
-
         if (is_array($name)) 
         {
             foreach ($name as $key => $value) 
@@ -155,9 +150,13 @@ abstract class Chart_Driver
                 $this->options[$key] = $value;
             }
         }
-        elseif (is_string($name)) 
+        elseif (is_string($name) and ! empty($name)) 
         {
             $this->options[$name] = $value;
+        }
+        else
+        {
+            throw new \FuelException(__METHOD__.' require \$name to be set.');
         }
 
         return $this;
