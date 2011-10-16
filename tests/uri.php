@@ -34,7 +34,7 @@ class Test_Uri extends \Fuel\Core\TestCase
      */
     public function setup() 
     {
-        \Fuel::add_package('hybrid');
+        \Package::load('hybrid');
 
         $_GET = array(
             'hello' => 'world',

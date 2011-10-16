@@ -29,8 +29,6 @@ namespace Hybrid;
 
 class Test_Acl extends \Fuel\Core\TestCase 
 {    
-    private $enable_test = true;
-
     /**
      * Setup the test
      */
@@ -46,16 +44,11 @@ class Test_Acl extends \Fuel\Core\TestCase
         
         try
         {
-            $user_table = \DB::list_tables('users');
+            \Database_Connection::instance(\Fuel::TEST)->connect();
         }
-        catch (\FuelException $e)
+        catch (\Database_Exception $e)
         {
             // in case when list table is not supported by Database Connection
-            $user_table = array();
-        }
-
-        if (empty($user_table))
-        {
             $this->markTestSkipped('User table is not available');
         }
     }
