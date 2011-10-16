@@ -69,10 +69,10 @@ abstract class Chart_Driver
         return static::forge();
     }
 
-    protected $options  = array();
-    protected $hAxis    = 'string';
-    protected $columns  = '';
-    protected $rows     = '';
+    protected $options = array();
+    protected $hAxis   = 'string';
+    protected $columns = '';
+    protected $rows    = '';
 
     /**
      * Clean-up private property on new object
@@ -92,11 +92,11 @@ abstract class Chart_Driver
      */
     public function clear() 
     {
-        $this->options  = array();
-        $this->columns  = '';
-        $this->rows     = '';
+        $this->options = array();
+        $this->columns = '';
+        $this->rows    = '';
 
-        return true;
+        return $this;
     }
 
     /**
@@ -107,9 +107,9 @@ abstract class Chart_Driver
      */
     public function set_columns($data = array()) 
     {
-        $this->columns  = '';
-
-        $count          = 0;
+        $this->columns = '';
+        
+        $count         = 0;
 
         if (count($data) > 0) 
         {
@@ -129,6 +129,8 @@ abstract class Chart_Driver
                 $count++;
             }
         }
+
+        return $this;
     }
 
     /**
@@ -141,9 +143,9 @@ abstract class Chart_Driver
      */
     public function set_options($name, $value = '') 
     {
-        if (null === $name) 
+        if (null === $name or empty($name)) 
         {
-            return false;
+            throw new \FuelException(__METHOD__.' require \$name to be set.');
         }
 
         if (is_array($name)) 
@@ -158,7 +160,7 @@ abstract class Chart_Driver
             $this->options[$name] = $value;
         }
 
-        return true;
+        return $this;
     }
 
     /**
@@ -201,6 +203,8 @@ abstract class Chart_Driver
         }
         
         $this->rows .= "data.addRows(".$x.");\r\n{$dataset}";
+
+        return $this;
     }
 
     /**
@@ -217,13 +221,39 @@ abstract class Chart_Driver
     }
 
     /**
-     * Generate the chart
+     * Render self
+     *
+     * @abstract
+     * @access  public
+     */
+    public function __toString()
+    {
+        return $this->render();
+    }
+
+    /**
+     * Render the chart
      * 
      * @abstract
      * @access  public
      * @param   int     $width
      * @param   int     $height
      */
-    public abstract function generate($width, $height);
+    public abstract function render($width, $height);
+
+    /**
+     * Generate the chart
+     * 
+     * @deprecated
+     * @access  public
+     * @param   int     $width
+     * @param   int     $height
+     */
+    public function generate()
+    {
+        \Log::warning('This method is deprecated. Please use a render() instead.', __METHOD__);
+
+        return $this->render();
+    }
     
 }
