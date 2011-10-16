@@ -37,6 +37,11 @@ namespace Hybrid;
      */
     protected static $instances = array();
 
+    public static function _init()
+    {
+        \Config::load('hybrid', 'hybrid');
+    }
+
     /**
      * Initiate a new Tabs instance.
      * 
@@ -109,8 +114,9 @@ namespace Hybrid;
      */
     protected function __construct($name, $config)
     {
+        $this->config = \Config::get('hybrid.tabs');
         $this->name   = $name;
-        $this->config = array_merge($this->config, $config);
+        $this->config = array_merge($config, $this->config);
     }
 
     /**
@@ -199,20 +205,24 @@ namespace Hybrid;
      */
     public function render()
     {
-        $title   = '<ul class="tabs">';
-        $content = '<div class="pill-content">';
+        $template = $this->config['template'];
+
+        $title   = $template['title_open'];
+        $content = $template['content_open'];
 
         foreach ($this->tabs as $count => $tab)
         {
             $active = ($count === 0 ? 'class="active"' : '');
-            $title .= \Str::tr('<li :active><a href="#:slug">:title</a></li>', array('active' => $active, 'slug' => $tab->slug, 'title' => $tab->title));
-            $content .= \Str::tr('<div :active id=":slug">:content</div>', array('active' => $active, 'slug' => $tab->slug, 'content' => $tab->content));
+            $title .= \Str::tr($template['title'], array('active' => $active, 'slug' => $tab->slug, 'title' => $tab->title));
+            $content .= \Str::tr($template['content'];, array('active' => $active, 'slug' => $tab->slug, 'content' => $tab->content));
         }
 
-        $title   .= '</ul>';
-        $content .= '</div>';
+        $title   .= $template['title_close'];
+        $content .= $template['content_close'];
+        
+        $prefix = \Config::get('hybrid.tabs.prefix', '');
 
-        return '<div id="tab_'.ltrim($this->name, 'tab_').'">'.$title.$content.'</div>';
+        return \Str::tr($template['wrapper_open'], array('id' => $prefix.ltrim($this->name, $prefix))).$title.$content.$template['wrapper_close'];
     }
 
  }

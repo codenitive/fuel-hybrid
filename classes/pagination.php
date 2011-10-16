@@ -60,6 +60,24 @@ class Pagination extends \Fuel\Core\Pagination
     protected static $suffix_url;
 
     /**
+     * Init
+     *
+     * Loads in the config and sets the variables
+     *
+     * @access  public
+     * @return  void
+     */
+    public static function _init()
+    {
+        \Config::load('hybrid', 'hybrid');
+        
+        $config = \Config::get('pagination', array());
+        $config = \Config::get('hybrid.pagination', array()) + $config;
+
+        static::set_config($config);
+    }
+
+    /**
      * Pagination Page Number links
      *
      * @access  public

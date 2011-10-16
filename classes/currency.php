@@ -228,6 +228,8 @@ class Currency
      */
     protected function fetch_currency_rate($from_currency)
     {
+        \Cache::forge('hybrid.currency.'.$from_currency, \Config::get('hybrid.currency.cache', array()));
+
         if ( ! array_key_exists($from_currency, static::$currencies))
         {
             throw new \FuelException("\Hybrid\Currency: Unable to use unknown currency {$from_currency}");
@@ -285,7 +287,7 @@ class Currency
                 }
             }
 
-            \Cache::set('hybrid.currency.'.$from_currency, $this->currency_rates, \Config::get('hybrid.currency.cache.expiration'));
+            \Cache::set('hybrid.currency.'.$from_currency, $this->currency_rates);
         }
     }
 
