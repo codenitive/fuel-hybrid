@@ -113,12 +113,14 @@ class Swiftmail
 
         if (method_exists($this, $transport))
         {
+            // set transport, messenger and mailer using Swiftmail
             $transport      = $this->{$transport}($config);
             $this->messager = new \Swift_Message();
             $this->mailer   = new \Swift_Mailer($transport);
 
             $this->messager->setCharset($config['charset']);
 
+            // set current mailtype, either it plain text or html
             switch($config['mailtype'])
             {
                case 'html' :
@@ -133,7 +135,7 @@ class Swiftmail
         }
         else
         {
-            throw new \FuelException("\Hybrid\Swiftmail: Transport protocol ".$config['protocol']." does not exist.");
+            throw new \FuelException(__METHOD__.": Transport protocol ".$config['protocol']." does not exist.");
         }
     }
 
@@ -201,6 +203,7 @@ class Swiftmail
      */
     public function __call($name, $args)
     {
+        // check if called method is a valid recipients type
         if (array_key_exists($name, $this->recipients))
         {
             $email_name    = null;
@@ -215,13 +218,14 @@ class Swiftmail
                 break;
             }
 
+            // add to recipient list
             $this->add_multiple_recipients($name, $email_address, $email_name);
 
             return $this;
         }
         else
         {
-            throw new \FuelException("\Hybrid\Swiftmail::{$name} method does not exist.");
+            throw new \FuelException(__CLASS__."::{$name}: method does not exist.");
         }
     }
 
@@ -238,15 +242,18 @@ class Swiftmail
     {
         if ( ! isset($this->recipients[$type]))
         {
-            throw new \FuelException("\Hybrid\Swiftmail: Recipient type {$type} does not exist");
+            throw new \FuelException(__METHOD__.": Recipient type {$type} does not exist");
         }
 
+        // add new address to the list
         if ( ! empty($name))
         {
             $this->recipients[$type][$address] = $name; 
         }
-
-        $this->recipients[$type][] = $address;
+        else
+        {
+            $this->recipients[$type][] = $address;
+        }
 
         return true;
     }
@@ -260,16 +267,14 @@ class Swiftmail
      */
     public function send($debug = false)
     {
-        $this->messager->setTo($this->recipients['to']);
-
+        // if the from recipient list is empty, load from address from configuration
         if (empty($this->recipients['from']))
         {
             $this->add_multiple_recipients('from', $this->config['from']['address'], $this->config['from']['name']);
         }
         
-        $this->messager->setFrom($this->recipients['from']);
-
-        foreach (array('reply_to', 'cc', 'bcc') as $type)
+        // loop every type of recipient, if for instance to or from is missing, let Swift_Message::send() return the failure.
+        foreach (array('to', 'from', 'reply_to', 'cc', 'bcc') as $type)
         {
             if (count($this->recipients[$type]) > 0)
             {
@@ -278,8 +283,10 @@ class Swiftmail
             }
         }
 
+        // try to send the email, and return the failure message if any.
         $result = $this->mailer->send($this->messager, $failure);
 
+        // set Swiftmail_Result data
         $this->result->failure = $failure;
 
         if (intval($result) >= 1)
@@ -288,6 +295,7 @@ class Swiftmail
             $this->result->total_sent = intval($result);
         }
 
+        // based on the $debug, return success status or Swiftmail_Result
         if (false === $debug)
         {
             return $this->result->success;
