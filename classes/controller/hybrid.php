@@ -35,7 +35,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
      * @access  protected
      * @var     bool
      */
-    protected $is_rest_call         = true;
+    protected $is_rest_call     = true;
 
     /**
      * Rest format to be used
@@ -43,7 +43,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
      * @access  protected
      * @var     string
      */
-    protected $rest_format          = null;
+    protected $rest_format      = null;
     
     /**
      * Set the default content type using PHP Header
@@ -51,7 +51,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
      * @access  protected
      * @var     bool
      */
-    protected $set_content_type     = true;
+    protected $set_content_type = true;
     
     /**
      * Page template
@@ -59,7 +59,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
      * @access  public
      * @var     string
      */
-    public $template                = 'normal';
+    public $template            = 'normal';
     
     /**
      * Auto render template
@@ -67,7 +67,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
      * @access  public
      * @var     bool    
      */
-    public $auto_render             = true;
+    public $auto_render         = true;
 
     /**
      * Run ACL check and redirect user automatically if user doesn't have the privilege
@@ -92,7 +92,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
                 }
                 else
                 {
-                    throw new \Request404Exception();
+                    throw new \HttpNotFoundException();
                 }
             break;
         }
@@ -192,7 +192,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
             }
             else
             {
-                throw new \Request404Exception();
+                throw new \HttpNotFoundException();
             }
         }
     }

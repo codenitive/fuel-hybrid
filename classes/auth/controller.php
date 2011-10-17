@@ -47,7 +47,7 @@ class Auth_Controller extends \Controller
     {
         if (empty($provider))
         {
-            throw new \Request404Exception();
+            throw new \HttpNotFoundException();
         }
 
         Auth_Strategy::forge($provider)->authenticate();
@@ -57,7 +57,7 @@ class Auth_Controller extends \Controller
     {
         if (empty($provider))
         {
-            throw new \Request404Exception();
+            throw new \HttpNotFoundException();
         }
         
         $strategy = Auth_Strategy::forge($provider);

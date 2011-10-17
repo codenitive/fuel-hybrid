@@ -45,7 +45,7 @@ abstract class Controller extends \Fuel\Core\Controller
         switch ($status) 
         {
             case 401 :
-                throw new \Request404Exception();
+                throw new \HttpNotFoundException();
             break;
         }
     }
