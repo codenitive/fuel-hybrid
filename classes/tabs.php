@@ -214,7 +214,7 @@ namespace Hybrid;
         {
             $active = ($count === 0 ? 'class="active"' : '');
             $title .= \Str::tr($template['title'], array('active' => $active, 'slug' => $tab->slug, 'title' => $tab->title));
-            $content .= \Str::tr($template['content'];, array('active' => $active, 'slug' => $tab->slug, 'content' => $tab->content));
+            $content .= \Str::tr($template['content'], array('active' => $active, 'slug' => $tab->slug, 'content' => $tab->content));
         }
 
         $title   .= $template['title_close'];
