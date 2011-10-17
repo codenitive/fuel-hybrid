@@ -5,6 +5,12 @@
 
 return array(
 
+    /* The default from address and name to be used globally unless replaced in the application code. */
+    'from' => array(
+        'address' => null,
+        'name'    => null,
+    ),
+
     /* The user agent to use in the email headers (User-Agent and X-Mailer). Mostly used for aesthetics.
      * Value is a string to use as the useragent.
      * Defaults to 'FuelPHP'

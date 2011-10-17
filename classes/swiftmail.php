@@ -261,6 +261,12 @@ class Swiftmail
     public function send($debug = false)
     {
         $this->messager->setTo($this->recipients['to']);
+
+        if (empty($this->recipients['from']))
+        {
+            $this->add_multiple_recipients('from', $this->config['from']['address'], $this->config['from']['name']);
+        }
+        
         $this->messager->setFrom($this->recipients['from']);
 
         foreach (array('reply_to', 'cc', 'bcc') as $type)
