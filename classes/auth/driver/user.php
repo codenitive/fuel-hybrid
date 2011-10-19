@@ -157,17 +157,18 @@ class Auth_Driver_User extends Auth_Driver
         return null;
     }
 
-    /**
+     /**
      * Login user using normal authentication (username and password)
      * 
      * @access  public
      * @param   string  $username
      * @param   string  $password
+     * @param   bool    $remember_me
      * @return  bool
      */
-    public function login($username, $password) 
+    public function login($username, $password, $remember_me = false) 
     {
-        $this->provider->login($username, $password);
+        $this->provider->login($username, $password, $remember_me);
         return true;
     }
 
@@ -177,11 +178,12 @@ class Auth_Driver_User extends Auth_Driver
      * @access  public
      * @param   string  $token
      * @param   string  $secret
+     * @param   bool    $remember_me
      * @return  bool
      */
-    public function login_token($token, $secret) 
+    public function login_token($token, $secret, $remember_me = false) 
     {
-        $this->provider->login_token($token, $secret);
+        $this->provider->login_token($token, $secret, $remember_me);
         return true;
     }
 

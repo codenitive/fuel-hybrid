@@ -37,7 +37,7 @@ class Auth_Provider_Normal
 {
     public $data = null;
 
-     /**
+    /**
      * List of user fields to be used
      *
      * @access  protected
@@ -45,7 +45,7 @@ class Auth_Provider_Normal
      */
     protected $optional_fields = array('status', 'full_name');
      
-     /**
+    /**
      * Allow status to login based on `users`.`status`
      *
      * @access  protected
@@ -53,7 +53,7 @@ class Auth_Provider_Normal
      */
     protected $allowed_status = array('verified');
      
-     /**
+    /**
      * Use `users_meta` table
      *
      * @access  protected
@@ -61,13 +61,21 @@ class Auth_Provider_Normal
      */
     protected $use_meta = true;
      
-     /**
+    /**
      * Use `users_auth` table
      *
      * @access  protected
      * @var     bool
      */
     protected $use_auth = true;
+
+    /**
+     * Total number of seconds before Cookie expired
+     *
+     * @access  protected
+     * @var     bool
+     */
+    protected $expiration = 0;
 
     /**
      * Verify User Agent in Hash
@@ -77,23 +85,52 @@ class Auth_Provider_Normal
      */
     protected $verify_user_agent = false;
 
+    /**
+     * Load configurations
+     *
+     * @static 
+     * @access  public
+     * @return  void
+     */
     public static function _init()
     {
         \Lang::load('autho', 'autho');
     }
 
-
+    /**
+     * Initiate a new Auth_Provider_Normal instance.
+     * 
+     * @static
+     * @access  public
+     * @return  object  Auth_Provider_Normal
+     */
     public static function forge()
     {
         return new static();
     }
 
+    /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  object  Auth_Provider_Normal
+     * @see     self::forge()
+     */
     public static function factory()
     {
         \Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
         return static::forge();
     }
 
+    /**
+     * Construct this provider
+     *
+     * @access  protected
+     * @return  void
+     */
     protected function __construct()
     {
         $this->reset();
@@ -135,6 +172,7 @@ class Auth_Provider_Normal
         }
 
         $this->verify_user_agent = \Config::get('autho.verify_user_agent', $this->verify_user_agent);
+        $this->expiration        = \Config::get('autho.expiration', $this->expiration);
     }
 
     /**
@@ -230,11 +268,17 @@ class Auth_Provider_Normal
      * @access  public
      * @param   string  $username
      * @param   string  $password
+     * @param   string  $remember_me
      * @return  self
      * @throws  Auth_Exception
      */
-    public function login($username, $password)
+    public function login($username, $password, $remember_me = false)
     {
+        if ( !! $remember_me)
+        {
+            $this->expiration = 0;
+        }
+
         $query = \DB::select('users.*')
                 ->from('users');
         
@@ -292,10 +336,16 @@ class Auth_Provider_Normal
      * @access  public
      * @param   string  $token
      * @param   string  $secret
+     * @param   bool    $remember_me
      * @return  self
      */
-    public function login_token($token, $secret)
+    public function login_token($token, $secret, $remember_me = false)
     {
+        if ( !! $remember_me)
+        {
+            $this->expiration = 0;
+        }
+
         $query = \DB::select('users.*')
             ->from('users')
             ->join('authentications')

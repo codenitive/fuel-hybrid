@@ -67,9 +67,23 @@ return array(
      */
     'link_multiple_providers' => true,
 
+    /**
+     * salt
+     *
+     * Application salt for hashing
+     */
     'salt'      => null,
 
     /**
+     * expiration
+     *
+     * Set default number of seconds before Cookie expired
+     */
+    'expiration' => 0,
+
+    /**
+     * verify_user_agent
+     *
      * Verify User Agent in Hash
      */
     'verify_user_agent' => false,

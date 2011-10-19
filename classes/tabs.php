@@ -213,7 +213,7 @@ namespace Hybrid;
         foreach ($this->tabs as $count => $tab)
         {
             $active = ($count === 0 ? 'class="active"' : '');
-            $title .= \Str::tr($template['title'], array('active' => $active, 'slug' => $tab->slug, 'title' => $tab->title));
+            $title   .= \Str::tr($template['title'], array('active' => $active, 'slug' => $tab->slug, 'title' => $tab->title));
             $content .= \Str::tr($template['content'], array('active' => $active, 'slug' => $tab->slug, 'content' => $tab->content));
         }
 
