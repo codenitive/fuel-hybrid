@@ -36,6 +36,7 @@ namespace Hybrid;
 class Auth_Provider_Normal 
 {
     public $data = null;
+
      /**
      * List of user fields to be used
      *
@@ -75,6 +76,11 @@ class Auth_Provider_Normal
      * @var     bool
      */
     protected $verify_user_agent = false;
+
+    public static function _init()
+    {
+        \Lang::load('autho', 'autho');
+    }
 
 
     public static function forge()
@@ -156,11 +162,24 @@ class Auth_Provider_Normal
         return $this;
     }
 
+    /**
+     * Get user information
+     *
+     * @access  public
+     * @return  array
+     */
     public function get()
     {
         return $this->data;
     }
 
+    /**
+     * Get and verify user information given by Cookie
+     *
+     * @access  public
+     * @param   array   $data
+     * @return  self
+     */
     public function access_token($data)
     {
         $this->data['_hash'] = '';
@@ -205,6 +224,15 @@ class Auth_Provider_Normal
         return $this;
     }
 
+    /**
+     * User login
+     *
+     * @access  public
+     * @param   string  $username
+     * @param   string  $password
+     * @return  self
+     * @throws  Auth_Exception
+     */
     public function login($username, $password)
     {
         $query = \DB::select('users.*')
@@ -244,13 +272,13 @@ class Auth_Provider_Normal
         if ($this->data['id'] < 1)
         {
             $this->reset();
-            throw new Auth_Exception("User {$username} does not exist in our database");
+            throw new Auth_Exception(\Lang::get('autho.user.not_exist', array('username' => $username)));
         }
 
         if ($this->data['password'] !== Auth::add_salt($password))
         {
             $this->reset();
-            throw new Auth_Exception("Invalid username and password combination");
+            throw new Auth_Exception(\Lang::get('autho.user.bad_combination'));
         }
 
         $this->verify_token();
@@ -258,6 +286,14 @@ class Auth_Provider_Normal
         return $this;
     }
 
+    /**
+     * User login via token
+     *
+     * @access  public
+     * @param   string  $token
+     * @param   string  $secret
+     * @return  self
+     */
     public function login_token($token, $secret)
     {
         $query = \DB::select('users.*')
@@ -296,7 +332,7 @@ class Auth_Provider_Normal
 
         if ($this->data['id'] < 1)
         {
-            throw new Auth_Exception("User does not exist in our database");
+            throw new Auth_Exception(\Lang::get('autho.user.not_linked'));
         }
 
         $this->verify_token();
@@ -304,6 +340,12 @@ class Auth_Provider_Normal
         return $this;
     }
 
+    /**
+     * Logout user account
+     *
+     * @access  public
+     * @return  self
+     */
     public function logout()
     {
         $this->revoke_token(true);
@@ -354,6 +396,12 @@ class Auth_Provider_Normal
         return true;
     }
 
+    /**
+     * Fetch user information (not using Model)
+     *
+     * @access  protected
+     * @return  bool
+     */
     protected function fetch_user($result)
     {
         if (null === $result or $result->count() < 1) 
@@ -377,11 +425,13 @@ class Auth_Provider_Normal
             $hash .= Input::user_agent();
         }
 
+        // validate our hash data
         if (null !== $this->data['_hash'] and $this->data['_hash'] !== Auth::add_salt($hash)) 
         {
             return $this->reset();
         }
 
+        // user_id property wouldn't be available if we don't use meta or auth
         if ( ! $this->use_meta and ! $this->use_auth)
         {
             $this->data['id'] = $user->id;
@@ -406,6 +456,12 @@ class Auth_Provider_Normal
         }
     }
 
+    /**
+     * Fetch all roles associated to the account
+     *
+     * @access  protected
+     * @return  bool
+     */
     protected function fetch_linked_roles()
     {
         $data  = array();
@@ -436,6 +492,12 @@ class Auth_Provider_Normal
         return true;
     }
 
+    /**
+     * Fetch all linked account from OAuth and OAuth2
+     *
+     * @access  protected
+     * @return  bool
+     */
     protected function fetch_linked_accounts()
     {
         $data = array();
