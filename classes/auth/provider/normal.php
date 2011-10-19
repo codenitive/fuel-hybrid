@@ -75,7 +75,7 @@ class Auth_Provider_Normal
      * @access  protected
      * @var     bool
      */
-    protected $expiration = 0;
+    protected $expiration = null;
 
     /**
      * Verify User Agent in Hash
@@ -184,17 +184,18 @@ class Auth_Provider_Normal
     public function reset() 
     {
         $this->data = array(
-            'id'        => 0,
-            'user_name' => 'guest',
-            'full_name' => '',
-            'email'     => '',
-            '_hash'     => null,
-            'password'  => '',
-            'method'    => 'normal',
-            'gender'    => '',
-            'status'    => null,
-            'roles'     => array('0' => 'guest'),
-            'accounts'  => array(),
+            'id'         => 0,
+            'user_name'  => 'guest',
+            'full_name'  => '',
+            'email'      => '',
+            '_hash'      => null,
+            'password'   => '',
+            'method'     => 'normal',
+            'gender'     => '',
+            'status'     => null,
+            'roles'      => array('0' => 'guest'),
+            'accounts'   => array(),
+            'expired_at' => null,
         );
 
         return $this;
@@ -276,7 +277,7 @@ class Auth_Provider_Normal
     {
         if ( !! $remember_me)
         {
-            $this->expiration = 0;
+            $this->expiration = -1;
         }
 
         $query = \DB::select('users.*')
@@ -343,7 +344,7 @@ class Auth_Provider_Normal
     {
         if ( !! $remember_me)
         {
-            $this->expiration = 0;
+            $this->expiration = -1;
         }
 
         $query = \DB::select('users.*')
@@ -422,7 +423,24 @@ class Auth_Provider_Normal
 
         unset($values['password']);
 
-        \Cookie::set('_users', \Crypt::encode(serialize((object) $values)));
+        if ( ! isset($values['expired_at']) or null === $values['expired_at'])
+        {
+            $expired_at = 0;
+
+            if (0 > $this->expiration)
+            {
+                $expired_at = pow(2,31) - (time() + 1);
+            }
+            elseif (null !== $this->expiration and 0 !== $this->expiration)
+            {
+                 $expired_at = $this->expiration;
+            }
+
+            $this->data['expired_at'] = $values['expired_at'] = $expired_at;
+        }
+        \Debug::dump($values['expired_at']);
+        \Cookie::delete('_users');
+        \Cookie::set('_users', \Crypt::encode(serialize((object) $values)), $values['expired_at']);
 
         return true;
     }

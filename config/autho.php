@@ -78,6 +78,11 @@ return array(
      * expiration
      *
      * Set default number of seconds before Cookie expired
+     *
+     * Available values:
+     * -1   Most maximum time
+     *  0   Until browser is turn off
+     * >0   offset to current time()    
      */
     'expiration' => 0,
 
