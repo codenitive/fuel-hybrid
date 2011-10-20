@@ -438,7 +438,7 @@ class Auth_Provider_Normal
 
             $this->data['expired_at'] = $values['expired_at'] = $expired_at;
         }
-        \Debug::dump($values['expired_at']);
+        
         \Cookie::delete('_users');
         \Cookie::set('_users', \Crypt::encode(serialize((object) $values)), $values['expired_at']);
 
