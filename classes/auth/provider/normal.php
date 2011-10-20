@@ -36,7 +36,8 @@ namespace Hybrid;
 class Auth_Provider_Normal 
 {
     public $data = null;
-     /**
+
+    /**
      * List of user fields to be used
      *
      * @access  protected
@@ -44,7 +45,7 @@ class Auth_Provider_Normal
      */
     protected $optional_fields = array('status', 'full_name');
      
-     /**
+    /**
      * Allow status to login based on `users`.`status`
      *
      * @access  protected
@@ -52,7 +53,7 @@ class Auth_Provider_Normal
      */
     protected $allowed_status = array('verified');
      
-     /**
+    /**
      * Use `users_meta` table
      *
      * @access  protected
@@ -60,13 +61,21 @@ class Auth_Provider_Normal
      */
     protected $use_meta = true;
      
-     /**
+    /**
      * Use `users_auth` table
      *
      * @access  protected
      * @var     bool
      */
     protected $use_auth = true;
+
+    /**
+     * Total number of seconds before Cookie expired
+     *
+     * @access  protected
+     * @var     bool
+     */
+    protected $expiration = null;
 
     /**
      * Verify User Agent in Hash
@@ -76,18 +85,52 @@ class Auth_Provider_Normal
      */
     protected $verify_user_agent = false;
 
+    /**
+     * Load configurations
+     *
+     * @static 
+     * @access  public
+     * @return  void
+     */
+    public static function _init()
+    {
+        \Lang::load('autho', 'autho');
+    }
 
+    /**
+     * Initiate a new Auth_Provider_Normal instance.
+     * 
+     * @static
+     * @access  public
+     * @return  object  Auth_Provider_Normal
+     */
     public static function forge()
     {
         return new static();
     }
 
+    /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  object  Auth_Provider_Normal
+     * @see     self::forge()
+     */
     public static function factory()
     {
         \Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
         return static::forge();
     }
 
+    /**
+     * Construct this provider
+     *
+     * @access  protected
+     * @return  void
+     */
     protected function __construct()
     {
         $this->reset();
@@ -104,7 +147,7 @@ class Auth_Provider_Normal
                 continue;
             }
 
-            if (is_null($value))
+            if (null === $value)
             {
                 continue;
             }
@@ -129,6 +172,7 @@ class Auth_Provider_Normal
         }
 
         $this->verify_user_agent = \Config::get('autho.verify_user_agent', $this->verify_user_agent);
+        $this->expiration        = \Config::get('autho.expiration', $this->expiration);
     }
 
     /**
@@ -140,27 +184,41 @@ class Auth_Provider_Normal
     public function reset() 
     {
         $this->data = array(
-            'id'        => 0,
-            'user_name' => 'guest',
-            'full_name' => '',
-            'email'     => '',
-            '_hash'     => null,
-            'password'  => '',
-            'method'    => 'normal',
-            'gender'    => '',
-            'status'    => null,
-            'roles'     => array('0' => 'guest'),
-            'accounts'  => array(),
+            'id'         => 0,
+            'user_name'  => 'guest',
+            'full_name'  => '',
+            'email'      => '',
+            '_hash'      => null,
+            'password'   => '',
+            'method'     => 'normal',
+            'gender'     => '',
+            'status'     => null,
+            'roles'      => array('0' => 'guest'),
+            'accounts'   => array(),
+            'expired_at' => null,
         );
 
         return $this;
     }
 
+    /**
+     * Get user information
+     *
+     * @access  public
+     * @return  array
+     */
     public function get()
     {
         return $this->data;
     }
 
+    /**
+     * Get and verify user information given by Cookie
+     *
+     * @access  public
+     * @param   array   $data
+     * @return  self
+     */
     public function access_token($data)
     {
         $this->data['_hash'] = '';
@@ -205,8 +263,23 @@ class Auth_Provider_Normal
         return $this;
     }
 
-    public function login($username, $password)
+    /**
+     * User login
+     *
+     * @access  public
+     * @param   string  $username
+     * @param   string  $password
+     * @param   string  $remember_me
+     * @return  self
+     * @throws  Auth_Exception
+     */
+    public function login($username, $password, $remember_me = false)
     {
+        if ( !! $remember_me)
+        {
+            $this->expiration = -1;
+        }
+
         $query = \DB::select('users.*')
                 ->from('users');
         
@@ -244,13 +317,13 @@ class Auth_Provider_Normal
         if ($this->data['id'] < 1)
         {
             $this->reset();
-            throw new Auth_Exception("User {$username} does not exist in our database");
+            throw new Auth_Exception(\Lang::get('autho.user.not_exist', array('username' => $username)));
         }
 
         if ($this->data['password'] !== Auth::add_salt($password))
         {
             $this->reset();
-            throw new Auth_Exception("Invalid username and password combination");
+            throw new Auth_Exception(\Lang::get('autho.user.bad_combination'));
         }
 
         $this->verify_token();
@@ -258,8 +331,22 @@ class Auth_Provider_Normal
         return $this;
     }
 
-    public function login_token($token, $secret)
+    /**
+     * User login via token
+     *
+     * @access  public
+     * @param   string  $token
+     * @param   string  $secret
+     * @param   bool    $remember_me
+     * @return  self
+     */
+    public function login_token($token, $secret, $remember_me = false)
     {
+        if ( !! $remember_me)
+        {
+            $this->expiration = -1;
+        }
+
         $query = \DB::select('users.*')
             ->from('users')
             ->join('authentications')
@@ -296,7 +383,7 @@ class Auth_Provider_Normal
 
         if ($this->data['id'] < 1)
         {
-            throw new Auth_Exception("User does not exist in our database");
+            throw new Auth_Exception(\Lang::get('autho.user.not_linked'));
         }
 
         $this->verify_token();
@@ -304,6 +391,12 @@ class Auth_Provider_Normal
         return $this;
     }
 
+    /**
+     * Logout user account
+     *
+     * @access  public
+     * @return  self
+     */
     public function logout()
     {
         $this->revoke_token(true);
@@ -330,7 +423,24 @@ class Auth_Provider_Normal
 
         unset($values['password']);
 
-        \Cookie::set('_users', \Crypt::encode(serialize((object) $values)));
+        if ( ! isset($values['expired_at']) or null === $values['expired_at'])
+        {
+            $expired_at = 0;
+
+            if (0 > $this->expiration)
+            {
+                $expired_at = pow(2,31) - (time() + 1);
+            }
+            elseif (null !== $this->expiration and 0 !== $this->expiration)
+            {
+                 $expired_at = $this->expiration;
+            }
+
+            $this->data['expired_at'] = $values['expired_at'] = $expired_at;
+        }
+        
+        \Cookie::delete('_users');
+        \Cookie::set('_users', \Crypt::encode(serialize((object) $values)), $values['expired_at']);
 
         return true;
     }
@@ -354,9 +464,15 @@ class Auth_Provider_Normal
         return true;
     }
 
+    /**
+     * Fetch user information (not using Model)
+     *
+     * @access  protected
+     * @return  bool
+     */
     protected function fetch_user($result)
     {
-        if (is_null($result) or $result->count() < 1) 
+        if (null === $result or $result->count() < 1) 
         {
             return $this->reset();
         } 
@@ -377,12 +493,22 @@ class Auth_Provider_Normal
             $hash .= Input::user_agent();
         }
 
-        if ( ! is_null($this->data['_hash']) and $this->data['_hash'] !== Auth::add_salt($hash)) 
+        // validate our hash data
+        if (null !== $this->data['_hash'] and $this->data['_hash'] !== Auth::add_salt($hash)) 
         {
             return $this->reset();
         }
 
-        $this->data['id']        = $user->user_id;
+        // user_id property wouldn't be available if we don't use meta or auth
+        if ( ! $this->use_meta and ! $this->use_auth)
+        {
+            $this->data['id'] = $user->id;
+        }
+        else
+        {
+            $this->data['id'] = $user->user_id;
+        }
+        
         $this->data['user_name'] = $user->user_name;
         $this->data['email']     = $user->email;
         $this->data['password']  = $user->password_token;
@@ -398,6 +524,12 @@ class Auth_Provider_Normal
         }
     }
 
+    /**
+     * Fetch all roles associated to the account
+     *
+     * @access  protected
+     * @return  bool
+     */
     protected function fetch_linked_roles()
     {
         $data  = array();
@@ -428,6 +560,12 @@ class Auth_Provider_Normal
         return true;
     }
 
+    /**
+     * Fetch all linked account from OAuth and OAuth2
+     *
+     * @access  protected
+     * @return  bool
+     */
     protected function fetch_linked_accounts()
     {
         $data = array();

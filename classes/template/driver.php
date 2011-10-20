@@ -46,10 +46,10 @@ abstract class Template_Driver
      */
     public static function _init()
     {
-        if (is_null(static::$config))
+        if (null === static::$config)
         {
-            \Config::load('app', 'app');
-            static::$config = \Config::get('app.template', array());
+            \Config::load('hybrid', 'hybrid');
+            static::$config = \Config::get('hybrid.template', array());
         }
     }
 
@@ -102,7 +102,7 @@ abstract class Template_Driver
             return $this;
         }
 
-        if (!\is_dir($folder_path))
+        if ( ! is_dir($folder_path))
         {
             throw new \FuelException("\Hybrid\Template_Driver: Unable to load assets at {$folder_path}.");
         }
@@ -110,7 +110,7 @@ abstract class Template_Driver
         {
             $folder_path = str_replace(DOCROOT, '', $folder_path);
 
-            if (!in_array($folder_path, static::$assets))
+            if ( ! in_array($folder_path, static::$assets))
             {
                 \Asset::add_path($folder_path);
                 array_push(static::$assets, $folder_path);
@@ -130,7 +130,7 @@ abstract class Template_Driver
      */
     public function set_folder($path = null)
     {
-        if ( ! \is_dir($path))
+        if ( ! is_dir($path))
         {
             throw new \FuelException("\Hybrid\Template_Driver: Path {$path} does not appear to a valid folder.");
         }

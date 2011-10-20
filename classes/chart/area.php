@@ -35,7 +35,7 @@ class Chart_Area extends Chart_Driver
         $this->set_options(\Config::get('chart.area', array()));
     }
 
-    public function generate($width = '100%', $height = '300px') 
+    public function render($width = '100%', $height = '300px') 
     {
         $columns    = $this->columns;
         $rows       = $this->rows;

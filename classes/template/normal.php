@@ -42,8 +42,9 @@ class Template_Normal extends Template_Driver
     public static function forge($name = null)
     {
         $driver = 'normal';
+        $name   = strtolower($name);
         
-        if ( ! is_null($name) and ! empty($name))
+        if ( ! empty($name))
         {
             $driver .= ".{$name}";
         }
@@ -78,7 +79,7 @@ class Template_Normal extends Template_Driver
     public function __construct($folder = null, $filename = null)
     {
         // Assets shouldn't be added in APPPATH/views at all
-        if ( ! empty($folder) and $folder !== '_default_')
+        if ( ! empty($folder) and '_default_' !== $folder)
         {
             $this->set_folder($folder);
         }
@@ -87,7 +88,7 @@ class Template_Normal extends Template_Driver
             $this->set_folder(static::$config['default_folder']);
         }
 
-        if ( ! empty($filename) and $filename !== '_default_')
+        if ( ! empty($filename) and '_default_' !== $filename)
         {
             $this->set_filename($filename);
         }

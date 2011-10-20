@@ -53,7 +53,7 @@ class Template
      */
     public static function _init()
     {
-        \Config::load('app', 'app');
+        \Config::load('hybrid', 'hybrid');
     }
 
     /**
@@ -65,9 +65,9 @@ class Template
      */
     public static function forge($name = null)
     {
-        if (is_null($name))
+        if (null === $name)
         {
-            $name = \Config::get('app.template.default', self::DEFAULT_TEMPLATE);   
+            $name = \Config::get('hybrid.template.default', self::DEFAULT_TEMPLATE);   
         }
 
         $name       = \Str::lower($name);

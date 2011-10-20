@@ -80,7 +80,7 @@ abstract class Auth_Driver
      */
     public function get($name = null)
     {
-        if (is_null($name))
+        if (null === $name)
         {
             return (object) $this->data;
         }

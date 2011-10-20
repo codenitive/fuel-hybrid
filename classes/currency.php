@@ -125,6 +125,18 @@ class Currency
      * @var     string  Use google API service
      */
     protected static $service = "http://www.google.com/ig/calculator?hl=en&q={AMOUNT}{FROM}=?{TO}";
+
+    /**
+     * Only load the configuration once
+     *
+     * @static
+     * @access  public
+     */
+    public static function _init()
+    {
+        \Config::load('hybrid', 'hybrid');
+        static::$default = \Config::get('hybrid.currency.default', static::$default);
+    }
     
     /**
      * Initiate a new Currency class
@@ -216,6 +228,8 @@ class Currency
      */
     protected function fetch_currency_rate($from_currency)
     {
+        \Cache::forge('hybrid.currency.'.$from_currency, \Config::get('hybrid.currency.cache', array()));
+
         if ( ! array_key_exists($from_currency, static::$currencies))
         {
             throw new \FuelException("\Hybrid\Currency: Unable to use unknown currency {$from_currency}");
@@ -235,7 +249,7 @@ class Currency
             {
                 $replace = array('1', $from_currency, $cur);
                 
-                if (function_exists('curl_init'))
+                try
                 {
                     $data = Curl::get(str_replace($search, $replace, static::$service))
                         ->setopt(array(
@@ -249,7 +263,7 @@ class Currency
 
                     $body = $data->body;
                 }
-                else 
+                catch (\FuelException $e)
                 {
                     $body = file_get_contents(str_replace($search, $replace, static::$service));     
                 }
@@ -263,7 +277,7 @@ class Currency
                 // need to decode this first
                 $data = json_decode($body);
                 
-                if ( ! is_null($data) and $data->icc !== false)
+                if (null !== $data and false !== $data->icc)
                 {
                     $conversion = \Format::forge($body, 'json')->to_array();
                     $tmp        = explode(' ', $conversion['rhs']);

@@ -66,7 +66,6 @@ class Acl
     /**
      * Initiate a new Acl instance.
      * 
-     * @deprecated  1.3.0
      * @static
      * @access  public
      * @param   string  $name
@@ -74,7 +73,7 @@ class Acl
      */
     public static function forge($name = null)
     {
-        if (is_null($name))
+        if (null === $name)
         {
             $name = 'default';
         }
@@ -249,14 +248,14 @@ class Acl
      */
     public function add_roles($roles = null) 
     {
-        if (is_null($roles)) 
+        if (null === $roles) 
         {
             throw new \FuelException("\Hybrid\Acl: Can't add NULL roles.");
         }
 
         if (is_string($roles)) 
         {
-            $roles = array($roles);
+            $roles = func_get_args();
         }
         
         if (is_array($roles)) 
@@ -286,7 +285,7 @@ class Acl
      */
     public function add_resources($resources = null) 
     {
-        if (is_null($resources)) 
+        if (null === $resources) 
         {
             throw new \FuelException("\Hybrid\Acl: Can't add NULL resources.");
         }
@@ -294,7 +293,7 @@ class Acl
 
         if ( ! is_array($resources)) 
         {
-            $resources = array($resources);
+            $resources = func_get_args();
         }
 
         if (is_array($resources)) 

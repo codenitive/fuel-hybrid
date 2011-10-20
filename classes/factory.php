@@ -40,7 +40,7 @@ class Factory
     public static function _init() 
     {
         // initiate this only once
-        if ( ! is_null(static::$identity)) 
+        if (null !== static::$identity) 
         {
             return;
         }
@@ -56,7 +56,7 @@ class Factory
 
         $lang = \Session::get(static::$identity.'_lang');
 
-        if ( ! is_null($lang)) 
+        if (null !== $lang) 
         {
             \Config::set('language', $lang);
             static::$language = $lang;

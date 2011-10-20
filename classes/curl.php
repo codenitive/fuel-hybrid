@@ -169,6 +169,11 @@ class Curl
      */
     public function __construct($uri, $dataset = array(), $type = 'GET')
     {
+        if ( ! function_exists('curl_init'))
+        {
+            throw new \FuelException("\Hybrid\Curl: curl_init() is not available.");
+        }
+
         $this->request_uri    = $uri;
         $this->request_method = $type;
         $this->request_data   = $dataset;
@@ -180,6 +185,14 @@ class Curl
         {
             case 'GET' :
                 $option[CURLOPT_HTTPGET] = true;
+            break;
+
+            case 'PUT' :
+                $dataset = (is_array($dataset) ? http_build_query($dataset) : $dataset);
+                $option[CURLOPT_CUSTOMREQUEST]  = 'PUT';
+                $option[CURLOPT_RETURNTRANSFER] = true;
+                $option[CURLOPT_HTTPHEADER]     = array('Content-Type: ' . strlen($dataset));
+                $option[CURLOPT_POSTFIELDS]     = $dataset;
             break;
             
             case 'POST' :

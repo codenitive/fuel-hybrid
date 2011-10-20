@@ -47,14 +47,14 @@ class Parser
      */
     public static function forge($name = null)
     {
-        if (is_null($name))
+        if (null === $name)
         {
             $name = '';
         }
 
         $name = \Str::lower($name);
 
-        if (!isset(static::$instances[$name]))
+        if ( ! isset(static::$instances[$name]))
         {
             $driver = '\\Hybrid\\Parser_'.\Str::ucfirst($name);
         

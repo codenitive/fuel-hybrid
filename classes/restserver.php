@@ -203,7 +203,7 @@ class Restserver
      */
     public function format($rest_format = '')
     {
-        if (is_null($rest_format) or empty($rest_format))
+        if (null === $rest_format or empty($rest_format))
         {
             return $this;
         }
@@ -251,7 +251,7 @@ class Restserver
             $format = $matches[1];
         } 
         
-        if (is_null($format))
+        if (null === $format)
         {
             // Which format should the data be returned in?
             $format = $this->detect_format();

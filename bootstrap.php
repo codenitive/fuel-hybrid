@@ -28,6 +28,7 @@ Autoloader::add_classes(array (
     'Hybrid\\Restserver'           => __DIR__.'/classes/restserver.php',
     'Hybrid\\Swiftmail'            => __DIR__.'/classes/swiftmail.php',
     'Hybrid\\Swiftmail_Result'     => __DIR__.'/classes/swiftmail/result.php',
+    'Hybrid\\Tabs'                 => __DIR__.'/classes/tabs.php',
     'Hybrid\\Uri'                  => __DIR__.'/classes/uri.php',
     'Hybrid\\View'                 => __DIR__.'/classes/view.php',
     

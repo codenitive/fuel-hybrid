@@ -31,18 +31,18 @@ class Pagination extends \Fuel\Core\Pagination
      * @var array The HTML for the display
      */
     public static $template = array(
-        'wrapper_start'  => '<div class="pagination"> ',
-        'wrapper_end'    => ' </div>',
-        'page_start'     => '<span class="page-links"> ',
-        'page_end'       => ' </span>',
-        'previous_start' => '<span class="previous"> ',
-        'previous_end'   => ' </span>',
+        'wrapper_start'  => '<div class="pagination"> <ul>',
+        'wrapper_end'    => '</ul> </div>',
+        'page_start'     => '<li> ',
+        'page_end'       => ' </li>',
+        'previous_start' => '<li class="prev"> ',
+        'previous_end'   => ' </li>',
         'previous_mark'  => '&laquo; ',
-        'next_start'     => '<span class="next"> ',
-        'next_end'       => ' </span>',
+        'next_start'     => '<li class="next"> ',
+        'next_end'       => ' </li>',
         'next_mark'      => ' &raquo;',
-        'active_start'   => '<span class="active"> ',
-        'active_end'     => ' </span>',
+        'active_start'   => '<li class="active"><a href="#"> ',
+        'active_end'     => ' </a></li>',
         'disabled'       => array(
             'previous_start' => '<li class="prev disabled"><a href="#">',
             'previous_end'   => '</a></li>',
@@ -58,6 +58,24 @@ class Pagination extends \Fuel\Core\Pagination
      * @staticvar   mixed
      */
     protected static $suffix_url;
+
+    /**
+     * Init
+     *
+     * Loads in the config and sets the variables
+     *
+     * @access  public
+     * @return  void
+     */
+    public static function _init()
+    {
+        \Config::load('hybrid', 'hybrid');
+        
+        $config = \Config::get('pagination', array());
+        $config = \Config::get('hybrid.pagination', array()) + $config;
+
+        static::set_config($config);
+    }
 
     /**
      * Pagination Page Number links
@@ -152,9 +170,9 @@ class Pagination extends \Fuel\Core\Pagination
     /**
      * Build query string
      * 
+     * @deprecated
      * @static
      * @access  public
-     * @deprecated
      * @param   mixed   $values
      * @return  string 
      */
