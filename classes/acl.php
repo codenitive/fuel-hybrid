@@ -255,7 +255,7 @@ class Acl
 
         if (is_string($roles)) 
         {
-            $roles = array($roles);
+            $roles = func_get_args();
         }
         
         if (is_array($roles)) 
@@ -293,7 +293,7 @@ class Acl
 
         if ( ! is_array($resources)) 
         {
-            $resources = array($resources);
+            $resources = func_get_args();
         }
 
         if (is_array($resources)) 
