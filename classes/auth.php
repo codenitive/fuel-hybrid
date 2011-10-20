@@ -159,7 +159,7 @@ class Auth
 
         if ( ! is_array($check_roles)) 
         {
-            $check_roles = array($check_roles);
+            $check_roles = func_get_args();
         }
 
         foreach ($user->roles as $role) 
