@@ -83,22 +83,4 @@ class View extends \Fuel\Core\View
         return $this;
     }
 
-    /**
-     * Use custom view path if available, eitherwise just return false so we can use 
-     * \Fuel::find_file()
-     *
-     * @access  protected
-     * @param   string  $file
-     * @return  mixed
-     */
-    protected function find_file($file) 
-    {
-        if (empty(static::$file_path))
-        {
-            return false;
-        }
-
-        return \Fuel::find_file('views', static::$file_path.$file.'.php');
-    }
-
 }
