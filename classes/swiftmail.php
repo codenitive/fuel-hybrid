@@ -279,7 +279,7 @@ class Swiftmail
             if (count($this->recipients[$type]) > 0)
             {
                 $method = 'set'.\Inflector::camelize($type);
-                $this->messenger->{$method}($this->recipients[$type]);
+                $this->messager->{$method}($this->recipients[$type]);
             }
         }
 
