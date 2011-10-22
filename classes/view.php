@@ -69,12 +69,19 @@ class View extends \Fuel\Core\View
      */
     public function set_filename($file) 
     {
+        // locate the view file
         switch (true) 
         {
-            case ($path = \Fuel::find_file('views', static::$file_path.$file.'.php')) : break;
-            case ($path = \Fuel::find_file('views', $file, '.php', false, false)) : break;
+            case ($path = \Finder::search('views', static::$file_path.$file.'.'.$this->extension)) : break;
             default :
-                throw new \FuelException('The requested view could not be found: '.\Fuel::clean_path($file));
+                // set find_file's one-time-only search paths
+                \Finder::instance()->flash($this->request_paths);
+                
+                if (($path = \Finder::search('views', $file, '.'.$this->extension, false, false)) === false)
+                {
+                    throw new \FuelException('The requested view could not be found: '.\Fuel::clean_path($file));
+                }
+            
         }
 
         // Store the file path locally
