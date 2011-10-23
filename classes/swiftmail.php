@@ -212,7 +212,7 @@ class Swiftmail
             switch (true)
             {
                 case count($args) > 1 :
-                    $email_name    = $args[2];
+                    $email_name    = $args[1];
                 case count($args) > 0 :
                     $email_address = $args[0];
                 break;
