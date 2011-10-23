@@ -3,11 +3,20 @@
 return array(
     
     'normal'    => array(
-        'enabled'         => true,      // Set application to load Auth class. 
-        'optional_fields' => null,      // List of user fields to be used (default to array('status', 'full_name'))
-        'allowed_status'  => null,      // Allow status to login based on `users`.`status` (default to ('verified'))
-        'use_meta'        => true,      // Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
-        'use_auth'        => true,      // Auth to use `users_auth` table for user meta information, useful to keep `users` table is simple as possible.
+        // Set application to load Auth class. 
+        'enabled'         => true,
+        
+        // List of user fields to be used (default to array('status', 'full_name'))
+        'optional_fields' => null,
+        
+        // Allow status to login based on `users`.`status` (default to ('verified'))
+        'allowed_status'  => null,
+
+        // Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
+        'use_meta'        => true,
+
+        // Auth to use `users_auth` table for user meta information, useful to keep `users` table is simple as possible.
+        'use_auth'        => true,
     ),
 
     'urls' => array(
