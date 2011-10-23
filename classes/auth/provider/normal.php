@@ -228,6 +228,12 @@ class Auth_Provider_Normal
             $this->data['_hash'] = $data['_hash'];
         }
 
+        // in case if data['id'] doesn't exist or null, default to zero
+        if ( ! isset($data['id'] or null === $data['id'])
+        {
+            $data['id'] = 0;
+        }
+
         $query = \DB::select('users.*')
             ->from('users')
             ->where('users.id', '=', $data['id'])
