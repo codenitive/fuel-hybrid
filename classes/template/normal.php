@@ -109,7 +109,7 @@ class Template_Normal extends Template_Driver
      */
     public function load_assets($forced_load = false)
     {
-      throw new \FuelException("\Hybrid\Template_Normal: Asset loading not available for Template_Normal.");
+      throw new \FuelException(__METHOD__.": Asset loading not available.");
     }
 
     /**
@@ -123,11 +123,11 @@ class Template_Normal extends Template_Driver
     {
         // this is not the best way of doing it, the request is not cached and going to be slow
         // if there's a lot of paths and files
-        $files = \Fuel::list_files('views/'.$path, '*.php');
+        $files = \Finder::search('views/'.$path, '*.*');
 
         if (empty($files))
         {
-            throw new \FuelException("\Hybrid\Template_Normal: Path {$path} does not appear to a valid folder or contain any View files.");
+            throw new \FuelException(__METHOD__.": Path {$path} does not appear to a valid folder or contain any View files.");
         }
         else 
         {
