@@ -232,7 +232,7 @@ class Currency
 
         if ( ! array_key_exists($from_currency, static::$currencies))
         {
-            throw new \FuelException("\Hybrid\Currency: Unable to use unknown currency {$from_currency}");
+            throw new \FuelException(__METHOD__.": Unable to use unknown currency {$from_currency}");
         }
 
         try

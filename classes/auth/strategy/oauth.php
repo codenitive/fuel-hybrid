@@ -63,7 +63,6 @@ class Auth_Strategy_OAuth extends Auth_Strategy
         )));
     }
     
-    
     public function callback()
     {
         // Create an consumer from the config

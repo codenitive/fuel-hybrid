@@ -79,7 +79,7 @@ class View extends \View
                 
                 if (($path = \Finder::search('views', $file, '.'.$this->extension, false, false)) === false)
                 {
-                    throw new \FuelException('The requested view could not be found: '.\Fuel::clean_path($file));
+                    throw new \FuelException(__METHOD__.': The requested view could not be found: '.\Fuel::clean_path($file));
                 }
             
         }

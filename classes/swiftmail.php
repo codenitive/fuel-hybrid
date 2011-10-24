@@ -344,7 +344,7 @@ class Swiftmail
      */
     public static function dynamic_attach($contents, $filename, $disposition = 'attachment')
     {
-        throw new \FuelException("\Hybrid\Swiftmail: Dynamic file attachment has not been implemented yet.");
+        throw new \FuelException(__METHOD__.": Dynamic file attachment has not been implemented yet.");
 
         return $this;
     }

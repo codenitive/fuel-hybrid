@@ -99,7 +99,7 @@ abstract class Auth_Strategy
             $num_linked = count($accounts);
         
             // Allowed multiple providers, or not authed yet?
-            if ($num_linked === 0 or \Config::get('autho.link_multiple_providers') === true)
+            if (0 === $num_linked or true === \Config::get('autho.link_multiple_providers'))
             {
                 switch ($strategy->name)
                 {
