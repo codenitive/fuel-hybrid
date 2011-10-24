@@ -45,7 +45,7 @@ class Uri extends \Fuel\Core\Uri
         {
             $data = Input::get($value);
             
-            if (empty($data))
+            if (null === $data)
             {
                 return false;
             }
