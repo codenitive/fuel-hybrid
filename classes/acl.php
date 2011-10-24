@@ -130,7 +130,7 @@ class Acl
      * @access  protected
      * @var     array
      */
-    protected $roles     = array('guest');
+    protected $roles = array('guest');
      
     /**
      * List of resources
@@ -146,7 +146,7 @@ class Acl
      * @access  protected
      * @var     array
      */
-    protected $acl       = array();
+    protected $acl = array();
 
     /**
      * Verify whether current user has sufficient roles to access the resources based 
@@ -163,13 +163,13 @@ class Acl
 
         if ( ! in_array($resource, $this->resources)) 
         {
-            throw new \FuelException("\Hybrid\Acl: Unable to verify unknown resource: {$resource}.");
+            throw new \FuelException(__METHOD__.": Unable to verify unknown resource {$resource}.");
         }
 
-        $user       = Auth::instance('user')->get();
-
-        $type_id    = array_search($type, $types);
-        $length     = count($types);
+        $user    = Auth::instance('user')->get();
+        
+        $type_id = array_search($type, $types);
+        $length  = count($types);
 
         if (empty($user->roles) and in_array('guest', $this->roles))
         {
@@ -250,7 +250,7 @@ class Acl
     {
         if (null === $roles) 
         {
-            throw new \FuelException("\Hybrid\Acl: Can't add NULL roles.");
+            throw new \FuelException(__METHOD__.": Can't add NULL roles.");
         }
 
         if (is_string($roles)) 
@@ -287,7 +287,7 @@ class Acl
     {
         if (null === $resources) 
         {
-            throw new \FuelException("\Hybrid\Acl: Can't add NULL resources.");
+            throw new \FuelException(__METHOD__.": Can't add NULL resources.");
         }
 
 
@@ -328,7 +328,7 @@ class Acl
     {
         if ( ! in_array($type, static::$types)) 
         {
-            throw new \FuelException("\Hybrid\Acl: Type {$type} does not exist.");
+            throw new \FuelException(__METHOD__.": Type {$type} does not exist.");
         }
 
         if ( ! is_array($roles)) 
@@ -347,7 +347,7 @@ class Acl
 
             if ( ! in_array($role, $this->roles)) 
             {
-                throw new \FuelException("\Hybrid\Acl: Role {$role} does not exist.");
+                throw new \FuelException(__METHOD__": Role {$role} does not exist.");
 
                 continue;
             }
@@ -356,9 +356,9 @@ class Acl
             {
                 $resource = \Inflector::friendly_title($resource, '-', true);
 
-                if (!in_array($resource, $this->resources)) 
+                if ( ! in_array($resource, $this->resources)) 
                 {
-                    throw new \FuelException("\Hybrid\Acl: Resource {$resource} does not exist.");
+                    throw new \FuelException(__METHOD__.": Resource {$resource} does not exist.");
 
                     continue;
                 }
