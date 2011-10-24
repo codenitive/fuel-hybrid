@@ -1,4 +1,4 @@
-<?php
+i8<?php
 
 /**
  * Fuel is a fast, lightweight, community driven PHP5 framework.

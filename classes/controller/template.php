@@ -26,7 +26,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-abstract class Controller_Template extends \Fuel\Core\Controller 
+abstract class Controller_Template extends \Controller 
 {
     /**
      * Page template
@@ -34,7 +34,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller
      * @access  public
      * @var     string
      */
-    public $template        = 'normal';
+    public $template = 'normal';
     
     /**
      * Auto render template
@@ -42,7 +42,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller
      * @access  public
      * @var     bool    
      */
-    public $auto_render     = true;
+    public $auto_render = true;
 
     /**
      * Run ACL check and redirect user automatically if user doesn't have the privilege
@@ -71,8 +71,8 @@ abstract class Controller_Template extends \Fuel\Core\Controller
      */
     public function before() 
     {
-        $this->language     = Factory::get_language();
-        $this->user         = Auth::instance('user')->get();
+        $this->language = Factory::get_language();
+        $this->user     = Auth::instance('user')->get();
 
         \Event::trigger('controller_before');
         

@@ -27,7 +27,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-abstract class Controller_Hybrid extends \Fuel\Core\Controller 
+abstract class Controller_Hybrid extends \Controller 
 {    
     /**
      * Set whether the request is either rest or template
@@ -35,7 +35,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
      * @access  protected
      * @var     bool
      */
-    protected $is_rest_call     = true;
+    protected $is_rest_call = true;
 
     /**
      * Rest format to be used
@@ -43,7 +43,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
      * @access  protected
      * @var     string
      */
-    protected $rest_format      = null;
+    protected $rest_format = null;
     
     /**
      * Set the default content type using PHP Header
@@ -59,7 +59,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
      * @access  public
      * @var     string
      */
-    public $template            = 'normal';
+    public $template = 'normal';
     
     /**
      * Auto render template
@@ -67,7 +67,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
      * @access  public
      * @var     bool    
      */
-    public $auto_render         = true;
+    public $auto_render = true;
 
     /**
      * Run ACL check and redirect user automatically if user doesn't have the privilege
@@ -84,9 +84,10 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
         switch ($status) 
         {
             case 401 :
-                if ($this->is_rest_call === true)
+                if (true === $this->is_rest_call)
                 {
-                    $this->response(array('text' => "You doesn't have privilege to do this action"), 401);
+                    \Lang::load('autho', 'autho');
+                    $this->response(array('text' => \Lang::get('autho.no_privilege')), 401);
                     print $this->response->body;
                     exit();
                 }
