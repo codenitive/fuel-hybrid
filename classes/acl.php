@@ -347,7 +347,7 @@ class Acl
 
             if ( ! in_array($role, $this->roles)) 
             {
-                throw new \FuelException(__METHOD__": Role {$role} does not exist.");
+                throw new \FuelException(__METHOD__.": Role {$role} does not exist.");
 
                 continue;
             }

@@ -111,7 +111,7 @@ class Restserver
         $resource = \Request::active()->action;
 
         // Check if a file extension is used
-        return preg_match($pattern, $resource, $matches) or '' != static::detect_format());
+        return preg_match($pattern, $resource, $matches) or '' != static::detect_format();
     }
     
     /**
