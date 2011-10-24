@@ -107,18 +107,11 @@ class Restserver
      */
     public static function is_rest_call()
     {
-        $pattern = static::$pattern;
+        $pattern  = static::$pattern;
         $resource = \Request::active()->action;
 
         // Check if a file extension is used
-        if (preg_match($pattern, $resource, $matches) or static::detect_format() != '')
-        {
-            return true;
-        }
-        else 
-        {
-            return false;
-        }
+        return preg_match($pattern, $resource, $matches) or '' != static::detect_format());
     }
     
     /**
@@ -147,13 +140,15 @@ class Restserver
      */
     public static function auth()
     {
-        if (\Config::get('rest.auth') == 'basic')
+        switch (\Config::get('rest.auth'))
         {
-            static::prepare_basic_auth();
-        }
-        elseif (\Config::get('rest.auth') == 'digest')
-        {
-            static::prepare_digest_auth();
+            case 'basic' :
+                static::prepare_basic_auth();
+            break;
+            
+            case 'digest' :
+                static::prepare_digest_auth();
+            break;
         }
     }
     
@@ -166,7 +161,7 @@ class Restserver
      */
     public function __construct($data = array(), $http_code = 200)
     {
-        $this->data = $data;
+        $this->data        = $data;
         $this->http_status = $http_code;
     }
     
@@ -216,7 +211,7 @@ class Restserver
         }
         else
         {
-            throw new \FuelException("\Hybrid\Restserver: {$rest_format} is not a valid REST format.");
+            throw new \FuelException(__METHOD__.": {$rest_format} is not a valid REST format.");
         }
         
         return $this;
@@ -235,11 +230,11 @@ class Restserver
             $this->http_status = 404;
         }
         
-        $pattern = static::$pattern;
-        $resource = \Request::active()->action;
+        $pattern          = static::$pattern;
+        $resource         = \Request::active()->action;
         
-        $format = $this->rest_format;
-        $response = new \stdClass();
+        $format           = $this->rest_format;
+        $response         = new \stdClass();
         $response->status = $this->http_status;
         
         // Check if a file extension is used
@@ -247,8 +242,8 @@ class Restserver
         {
             // Remove the extension from arguments too
             $resource = preg_replace($pattern, '', $resource);
-
-            $format = $matches[1];
+            
+            $format   = $matches[1];
         } 
         
         if (null === $format)
@@ -412,13 +407,16 @@ class Restserver
         }
 
         // Otherwise, check the HTTP_ACCEPT (if it exists and we are allowed)
-        if (\Config::get('rest.ignore_http_accept') === false and Input::server('HTTP_ACCEPT'))
+        $http_accept = Input::server('HTTP_ACCEPT');
+
+        if (\Config::get('rest.ignore_http_accept') === false and $http_accept)
         {
+
             // Check all formats against the HTTP_ACCEPT header
             foreach (array_keys(static::$supported_formats) as $format)
             {
                 // Has this format been requested?
-                if (strpos(Input::server('HTTP_ACCEPT'), $format) !== false)
+                if (strpos($http_accept, $format) !== false)
                 {
                     // If not HTML or XML assume its right and send it on its way
                     if ($format != 'html' and $format != 'xml')
@@ -430,13 +428,13 @@ class Restserver
                     else
                     {
                         // If it is truely HTML, it wont want any XML
-                        if ($format == 'html' and strpos(Input::server('HTTP_ACCEPT'), 'xml') === false)
+                        if ($format == 'html' and strpos($http_accept, 'xml') === false)
                         {
                             return $format;
                         }
 
                         // If it is truely XML, it wont want any HTML
-                        elseif ($format == 'xml' and strpos(Input::server('HTTP_ACCEPT'), 'html') === false)
+                        elseif ($format == 'xml' and strpos($http_accept, 'html') === false)
                         {
                             return $format;
                         }
@@ -463,9 +461,9 @@ class Restserver
         // They might have sent a few, make it an array
         if (strpos($lang, ',') !== false)
         {
-            $langs          = explode(',', $lang);
-
-            $return_langs   = array();
+            $langs        = explode(',', $lang);
+            
+            $return_langs = array();
 
             foreach ($langs as $lang)
             {
@@ -493,13 +491,17 @@ class Restserver
         header('HTTP/1.0 401 Unauthorized');
         header('HTTP/1.1 401 Unauthorized');
 
-        if (\Config::get('rest.auth') == 'basic')
+        $realm = \Config::get('rest.realm');
+
+        switch (\Config::get('rest.auth'))
         {
-            header('WWW-Authenticate: Basic realm="'.\Config::get('rest.realm').'"');
-        }
-        elseif (\Config::get('rest.auth') == 'digest')
-        {
-            header('WWW-Authenticate: Digest realm="'.\Config::get('rest.realm').'" qop="auth" nonce="'.$nonce.'" opaque="'.md5(\Config::get('rest.realm')).'"');
+            case 'basic' :
+                header('WWW-Authenticate: Basic realm="'.$realm.'"');
+            break;
+            
+            case 'digest' :
+                header('WWW-Authenticate: Digest realm="'.$realm.'" qop="auth" nonce="'.$nonce.'" opaque="'.md5($realm).'"');
+            break;
         }
 
         exit('Not authorized.');
@@ -514,7 +516,8 @@ class Restserver
  * @deprecated  1.3.0
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
-class Restful extends Restserver {
+class Restful extends Restserver 
+{
     
     public static function forge($data = array(), $http_code = 200)
     {
