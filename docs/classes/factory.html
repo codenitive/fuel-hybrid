@@ -35,8 +35,219 @@
     </header>
 
     <p>
-        Class description
+        Factory class work as a bootstrap class for Hybrid, allows to define Application identity, language and maintenance mode.
     </p>
+
+    <h2>Configuration</h2>
+
+    <p>
+        Application can be configured in a <code>config/app.php</code> file and takes the following keys:
+    </p>
+
+    <table class="config">
+        <tbody>
+            <tr class="header">
+                <th>Param</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <th>identity</th>
+                <td>string</td>
+                <td><code>'fuelphp'</code></td>
+                <td>
+                    Application identity is a unique string to be used in cookie and etc.
+                </td>
+            </tr>
+            <tr>
+                <th>site_name</th>
+                <td>string</td>
+                <td><code>'FuelPHP'</code></td>
+                <td>
+                    Application name string.
+                </td>
+            </tr>
+            <tr>
+                <th>maintenance_mode</th>
+                <td>bool</td>
+                <td><code>false</code></td>
+                <td>
+                    Set application into maintenance mode if value is set to true (default is false).
+                </td>
+            </tr>
+            <tr>
+                <th>available_language</th>
+                <td>array</td>
+                <td><code>array('en')</code></td>
+                <td>
+                    List of available language for this application..
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <div class="row">
+        <div class="span4">
+            <h2>Maintenance Mode</h2>
+
+            <p>Here an easy way to set your application into maintenance mode temporarily without touching any of your controller.</p>
+        </div>
+        <div class="span12">
+            <ol>
+                <li>
+                    Edit <code>APPPATH/config/routes.php</code> and add <code>'_maintenance_mode_'</code>:
+                    <pre class="prettyprint lang-php">&lt;?php
+return array(
+    '_root_'  => 'welcome/index',  // The default route
+    '_404_'   => 'welcome/404',    // The main 404 route
+
+    '_maintenance_mode_' => 'hello/maintenance',
+);</pre>
+                </li>
+                <li>
+                    Create action and view for maintenance mode.
+                    <pre class="prettyprint lang-php">&lt;?php
+
+class Controller_Welcome extends \Hybrid\Controller 
+{
+    /* some actions */
+
+    public function action_maintenance()
+    {
+        $this->response->body = \View::forge('welcome/maintenance');
+    }
+}</pre>
+                </li>
+                <li>
+                    Now, just set <code>maintenance_mode</code> to <code>true</code> in <code>config/app.php</code> to turn the application to maintenance mode.
+                </li>
+            </ol>
+
+            <div class="alert-message block-message warning">
+                <p>
+                    <code>\Hybrid\Factory::_init()</code> need to be loaded onced to detect maintenance mode, if you're not using any of the <code>\Hybrid\Controller</code> please execute <code>\Hybrid\Factory::_init()</code> manually from your code.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="get_identity()">get_identity()</h3>
+
+        <p>Get application codename, equal to <code>\Config::get('app.identity');</code>.</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>string</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">
+\Hybrid\Factory::get_identity(); // return 'fuelphp'</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="get_language()">get_language()</h3>
+
+        <p>Get application language from session, equal to <code>\Session::get(\Config::get('app.identity').'_lang')</code>.</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>string</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">\Session::set(\Config::get('app.identity').'_lang', 'ms');
+
+\Hybrid\Factory::get_language(); // return 'ms'</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="import()">import($path, $folder = 'classes')</h3>
+
+        <p>Import file by look inside current hybrid folder instead of <code>import()</code> unusable structure.</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$path</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>String containing requested file.</td>
+                        </tr>
+                        <tr>
+                            <th><kbd>$folder</kbd></th>
+                            <td><code>'classes'</code></td>
+                            <td>String of path to look for.</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>void</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">\Hybrid\Factory::import('markdown/markdown', 'vendor'); 
+// load markdown library from PKGPATH/hybrid/vendor/markdown/markdown.php</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     
     <footer>
         <p>

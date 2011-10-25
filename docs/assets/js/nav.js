@@ -20,7 +20,7 @@ var nav = {
 			"Acl": 					"classes/acl.html",
 			"Chart": 				"classes/chart.html",
 			"Curl": 				"classes/curl.html",
-			//"Factory": 				"classes/factory.html",
+			"Factory": 				"classes/factory.html",
 			"Input": 				"classes/input.html",
 			"Html": 				"classes/html.html",
 			"Pagination": 			"classes/pagination.html",
