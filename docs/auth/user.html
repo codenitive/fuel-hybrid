@@ -2,95 +2,106 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Auth &mdash; Fuel Hybrid Documentation</title>
+    <title>Auth &mdash; Hybrid for FuelPHP Documentation</title>
+    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
     <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
     <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
     <script type="text/javascript" src="../assets/js/nav.js"></script>
-    <script type="text/javascript" src="../assets/js/highlight.pack.js"></script>
+
+    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
     <script type="text/javascript">
         $(function() {
             show_nav('auth', '../');
-            hljs.tabReplace = '    ';
-            hljs.initHighlightingOnLoad();
+            prettyPrint();
         });
     </script>
-
 </head>
 <body>
+<div class="topbar">
+    <div class="topbar-inner">
+        <div id="topbar" class="container">
+            <strong class="brand">Hybrid for FuelPHP Documentation</strong>
+            <ul></ul>
+        </div>
+    </div>
+</div>
 
-    <header>
-        <h1>Fuel Hybrid Documentation</h1>
+<div class="container after-topbar">
+
+    <header class="page-header">
+        <h1>Auth <small>User</small></h1>
     </header>
 
-    <div id="main-nav"></div>
+    <p>
+        The Auth classes provides a standardized interface for authentication in Fuel. This allows our users to write their own drivers and easily integrate a new driver to work with old code by keeping the basic methods consistent.
+    </p>
 
-    <section id="content">
-        
-        <h2 id="">Auth</h2>
+    <h2>Configuration</h2>
 
-        <p>
-            The Auth classes provides a standardized interface for authentication in Fuel. This allows our users to write their own drivers and easily integrate a new driver to work with old code by keeping the basic methods consistent.
-        </p>
+    <p>
+        <code>\Hybrid\Auth_Driver_User</code> can be configured in a <code>config/autho.php</code> file and takes the following keys:
+    </p>
 
-        <h3>Configuration</h3>
+     <table class="config">
+        <tbody>
+            <tr class="header">
+                <th>Param</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <th>normal.enabled</th>
+                <td>bool</td>
+                <td><code>true</code></td>
+                <td>
+                    Set application to load Auth class.
+                </td>
+            </tr>
+            
+            <tr>
+                <th>normal.optional_fields</th>
+                <td>array|null</td>
+                <td><code>null</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <th>normal.allowed_status</th>
+                <td>array|null</td>
+                <td><code>null</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <th>normal.use_auth</th>
+                <td>bool</td>
+                <td><code>true</code></td>
+                <td>
+                    Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
+                </td>
+            </tr>
+            <tr>
+                <th>normal.use_meta</th>
+                <td>bool</td>
+                <td><code>true</code></td>
+                <td>
+                    Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-        <p>
-            Auth_Driver_User can be configured in a <strong>config/autho.php</strong> file and takes the following keys:
-        </p>
+    <hr />
 
-         <table class="config">
-            <tbody>
-                <tr class="header">
-                    <th>Param</th>
-                    <th>Type</th>
-                    <th>Default</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <th>normal.enabled</th>
-                    <td>bool</td>
-                    <td><pre class="php"><code class="php">true</code></pre></td>
-                    <td>
-                        Set application to load Auth class.
-                    </td>
-                </tr>
-                
-                <tr>
-                    <th>normal.optional_fields</th>
-                    <td>array|null</td>
-                    <td><pre class="php"><code>null</code></pre></td>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
-                    <th>normal.allowed_status</th>
-                    <td>array|null</td>
-                    <td><pre class="php"><code>null</code></pre></td>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
-                    <th>normal.use_auth</th>
-                    <td>bool</td>
-                    <td><pre class="php"><code class="php">true</code></pre></td>
-                    <td>
-                        Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
-                    </td>
-                </tr>
-                <tr>
-                    <th>normal.use_meta</th>
-                    <td>bool</td>
-                    <td><pre class="php"><code class="php">true</code></pre></td>
-                    <td>
-                        Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h2 id="how-to">How To</h2>
-
-        <pre class="php"><code>&lt;?php
+    <div class="row">
+        <div class="span4">
+            <h2 id="how-to">How To</h2>
+        </div>
+        <div class="span12">
+            <pre class="prettyprint lang-php">&lt;?php
 
 class Controller_Credential extends \Controller_Rest {
     
@@ -123,19 +134,19 @@ class Controller_Credential extends \Controller_Rest {
         \Hybrid\Auth::logout();
     }
 
-}</code></pre>
-
-        <p class="note">'php oil refine autho --install' can automatically generate your model and migration files, however use <a href="schema.html">these schema</a> for best practice.</p>
-
-
-    </section>
+}</pre>        
+            <div class="alert-message block-message info">
+                <p><code>php oil refine autho --install</code> can automatically generate your model and migration files, however use <a href="schema.html">these schema</a> for best practice.</p>
+            </div>
+        </div>
+    </div>
     
-    <section id="footer">
+    <footer>
         <p>
             <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
             &copy; 2010 - 2011 Fuel Hybrid Development Team
         </p>
-    </section>
-
+    </footer>
+</div>
 </body>
 </html>

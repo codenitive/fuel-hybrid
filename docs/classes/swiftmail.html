@@ -2,43 +2,50 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Swiftmail Class &mdash; Fuel Hybrid Documentation</title>
+    <title>Swiftmail Class &mdash; Hybrid for FuelPHP Documentation</title>
+    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
     <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
     <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
     <script type="text/javascript" src="../assets/js/nav.js"></script>
-    <script type="text/javascript" src="../assets/js/highlight.pack.js"></script>
+
+    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
     <script type="text/javascript">
         $(function() {
             show_nav('classes', '../');
-            hljs.tabReplace = '    ';
-            hljs.initHighlightingOnLoad();
+            prettyPrint();
         });
     </script>
-
 </head>
 <body>
+<div class="topbar">
+    <div class="topbar-inner">
+        <div id="topbar" class="container">
+            <a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
+            <ul></ul>
+        </div>
+    </div>
+</div>
 
-    <header>
-        <h1>Fuel Hybrid Documentation</h1>
+<div class="container after-topbar">
+
+    <header class="page-header">
+        <h1>Swiftmail <small>Class</small></h1>
     </header>
 
-    <div id="main-nav"></div>
+    <p>
+        Missing E-mail Class for Fuel Framework using Swiftmailer E-mail Library.
+    </p>
 
-    <section id="content">
-        
-        <h2 id="">Swiftmail Class</h2>
+    <p>Swiftmail can be configured in a <code>config/swiftmail.php</code></p>
 
-        <p>
-            Missing E-mail Class for Fuel Framework using Swiftmailer E-mail Library.
-        </p>
-
-        <h3>Information</h3>
-
-        <p>Swiftmail can be configured in a <strong>config/swiftmail.php</strong> file and takes the following keys: </p>
-
-        <h2 id="how-to">How To</h2>
-
-        <pre class="php"><code>\Config::load('swiftmail');
+    <div class="row">
+        <div class="span4">
+            <h2 id="how-to">How To</h2>
+        </div>
+        <div class="span12">
+            <pre class="prettyprint lang-php">\Config::load('swiftmail');
 
 $mail = \Hybrid\Swiftmail::forge();
 $mail->to('to@domain.com', 'Name');
@@ -49,177 +56,191 @@ $mail->message('E-mail message');
 if (false === $mail->send())
 {
     throw new \Fuel_Exception('Unable to send email');
-}</code></pre>
-        
-        <article>
-            <h3 id="forge()">forge($config = array())</h3>
+}</pre>
+        </div>
+    </div>
+    
+    <hr />
 
-            <p>Creates a new instance of the Swiftmail.</p>
+    <div class="row">
+        <h3 id="forge()">forge($config = array())</h3>
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>Yes</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>
-                        <table class="parameters">
-                            <tbody><tr>
-                                <th>Param</th>
-                                <th>Default</th>
-                                <th class="description">Description</th>
-                            </tr>
-                            <tr>
-                                <th><kbd>$config</kbd></th>
-                                <td><pre class="php"><code>array()</code></pre></td>
-                                <td>An array to overwrite default config from config/email.php.</td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>\Hybrid\Swiftmail Object</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-                        <pre class="php"><code>$email = \Hybrid\Swiftmail::forge();</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
+        <p>Creates a new instance of the Swiftmail.</p>
 
-        <article>
-            <h3 id="__construct()">__construct($config = array())</h3>
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$config</kbd></th>
+                            <td><code>array()</code></td>
+                            <td>An array to overwrite default config from config/email.php.</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Swiftmail Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$email = \Hybrid\Swiftmail::forge();</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-            <p>Construct a new e-mail, alias to <a href="#forge()">\Hybrid\Swiftmail::forge()</a>.</p>
+    <hr />
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>
-                        <table class="parameters">
-                            <tbody><tr>
-                                <th>Param</th>
-                                <th>Default</th>
-                                <th class="description">Description</th>
-                            </tr>
-                            <tr>
-                                <th><kbd>$config</kbd></th>
-                                <td><pre class="php"><code>array()</code></pre></td>
-                                <td>An array to overwrite default config from config/email.php.</td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>\Hybrid\Swiftmail Object</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-                        <pre class="php"><code>$email = new \Hybrid\Swiftmail;</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
-        
-        <article>
-            <h3 id="subject()">subject($subject)</h3>
+    <div class="row">
 
-            <p>Sets the subject of the email.</p>
+        <h3 id="__construct()">__construct($config = array())</h3>
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>
-                        <table class="parameters">
-                            <tbody><tr>
-                                <th>Param</th>
-                                <th>Default</th>
-                                <th class="description">Description</th>
-                            </tr>
-                            <tr>
-                                <th><kbd>$subject</kbd></th>
-                                <td><i>Required</i></td>
-                                <td>The emails subject.</td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>\Hybrid\Swiftmail Object</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-                        <pre class="php"><code>$email->subject('E-mail Subject');</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
+        <p>Construct a new e-mail, alias to <a href="#forge()">\Hybrid\Swiftmail::forge()</a>.</p>
 
-        <article>
-            <h3 id="message()">message($content)</h3>
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$config</kbd></th>
+                            <td><code>array()</code></td>
+                            <td>An array to overwrite default config from config/email.php.</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Swiftmail Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$email = new \Hybrid\Swiftmail;</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-            <p>Sets the message of the email, content type is determined by 'mailtype' config.</p>
+    <hr />
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>
-                        <table class="parameters">
-                            <tbody><tr>
-                                <th>Param</th>
-                                <th>Default</th>
-                                <th class="description">Description</th>
-                            </tr>
-                            <tr>
-                                <th><kbd>$content</kbd></th>
-                                <td><i>Required</i></td>
-                                <td>The emails.</td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>\Hybrid\Swiftmail Object</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-                        <pre class="php"><code>$email->message('Some message');</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
+    <div class="row">
+            
+        <h3 id="subject()">subject($subject)</h3>
 
-        <article>
+        <p>Sets the subject of the email.</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$subject</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>The emails subject.</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Swiftmail Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$email->subject('E-mail Subject');</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="message()">message($content)</h3>
+
+        <p>Sets the message of the email, content type is determined by 'mailtype' config.</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$content</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>The emails.</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Swiftmail Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$email->message('Some message');</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
             <h3 id="text()">text($content)</h3>
 
             <p>Sets the Plain Text content to place into the email.</p>
@@ -254,398 +275,414 @@ if (false === $mail->send())
                 <tr>
                     <th>Example</th>
                     <td>
-                        <pre class="php"><code>$email->text('Some message in plain text');</code></pre>
+                        <pre class="prettyprint lang-php">$email->text('Some message in plain text');</pre>
                     </td>
                 </tr>
                 </tbody>
             </table>
-        </article>
+    </div>
 
-        <article>
-            <h3 id="html()">html($content)</h3>
+    <hr />
 
-            <p>Sets the HTML content to place into the email.</p>
+    <div class="row">
+        <h3 id="html()">html($content)</h3>
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>
-                        <table class="parameters">
-                            <tbody><tr>
-                                <th>Param</th>
-                                <th>Default</th>
-                                <th class="description">Description</th>
-                            </tr>
-                            <tr>
-                                <th><kbd>$content</kbd></th>
-                                <td><i>Required</i></td>
-                                <td>The emails HTML.</td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>\Hybrid\Swiftmail Object</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-                        <pre class="php"><code>$email->html('Some message &lt;strong&gt;with&lt;/strong&gt; HTML support');</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
+        <p>Sets the HTML content to place into the email.</p>
 
-        <article>
-            <h3 id="to()">to($address, $name = '')</h3>
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$content</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>The emails HTML.</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Swiftmail Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$email->html('Some message &lt;strong&gt;with&lt;/strong&gt; HTML support');</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-            <p>Adds a direct recipient.</p>
+    <hr />
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>
-                        <table class="parameters">
-                            <tbody><tr>
-                                <th>Param</th>
-                                <th>Default</th>
-                                <th class="description">Description</th>
-                            </tr>
-                            <tr>
-                                <th><kbd>$address</kbd></th>
-                                <td><i>Required</i></td>
-                                <td>A single e-mail address</td>
-                            </tr>
-                            <tr>
-                                <th><kbd>$name</kbd></th>
-                                <td><pre class="php"><code>''</code></pre></td>
-                                <td>Recipient name</td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>\Hybrid\Swiftmail Object</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-                        <pre class="php"><code>$email->to('to@domain.com');</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
+    <div class="row">
+        <h3 id="to()">to($address, $name = '')</h3>
 
-        <article>
-            <h3 id="cc()">cc($address, $name = '')</h3>
+        <p>Adds a direct recipient.</p>
 
-            <p>Adds a carbon copy recipient.</p>
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$address</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>A single e-mail address</td>
+                        </tr>
+                        <tr>
+                            <th><kbd>$name</kbd></th>
+                            <td><code>''</code></td>
+                            <td>Recipient name</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Swiftmail Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$email->to('to@domain.com');</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>
-                        <table class="parameters">
-                            <tbody><tr>
-                                <th>Param</th>
-                                <th>Default</th>
-                                <th class="description">Description</th>
-                            </tr>
-                            <tr>
-                                <th><kbd>$address</kbd></th>
-                                <td><i>Required</i></td>
-                                <td>A single e-mail address</td>
-                            </tr>
-                            <tr>
-                                <th><kbd>$name</kbd></th>
-                                <td><pre class="php"><code>''</code></pre></td>
-                                <td>Recipient name</td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>\Hybrid\Swiftmail Object</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-                        <pre class="php"><code>$email->cc('cc@domain.com');</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
+    <hr />
 
-        <article>
-            <h3 id="bcc()">bcc($address, $name = '')</h3>
+    <div class="row">
+        <h3 id="cc()">cc($address, $name = '')</h3>
 
-            <p>Adds a blind carbon copy recipient.</p>
+        <p>Adds a carbon copy recipient.</p>
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>
-                        <table class="parameters">
-                            <tbody><tr>
-                                <th>Param</th>
-                                <th>Default</th>
-                                <th class="description">Description</th>
-                            </tr>
-                            <tr>
-                                <th><kbd>$address</kbd></th>
-                                <td><i>Required</i></td>
-                                <td>A single e-mail address</td>
-                            </tr>
-                            <tr>
-                                <th><kbd>$name</kbd></th>
-                                <td><pre class="php"><code>''</code></pre></td>
-                                <td>Recipient name</td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>\Hybrid\Swiftmail Object</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-                        <pre class="php"><code>$email->bcc('bcc@domain.com');</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$address</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>A single e-mail address</td>
+                        </tr>
+                        <tr>
+                            <th><kbd>$name</kbd></th>
+                            <td><code>''</code></td>
+                            <td>Recipient name</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Swiftmail Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$email->cc('cc@domain.com');</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-        <article>
-            <h3 id="from()">from($address, $name = '')</h3>
+    <hr />
 
-            <p>Adds a direct sender.</p>
+    <div class="row">
+        <h3 id="bcc()">bcc($address, $name = '')</h3>
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>
-                        <table class="parameters">
-                            <tbody><tr>
-                                <th>Param</th>
-                                <th>Default</th>
-                                <th class="description">Description</th>
-                            </tr>
-                            <tr>
-                                <th><kbd>$address</kbd></th>
-                                <td><i>Required</i></td>
-                                <td>A single e-mail address</td>
-                            </tr>
-                            <tr>
-                                <th><kbd>$name</kbd></th>
-                                <td><pre class="php"><code>''</code></pre></td>
-                                <td>Sender name</td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>\Hybrid\Swiftmail Object</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-                        <pre class="php"><code>$email->from('from@domain.com');</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
+        <p>Adds a blind carbon copy recipient.</p>
 
-        <article>
-            <h3 id="reply_to()">reply_to($address, $name = '')</h3>
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$address</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>A single e-mail address</td>
+                        </tr>
+                        <tr>
+                            <th><kbd>$name</kbd></th>
+                            <td><code>''</code></td>
+                            <td>Recipient name</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Swiftmail Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$email->bcc('bcc@domain.com');</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-            <p>Adds a direct reply-to.</p>
+    <hr />
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>
-                        <table class="parameters">
-                            <tbody><tr>
-                                <th>Param</th>
-                                <th>Default</th>
-                                <th class="description">Description</th>
-                            </tr>
-                            <tr>
-                                <th><kbd>$address</kbd></th>
-                                <td><i>Required</i></td>
-                                <td>A single e-mail address</td>
-                            </tr>
-                            <tr>
-                                <th><kbd>$name</kbd></th>
-                                <td><pre class="php"><code>''</code></pre></td>
-                                <td>Sender name</td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>\Hybrid\Swiftmail Object</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-                        <pre class="php"><code>$email->reply_to('replyto@domain.com');</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
+    <div class="row">
+        <h3 id="from()">from($address, $name = '')</h3>
 
-        <!--article>
-            <h3 id="attach()">attach($filename, $disposition)</h3>
+        <p>Adds a direct sender.</p>
 
-            <p>Attaches a file in the local filesystem to the email.</p>
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$address</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>A single e-mail address</td>
+                        </tr>
+                        <tr>
+                            <th><kbd>$name</kbd></th>
+                            <td><code>''</code></td>
+                            <td>Sender name</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Swiftmail Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$email->from('from@domain.com');</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>
-                        <table class="parameters">
-                            <tbody><tr>
-                                <th>Param</th>
-                                <th>Default</th>
-                                <th class="description">Description</th>
-                            </tr>
-                            <tr>
-                                <th><kbd>$password</kbd></th>
-                                <td><pre class="php"><code>''</code></pre></td>
-                                <td>String to be hashed</td>
-                            </tr>
-                        </tbody></table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>\Hybrid\Swiftmail Object</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-                        <pre class="php"><code>$email->attach();</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article-->
+    <hr />
 
-        <article>
-            <h3 id="send()">send()</h3>
+    <div class="row">
+        <h3 id="reply_to()">reply_to($address, $name = '')</h3>
 
-            <p>Sends the email.</p>
+        <p>Adds a direct reply-to.</p>
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>bool</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-                        <pre class="php"><code>$email->send();</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$address</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>A single e-mail address</td>
+                        </tr>
+                        <tr>
+                            <th><kbd>$name</kbd></th>
+                            <td><code>''</code></td>
+                            <td>Sender name</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Swiftmail Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$email->reply_to('replyto@domain.com');</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-        <article>
-            <h3 id="debug()">debug()</h3>
+    <!--hr />
 
-            <p>Get transport/mail debug object.</p>
+    <div class="row">
+        <h3 id="attach()">attach($filename, $disposition)</h3>
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>\Hybrid\Swiftmail_Result Object</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-                        <pre class="php"><code>$email->debug();</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
+        <p>Attaches a file in the local filesystem to the email.</p>
 
-    </section>
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$password</kbd></th>
+                            <td><code>''</code></td>
+                            <td>String to be hashed</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Swiftmail Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$email->attach();</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div-->
+
+    <hr />
     
-    <section id="footer">
+    <div class="row">
+        <h3 id="send()">send()</h3>
+
+        <p>Sends the email.</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>bool</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$email->send();</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="debug()">debug()</h3>
+
+        <p>Get transport/mail debug object.</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Swiftmail_Result Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$email->debug();</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <footer>
         <p>
             <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
             &copy; 2010 - 2011 Fuel Hybrid Development Team
         </p>
-    </section>
-
+    </footer>
+</div>
 </body>
 </html>
