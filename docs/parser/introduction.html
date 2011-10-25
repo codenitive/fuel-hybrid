@@ -50,6 +50,10 @@
     <div class="row">
         <h3>forge($name = null)</h3>
 
+        <p>
+            Creates a new instance of the either Markdown, Textile or BBCode parser, or load from cache if already loaded. 
+        </p>
+
         <table class="method">
             <tbody>
             <tr>
@@ -83,9 +87,54 @@
                     <pre class="prettyprint lang-php">// Initiate markdown parser
 $markdown = \Hybrid\Parser::forge('markdown');
 
-echo $markdown->parse('### Hello world'); // return '&lt;h3&gt;Hello World&lt;/h3&gt;'
+echo $markdown->parse('### Hello world'); // return '&lt;h3&gt;Hello World&lt;/h3&gt;'</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-echo $markdown->parse('Some ```other code```'); // return 'Some &lt;code&gt;Hello World&lt;/code&gt;'</pre>
+    <hr />
+
+    <div class="row">
+        <h3>parse($text = '')</h3>
+
+        <p>
+            Parse given formatted text to HTML.
+        </p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$text</kbd></th>
+                            <td><code>''</code></td>
+                            <td>A string for formatted text to be parse.</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>string</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">\Hybrid\Parser::forge('markdown')
+    ->parse('Some ```other code```'); // return 'Some &lt;code&gt;Hello World&lt;/code&gt;'</pre>
                 </td>
             </tr>
             </tbody>
