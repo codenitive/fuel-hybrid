@@ -89,51 +89,6 @@
             </ol>
         </div>
     </div>
-
-    <div class="row">
-        <div class="span4">
-            <h1 id="cli-setup">Command Line Configuration</h1>
-            
-            <p>
-                Once all 4 steps have been done, we can proceed with the commandline installation using oil.
-            </p>
-        </div>
-
-        <div class="span12">
-            <p>This step is optional but handy to:</p>
-        
-            <ul>
-                <li>copy <code>fuel/packages/hybrid/config/app.php</code> to <code>APPPATH/config/app.php</code></li>
-                <li>copy <code>fuel/packages/hybrid/config/autho.php</code> to <code>APPPATH/config/autho.php</code></li>
-                <li>configure all authentication Models and Migrations script.</li>
-            </ul>
-
-            <pre class="cli">$ php oil refine autho --install
-Start Installation
-Created config: APPPATH/config/app.php
-Would you like to install `users_auth` table? [ y, n ]: y
-Would you like to install `users_meta` table? [ y, n ]: y
-Confirm Generate Model and Migration for User? [ y, n ]: y
-    Creating model: /fuel/app/classes/model/user.php
-    Creating migration: /fuel/app/migrations/001_create_users.php
-    Creating model: /fuel/app/classes/model/users/auth.php
-    Creating migration: /fuel/app/migrations/002_create_users_auths.php
-    Creating model: /fuel/app/classes/model/users/metum.php
-    Creating migration: /fuel/app/migrations/003_create_users_meta.php
-    Creating model: /fuel/app/classes/model/role.php
-    Creating migration: /fuel/app/migrations/004_create_roles.php
-    Creating model: /fuel/app/classes/model/users/role.php
-    Creating migration: /fuel/app/migrations/005_create_users_roles.php
-    Creating model: /fuel/app/classes/model/authentication.php
-    Creating migration: /fuel/app/migrations/006_create_authentications.php
-</pre>
-            <div class="alert-message block-message info">
-                <p>
-                    Do remember to use <code>--orm</code> to generate model using <code>\Orm\Model</code>, otherwise default to <code>\Model_Crud</code>
-                </p>
-            </div>
-        </div>
-    </div>
     
     <footer>
         <p>
