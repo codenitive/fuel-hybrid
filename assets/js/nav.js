@@ -24,28 +24,19 @@ var nav = {
 			"Html": 				"classes/html.html",
 			"Pagination": 			"classes/pagination.html",
 			"Request": 				"classes/request.html",
-			"Restful": 				"classes/restserver.html",
+			"Restserver": 			"classes/restserver.html",
 			"Swiftmail": 			"classes/swiftmail.html",
+			"Uri": 					"classes/uri.html",
 			"View": 				"classes/view.html"
 		},
 
 		"Auth": {
 			"Introduction": 		"auth/introduction.html",
 			"Usage": 				"auth/usage.html",
-			"Driver types": {
-				"User":  			"auth/todo.html",
-				"Facebook": 		"auth/todo.html",
-				"Twitter": 			"auth/todo.html"
-			},
-			"Connection types": {
-				"Normal":  			"auth/todo.html",
-				"Facebook": 		"auth/todo.html",
-				"Twitter": 			"auth/todo.html"
-			},
+			"Schema": 				"auth/schema.html",
 			"Examples": {
-				"User": 			"auth/example_user.html",
-				"Facebook": 		"auth/example_facebook.html",
-				"Twitter": 			"auth/example_twitter.html" 
+				"User": 			"auth/user.html",
+				"OAuth/OAuth2": 	"auth/oauth.html"
 			}
 		},
 		/*
@@ -54,28 +45,25 @@ var nav = {
 		},*/
 
 		"Controller": {
-			"Introduction": 		"controller/todo.html",
+			"Introduction": 		"controller/introduction.html",
 			"Usage": {
-				"Basic": 			"controller/todo.html",
-				"Rest": 			"controller/todo.html",
 				"Hybrid": 			"controller/todo.html",
 				"Frontend": 		"controller/todo.html"
 			},
-			"Using Template": 		"controller/todo.html",
-			"Using ACL": 			"controller/using_acl.html"
+			"Using Template": 		"controller/todo.html"
 		},
 		
 		/*
 		"Template": {
 			"Introduction": 		"template/todo.html"
-		},
-
+		}, */
+		
 		"Parser": {
-			"Introduction": 		"parser/todo.html",
+			"Introduction": 		"parser/introduction.html" /*,
 			"Driver types": {
 				"Markdown": 		"parser/todo.html"
-			}
-		},*/
+			}*/
+		},
 
 		"Refine": {}
 
@@ -87,25 +75,19 @@ function show_nav(page, path)
 	active_path = window.location.pathname;
 	path = path == null ? '' : path;
 	$.each(nav, function(section,links) {
-		var h3 = $('<h3></h3>');
-		h3.addClass('collapsible').html(section);
-		h3.attr('id', 'nav_'+section.toLowerCase().replace(' ', ''));
-		h3.bind('click', function() {
-			$(this).next('div').slideToggle();
-		});
+		
+		var li = $('<li>')
+			.addClass('dropdown')
+			.attr('id', 'nav_'+section.toLowerCase().replace(' ', ''));
+		var a  = $('<a href="#"/>').addClass('menu').html(section).appendTo(li);
 
-		$('#main-nav').append(h3);
-		var div = $('<div></div>');
-		if ('nav_'+page != h3.attr('id')) {
-			div.hide();
-		}
-
-		var ul = div.append('<ul></ul>');
-		ul.find('ul').append(generate_nav(path, links));
-
-		$('#main-nav').append(div);
-		$('#main-nav').find('#nav_'+page).next('div').slideDown();
+		$('#topbar > ul').append(li);
+		
+		var ul = $('<ul>').addClass('dropdown-menu').appendTo(li);
+		ul.append(generate_nav(path, links));
 	});
+
+	$('#topbar').dropdown();
 }
 
 //generate the navigation

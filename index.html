@@ -1,89 +1,112 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>Fuel Hybrid Documentation</title>
-	<link href="assets/css/main.css" media="screen" rel="stylesheet" />
-	<script type="text/javascript" src="assets/js/jquery-1.4.4.min.js"></script>
-	<script type="text/javascript" src="assets/js/nav.js"></script>
-	<script type="text/javascript" src="assets/js/highlight.pack.js"></script>
-	<script type="text/javascript">
-		$(function() {
-			show_nav('basic');
-			hljs.tabReplace = '    ';
-			hljs.initHighlightingOnLoad();
-		});
-	</script>
+    <meta charset="utf-8">
+    <title>Hybrid for FuelPHP Documentation</title>
+    <link href="assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
+    <link href="assets/css/main.css" media="screen" rel="stylesheet" />
+    <script type="text/javascript" src="assets/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-dropdown.js"></script>
+    <script type="text/javascript" src="assets/js/nav.js"></script>
+
+    <script type="text/javascript" src="assets/js/prettify/prettify.js"></script>
+    <link href="assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
+    <script type="text/javascript">
+        $(function() {
+            show_nav('basic');
+            prettyPrint();
+        });
+    </script>
 </head>
 <body>
+<div class="topbar">
+    <div class="topbar-inner">
+        <div id="topbar" class="container">
+            <a href="index.html" class="brand">Hybrid for FuelPHP Documentation</a>
+            <ul></ul>
+        </div>
+    </div>
+</div>
 
-	<header>
-		<h1>Fuel Hybrid Documentation</h1>
-	</header>
+<div class="container after-topbar">
 
-	<div id="main-nav"></div>
+    <header class="page-header">
+        <h1>Welcome <small>Hybrid for FuelPHP Documentation</small></h1>
+    </header>
 
-	<section id="content">
-		<h2>Welcome to Fuel Hybrid</h2>
+    <div class="hero-unit">
+        <p>A set of class that extends the functionality of FuelPHP without affecting the standard workflow when the application doesn't actually utilize Hybrid feature.</p>
+        
+    </div>
 
-		<p>
-			A set of class that extends the functionality of FuelPHP without affecting the standard workflow when the application doesn't actually utilize Hybrid feature.
-		</p>
+    <div class="row">
+        <div class="span6">
+            <h2>Step 1</h2>
+            <p>Download Hybrid for FuelPHP from Github.</p>
+            <a href="https://github.com/codenitive/fuel-hybrid/zipball/v1.0.6" class="btn primary">Download Latest</a> or  
+            <a href="installation/download.html" class="btn">View Archive</a> 
+        </div>
 
-		<h3 id="getting_started">Getting started</h3>
+        <div class="span5">
+            <h2>Step 2</h2>
+            <p>Learn how to install Hybrid for FuelPHP, we have provided a refine <code>php oil refine autho:install</code></p>
+            <a href="installation/instructions.html" class="btn">Install</a>
+        </div>
 
-		<ul>
-			<li>Step #1: <a href="installation/download.html">Download</a></li>
-			<li>Step #2: <a href="installation/instructions.html">Install</a></li>
-			<li>Step #3: Create sexy code</li>
-		</ul>
+        <div class="span5">
+            
+            <h2>Step 3</h2>
+            <p>Create sexy code</p>
+        </div>
+    </div>
 
-		<h3 id="quick_install">Optional: Quick Installation</h3>
+    <hr />
 
-		<p>
-			If you value your time and want to get things up and running in seconds instead of minutes you can use Fuel oil quick installer.
-		</p>
+    <div class="row">
+        <div class="span4">
+            <h2 id="quick_install">Quick Installation</h2>
 
-		<ol>
-			<li>Add <strong>github.com/codenitive</strong>
-				<pre class="php"><code>&lt;?php
+            <p>
+                If you value your time and want to get things up and running in seconds instead of minutes you can use Fuel Oil package quick installer.
+            </p>
+        </div>
+        <div class="span12">
+            
+            <h3>1. Add github.com/codenitive</h3>
+            
+            <pre class="prettyprint lang-php">&lt;?php
 
 return array(
 
-	/**
-	 * sources - The name of the main bootstrap file.
-	 *
-	 * Set this to false or remove if you using mod_rewrite.
-	 */
-	'sources' => array(
-		'github.com/fuel-packages',
-		'github.com/codenitive',
-	),
+    /**
+     * sources - The name of the main bootstrap file.
+     *
+     * Set this to false or remove if you using mod_rewrite.
+     */
+    'sources' => array(
+        'github.com/fuel-packages',
+        'github.com/codenitive',
+    ),
 
-);
-				</code></pre>
-			</li>
+);</pre>
+            <h3>2. Install Hybrid Package</h3>
 
-			<li>Install Hybrid Package
-
-				<pre class="cli">$ php oil package install hybrid --direct
+            <pre class="cli">$ php oil package install hybrid --direct
 Warning - fopen(http://github.com/fuel-packages/fuel-hybrid/zipball/master): failed to open stream: HTTP request failed! HTTP/1.1 404 Not Found
  in PKGPATH/oil/classes/package.php on line 53
 Downloading package: http://github.com/codenitive/fuel-hybrid/zipball/master
-	...
-	...
-				</pre>
-			</li>
-		</ol>
+    ...
+    ...
+            </pre>
+        </div>
+    </div>
+    <footer>
+        <p>
+            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+            &copy; 2010 - 2011 Fuel Hybrid Development Team
+        </p>
+    </footer>
 
-	</section>
-
-	<section id="footer">
-		<p>
-			<a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
-			&copy; 2010 - 2011 Fuel Hybrid Development Team
-		</p>
-	</section>
-
+</div>
 </body>
 </html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Auth &mdash; Hybrid for FuelPHP Documentation</title>
+    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
+    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
+    <script type="text/javascript" src="../assets/js/nav.js"></script>
+
+    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
+    <script type="text/javascript">
+        $(function() {
+            show_nav('auth', '../');
+            prettyPrint();
+        });
+    </script>
+</head>
+<body>
+<div class="topbar">
+    <div class="topbar-inner">
+        <div id="topbar" class="container">
+            <strong class="brand">Hybrid for FuelPHP Documentation</strong>
+            <ul></ul>
+        </div>
+    </div>
+</div>
+
+<div class="container after-topbar">
+
+    <header class="page-header">
+        <h1>Auth <small>User</small></h1>
+    </header>
+
+    <p>
+        The Auth classes provides a standardized interface for authentication in Fuel. This allows our users to write their own drivers and easily integrate a new driver to work with old code by keeping the basic methods consistent.
+    </p>
+
+    <h2>Configuration</h2>
+
+    <p>
+        <code>\Hybrid\Auth_Driver_User</code> can be configured in a <code>config/autho.php</code> file and takes the following keys:
+    </p>
+
+     <table class="config">
+        <tbody>
+            <tr class="header">
+                <th>Param</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <th>normal.enabled</th>
+                <td>bool</td>
+                <td><code>true</code></td>
+                <td>
+                    Set application to load Auth class.
+                </td>
+            </tr>
+            
+            <tr>
+                <th>normal.optional_fields</th>
+                <td>array|null</td>
+                <td><code>null</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <th>normal.allowed_status</th>
+                <td>array|null</td>
+                <td><code>null</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <th>normal.use_auth</th>
+                <td>bool</td>
+                <td><code>true</code></td>
+                <td>
+                    Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
+                </td>
+            </tr>
+            <tr>
+                <th>normal.use_meta</th>
+                <td>bool</td>
+                <td><code>true</code></td>
+                <td>
+                    Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr />
+
+    <div class="row">
+        <div class="span4">
+            <h2 id="how-to">How To</h2>
+        </div>
+        <div class="span12">
+            <pre class="prettyprint lang-php">&lt;?php
+
+class Controller_Credential extends \Controller_Rest {
+    
+    public function post_login()
+    {
+        // username field support username and password
+        $username   = \Input::post('username', '');
+        $password   = \Input::post('password', '');
+
+        try 
+        {
+            \Hybrid\Auth::instance('user')->login($username, $password);
+            // or you can also use \Hybrid\Auth::instance()->login($username, $password);
+        }
+        catch (\Fuel_Exception $e) 
+        {
+            $this->response(array(
+                'text' => $e->getMessage(),
+            ), 400);
+        }
+
+        $this->response(array(
+            'text' => 'You\'re logged in',
+        ), 200);
+    }
+
+    public function post_logout()
+    {
+        // Logout from all Auth_Driver session
+        \Hybrid\Auth::logout();
+    }
+
+}</pre>        
+            <div class="alert-message block-message info">
+                <p><code>php oil refine autho --install</code> can automatically generate your model and migration files, however use <a href="schema.html">these schema</a> for best practice.</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>
+            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+            &copy; 2010 - 2011 Fuel Hybrid Development Team
+        </p>
+    </footer>
+</div>
+</body>
+</html>

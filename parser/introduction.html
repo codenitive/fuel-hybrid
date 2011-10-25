@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>View Class &mdash; Hybrid for FuelPHP Documentation</title>
+    <title>Parser &mdash; Hybrid for FuelPHP Documentation</title>
     <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
     <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
     <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
@@ -13,7 +13,7 @@
     <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
     <script type="text/javascript">
         $(function() {
-            show_nav('classes', '../');
+            show_nav('parser', '../');
             prettyPrint();
         });
     </script>
@@ -31,25 +31,24 @@
 <div class="container after-topbar">
 
     <header class="page-header">
-        <h1>View <small>Class</small></h1>
+        <h1>Parser</h1>
     </header>
 
     <p>
-        The View class acts as an object wrapper for HTML pages with embedded PHP, called "views". Variables can be assigned with the view object and referenced locally within the view.
+        The Parser class acts as an object wrapper for HTML formatted string written using format such as Markdown, Textile, BBCode or etc.
     </p>
 
-    <h2>Extends</h2>
-
-    <p>
-        View class extends <a href="http://fuelphp.com/docs/classes/view.html">Fuel\Core\View</a>.
-    </p>
+    <h2>Available Drivers:</h2>
+    <ul>
+        <li>Parser_Markdown</li>
+        <li>Parser_Textile</li>
+        <li>Parser_BBCode</li>
+    </ul>
 
     <hr />
 
     <div class="row">
-        <h3 id="add_path()">add_path($path)</h3>
-
-        <p>Set the global path, overwrite default using <strong>/app/views/</strong> folder.</p>
+        <h3>forge($name = null)</h3>
 
         <table class="method">
             <tbody>
@@ -61,32 +60,32 @@
                 <th>Parameters</th>
                 <td>
                     <table class="parameters">
-                        <tr>
+                        <tbody><tr>
                             <th>Param</th>
                             <th>Default</th>
                             <th class="description">Description</th>
                         </tr>
                         <tr>
-                            <th><kbd>$path</kbd></th>
-                            <td><i>Required</i></td>
-                            <td>A string of valid absoluted path to view</td>
+                            <th><kbd>$name</kbd></th>
+                            <td><code>null</code></td>
+                            <td>null to fetch the default driver, or a driver id to get a specific one</td>
                         </tr>
-                    </table>
+                    </tbody></table>
                 </td>
             </tr>
             <tr>
                 <th>Returns</th>
-                <td><i>void</i></td>
+                <td>string</td>
+            </tr>
             <tr>
                 <th>Example</th>
                 <td>
-                    <pre class="prettyprint lang-php">$view = \Hybrid\View::forge('index');
+                    <pre class="prettyprint lang-php">// Initiate markdown parser
+$markdown = \Hybrid\Parser::forge('markdown');
 
-// set folder location
-$view->set_path(DOCROOT . 'views/');
+echo $markdown->parse('### Hello world'); // return '&lt;h3&gt;Hello World&lt;/h3&gt;'
 
-// render the view
-$this->response->body = $view->render();    // this will render DOCROOT/views/index.php</pre>
+echo $markdown->parse('Some ```other code```'); // return 'Some &lt;code&gt;Hello World&lt;/code&gt;'</pre>
                 </td>
             </tr>
             </tbody>

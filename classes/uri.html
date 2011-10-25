@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>View Class &mdash; Hybrid for FuelPHP Documentation</title>
+    <title>Uri Class &mdash; Hybrid for FuelPHP Documentation</title>
     <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
     <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
     <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
@@ -31,26 +31,26 @@
 <div class="container after-topbar">
 
     <header class="page-header">
-        <h1>View <small>Class</small></h1>
+        <h1>Uri <small>Class</small></h1>
     </header>
 
     <p>
-        The View class acts as an object wrapper for HTML pages with embedded PHP, called "views". Variables can be assigned with the view object and referenced locally within the view.
+        The Uri class allows you to interact with the URI.
     </p>
 
     <h2>Extends</h2>
 
     <p>
-        View class extends <a href="http://fuelphp.com/docs/classes/view.html">Fuel\Core\View</a>.
+        Uri class extends <a href="http://fuelphp.com/docs/classes/uri.html">Fuel\Core\Uri</a>.
     </p>
-
+    
     <hr />
 
     <div class="row">
-        <h3 id="add_path()">add_path($path)</h3>
+        <h3 id="build_get_query()">build_get_query($values)</h3>
 
-        <p>Set the global path, overwrite default using <strong>/app/views/</strong> folder.</p>
-
+        <p>Build query string, a feature missing in many pagination class. This allow you to combine search/filtering option using $_GET for your application with pagination.</p>
+    
         <table class="method">
             <tbody>
             <tr>
@@ -67,26 +67,28 @@
                             <th class="description">Description</th>
                         </tr>
                         <tr>
-                            <th><kbd>$path</kbd></th>
+                            <th><kbd>$values</kbd></th>
                             <td><i>Required</i></td>
-                            <td>A string of valid absoluted path to view</td>
+                            <td>A string or an array of $_GET attributes to be included in the pagination link</td>
                         </tr>
                     </table>
                 </td>
             </tr>
             <tr>
                 <th>Returns</th>
-                <td><i>void</i></td>
+                <td>String</td>
             <tr>
                 <th>Example</th>
                 <td>
-                    <pre class="prettyprint lang-php">$view = \Hybrid\View::forge('index');
+                    <pre class="prettyprint lang-php">&lt;?php
+$_GET = array(
+    'hello' => 'world',
+    'foo'   => 'bar',
+    'fuel'  => 'php',
+);
 
-// set folder location
-$view->set_path(DOCROOT . 'views/');
-
-// render the view
-$this->response->body = $view->render();    // this will render DOCROOT/views/index.php</pre>
+echo \Hybrid\Uri::build_get_query(array('foo', 'hello')); // return '?foo=bar&amp;hello=world'
+</pre>
                 </td>
             </tr>
             </tbody>

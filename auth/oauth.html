@@ -31,13 +31,36 @@
 <div class="container after-topbar">
 
     <header class="page-header">
-        <h1>Auth <small>Schema</small></h1>
+        <h1>Auth <small>OAuth</small></h1>
     </header>
 
     <p>
         The Auth classes provides a standardized interface for authentication in Fuel. This allows our users to write their own drivers and easily integrate a new driver to work with old code by keeping the basic methods consistent.
     </p>
 
+    <hr />
+
+    <div class="row">
+        <div class="span4">
+            <h2 id="how-to">How To</h2>
+        </div>
+        <div class="span12">
+            <ol>
+                <li>
+                    Create a controller at <code>APPPATH/classes/controller/connect.php</code>
+                    <pre class="prettyprint lang-php">&lt;?php
+
+class Controller_Connect extends \Hybrid\Auth_Controller {}</pre>
+                </li>
+                <li>Update <code>APPPATH/config/autho.php</code>, in `provider` section.</li>
+                <li>
+                    Create a login button and you're ready to go. 
+                    <pre class="prettyprint lang-php">&lt;?php echo \Hybrid\Html::anchor('connect/session/twitter', 'Sign-in with Twitter'); ?&gt;</pre>
+
+            </ol>
+        </div>
+    </div>
+    
     <footer>
         <p>
             <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
