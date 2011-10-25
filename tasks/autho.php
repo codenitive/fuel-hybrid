@@ -75,19 +75,19 @@ class Autho {
             $has_error = true;
         }
 
-        if (true === class_exists('\\Model_Users_Metum') and false === \Config::get('autho.normal.use_meta', false))
+        if ((true === class_exists("\Model_Users_Metum") or true === class_exists("\Model\Users_Metum")) and false === \Config::get('autho.normal.use_meta', false))
         {
             \Cli::write('Please set autho.normal.use_meta to TRUE in APPPATH/config/autho.php', 'red');
             $has_error = true;
         }
 
-        if (true === class_exists('\\Model_Users_Auth') and false === \Config::get('autho.normal.use_auth', false))
+        if ((true === class_exists("\Model_Users_Auth") or true === class_exists("\Model\Users_Auth")) and false === \Config::get('autho.normal.use_auth', false))
         {
             \Cli::write('Please set app.auth.use_auth to TRUE in APPPATH/config/autho.php', 'red');
             $has_error = true;
         }
 
-        if ('' === \Config::get('autho.salt', ''))
+        if (null === \Config::get('autho.salt'))
         {
             \Cli::write('Please provide autho.salt secret key in APPPATH/config/autho.php', 'red');
             $has_error = true;
@@ -156,8 +156,8 @@ HELP;
 
         switch(true)
         {
-            case (true === \is_file($path) and 'y' === \Cli::prompt("Overwrite APPPATH/config/{$file}.php?", array('y', 'n'))) :
-            case (false === \is_file($path)) : 
+            case (true === is_file($path) and 'y' === \Cli::prompt("Overwrite APPPATH/config/{$file}.php?", array('y', 'n'))) :
+            case (false === is_file($path)) : 
                $path = pathinfo($path);
 
                 try
@@ -186,7 +186,7 @@ HELP;
      */
     protected static function install_user()
     {
-        if (true === \class_exists('\\Model_User'))
+        if (true === class_exists("\Model_User") or true === class_exists("\Model\User"))
         {
             throw new \FuelException("Model User already exist, skipping this process");
         }
@@ -263,4 +263,5 @@ HELP;
             \Oil\Generate::$create_files = array();
         }
     }
+    
 }

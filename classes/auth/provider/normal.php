@@ -228,6 +228,12 @@ class Auth_Provider_Normal
             $this->data['_hash'] = $data['_hash'];
         }
 
+        // in case if data['id'] doesn't exist or null, default to zero
+        if ( ! isset($data['id']) or null === $data['id'])
+        {
+            $data['id'] = 0;
+        }
+
         $query = \DB::select('users.*')
             ->from('users')
             ->where('users.id', '=', $data['id'])
@@ -414,15 +420,18 @@ class Auth_Provider_Normal
         $values = $this->data;
         $hash   = $values['user_name'].$values['password'];
 
-        if ($this->verify_user_agent)
+        if (true === $this->verify_user_agent)
         {
             $hash .= Input::user_agent();
         }
 
+        // create a hash
         $values['_hash'] = Auth::add_salt($hash);
 
+        // for secure, don't ever include actual password
         unset($values['password']);
 
+        // set cookie expiration
         if ( ! isset($values['expired_at']) or null === $values['expired_at'])
         {
             $expired_at = 0;
@@ -468,6 +477,7 @@ class Auth_Provider_Normal
      * Fetch user information (not using Model)
      *
      * @access  protected
+     * @param   array   $result
      * @return  bool
      */
     protected function fetch_user($result)
@@ -570,12 +580,13 @@ class Auth_Provider_Normal
     {
         $data = array();
         
-        $accounts = \DB::select('*')
+        $accounts = \DB::select('provider', 'token', 'secret')
             ->from('authentications')
             ->where('user_id', '=', $this->data['id'])
             ->as_object()
             ->execute();
 
+        // linked all available accounts to user account
         foreach ($accounts as $account) 
         {
             $data[strval($account->provider)] = array(
@@ -583,7 +594,7 @@ class Auth_Provider_Normal
                 'secret' => $account->secret,
             );
         }
-            
+
         $this->data['accounts'] = $data;
 
         return true;

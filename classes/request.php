@@ -26,7 +26,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Request extends \Fuel\Core\Request 
+class Request extends \Request 
 {
     /**
      * Generates a new `curl` request without going through HTTP connection, 
@@ -115,7 +115,7 @@ class Request extends \Fuel\Core\Request
             $this->request_data   = $dataset;
         }
 
-        $this->response         = NULL;
+        $this->response = null;
     }
 
     /**
@@ -142,8 +142,9 @@ class Request extends \Fuel\Core\Request
         // We need to clean-up any request object transfered to \Hybrid\Input so that
         // any following request to \Hybrid\Input will redirected to \Fuel\Core\Input
         Input::disconnect();
-        $this->request_method   = '';
-        $this->request_data     = array();
+
+        $this->request_method = '';
+        $this->request_data   = array();
 
         return $execute;
     }

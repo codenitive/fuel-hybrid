@@ -26,7 +26,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-abstract class Controller_Rest extends \Fuel\Core\Controller 
+abstract class Controller_Rest extends \Controller 
 {    
     /**
      * Rest format to be used
@@ -34,7 +34,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
      * @access  protected
      * @var     string
      */
-    protected $rest_format          = null;
+    protected $rest_format = null;
     
     /**
      * Set the default content type using PHP Header
@@ -42,7 +42,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
      * @access  protected
      * @var     bool
      */
-    protected $set_content_type     = true;
+    protected $set_content_type = true;
 
     /**
      * Run ACL check and redirect user automatically if user doesn't have the privilege
@@ -59,7 +59,8 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
         switch ($status) 
         {
             case 401 :
-                $this->response(array('text' => "You doesn't have privilege to do this action"), 401);
+                \Lang::load('autho', 'autho');
+                $this->response(array('text' => \Lang::get('autho.no_privilege')), 401);
                 print $this->response->body;
                 exit();
             break;
@@ -116,13 +117,13 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
      */
     public function router($resource, $arguments) 
     {
-        $pattern            = Restserver::$pattern;
+        $pattern           = Restserver::$pattern;
         
         // Remove the extension from arguments too
-        $resource           = preg_replace($pattern, '', $resource);
+        $resource          = preg_replace($pattern, '', $resource);
         
         // If they call user, go to $this->post_user();
-        $controller_method  = strtolower(Input::method()).'_'.$resource;
+        $controller_method = strtolower(Input::method()).'_'.$resource;
         
         if (method_exists($this, $controller_method)) 
         {
@@ -143,7 +144,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
      */
     protected function response($data = array(), $http_code = 200) 
     {
-        $rest_server   = Restserver::forge($data, $http_code)
+        $rest_server = Restserver::forge($data, $http_code)
             ->format($this->rest_format)
             ->execute();
         

@@ -2,59 +2,79 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Request Class &mdash; Fuel Hybrid Documentation</title>
+    <title>Request Class &mdash; Hybrid for FuelPHP Documentation</title>
+    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
     <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
     <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
     <script type="text/javascript" src="../assets/js/nav.js"></script>
-    <script type="text/javascript" src="../assets/js/highlight.pack.js"></script>
+
+    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
     <script type="text/javascript">
         $(function() {
             show_nav('classes', '../');
-            hljs.tabReplace = '    ';
-            hljs.initHighlightingOnLoad();
+            prettyPrint();
         });
     </script>
-
 </head>
 <body>
+<div class="topbar">
+    <div class="topbar-inner">
+        <div id="topbar" class="container">
+            <a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
+            <ul></ul>
+        </div>
+    </div>
+</div>
 
-    <header>
-        <h1>Fuel Hybrid Documentation</h1>
+<div class="container after-topbar">
+
+    <header class="page-header">
+        <h1>Request <small>Class</small></h1>
     </header>
+   
+    <p>
+        Request class processes URI requests. It is used by Fuel in index.php to process the users URI request, and you need it to generate requests in an HMVC context.
+    </p>
 
-    <div id="main-nav"></div>
+    <h2>Extends</h2>
 
-    <section id="content">
+    <p>
+        Request class extends <a href="http://fuelphp.com/docs/classes/request.html">Fuel\Core\Request</a>.
+    </p>
+
+    <hr />
+
+    <div class="row">
+        <div class="span4">
+            <h2 id="hmvc-restful-request">HMVC + RESTful</h2>
+
+            <p>
+                On top of HMVC Request, a internal RESTful Request allow application to send it as either "GET", "POST", "PUT" or "DELETE" method with a sub-set data as if using a cURL request without losing current authentication setting.
+            </p>
+        </div>
+
+        <div class="span12">
         
-        <h2 id="">Request Class</h2>
+            <h3>Why and when to use it</h3>
+            <ol>
+                <li>Different attributes name in both method.</li>
+                <li>Different HTTP Method used in both method.</li>
+                <li>Requesting method from and to different Controllers or Modules.</li>
+                <li>Request required authentication (cURL won't have your authentication information since it's from a different session and called from your web server).</li>
+            </ol>
+        </div>
+    </div>
 
-        <p>
-            Request class processes URI requests. It is used by Fuel in index.php to process the users URI request, and you need it to generate requests in an HMVC context.
-        </p>
+    <hr />
 
-        <h5>Extends</h5>
-
-        <p>
-            Request class extends <a href="http://fuelphp.com/docs/classes/request.html">\Fuel\Core\Request</a>.
-        </p>
-
-        <h2 id="hmvc-restful-request">HMVC + RESTful Request</h2>
-
-        <p>
-            On top of HMVC Request, a internal RESTful Request allow application to send it as either "GET", "POST", "PUT" or "DELETE" method with a sub-set data as if using a cURL request without losing current authentication setting.
-        </p>
-    
-        <h3>Why and when to use it</h3>
-        <ol>
-            <li>Different attributes name in both method.</li>
-            <li>Different HTTP Method used in both method.</li>
-            <li>Requesting method from and to different Controllers or Modules.</li>
-            <li>Request required authentication (cURL won't have your authentication information since it's from a different session and called from your web server).</li>
-        </ol>
-
-        <h2 id="how-to">How To</h2>
-
-        <pre class="php"><code>&lt;?php
+    <div class="row">
+        <div class="span4">
+            <h2 id="how-to">How To</h2>
+        </div>
+        <div class="span12">
+            <pre class="prettyprint lang-php">&lt;?php
 
 class Controller_Credential extends \Controller_Rest {
     
@@ -90,114 +110,119 @@ class Controller_Credential extends \Controller_Rest {
             'text' => 'User logged in',
         ), 200); 
     }
-}</code></pre>
+}</pre>
+            <div class="alert-message block-message error">
+                <p>
+                    HMVC + RESTful Request only work with Controllers under the <strong>same</strong> application.
+                </p>
+            </div>
+        </div>
+    </div>
 
-        <p class="note">
-            HMVC + RESTful Request only work with Controllers under the same application.
-        </p>
+    <hr />
 
-        <article>
-            <h3 id="connect()">connect($uri, $dataset = array())</h3>
+    <div class="row">
+        <h3 id="connect()">connect($uri, $dataset = array())</h3>
 
-            <p>Generates a new `HMVC + RESTful` request without going through HTTP connection, this allow user session can be shared between both request `client` and `server`.</p>
-            <p>The request is then set to be the active request.</p>
+        <p>Generates a new `HMVC + RESTful` request without going through HTTP connection, this allow user session can be shared between both request `client` and `server`.</p>
+        <p>The request is then set to be the active request.</p>
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>Yes</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>
-                        <table class="parameters">
-                            <tr>
-                                <th>Param</th>
-                                <th>Default</th>
-                                <th class="description">Description</th>
-                            </tr>
-                            <tr>
-                                <th><kbd>$uri</kbd></th>
-                                <td><i>Required</i></td>
-                                <td>The URI being requested (including HTTP method). If this parameter is not present, the URI class will be used to detect the URI.</td>
-                            </tr>
-                            <tr>
-                                <th><kbd>$dataset</kbd></th>
-                                <td><pre class="php"><code>array()</code></pre></td>
-                                <td>An array of GET, POST, PUT or DELETE dataset (depends on which HTTP method is called)</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>\Hybrid\Request Object</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-    <pre class="php"><code>// GET method support query string
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$uri</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>The URI being requested (including HTTP method). If this parameter is not present, the URI class will be used to detect the URI.</td>
+                        </tr>
+                        <tr>
+                            <th><kbd>$dataset</kbd></th>
+                            <td><code>array()</code></td>
+                            <td>An array of GET, POST, PUT or DELETE dataset (depends on which HTTP method is called)</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Request Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">// GET method support query string
 \Hybrid\Request::connect('GET controller/method?hello=world');
 
 // Alternatively
-\Hybrid\Request::connect('GET controller/method', array('hello' => 'world'));</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
+\Hybrid\Request::connect('GET controller/method', array('hello' => 'world'));</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-        <article>
-            <h3 id="execute()">execute($method_params = null)</h3>
+    <hr />
 
-            <p>The execute method executes a request, and stores the resulting response in the request object to be used later.</p>
+    <div class="row">
+        <h3 id="execute()">execute($method_params = null)</h3>
 
-            <table class="method">
-                <tbody>
-                <tr>
-                    <th class="legend">Static</th>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <th>Parameters</th>
-                    <td>
-                        <table class="parameters">
-                            <tr>
-                                <th>Param</th>
-                                <th>Default</th>
-                                <th class="description">Description</th>
-                            </tr>
-                            <tr>
-                                <th><kbd>$method_params</kbd></th>
-                                <td><pre class="php"><code>array()</code></pre></td>
-                                <td>An array of parameters to pass to the method being executed</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Returns</th>
-                    <td>\Hybrid\Request Object</td>
-                </tr>
-                <tr>
-                    <th>Example</th>
-                    <td>
-    <pre class="php"><code>$exec = \Hybrid\Request::connector('PUT controller/method?hello=world')->execute();</code></pre>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </article>
+        <p>The execute method executes a request, and stores the resulting response in the request object to be used later.</p>
 
-    </section>
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$method_params</kbd></th>
+                            <td><code>array()</code></td>
+                            <td>An array of parameters to pass to the method being executed</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Request Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$exec = \Hybrid\Request::connector('PUT controller/method?hello=world')->execute();</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     
-    <section id="footer">
+    <footer>
         <p>
             <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
             &copy; 2010 - 2011 Fuel Hybrid Development Team
         </p>
-    </section>
-
+    </footer>
+</div>
 </body>
 </html>

@@ -59,7 +59,7 @@ abstract class Template_Driver
      * @access  protected
      * @var     string
      */
-    protected $folder           = 'default';
+    protected $folder = 'default';
 
     /**
      * Filename
@@ -67,7 +67,7 @@ abstract class Template_Driver
      * @access  protected
      * @var     string
      */
-    protected $filename         = 'index';
+    protected $filename = 'index';
 
     /**
      * Adapter \Fuel\Core\View
@@ -75,7 +75,7 @@ abstract class Template_Driver
      * @access  public
      * @var     object
      */
-    public $view                = null;
+    public $view = null;
 
      /**
      * List of loaded asset
@@ -83,7 +83,7 @@ abstract class Template_Driver
      * @access  protected
      * @staticvar   array
      */
-    protected static $assets    = array();
+    protected static $assets = array();
 
     /**
      * Load asset as subfolder of template
@@ -104,7 +104,7 @@ abstract class Template_Driver
 
         if ( ! is_dir($folder_path))
         {
-            throw new \FuelException("\Hybrid\Template_Driver: Unable to load assets at {$folder_path}.");
+            throw new \FuelException(__METHOD__.": Unable to load assets at {$folder_path}.");
         }
         else
         {
@@ -132,7 +132,7 @@ abstract class Template_Driver
     {
         if ( ! is_dir($path))
         {
-            throw new \FuelException("\Hybrid\Template_Driver: Path {$path} does not appear to a valid folder.");
+            throw new \FuelException(__METHOD__.": Path {$path} does not appear to a valid folder.");
         }
         else 
         {

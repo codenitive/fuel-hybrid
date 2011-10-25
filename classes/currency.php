@@ -232,13 +232,12 @@ class Currency
 
         if ( ! array_key_exists($from_currency, static::$currencies))
         {
-            throw new \FuelException("\Hybrid\Currency: Unable to use unknown currency {$from_currency}");
+            throw new \FuelException(__METHOD__.": Unable to use unknown currency {$from_currency}");
         }
 
         try
         {
             $this->currency_rates = \Cache::get('hybrid.currency.'.$from_currency);
-            throw new \CacheNotFoundException();
         }
         catch (\CacheNotFoundException $e)
         {   
@@ -248,10 +247,11 @@ class Currency
             foreach (static::$currencies as $cur => $name)
             {
                 $replace = array('1', $from_currency, $cur);
+                $url     = str_replace($search, $replace, static::$service);
                 
                 try
                 {
-                    $data = Curl::get(str_replace($search, $replace, static::$service))
+                    $data = Curl::get($url)
                         ->setopt(array(
                             CURLOPT_BINARYTRANSFER => 1,
                             CURLOPT_RETURNTRANSFER => true,
@@ -265,7 +265,7 @@ class Currency
                 }
                 catch (\FuelException $e)
                 {
-                    $body = file_get_contents(str_replace($search, $replace, static::$service));     
+                    $body = file_get_contents($url);     
                 }
                 
                 // this is rather hackish, the return body from either Curl or file_get_contents can't be use directly with json_decode
@@ -305,7 +305,7 @@ class Currency
 
         if ( ! array_key_exists($to_currency, static::$currencies))
         {
-            throw new \FuelException(__CLASS__." Currency {$to_currency} does not exists.");
+            throw new \FuelException(__METHOD__.": Currency {$to_currency} does not exists.");
         }
 
         // This is no brainer, does not need to convert if from and to currency is the same.
@@ -320,7 +320,7 @@ class Currency
         // we fetch the latest currency but if for instance there no conversion rate available between the two, throw an exception
         if ( ! array_key_exists($to_currency, $this->currency_rate))
         {
-            throw new \FuelException(__CLASS__." Currency {$to_currency} is not available to convert from {$from_currency}");
+            throw new \FuelException(__METHOD__.": Currency {$to_currency} is not available to convert from {$from_currency}");
         }
 
         return (float) round($this->amount * $this->currency_rates[$currency], $this->round);
@@ -338,7 +338,7 @@ class Currency
     {
         if ( ! strpos(strtolower($method), 'to_') === 0)
         {
-            throw new \FuelException(__CLASS__.'::'.$method.' does not exists, use ::to_{currency}().');
+            throw new \FuelException(__CLASS__.'::'.$method.' does not exist, use ::to_{currency}().');
         }
         
         $currency = strtoupper(str_replace('to_', '', $method));

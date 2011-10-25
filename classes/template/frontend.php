@@ -105,7 +105,7 @@ class Template_Frontend extends Template_Driver
 
         if (empty($available_folders))
         {
-            throw new \FuelException("\Hybrid\Template_Driver: configuration is not completed");
+            throw new \FuelException(__METHOD__.": configuration is not completed");
         }
 
         if (null === $theme or '_default_' === $theme)
@@ -119,7 +119,7 @@ class Template_Frontend extends Template_Driver
         }
         else
         {
-            throw new \FuelException("\Hybrid\Template_Frontend: Requested {$theme} folder is not available.");
+            throw new \FuelException(__METHOD__.": Requested {$theme} folder is not available.");
         }
 
         return $this;

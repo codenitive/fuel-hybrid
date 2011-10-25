@@ -84,12 +84,12 @@ class Input
         $default      = null;
         $index        = null;
         
-        if (null !== static::$request and static::$request->method !== '') 
+        if (null !== static::$request and '' !== static::$request->method) 
         {
             $using_hybrid = true;
         }
 
-        if ( ! $using_hybrid and $name == 'method') 
+        if ( ! $using_hybrid and 'method' == $name) 
         {
             return call_user_func(array('\\Input', 'method'));
         }
@@ -103,7 +103,7 @@ class Input
             break;
         }
 
-        if ($name === 'method') 
+        if ('method' === $name) 
         {
             return static::$request->method;
         }
@@ -120,7 +120,7 @@ class Input
             return call_user_func_array(array('\\Input', $name), array($index, $default));
         }
 
-        if ((strtoupper($name) === static::$request->method)) 
+        if (strtoupper($name) === static::$request->method) 
         {
             return isset(static::$request->data[$index]) ? static::$request->data[$index] : $default;
         } 

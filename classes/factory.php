@@ -88,7 +88,6 @@ class Factory
             throw new \FuelException('It appears your _maintenance_mode_ route is incorrect.  Multiple Recursion has happened.');
         }
 
-
         if (\Config::get('routes._maintenance_mode_') === null) 
         {
             throw new \FuelException('It appears your _maintenance_mode_ route is null.');

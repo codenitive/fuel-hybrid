@@ -70,7 +70,7 @@ class Template
             $name = \Config::get('hybrid.template.default', self::DEFAULT_TEMPLATE);   
         }
 
-        $name       = \Str::lower($name);
+        $name       = strtolower($name);
 
         $folder     = null;
         $filename   = null;
@@ -94,7 +94,7 @@ class Template
 
         if ( ! isset(static::$instances[$name]))
         {
-            $driver = '\\Hybrid\\Template_'.\Str::ucfirst($type);
+            $driver = '\\Hybrid\\Template_'.ucfirst($type);
          
             if (class_exists($driver)) 
             {

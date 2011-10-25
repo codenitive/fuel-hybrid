@@ -2,164 +2,170 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Auth &mdash; Fuel Hybrid Documentation</title>
+    <title>Auth &mdash; Hybrid for FuelPHP Documentation</title>
+    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
     <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
     <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
     <script type="text/javascript" src="../assets/js/nav.js"></script>
-    <script type="text/javascript" src="../assets/js/highlight.pack.js"></script>
+
+    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
     <script type="text/javascript">
         $(function() {
             show_nav('auth', '../');
-            hljs.tabReplace = '    ';
-            hljs.initHighlightingOnLoad();
+            prettyPrint();
         });
     </script>
-
 </head>
 <body>
+<div class="topbar">
+    <div class="topbar-inner">
+        <div id="topbar" class="container">
+            <strong class="brand">Hybrid for FuelPHP Documentation</strong>
+            <ul></ul>
+        </div>
+    </div>
+</div>
 
-    <header>
-        <h1>Fuel Hybrid Documentation</h1>
+<div class="container after-topbar">
+
+    <header class="page-header">
+        <h1>Auth</h1>
     </header>
 
-    <div id="main-nav"></div>
+    <p>
+        The Auth classes provides a standardized interface for authentication in Fuel. This allows our users to write their own drivers and easily integrate a new driver to work with old code by keeping the basic methods consistent.
+    </p>
 
-    <section id="content">
-        
-        <h2 id="">Auth</h2>
+    <h2 id="introduction">Introduction</h2>
+    <p>
+        Creating an Auth package that will suit everyone or every implementation is impossible. As a framework we don't want to force how you do Auth, but we do want to facilitate you creating your own or using the work of others. This is where the Auth package comes in, which of course includes a simple implementation to get you going.
+    </p>
 
-        <p>
-            The Auth classes provides a standardized interface for authentication in Fuel. This allows our users to write their own drivers and easily integrate a new driver to work with old code by keeping the basic methods consistent.
-        </p>
+    <hr />
 
-        <h2 id="introduction">Introduction</h2>
+    <h2>Configuration</h2>
+    <p>
+        Auth can be configured in a <code>config/autho.php</code> file and takes the following keys:
+    </p>
 
-        <p>
-            Creating an Auth package that will suit everyone or every implementation is impossible. As a framework we don't want to force how you do Auth, but we do want to facilitate you creating your own or using the work of others. This is where the Auth package comes in, which of course includes a simple implementation to get you going.
-        </p>
+    <table class="config">
+        <tbody>
+            <tr class="header">
+                <th>Param</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <th>normal.enable</th>
+                <td>bool</td>
+                <td><code>true</code></td>
+                <td>
+                    Set application to load Auth class.
+                </td>
+            </tr>
+            <tr>
+                <th>normal.optional_fields</th>
+                <td>array|null</td>
+                <td><code>null</code></td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <th>normal.allowed_status</th>
+                <td>array|null</td>
+                <td><code>null</code></td>
+                <td>
+                </td>
+            </tr>
 
-        <h3>Configuration</h3>
+            <tr>
+                <th>normal.use_meta</th>
+                <td>bool</td>
+                <td><code>false</code></td>
+                <td>
+                    Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
+                </td>
+            </tr>
+            <tr>
+                <th>normal.use_auth</th>
+                <td>bool</td>
+                <td><code>false</code></td>
+                <td>
+                    Auth to use `users_auth` table for user authentication information, useful to keep `users` table is simple as possible.
+                </td>
+            </tr>
 
-        <p>
-            Auth can be configured in a <strong>config/autho.php</strong> file and takes the following keys:
-        </p>
+            <tr>
+                <th>urls.registration</th>
+                <td>string</td>
+                <td><code>'auth/register'</code></td>
+                <td>
+                    Route path for registration.
+                </td>
+            </tr>
 
-        <table class="config">
-            <tbody>
-                <tr class="header">
-                    <th>Param</th>
-                    <th>Type</th>
-                    <th>Default</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <th>normal.enable</th>
-                    <td>bool</td>
-                    <td><pre class="php"><code class="php">true</code></pre></td>
-                    <td>
-                        Set application to load Auth class.
-                    </td>
-                </tr>
-                <tr>
-                    <th>normal.optional_fields</th>
-                    <td>array|null</td>
-                    <td><pre class="php"><code>null</code></pre></td>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
-                    <th>normal.allowed_status</th>
-                    <td>array|null</td>
-                    <td><pre class="php"><code>null</code></pre></td>
-                    <td>
-                    </td>
-                </tr>
+            <tr>
+                <th>urls.login</th>
+                <td>string</td>
+                <td><code>'auth/login'</code></td>
+                <td>
+                    Route path for login.
+                </td>
+            </tr>
 
-                <tr>
-                    <th>normal.use_meta</th>
-                    <td>bool</td>
-                    <td><pre class="php"><code>false</code></pre></td>
-                    <td>
-                        Auth to use `users_meta` table for user meta information, useful to keep `users` table is simple as possible.
-                    </td>
-                </tr>
-                <tr>
-                    <th>normal.use_auth</th>
-                    <td>bool</td>
-                    <td><pre class="php"><code>false</code></pre></td>
-                    <td>
-                        Auth to use `users_auth` table for user authentication information, useful to keep `users` table is simple as possible.
-                    </td>
-                </tr>
+            <tr>
+                <th>urls.callback</th>
+                <td>string</td>
+                <td><code>'auth/callback'</code></td>
+                <td>
+                    Route path for OAuth/OAuth2 callback controller.
+                </td>
+            </tr>
 
-                <tr>
-                    <th>urls.registration</th>
-                    <td>string</td>
-                    <td><pre class="php"><code class="php">'auth/register'</code></pre></td>
-                    <td>
-                        Route path for registration.
-                    </td>
-                </tr>
+            <tr>
+                <th>urls.registered</th>
+                <td>string</td>
+                <td><code>'auth/account'</code></td>
+                <td>
+                    Route path once registered.
+                </td>
+            </tr>
+            <tr>
+                <th>urls.logged_in</th>
+                <td>string</td>
+                <td><code>'auth/account'</code></td>
+                <td>
+                    Route path for logged-in.
+                </td>
+            </tr>
 
-                <tr>
-                    <th>urls.login</th>
-                    <td>string</td>
-                    <td><pre class="php"><code class="php">'auth/login'</code></pre></td>
-                    <td>
-                        Route path for login.
-                    </td>
-                </tr>
+            <tr>
+                <th>link_multiple_providers</th>
+                <td>bool</td>
+                <td><code>true</code></td>
+                <td>
+                    Can multiple providers be attached to one user account.
+                </td>
+            </tr>
+            <tr>
+                <th>salt</th>
+                <td>string</td>
+                <td><code>null</code></td>
+                <td>
+                    The salt used for password hashing.
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-                <tr>
-                    <th>urls.callback</th>
-                    <td>string</td>
-                    <td><pre class="php"><code class="php">'auth/callback'</code></pre></td>
-                    <td>
-                        Route path for OAuth/OAuth2 callback controller.
-                    </td>
-                </tr>
+    <p>
+        Partial of your app config file should look like this:
+    </p>
 
-                <tr>
-                    <th>urls.registered</th>
-                    <td>string</td>
-                    <td><pre class="php"><code class="php">'auth/account'</code></pre></td>
-                    <td>
-                        Route path once registered.
-                    </td>
-                </tr>
-                <tr>
-                    <th>urls.logged_in</th>
-                    <td>string</td>
-                    <td><pre class="php"><code class="php">'auth/account'</code></pre></td>
-                    <td>
-                        Route path for logged-in.
-                    </td>
-                </tr>
-
-                <tr>
-                    <th>link_multiple_providers</th>
-                    <td>bool</td>
-                    <td><pre class="php"><code class="php">true</code></pre></td>
-                    <td>
-                        Can multiple providers be attached to one user account.
-                    </td>
-                </tr>
-                <tr>
-                    <th>salt</th>
-                    <td>string</td>
-                    <td><pre class="php"><code class="php">null</code></pre></td>
-                    <td>
-                        The salt used for password hashing.
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <p>
-            Partial of your app config file should look like this:
-        </p>
-
-        <pre class="php"><code>&lt;?php
+    <pre class="prettyprint lang-php">&lt;?php
 
 return array(
     
@@ -229,20 +235,21 @@ return array(
     'link_multiple_providers' => true,
 
     'salt'      => null,
-);</code></pre>
+);</pre>
 
-        <h3>What's not available</h3>
-
-        <p class="note">It doesn't provide the MVC process/flow of registration, login and logout.</p>
-
-    </section>
+    <div class="alert-message block-message warning">
+        <p>
+            <strong>What's not available?</strong>
+            <br />It doesn't provide the MVC process/flow of registration, login and logout.
+        </p>
+    </div>
     
-    <section id="footer">
+    <footer>
         <p>
             <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
             &copy; 2010 - 2011 Fuel Hybrid Development Team
         </p>
-    </section>
-
+    </footer>
+</div>
 </body>
 </html>

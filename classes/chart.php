@@ -53,7 +53,7 @@ class Chart
             $name = 'default';
         }
 
-        $name   = \Str::lower($name);
+        $name = strtolower($name);
 
         if ( ! isset(static::$instances[$name]))
         {

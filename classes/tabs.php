@@ -160,7 +160,7 @@ namespace Hybrid;
     {
         if (empty($title))
         {
-            throw new \FuelException("\Hybrid\Tabs: Unable to add empty tab.");
+            throw new \FuelException(__METHOD__.": Unable to add empty tab.");
         }
 
         if (empty($content) or ! strval($content))
@@ -206,9 +206,9 @@ namespace Hybrid;
     public function render()
     {
         $template = $this->config['template'];
-
-        $title   = $template['title_open'];
-        $content = $template['content_open'];
+        
+        $title    = $template['title_open'];
+        $content  = $template['content_open'];
 
         foreach ($this->tabs as $count => $tab)
         {

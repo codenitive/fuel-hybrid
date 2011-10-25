@@ -39,17 +39,17 @@ class Curl
      */
     public static function forge($uri, $dataset = array())
     {
-        $uri_segments   = explode(' ', $uri);
-        $type           = 'GET';
+        $uri_segments = explode(' ', $uri);
+        $type         = 'GET';
 
         if (in_array(strtoupper($uri_segments[0]), array('DELETE', 'POST', 'PUT', 'GET'))) 
         {
-            $uri        = $uri_segments[1];
-            $type       = $uri_segments[0];
+            $uri  = $uri_segments[1];
+            $type = $uri_segments[0];
         }
         else
         {
-            throw new \FuelException("\Hybrid\Curl: Provided {$uri} can't be processed.");
+            throw new \FuelException(__METHOD__.": Provided {$uri} can't be processed.");
         }
 
         $dataset = array_merge(static::query_string($uri), $dataset);
@@ -154,10 +154,10 @@ class Curl
         return $query_dataset;
     }
     
-    protected $request_uri      = '';
-    protected $adapter          = null;
-    protected $request_data     = array();
-    protected $request_method   = '';
+    protected $request_uri    = '';
+    protected $adapter        = null;
+    protected $request_data   = array();
+    protected $request_method = '';
     
     /**
      * Construct a new object
@@ -171,7 +171,7 @@ class Curl
     {
         if ( ! function_exists('curl_init'))
         {
-            throw new \FuelException("\Hybrid\Curl: curl_init() is not available.");
+            throw new \FuelException(__METHOD__.": curl_init() is not available.");
         }
 
         $this->request_uri    = $uri;
@@ -191,7 +191,7 @@ class Curl
                 $dataset = (is_array($dataset) ? http_build_query($dataset) : $dataset);
                 $option[CURLOPT_CUSTOMREQUEST]  = 'PUT';
                 $option[CURLOPT_RETURNTRANSFER] = true;
-                $option[CURLOPT_HTTPHEADER]     = array('Content-Type: ' . strlen($dataset));
+                $option[CURLOPT_HTTPHEADER]     = array('Content-Type: '.strlen($dataset));
                 $option[CURLOPT_POSTFIELDS]     = $dataset;
             break;
             
@@ -234,10 +234,10 @@ class Curl
      */
     public function execute()
     {
-        $uri              = $this->request_uri.'?'.http_build_query($this->request_data, '', '&');
+        $uri = $this->request_uri.'?'.http_build_query($this->request_data, '', '&');
         curl_setopt($this->adapter, CURLOPT_URL, $uri); 
         
-        $info             = curl_getinfo($this->adapter);
+        $info = curl_getinfo($this->adapter);
         
         $response         = new \stdClass();
         $response->body   = $response->raw_body = curl_exec($this->adapter);

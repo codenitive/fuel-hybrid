@@ -212,7 +212,7 @@ class Swiftmail
             switch (true)
             {
                 case count($args) > 1 :
-                    $email_name    = $args[2];
+                    $email_name    = $args[1];
                 case count($args) > 0 :
                     $email_address = $args[0];
                 break;
@@ -279,7 +279,7 @@ class Swiftmail
             if (count($this->recipients[$type]) > 0)
             {
                 $method = 'set'.\Inflector::camelize($type);
-                $this->messenger->{$method}($this->recipients[$type]);
+                $this->messager->{$method}($this->recipients[$type]);
             }
         }
 
@@ -344,7 +344,7 @@ class Swiftmail
      */
     public static function dynamic_attach($contents, $filename, $disposition = 'attachment')
     {
-        throw new \FuelException("\Hybrid\Swiftmail: Dynamic file attachment has not been implemented yet.");
+        throw new \FuelException(__METHOD__.": Dynamic file attachment has not been implemented yet.");
 
         return $this;
     }

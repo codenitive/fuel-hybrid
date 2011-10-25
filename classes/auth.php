@@ -58,7 +58,7 @@ class Auth
 
         if (null === $path)
         {
-            throw new \FuelException("\Hybrid\Auth_Driver: Unable to redirect using {$type} type.");
+            throw new \FuelException(__METHOD__.": Unable to redirect using {$type} type.");
         }
         
         \Response::redirect($path);
@@ -82,11 +82,11 @@ class Auth
             $name = 'user';
         }
 
-        $name = \Str::lower($name);
+        $name = strtolower($name);
 
         if ( ! isset(static::$instances[$name]))
         {
-            $driver = '\\Hybrid\\Auth_Driver_'.\Str::ucfirst($name);
+            $driver = '\\Hybrid\\Auth_Driver_'.ucfirst($name);
 
             if ( !! class_exists($driver))
             {
