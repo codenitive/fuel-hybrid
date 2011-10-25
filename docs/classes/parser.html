@@ -13,7 +13,7 @@
     <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
     <script type="text/javascript">
         $(function() {
-            show_nav('parser', '../');
+            show_nav('classes', '../');
             prettyPrint();
         });
     </script>
@@ -40,9 +40,9 @@
 
     <h2>Available Drivers:</h2>
     <ul>
-        <li>Parser_Markdown</li>
-        <li>Parser_Textile</li>
-        <li>Parser_BBCode</li>
+        <li>Markdown</li>
+        <li>Textile</li>
+        <li>BBCode</li>
     </ul>
 
     <hr />
@@ -87,7 +87,9 @@
                     <pre class="prettyprint lang-php">// Initiate markdown parser
 $markdown = \Hybrid\Parser::forge('markdown');
 
-echo $markdown->parse('### Hello world'); // return '&lt;h3&gt;Hello World&lt;/h3&gt;'</pre>
+echo $markdown->parse('### Hello world'); // return '&lt;h3&gt;Hello World&lt;/h3&gt;'
+
+\Hybrid\Parser::forge('BBCode');</pre>
                 </td>
             </tr>
             </tbody>
