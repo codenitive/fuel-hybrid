@@ -18,8 +18,9 @@ var nav = {
 
 		"Classes": {
 			"Acl": 					"classes/acl.html",
-			"Chart": 				"classes/chart.html",
+			/*"Chart": 				"classes/chart.html",*/
 			"Curl": 				"classes/curl.html",
+			/*"Currency": 			"classes/currency.html",*/
 			"Factory": 				"classes/factory.html",
 			"Input": 				"classes/input.html",
 			"Html": 				"classes/html.html",
@@ -28,6 +29,7 @@ var nav = {
 			"Request": 				"classes/request.html",
 			"Restserver": 			"classes/restserver.html",
 			"Swiftmail": 			"classes/swiftmail.html",
+			/*"Tabs": 				"classes/tabs.html",*/
 			"Uri": 					"classes/uri.html",
 			"View": 				"classes/view.html"
 		},
@@ -44,11 +46,12 @@ var nav = {
 
 		"Controller": {
 			"Introduction": 		"controller/introduction.html",
+			/*
 			"Usage": {
 				"Hybrid": 			"controller/todo.html",
 				"Frontend": 		"controller/todo.html"
 			},
-			"Using Template": 		"controller/todo.html"
+			"Using Template": 		"controller/todo.html"*/
 		},
 		
 		/*
