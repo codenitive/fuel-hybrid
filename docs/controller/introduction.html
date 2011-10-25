@@ -79,8 +79,6 @@ class Controller_Welcome extends \Hybrid\Controller
 
         <p>Validate user authorization to given resource with access level using <a href="../classes/acl.html">\Hybrid\Acl</a> class, exception <code>\HttpNotFoundException</code> or equivalent response will be given if there no authorization.</p>
 
-
-
         <table class="method">
             <tbody>
             <tr>
@@ -138,6 +136,28 @@ class Controller_Welcome extends \Hybrid\Controller
         <h3 id="$user">$user</h3>
 
         <p>User instance from <code>\Hybrid\Auth::instance('user')->get();</code>.
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">public function action_hello()
+{
+    printf('Hello %s', $this->user->full_name); // Return 'Hello guest'
+}</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
     <hr />
@@ -146,7 +166,30 @@ class Controller_Welcome extends \Hybrid\Controller
         <h3 id="$language">$language</h3>
 
         <p>Current active language from <code>\Hybrid\Factory::get_language();</code>.
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>string</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">public function action_hello()
+{
+    printf('Current language: %s', $this->language); // Return 'Current language: en'
+}</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
+
     <footer>
         <p>
             <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
