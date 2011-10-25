@@ -56,7 +56,9 @@ var nav = {
 			"Introduction": 		"template/todo.html"
 		}, */
 
-		"Refine": {}
+		"Refine": {
+			"Autho": 				"refine/autho.html"
+		}
 
 };
 
