@@ -39,10 +39,10 @@ var nav = {
 				"OAuth/OAuth2": 	"auth/oauth.html"
 			}
 		},
-		/*
+
 		"Chart" : {
 			"Introduction": 		"chart/todo.html"
-		},*/
+		},
 
 		"Controller": {
 			"Introduction": 		"controller/introduction.html",
