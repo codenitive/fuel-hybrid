@@ -13,7 +13,7 @@
     <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
     <script type="text/javascript">
         $(function() {
-            show_nav('parser', '../');
+            show_nav('classes', '../');
             prettyPrint();
         });
     </script>
@@ -40,15 +40,19 @@
 
     <h2>Available Drivers:</h2>
     <ul>
-        <li>Parser_Markdown</li>
-        <li>Parser_Textile</li>
-        <li>Parser_BBCode</li>
+        <li>Markdown</li>
+        <li>Textile</li>
+        <li>BBCode</li>
     </ul>
 
     <hr />
 
     <div class="row">
         <h3>forge($name = null)</h3>
+
+        <p>
+            Creates a new instance of the either Markdown, Textile or BBCode parser, or load from cache if already loaded. 
+        </p>
 
         <table class="method">
             <tbody>
@@ -85,7 +89,54 @@ $markdown = \Hybrid\Parser::forge('markdown');
 
 echo $markdown->parse('### Hello world'); // return '&lt;h3&gt;Hello World&lt;/h3&gt;'
 
-echo $markdown->parse('Some ```other code```'); // return 'Some &lt;code&gt;Hello World&lt;/code&gt;'</pre>
+\Hybrid\Parser::forge('BBCode');</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3>parse($text = '')</h3>
+
+        <p>
+            Parse given formatted text to HTML.
+        </p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$text</kbd></th>
+                            <td><code>''</code></td>
+                            <td>A string for formatted text to be parse.</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>string</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">\Hybrid\Parser::forge('markdown')
+    ->parse('Some ```other code```'); // return 'Some &lt;code&gt;Hello World&lt;/code&gt;'</pre>
                 </td>
             </tr>
             </tbody>

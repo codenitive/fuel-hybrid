@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Autho Refine &mdash; Hybrid for FuelPHP Documentation</title>
+    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
+    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
+    <script type="text/javascript" src="../assets/js/nav.js"></script>
+
+    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
+    <script type="text/javascript">
+        $(function() {
+            show_nav('refine', '../');
+            prettyPrint();
+        });
+    </script>
+</head>
+<body>
+<div class="topbar">
+    <div class="topbar-inner">
+        <div id="topbar" class="container">
+            <a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
+            <ul></ul>
+        </div>
+    </div>
+</div>
+
+<div class="container after-topbar">
+
+    <header class="page-header">
+        <h1>Autho <small>Refine</small></h1>
+    </header>
+
+    <p>
+        <code>php oil refine autho</code> is a quick way to setup Models and Migrations for <a href="../auth/introduction.html">\Hybrid\Auth</a> class.
+    </p>
+
+    <hr />
+
+    <div class="row">
+        <div class="span4">
+            <h2 id="help">Help</h2>
+            <p>Show list of available runtime options.</p>
+        </div>
+        <div class="span12">
+            <pre class="cli">$ php oil refine autho --help
+
+Usage:
+  php oil refine autho
+
+Runtime options:
+  -h, [--help]      # Show option
+  -i, [--install]   # Install configuration file and user model/migrations script
+  -t, [--test]      # Test installation to match configuration
+
+Description:
+  The 'oil refine autho' command can be used in several ways to facilitate quick development, help with
+  user database generation and installation</pre>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span4">
+            <h1 id="cli-setup">Install</h1>
+            
+            <p>
+                Install configuration file and user model/migrations script.
+            </p>
+        </div>
+
+        <div class="span12">
+            <p>This step is optional but handy to:</p>
+        
+            <ul>
+                <li>copy <code>fuel/packages/hybrid/config/app.php</code> to <code>APPPATH/config/app.php</code></li>
+                <li>copy <code>fuel/packages/hybrid/config/autho.php</code> to <code>APPPATH/config/autho.php</code></li>
+                <li>configure all authentication Models and Migrations script.</li>
+            </ul>
+
+            <pre class="cli">$ php oil refine autho --install
+<span style="color:green">Start Installation
+Created config: APPPATH/config/autho.php
+Created config: APPPATH/config/app.php</span>
+Would you like to install `users_auth` table? [ y, n ]: y
+Would you like to install `users_meta` table? [ y, n ]: y
+Confirm Generate Model and Migration for User? [ y, n ]: y
+    <span style="color:green">Creating model: /fuel/app/classes/model/user.php
+    Creating migration: /fuel/app/migrations/001_create_users.php
+    Creating model: /fuel/app/classes/model/users/auth.php
+    Creating migration: /fuel/app/migrations/002_create_users_auths.php
+    Creating model: /fuel/app/classes/model/users/metum.php
+    Creating migration: /fuel/app/migrations/003_create_users_meta.php
+    Creating model: /fuel/app/classes/model/role.php
+    Creating migration: /fuel/app/migrations/004_create_roles.php
+    Creating model: /fuel/app/classes/model/users/role.php
+    Creating migration: /fuel/app/migrations/005_create_users_roles.php
+    Creating model: /fuel/app/classes/model/authentication.php
+    Creating migration: /fuel/app/migrations/006_create_authentications.php</span>
+</pre>
+            <div class="alert-message block-message info">
+                <p>
+                    Do remember to use <code>--orm</code> to generate model using <code>\Orm\Model</code>, otherwise default to <code>\Model_Crud</code>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span4">
+            <h2 id="help">Test</h2>
+            <p>Test installation to ensure <code>config/autho.php</code> matched migrations setup based on Model structure.</p>
+        </div>
+        <div class="span12">
+            <pre class="cli">$ php oil r autho -t
+<span style="color:green">Your application is correctly configured</span></pre>
+
+            <p>For example, if salt is set to null.</p>
+            <pre class="cli">$ php oil r autho -t
+<span style="color:red">Please provide autho.salt secret key in APPPATH/config/autho.php</span></pre>
+        </div>
+    </div>
+
+    
+    <footer>
+        <p>
+            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+            &copy; 2010 - 2011 Fuel Hybrid Development Team
+        </p>
+    </footer>
+</div>
+</body>
+</html>

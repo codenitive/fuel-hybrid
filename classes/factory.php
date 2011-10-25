@@ -127,7 +127,7 @@ class Factory
     }
 
     /**
-     * Import file to actually look inside current hybrid folder instead
+     * Import file by look inside current hybrid folder instead of import() unusable structure.
      *
      * @static
      * @access  public

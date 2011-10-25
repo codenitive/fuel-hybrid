@@ -47,9 +47,9 @@
     <hr />
 
     <div class="row">
-        <h3 id="build_get_query()">build_get_query($values)</h3>
+        <h3 id="build_get_query()">build_get_query($values, $start_with = '?')</h3>
 
-        <p>Build query string, a feature missing in many pagination class. This allow you to combine search/filtering option using $_GET for your application with pagination.</p>
+        <p>Build query string allow you to combine search/filtering option using $_GET for your application with <a href="pagination.html">\Hybrid\Pagination</a> class.</p>
     
         <table class="method">
             <tbody>
@@ -69,7 +69,12 @@
                         <tr>
                             <th><kbd>$values</kbd></th>
                             <td><i>Required</i></td>
-                            <td>A string or an array of $_GET attributes to be included in the pagination link</td>
+                            <td>A string or an array of $_GET attributes</td>
+                        </tr>
+                        <tr>
+                            <th><kbd>$start_with</kbd></th>
+                            <td><code>'?'</code></td>
+                            <td>Value of the first string, normally either ? or &amp;</td>
                         </tr>
                     </table>
                 </td>
