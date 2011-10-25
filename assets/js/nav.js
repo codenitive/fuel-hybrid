@@ -18,14 +18,18 @@ var nav = {
 
 		"Classes": {
 			"Acl": 					"classes/acl.html",
+			/*"Chart": 				"classes/chart.html",*/
 			"Curl": 				"classes/curl.html",
-			//"Factory": 				"classes/factory.html",
+			/*"Currency": 			"classes/currency.html",*/
+			"Factory": 				"classes/factory.html",
 			"Input": 				"classes/input.html",
 			"Html": 				"classes/html.html",
 			"Pagination": 			"classes/pagination.html",
+			"Parser": 				"classes/parser.html",
 			"Request": 				"classes/request.html",
 			"Restserver": 			"classes/restserver.html",
 			"Swiftmail": 			"classes/swiftmail.html",
+			/*"Tabs": 				"classes/tabs.html",*/
 			"Uri": 					"classes/uri.html",
 			"View": 				"classes/view.html"
 		},
@@ -39,33 +43,25 @@ var nav = {
 				"OAuth/OAuth2": 	"auth/oauth.html"
 			}
 		},
-		/*
-		"Chart" : {
-			"Introduction": 		"chart/todo.html"
-		},*/
 
 		"Controller": {
 			"Introduction": 		"controller/introduction.html",
+			/*
 			"Usage": {
 				"Hybrid": 			"controller/todo.html",
 				"Frontend": 		"controller/todo.html"
 			},
-			"Using Template": 		"controller/todo.html"
+			"Using Template": 		"controller/todo.html"*/
 		},
 		
 		/*
 		"Template": {
 			"Introduction": 		"template/todo.html"
 		}, */
-		
-		"Parser": {
-			"Introduction": 		"parser/introduction.html" /*,
-			"Driver types": {
-				"Markdown": 		"parser/todo.html"
-			}*/
-		},
 
-		"Refine": {}
+		"Refine": {
+			"Autho": 				"refine/autho.html"
+		}
 
 };
 

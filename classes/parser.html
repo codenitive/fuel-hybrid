@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Parser &mdash; Hybrid for FuelPHP Documentation</title>
+    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
+    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
+    <script type="text/javascript" src="../assets/js/nav.js"></script>
+
+    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
+    <script type="text/javascript">
+        $(function() {
+            show_nav('classes', '../');
+            prettyPrint();
+        });
+    </script>
+</head>
+<body>
+<div class="topbar">
+    <div class="topbar-inner">
+        <div id="topbar" class="container">
+            <a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
+            <ul></ul>
+        </div>
+    </div>
+</div>
+
+<div class="container after-topbar">
+
+    <header class="page-header">
+        <h1>Parser</h1>
+    </header>
+
+    <p>
+        The Parser class acts as an object wrapper for HTML formatted string written using format such as Markdown, Textile, BBCode or etc.
+    </p>
+
+    <h2>Available Drivers:</h2>
+    <ul>
+        <li>Markdown</li>
+        <li>Textile</li>
+        <li>BBCode</li>
+    </ul>
+
+    <hr />
+
+    <div class="row">
+        <h3>forge($name = null)</h3>
+
+        <p>
+            Creates a new instance of the either Markdown, Textile or BBCode parser, or load from cache if already loaded. 
+        </p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$name</kbd></th>
+                            <td><code>null</code></td>
+                            <td>null to fetch the default driver, or a driver id to get a specific one</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>string</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">// Initiate markdown parser
+$markdown = \Hybrid\Parser::forge('markdown');
+
+echo $markdown->parse('### Hello world'); // return '&lt;h3&gt;Hello World&lt;/h3&gt;'
+
+\Hybrid\Parser::forge('BBCode');</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3>parse($text = '')</h3>
+
+        <p>
+            Parse given formatted text to HTML.
+        </p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$text</kbd></th>
+                            <td><code>''</code></td>
+                            <td>A string for formatted text to be parse.</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>string</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">\Hybrid\Parser::forge('markdown')
+    ->parse('Some ```other code```'); // return 'Some &lt;code&gt;Hello World&lt;/code&gt;'</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <footer>
+        <p>
+            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+            &copy; 2010 - 2011 Fuel Hybrid Development Team
+        </p>
+    </footer>
+</div>
+</body>
+</html>
