@@ -280,7 +280,7 @@ class Pagination
      * @access  protected
      * @var     string
      */
-    protected $url = null;
+    protected $uri = null;
 
     /**
      * Pagination Page Number links
