@@ -18,6 +18,7 @@
 Autoloader::add_classes(array (
     'Hybrid\\Acl'              => __DIR__.'/classes/acl.php',
     'Hybrid\\Curl'             => __DIR__.'/classes/curl.php',
+    'Hybrid\\Currency'         => __DIR__.'/classes/currency.php',
     'Hybrid\\Cli'              => __DIR__.'/classes/cli.php',
     'Hybrid\\Factory'          => __DIR__.'/classes/factory.php',
     'Hybrid\\Input'            => __DIR__.'/classes/input.php',
@@ -61,8 +62,6 @@ Autoloader::add_classes(array (
     'Hybrid\\Controller_Template' => __DIR__.'/classes/controller/template.php',
     'Hybrid\\Controller_Rest'     => __DIR__.'/classes/controller/rest.php',
     'Hybrid\\Controller_Hybrid'   => __DIR__.'/classes/controller/hybrid.php',
-    
-    'Hybrid\\Currency' => __DIR__.'/classes/currency.php',
     
     'Hybrid\\Parser'          => __DIR__.'/classes/parser.php',
     'Hybrid\\Parser_Driver'   => __DIR__.'/classes/parser/driver.php',
