@@ -127,7 +127,7 @@ class Pagination
                 $this->uri_segment = intval($key) + 1;
             }
 
-            $this->current_page = (int) \URI::segment($this->uri_segment);
+            $this->current_page = (int) \Uri::segment($this->uri_segment);
         }
         else
         {
@@ -408,6 +408,18 @@ class Pagination
                 'state' => $this->template['state']['previous_next']['active'],
                 'url'   => $this->build_url($previous_page),
             ));
+        }
+    }
+
+    public function __get($name)
+    {
+        if (in_array($name, array('offset', 'per_page', 'current_page')))
+        {
+            return $this->{$name};
+        }
+        else
+        {
+            throw new \FuelException(__CLASS__."::{$name} is not accessible.");
         }
     }
 
