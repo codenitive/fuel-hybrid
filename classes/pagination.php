@@ -69,7 +69,7 @@ class Pagination
 
         if (null === $name)
         {
-            $name = 'default';
+            $name = md5(\Request::active()->route->translation);
         }
 
         if ( ! isset(static::$instances[$name]))
