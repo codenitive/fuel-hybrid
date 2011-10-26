@@ -119,7 +119,8 @@ class Pagination
 
         if ( ! empty($this->uri))
         {
-            $key = array_search(':page', explode('/', $this->uri));
+            $segments = explode('/', str_replace(Uri::base(), '', $this->uri));
+            $key = array_search(':page', $segments);
 
             if (false !== $key)
             {
