@@ -122,7 +122,7 @@ class Pagination
             $segments = explode('/', str_replace(Uri::base(), '', $this->uri));
             $key = array_search(':page', $segments);
 
-            if (null !== $this->current_page)
+            if (null === $this->current_page)
             {   
                 if (false !== $key)
                 {
@@ -132,10 +132,12 @@ class Pagination
                 $this->current_page = (int) \Uri::segment($this->uri_segment);
             }
 
+            $this->current_page = (int) $this->current_page;
+
         }
         else
         {
-            $get      = \Input::get();
+            $get      = \Input::get(null, array());
             $segments = \Uri::segments();
 
             if (null === $this->uri_segment)
@@ -157,18 +159,33 @@ class Pagination
                 {
                     $this->current_page = (int) $segments[$key];
                 }
-
-                $key--;
-
-                if ( ! isset($segments[$key]) and $key >= 0)
+                else
                 {
-                    $segments[$key] = \Request::active()->route->translation;
+                    $this->current_page = (int) \URI::segment($this->uri_segment);
+                }
+
+                $translation = explode('/', \Request::active()->route->translation);
+
+                if ($key >= count($segments))
+                {
+                    foreach ($translation as $seg_id => $seg_value)
+                    {
+                        if ( ! isset($segments[$seg_id]))
+                        {
+                            $segments[$seg_id] = $seg_value;
+                        }
+                    }
+                }
+
+                if (null === \Request::active()->route->action and count($translation) <= count($segments))
+                {
+                    $key--;
+                    $segments[$key] = 'index';
                 }
 
                 $key++;
 
-                $segments[$key]     = ':page'; 
-                $this->current_page = (int) \URI::segment($this->uri_segment);
+                $segments[$key] = ':page'; 
             }
             
 
@@ -176,6 +193,10 @@ class Pagination
             {
                 $get = '?'.http_build_query($get);
                 $get = str_replace('page=%3Apage', 'page=:page', $get);
+            }
+            else
+            {
+                $get = '';
             }
 
             $this->uri = implode('/', $segments).$get;
