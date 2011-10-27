@@ -123,7 +123,7 @@ class Template_Normal extends Template_Driver
     {
         // this is not the best way of doing it, the request is not cached and going to be slow
         // if there's a lot of paths and files
-        $files = \Finder::search('views/'.$path, '*.*');
+        $files = \Finder::instance()->list_files(rtrim('views/'.$path, '/'), '*.*');
 
         if (empty($files))
         {
