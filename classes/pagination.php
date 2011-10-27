@@ -372,22 +372,24 @@ class Pagination
 
         for ($i = $start; $i <= $end; $i++)
         {
-            $text = $i;
-            $url  = '#';
+            $text  = $i;
+            $url   = '#';
+            $state = $this->template['state']['current_page'];
 
             if ($this->current_page != $i)
             {
                 // detect if anchor attribute is presented in the template   
-                if (false === stripos('<a ', $this->template['page_start']))
+                if (stripos('<a ', $this->template['page_start']) < 0)
                 {
                     $text = '<a href=":url">'.$i.'</a>';
                 }
                 
-                $url = $this->build_url($i);
+                $url   = $this->build_url($i);
+                $state = '';
             }
 
             $pagination .= \Str::tr($this->template['page_start'].$text.$this->template['page_end'], array(
-                'state' => '',
+                'state' => $state,
                 'url'   => $url,
             ));
         }
@@ -404,8 +406,9 @@ class Pagination
      */
     public function next_link($value)
     {
-        $text = $value.$this->template['next_mark'];
-        $url  = '#';
+        $text  = $value.$this->template['next_mark'];
+        $url   = '#';
+        $state = $this->template['state']['previous_next']['disabled'];
 
         if ($this->total_pages == 1)
         {
@@ -415,16 +418,17 @@ class Pagination
         if ($this->current_page != $this->total_pages)
         {
             // detect if anchor attribute is presented in the template
-            if (false === stripos('<a ', $this->template['next_start']))
+            if (stripos('<a ', $this->template['next_start']) < 0)
             {
                 $text = '<a href=":url">'.$text.'</a>';
             }
             
-            $url = $this->build_url($this->current_page + 1);
+            $url   = $this->build_url($this->current_page + 1);
+            $state = $this->template['state']['previous_next']['active'];
         }
 
         return \Str::tr($this->template['next_start'].$text.$this->template['next_end'], array(
-            'state' => $this->template['state']['previous_next']['disabled'],
+            'state' => $state,
             'url'   => $url,
         ));
     }
@@ -438,8 +442,9 @@ class Pagination
      */
     public function prev_link($value)
     {
-        $text = $this->template['previous_mark'].$value;
-        $url  = '#';
+        $text  = $this->template['previous_mark'].$value;
+        $url   = '#';
+        $state = $this->template['state']['previous_next']['disabled'];
 
         if ($this->total_pages == 1)
         {
@@ -449,16 +454,17 @@ class Pagination
         if ($this->current_page != 1)
         {
             // detect if anchor attribute is presented in the template
-            if (false === stripos('<a ', $this->template['previous_start']))
+            if (stripos('<a ', $this->template['previous_start']) < 0)
             {
                 $text = '<a href=":url">'.$text.'</a>';
             }
 
-            $url = $this->build_url($this->current_page - 1);
+            $url   = $this->build_url($this->current_page - 1);
+            $state = $this->template['state']['previous_next']['active'];
         }
 
         return \Str::tr($this->template['previous_start'].$text.$this->template['previous_end'], array(
-            'state' => $this->template['state']['previous_next']['disabled'],
+            'state' => $state,
             'url'   => $url,
         ));
     }
