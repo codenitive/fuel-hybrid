@@ -122,12 +122,16 @@ class Pagination
             $segments = explode('/', str_replace(Uri::base(), '', $this->uri));
             $key = array_search(':page', $segments);
 
-            if (false !== $key)
-            {
-                $this->uri_segment = intval($key) + 1;
+            if (null !== $this->current_page)
+            {   
+                if (false !== $key)
+                {
+                    $this->uri_segment = intval($key) + 1;
+                }
+
+                $this->current_page = (int) \Uri::segment($this->uri_segment);
             }
 
-            $this->current_page = (int) \Uri::segment($this->uri_segment);
         }
         else
         {
