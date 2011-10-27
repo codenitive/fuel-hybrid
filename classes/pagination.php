@@ -473,19 +473,5 @@ class Pagination
     {
         return \Uri::create(\Str::tr($this->uri, array('page' => $page_id)));
     }
-    
-    /**
-     * Build query string
-     * 
-     * @deprecated
-     * @static
-     * @access  public
-     * @param   mixed   $values
-     * @return  string 
-     */
-    public static function build_get_query($values) 
-    {
-        return Uri::build_get_query($values);
-    }
 
 }
