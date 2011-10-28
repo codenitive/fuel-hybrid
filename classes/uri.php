@@ -33,42 +33,23 @@ class Uri extends \Fuel\Core\Uri
      * 
      * @static
      * @access  public
-     * @param   mixed   $values
+     * @param   mixed   $data
      * @param   string  $start_with     Default string set to ?
      * @return  string 
      */
-    public static function build_get_query($values, $start_with = '?') 
+    public static function build_get_query($data, $start_with = '?') 
     {
-        $dataset = array ();
-        
-        $check_get_input = function($value, & $dataset) 
+        if (is_string($data))
         {
-            $data = Input::get($value);
-            
-            if (null === $data)
-            {
-                return false;
-            }
-            else 
-            {
-                array_push($dataset, sprintf('%s=%s', $value, $data));
-                return;
-            }
-        };
-        
-        if (is_array($values))
-        {
-            foreach ($values as $value)
-            {
-                $check_get_input($value, $dataset);
-            }
+            $data = array($data);
         }
-        else 
+
+        if (null === $data or ! is_array($data))
         {
-            $check_get_input($values, $dataset);
+            return '';
         }
         
-        return $start_with.implode('&', $dataset);
+        return $start_with.http_build_query($data);
     }
     
 }
