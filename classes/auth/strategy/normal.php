@@ -36,6 +36,7 @@ namespace Hybrid;
 class Auth_Strategy_Normal extends Auth_Strategy 
 {
     public $provider = null;
+    protected $users = null;
 
     public function __construct($provider)
     {
@@ -62,6 +63,29 @@ class Auth_Strategy_Normal extends Auth_Strategy
             $users->id    = 0;
             $users->_hash = '';
         }
+
+        $this->users = $users;
+
+        $this->provider->access_token((array) $users);
+
+        return $this;
+    }
+
+    public function reauthenticate()
+    {
+        // get user data from cookie
+        $users = $this->users;
+
+        // user data shouldn't be null if there user authentication available, if not populate from default
+        if (null === $users) 
+        {
+            $users        = new \stdClass();
+            $users->id    = 0;
+        }
+
+        $users->_hash = '';
+
+        $this->users = $users;
 
         $this->provider->access_token((array) $users);
 

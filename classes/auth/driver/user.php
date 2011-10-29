@@ -157,7 +157,7 @@ class Auth_Driver_User extends Auth_Driver
         return null;
     }
 
-     /**
+    /**
      * Login user using normal authentication (username and password)
      * 
      * @access  public
@@ -184,6 +184,18 @@ class Auth_Driver_User extends Auth_Driver
     public function login_token($token, $secret, $remember_me = false) 
     {
         $this->provider->login_token($token, $secret, $remember_me);
+        return true;
+    }
+
+    /**
+     * Reauthenticate current user
+     * 
+     * @access  public
+     * @return  bool
+     */
+    public function reauthenticate() 
+    {
+        $this->strategy->reauthenticate();
         return true;
     }
 

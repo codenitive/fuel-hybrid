@@ -228,6 +228,11 @@ class Auth_Provider_Normal
             $this->data['_hash'] = $data['_hash'];
         }
 
+        if (isset($data['expired_at']))
+        {
+            $this->data['expired_at'] = $data['expired_at'];
+        }
+
         // in case if data['id'] doesn't exist or null, default to zero
         if ( ! isset($data['id']) or null === $data['id'])
         {
@@ -281,6 +286,8 @@ class Auth_Provider_Normal
      */
     public function login($username, $password, $remember_me = false)
     {
+        unset($this->data['expired_at']);
+
         if ( !! $remember_me)
         {
             $this->expiration = -1;
@@ -348,6 +355,8 @@ class Auth_Provider_Normal
      */
     public function login_token($token, $secret, $remember_me = false)
     {
+        unset($this->data['expired_at']);
+
         if ( !! $remember_me)
         {
             $this->expiration = -1;
@@ -432,7 +441,7 @@ class Auth_Provider_Normal
         unset($values['password']);
 
         // set cookie expiration
-        if ( ! isset($values['expired_at']) or null === $values['expired_at'])
+        if ( ! isset($values['expired_at']) or null == $values['expired_at'])
         {
             $expired_at = 0;
 

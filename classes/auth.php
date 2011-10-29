@@ -195,6 +195,19 @@ class Auth
     }
 
     /**
+     * Reauthenticate current user.
+     *
+     * @static
+     * @access  public
+     * @return  bool
+     * @throws  \FuelException
+     */
+    public static function reauthenticate()
+    {
+        return static::forge($driver)->reauthenticate();
+    }
+
+    /**
      * Logout from all loaded instances.
      *
      * @static
