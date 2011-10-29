@@ -39,6 +39,8 @@ class Uri extends \Fuel\Core\Uri
      */
     public static function build_get_query($data, $start_with = '?') 
     {
+        $values = array();
+
         if (is_string($data))
         {
             $data = array($data);
@@ -48,8 +50,13 @@ class Uri extends \Fuel\Core\Uri
         {
             return '';
         }
+
+        foreach ($data as $get)
+        {
+            $values[$get] = Input::get($get);
+        }
         
-        return $start_with.http_build_query($data);
+        return $start_with.http_build_query($values);
     }
     
 }
