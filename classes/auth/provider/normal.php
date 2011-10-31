@@ -223,7 +223,7 @@ class Auth_Provider_Normal
     {
         $this->data['_hash'] = '';
 
-        if (isset($data['_hash']))
+        if (isset($data['_hash']) or null === $data['_hash'])
         {
             $this->data['_hash'] = $data['_hash'];
         }
@@ -286,6 +286,7 @@ class Auth_Provider_Normal
      */
     public function login($username, $password, $remember_me = false)
     {
+        $this->data['_hash'] = null;
         unset($this->data['expired_at']);
 
         if ( !! $remember_me)
@@ -338,7 +339,7 @@ class Auth_Provider_Normal
             $this->reset();
             throw new Auth_Exception(\Lang::get('autho.user.bad_combination'));
         }
-
+        
         $this->verify_token();
 
         return $this;
@@ -355,6 +356,7 @@ class Auth_Provider_Normal
      */
     public function login_token($token, $secret, $remember_me = false)
     {
+        $this->data['_hash'] = null;
         unset($this->data['expired_at']);
 
         if ( !! $remember_me)

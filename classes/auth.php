@@ -199,10 +199,11 @@ class Auth
      *
      * @static
      * @access  public
+     * @param   string  $driver         Driver type string, default to 'user'.
      * @return  bool
      * @throws  \FuelException
      */
-    public static function reauthenticate()
+    public static function reauthenticate($driver = 'user')
     {
         return static::forge($driver)->reauthenticate();
     }

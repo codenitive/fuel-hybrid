@@ -83,7 +83,7 @@ class Auth_Strategy_Normal extends Auth_Strategy
             $users->id    = 0;
         }
 
-        $users->_hash = '';
+        $users->_hash = null;
 
         $this->users = $users;
 
