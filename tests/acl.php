@@ -44,7 +44,7 @@ class Test_Acl extends \Fuel\Core\TestCase
         
         try
         {
-            \Database_Connection::instance(\Fuel::TEST)->connect();
+            \Database_Connection::instance(\Config::get('db.active'))->connect();
         }
         catch (\Database_Exception $e)
         {

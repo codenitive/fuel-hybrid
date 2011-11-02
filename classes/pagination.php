@@ -25,39 +25,16 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Pagination extends \Fuel\Core\Pagination 
+class Pagination 
 {
     /**
-     * @var array The HTML for the display
-     */
-    public static $template = array(
-        'wrapper_start'  => '<div class="pagination"> <ul>',
-        'wrapper_end'    => '</ul> </div>',
-        'page_start'     => '<li> ',
-        'page_end'       => ' </li>',
-        'previous_start' => '<li class="prev"> ',
-        'previous_end'   => ' </li>',
-        'previous_mark'  => '&laquo; ',
-        'next_start'     => '<li class="next"> ',
-        'next_end'       => ' </li>',
-        'next_mark'      => ' &raquo;',
-        'active_start'   => '<li class="active"><a href="#"> ',
-        'active_end'     => ' </a></li>',
-        'disabled'       => array(
-            'previous_start' => '<li class="prev disabled"><a href="#">',
-            'previous_end'   => '</a></li>',
-            'next_start'     => '<li class="next disabled"><a href="#">',
-            'next_end'       => '</a></li>',
-        ),
-    );
-    
-    /**
-     * The pagination URL (after the page number URI segment)
+     * Cache Pagination instance so we can reuse it on multiple request. 
      * 
-     * @access      protected
-     * @staticvar   mixed
+     * @static
+     * @access  protected
+     * @var     array
      */
-    protected static $suffix_url;
+    protected static $instances = array();
 
     /**
      * Init
@@ -69,13 +46,308 @@ class Pagination extends \Fuel\Core\Pagination
      */
     public static function _init()
     {
+        \Lang::load('pagination', true);
         \Config::load('hybrid', 'hybrid');
+    }
+
+    /**
+     * Initiate a new Pagination instance.
+     * 
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @param   array   $config
+     * @return  object  Pagination
+     */
+    public static function forge($name = null, $config = array())
+    {
+        if (is_array($name))
+        {
+            $config = $name;
+            $name   = null;
+        }
+
+        if (null === $name)
+        {
+            $name = md5(\Request::active()->route->translation);
+        }
+
+        if ( ! isset(static::$instances[$name]))
+        {
+            static::$instances[$name] = new static($config);
+        }
+
+        return static::$instances[$name];
+    }
+
+    /**
+     * Shortcode to self::forge().
+     *
+     * @deprecated  1.3.0
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @param   array   $config
+     * @return  object  Pagination
+     */
+    public static function factory($name = null, $config = array())
+    {
+        \Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
         
-        $config = \Config::get('pagination', array());
+        return static::forge($name, $config);
+    }
+
+    /**
+     * Shortcode to self::forge().
+     *
+     * @static
+     * @access  public
+     * @param   string  $name
+     * @return  object  Pagination
+     */
+    public static function instance($name = null)
+    {
+        return static::forge($name);
+    }
+
+    /**
+     * Construct a new instance
+     *
+     * @access  protected
+     * @param   string  $name
+     * @param   array   $config
+     * @return  object  Pagination
+     */
+    protected function __construct($config = array()) 
+    {
+        $config = \Config::get('pagination', array()) + $config;
         $config = \Config::get('hybrid.pagination', array()) + $config;
 
-        static::set_config($config);
+        // Bind passed config as instance's properties
+        foreach ($config as $key => $value)
+        {
+            // manage template
+            if ($key == 'template')
+            {
+                $this->template = array_merge($this->template, $config['template']);
+                continue;
+            }
+
+            // only config value if the property exist
+            if (property_exists($this, $key))
+            {
+                $this->{$key} = $value;
+            }
+        }
+
+        // process URI and get 
+        $this->initiate();
+
+        // calculate current config
+        $this->total_pages  = ceil($this->total_items / $this->per_page) ?: 1;
+
+        if ($this->current_page > $this->total_pages)
+        {
+            $this->current_page = $this->total_pages;
+        }
+        elseif ($this->current_page < 1)
+        {
+            $this->current_page = 1;
+        }
+
+        // The current page must be zero based so that the offset for page 1 is 0.
+        $this->offset = ($this->current_page - 1) * $this->per_page;
     }
+
+    /**
+     * Parse URI structure and get current_page
+     *
+     * @access  protected
+     * @return  void
+     */
+    protected function initiate()
+    {
+        // Parse based from provided `uri`, for custom routing
+        if ( ! empty($this->uri))
+        {
+            $segments = explode('/', str_replace(Uri::base(), '', $this->uri));
+            $key = array_search(':page', $segments);
+
+            // only find current_page if specifically set to null, otherwise assume current_page is provided
+            if (null === $this->current_page)
+            {   
+                if (false !== $key)
+                {
+                    $this->uri_segment = intval($key) + 1;
+                }
+
+                $this->current_page = (int) \Uri::segment($this->uri_segment);
+            }
+
+            // make sure it's an integer
+            $this->current_page = (int) $this->current_page;
+        }
+        else
+        {
+            // URI is not given, we need to automatically detect request URI
+            $get      = \Input::get(null, array());
+            $segments = \Uri::segments();
+
+            // use $_GET if uri_segment is specifically set to null
+            if (null === $this->uri_segment)
+            {
+                if ( ! isset($get['page']))
+                {
+                    $get['page'] = 1;
+                }
+
+                $this->current_page = (int) $get['page'];
+                $get['page'] = ':page';
+            }
+            else 
+            {
+                // start URI detection
+                $key = ($this->uri_segment - 1);
+
+                // @todo it's should basically be the same.
+                if (isset($segments[$key]))
+                {
+                    $this->current_page = (int) $segments[$key];
+                }
+                else
+                {
+                    $this->current_page = (int) \URI::segment($this->uri_segment);
+                }
+
+                // get the route translation, as comparison to current URI segment
+                $translation = explode('/', \Request::active()->route->translation);
+
+                // we need to merge translation when Uri::segments is not enough
+                if ($key >= count($segments))
+                {
+                    foreach ($translation as $seg_id => $seg_value)
+                    {
+                        if ( ! isset($segments[$seg_id]))
+                        {
+                            $segments[$seg_id] = $seg_value;
+                        }
+                    }
+                }
+
+                // add in action index when not available
+                if (null === \Request::active()->route->action and count($translation) <= count($segments))
+                {
+                    $segments[($key - 1)] = 'index';
+                }
+
+                $segments[$key] = ':page'; 
+            }
+            
+            // we should add in all $_GET (useful for listing with filters)
+            if ( ! empty($get))
+            {
+                $get = '?'.http_build_query($get);
+                $get = str_replace('page=%3Apage', 'page=:page', $get);
+            }
+            else
+            {
+                $get = '';
+            }
+
+            // generate an formatted uri with :page
+            $this->uri = implode('/', $segments).$get;
+        }
+    }
+
+    /**
+     * The HTML for the display
+     *
+     * @access  protected
+     * @var     array 
+     */
+    protected $template = array(
+        'wrapper_start'  => '<div class="pagination"><ul>',
+        'wrapper_end'    => '</ul></div>',
+        'page_start'     => '<li class=":state">',
+        'page_end'       => '</li>',
+        'previous_start' => '<li class="prev :state">',
+        'previous_end'   => '</li>',
+        'previous_mark'  => '&laquo; ',
+        'next_start'     => '<li class="next :state">',
+        'next_end'       => '</li>',
+        'next_mark'      => ' &raquo;',
+        'state'          => array(
+            'previous_next' => array(
+                'active'   => '',
+                'disabled' => 'disabled',
+            ),
+            'current_page' => 'active',
+        ),
+    );
+
+    /**
+     * The current page
+     *
+     * @access  protected
+     * @var     integer
+     */
+    protected $current_page = null;
+
+    /**
+     * Uri segment 
+     *
+     * @access  protected
+     * @var     integer
+     */
+    protected $uri_segment = 3;
+
+    /**
+     * The offset that the current page starts at
+     *
+     * @access  protected
+     * @var     integer
+     */
+    protected $offset = 0;
+
+    /**
+     * The number of items per page
+     *
+     * @access  protected
+     * @var     integer
+     */
+    protected $per_page = 10;
+
+    /**
+     * The number of total pages
+     *
+     * @access  protected
+     * @var     integer
+     */
+    protected $total_pages = 0;
+
+    /**
+     * The number of total items
+     *
+     * @access  protected
+     * @var     integer
+     */
+    protected $total_items = 0;
+
+    /**
+     * The total number of links to show
+     *
+     * @access  protected
+     * @var     integer
+     */
+    protected $num_links = 5;
+    
+    /**
+     * The pagination URL (after the page number URI segment)
+     * 
+     * @access  protected
+     * @var     string
+     */
+    protected $uri = null;
 
     /**
      * Pagination Page Number links
@@ -83,9 +355,9 @@ class Pagination extends \Fuel\Core\Pagination
      * @access  public
      * @return  mixed   Markup for page number links
      */
-    public static function page_links()
+    public function page_links()
     {
-        if (static::$total_pages == 1)
+        if ($this->total_pages == 1)
         {
             return '';
         }
@@ -93,22 +365,33 @@ class Pagination extends \Fuel\Core\Pagination
         $pagination = '';
         
         // Let's get the starting page number, this is determined using num_links
-        $start = ((static::$current_page - static::$num_links) > 0) ? static::$current_page - (static::$num_links - 1) : 1;
+        $start = (($this->current_page - $this->num_links) > 0) ? $this->current_page - ($this->num_links - 1) : 1;
 
         // Let's get the ending page number
-        $end   = ((static::$current_page + static::$num_links) < static::$total_pages) ? static::$current_page + static::$num_links : static::$total_pages;
+        $end   = (($this->current_page + $this->num_links) < $this->total_pages) ? $this->current_page + $this->num_links : $this->total_pages;
 
-        for($i = $start; $i <= $end; $i++)
+        for ($i = $start; $i <= $end; $i++)
         {
-            if (static::$current_page == $i)
+            $text  = $i;
+            $url   = '#';
+            $state = $this->template['state']['current_page'];
+
+            if ($this->current_page != $i)
             {
-                $pagination .= static::$template['active_start'].$i.static::$template['active_end'];
+                // detect if anchor attribute is presented in the template   
+                if (stripos('<a ', $this->template['page_start']) < 0)
+                {
+                    $text = '<a href=":url">'.$i.'</a>';
+                }
+                
+                $url   = $this->build_url($i);
+                $state = '';
             }
-            else
-            {
-                $url = ($i == 1) ? '' : '/'.$i;
-                $pagination .= static::$template['page_start'].\Html::anchor(rtrim(static::$pagination_url, '/').$url.'/'.static::$suffix_url, $i).static::$template['page_end'];
-            }
+
+            $pagination .= \Str::tr($this->template['page_start'].$text.$this->template['page_end'], array(
+                'state' => $state,
+                'url'   => $url,
+            ));
         }
 
         return $pagination;
@@ -117,68 +400,137 @@ class Pagination extends \Fuel\Core\Pagination
     /**
      * Pagination "Next" link
      *
-     * @static
      * @access  public
      * @param   string  $value The text displayed in link
      * @return  mixed   The next link
      */
-    public static function next_link($value)
+    public function next_link($value)
     {
-        if (static::$total_pages == 1)
+        $text  = $value.$this->template['next_mark'];
+        $url   = '#';
+        $state = $this->template['state']['previous_next']['disabled'];
+
+        if ($this->total_pages == 1)
         {
             return '';
         }
 
-        if (static::$current_page == static::$total_pages)
+        if ($this->current_page != $this->total_pages)
         {
-            return static::$template['disabled']['next_start'].$value.static::$template['next_mark'].static::$template['disabled']['next_end'];
+            // detect if anchor attribute is presented in the template
+            if (stripos('<a ', $this->template['next_start']) < 0)
+            {
+                $text = '<a href=":url">'.$text.'</a>';
+            }
+            
+            $url   = $this->build_url($this->current_page + 1);
+            $state = $this->template['state']['previous_next']['active'];
         }
-        else
-        {
-            $next_page = static::$current_page + 1;
-            return static::$template['next_start'].\Html::anchor(rtrim(static::$pagination_url, '/').'/'.$next_page.'/'. static::$suffix_url, $value.static::$template['next_mark']).static::$template['next_end'];
-        }
+
+        return \Str::tr($this->template['next_start'].$text.$this->template['next_end'], array(
+            'state' => $state,
+            'url'   => $url,
+        ));
     }
 
     /**
      * Pagination "Previous" link
      *
-     * @static
      * @access  public
      * @param   string  $value The text displayed in link
      * @return  mixed   The previous link
      */
-    public static function prev_link($value)
+    public function prev_link($value)
     {
-        if (static::$total_pages == 1)
+        $text  = $this->template['previous_mark'].$value;
+        $url   = '#';
+        $state = $this->template['state']['previous_next']['disabled'];
+
+        if ($this->total_pages == 1)
         {
             return '';
         }
 
-        if (static::$current_page == 1)
+        if ($this->current_page != 1)
         {
-            return static::$template['disabled']['previous_start'].static::$template['previous_mark'].$value.static::$template['disabled']['previous_end'];
+            // detect if anchor attribute is presented in the template
+            if (stripos('<a ', $this->template['previous_start']) < 0)
+            {
+                $text = '<a href=":url">'.$text.'</a>';
+            }
+
+            $url   = $this->build_url($this->current_page - 1);
+            $state = $this->template['state']['previous_next']['active'];
+        }
+
+        return \Str::tr($this->template['previous_start'].$text.$this->template['previous_end'], array(
+            'state' => $state,
+            'url'   => $url,
+        ));
+    }
+
+    /**
+     * Allow some of Pagination instance's protected properties to be accessible from outside the class (read only)
+     *
+     * @access  public
+     * @return  mixed
+     * @throws  \FuelException
+     */
+    public function __get($name)
+    {
+        if (in_array($name, array('offset', 'per_page', 'current_page')))
+        {
+            return $this->{$name};
         }
         else
         {
-            $previous_page = static::$current_page - 1;
-            $previous_page = ($previous_page == 1) ? '' : '/'.$previous_page;
-            return static::$template['previous_start'].\Html::anchor(rtrim(static::$pagination_url, '/').$previous_page.'/'.static::$suffix_url, static::$template['previous_mark'].$value).static::$template['previous_end'];
+            throw new \FuelException(__CLASS__."::{$name} is not accessible.");
         }
     }
-    
+
     /**
-     * Build query string
-     * 
-     * @deprecated
-     * @static
+     * Render self::view
+     *
      * @access  public
-     * @param   mixed   $values
-     * @return  string 
+     * @return  string
      */
-    public static function build_get_query($values) 
+    public function __toString()
     {
-        return Uri::build_get_query($values);
+        return $this->render();
+    }
+
+    /**
+     * Render Pagnation as a view
+     *
+     * @access  public
+     * @return  string
+     */
+    public function render()
+    {
+        if ($this->total_pages == 1)
+        {
+            return '';
+        }
+
+        $pagination  = $this->template['wrapper_start'];
+        $pagination .= $this->prev_link(\Lang::get('pagination.previous'));
+        $pagination .= $this->page_links();
+        $pagination .= $this->next_link(\Lang::get('pagination.next'));
+        $pagination .= $this->template['wrapper_end'];
+
+        return $pagination;
+    }
+
+    /**
+     * Parse pagination url
+     *
+     * @access  protected
+     * @param   integer     $page_id
+     * @return  string
+     */
+    protected function build_url($page_id)
+    {
+        return \Uri::create(\Str::tr($this->uri, array('page' => $page_id)));
     }
 
 }

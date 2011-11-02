@@ -44,7 +44,14 @@ class Test_Template extends \Fuel\Core\TestCase
      */
     public function test_forge()
     {
-        $output = Template::forge('normal');
+        try
+        {
+            $output = Template::forge('normal');
+        }
+        catch (\FuelException $e)
+        {
+            $this->markTestSkipped("config/hybrid.php is not configured or Template_Normal not in used");
+        }
         
         $this->assertTrue($output instanceof \Hybrid\Template_Normal); 
     }

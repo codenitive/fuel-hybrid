@@ -223,9 +223,14 @@ class Auth_Provider_Normal
     {
         $this->data['_hash'] = '';
 
-        if (isset($data['_hash']))
+        if (isset($data['_hash']) or null === $data['_hash'])
         {
             $this->data['_hash'] = $data['_hash'];
+        }
+
+        if (isset($data['expired_at']))
+        {
+            $this->data['expired_at'] = $data['expired_at'];
         }
 
         // in case if data['id'] doesn't exist or null, default to zero
@@ -281,6 +286,9 @@ class Auth_Provider_Normal
      */
     public function login($username, $password, $remember_me = false)
     {
+        $this->data['_hash'] = null;
+        unset($this->data['expired_at']);
+
         if ( !! $remember_me)
         {
             $this->expiration = -1;
@@ -331,7 +339,7 @@ class Auth_Provider_Normal
             $this->reset();
             throw new Auth_Exception(\Lang::get('autho.user.bad_combination'));
         }
-
+        
         $this->verify_token();
 
         return $this;
@@ -348,6 +356,9 @@ class Auth_Provider_Normal
      */
     public function login_token($token, $secret, $remember_me = false)
     {
+        $this->data['_hash'] = null;
+        unset($this->data['expired_at']);
+
         if ( !! $remember_me)
         {
             $this->expiration = -1;
@@ -432,7 +443,7 @@ class Auth_Provider_Normal
         unset($values['password']);
 
         // set cookie expiration
-        if ( ! isset($values['expired_at']) or null === $values['expired_at'])
+        if ( ! isset($values['expired_at']) or null == $values['expired_at'])
         {
             $expired_at = 0;
 

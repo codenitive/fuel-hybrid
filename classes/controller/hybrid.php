@@ -257,7 +257,7 @@ abstract class Controller_Hybrid extends \Controller
         if (true === $this->auto_render and ! $response instanceof \Response)
         {
             $response       = $this->response;
-            $response->body = $this->template;
+            $response->body = $this->template->render();
         }
 
         return $response;
