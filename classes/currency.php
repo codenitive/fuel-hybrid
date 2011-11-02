@@ -318,7 +318,7 @@ class Currency
         $this->fetch_currency_rate($this->from);
 
         // we fetch the latest currency but if for instance there no conversion rate available between the two, throw an exception
-        if ( ! array_key_exists($to_currency, $this->currency_rate))
+        if ( ! array_key_exists($to_currency, $this->currency_rates))
         {
             throw new \FuelException(__METHOD__.": Currency {$to_currency} is not available to convert from {$from_currency}");
         }
