@@ -323,7 +323,7 @@ class Currency
             throw new \FuelException(__METHOD__.": Currency {$to_currency} is not available to convert from {$from_currency}");
         }
 
-        return (float) round($this->amount * $this->currency_rates[$currency], $this->round);
+        return (float) round($this->amount * $this->currency_rates[$to_currency], $this->round);
     }
     
     /**
