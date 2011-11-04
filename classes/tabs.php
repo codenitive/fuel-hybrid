@@ -213,7 +213,7 @@ namespace Hybrid;
 
         foreach ($this->tabs as $count => $tab)
         {
-            $active = ($count === 0 ? 'class="active"' : '');
+            $active  = ($count === 0 ? 'class="active"' : '');
             $title   .= \Str::tr($template['title'], array('active' => $active, 'slug' => $tab->slug, 'title' => $tab->title));
             $content .= \Str::tr($template['content'], array('active' => $active, 'slug' => $tab->slug, 'content' => $tab->content));
         }
@@ -221,7 +221,7 @@ namespace Hybrid;
         $title   .= $template['title_close'];
         $content .= $template['content_close'];
         
-        $prefix = \Config::get('hybrid.tabs.prefix', '');
+        $prefix  = \Config::get('hybrid.tabs.prefix', '');
 
         return \Str::tr($template['wrapper_open'], array('id' => $prefix.ltrim($this->name, $prefix))).$title.$content.$template['wrapper_close'];
     }

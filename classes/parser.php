@@ -56,7 +56,7 @@ class Parser
 
         if ( ! isset(static::$instances[$name]))
         {
-            $driver = '\\Hybrid\\Parser_'.ucfirst($name);
+            $driver = "\Hybrid\Parser_".ucfirst($name);
         
             // instance has yet to be initiated
             if (class_exists($driver))

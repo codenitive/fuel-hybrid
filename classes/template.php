@@ -94,7 +94,7 @@ class Template
 
         if ( ! isset(static::$instances[$name]))
         {
-            $driver = '\\Hybrid\\Template_'.ucfirst($type);
+            $driver = "\Hybrid\Template_".ucfirst($type);
          
             if (class_exists($driver)) 
             {
