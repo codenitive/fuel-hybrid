@@ -89,7 +89,7 @@ class Input
             $using_hybrid = true;
         }
 
-        if ( ! $using_hybrid and in_array($name, array('method', 'all')) 
+        if ( ! $using_hybrid and in_array($name, array('method', 'all'))) 
         {
             return call_user_func(array("Fuel\Core\Input", $name));
         }
@@ -120,7 +120,7 @@ class Input
             return $default;
         }
 
-        if (false === $using_hybrid or $name === 'file') 
+        if ( ! $using_hybrid or $name === 'file') 
         {
             // Not using \Hybrid\Request, it has to be from \Fuel\Core\Input.
             return call_user_func_array(array("Fuel\Core\Input", $name), array($index, $default));
