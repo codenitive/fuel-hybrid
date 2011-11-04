@@ -26,7 +26,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
- class Tabs {
+ class Tabs 
+ {
     
     /**
      * Cache Tabs instance so we can reuse it on multiple request.

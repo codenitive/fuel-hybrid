@@ -27,7 +27,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-abstract class Controller_Hybrid extends \Controller 
+abstract class Controller_Hybrid extends \Fuel\Core\Controller 
 {    
     /**
      * Set whether the request is either rest or template

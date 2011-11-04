@@ -26,7 +26,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-class Request extends \Request 
+class Request extends \Fuel\Core\Request 
 {
     /**
      * Generates a new `curl` request without going through HTTP connection, 
