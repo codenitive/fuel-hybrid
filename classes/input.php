@@ -91,7 +91,7 @@ class Input
 
         if ( ! $using_hybrid and in_array($name, array('method', 'all')) 
         {
-            return call_user_func(array('\\Input', 'all'));
+            return call_user_func(array('\\Input', $name));
         }
 
         switch (true) 
