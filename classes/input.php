@@ -75,7 +75,7 @@ class Input
         // If $request is null, it's a request from \Fuel\Core\Request so use it instead
         if (in_array(strtolower($name), array('is_ajax', 'protocol', 'real_ip', 'referrer', 'server', 'uri', 'user_agent'))) 
         {
-            return call_user_func(array('\\Input', $name));
+            return call_user_func(array("Fuel\Core\Input", $name));
         }
         
         // Check whether this request is from \Fuel\Core\Request or \Hybrid\Request
@@ -91,7 +91,7 @@ class Input
 
         if ( ! $using_hybrid and in_array($name, array('method', 'all')) 
         {
-            return call_user_func(array('\\Input', $name));
+            return call_user_func(array("Fuel\Core\Input", $name));
         }
 
         switch (true) 
@@ -123,7 +123,7 @@ class Input
         if (false === $using_hybrid or $name === 'file') 
         {
             // Not using \Hybrid\Request, it has to be from \Fuel\Core\Input.
-            return call_user_func_array(array('\\Input', $name), array($index, $default));
+            return call_user_func_array(array("Fuel\Core\Input", $name), array($index, $default));
         }
 
         switch (true)
