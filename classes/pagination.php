@@ -25,7 +25,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Pagination 
+class Pagination extends Fuel\Core\Pagination
 {
     /**
      * Cache Pagination instance so we can reuse it on multiple request. 
