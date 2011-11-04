@@ -46,8 +46,14 @@ class Factory
         }
         
         \Config::load('app', 'app');
+        \Config::load('hybrid', 'hybrid');
 
         static::$identity = \Config::get('app.identity');
+
+        if (\Fuel::$env !== \Fuel::PRODUCTION and true === \Config::get('hybrid.profiling', false))
+        {
+            static::profiling();
+        }
 
         if (\Config::get('app.maintenance_mode') == true) 
         {
@@ -140,6 +146,34 @@ class Factory
         $dir_path = __DIR__.'/../';
         $path     = str_replace('/', DIRECTORY_SEPARATOR, $path);
         require_once $dir_path.$folder.DIRECTORY_SEPARATOR.$path.'.php';
+    }
+
+    /**
+     * Dynamically load profiling using $_GET['profiler'] = 1;
+     *
+     * @static
+     * @access  protected
+     * @return  void
+     */
+    protected static function profiling()
+    {
+        $profiler     = \Session::get('_profiler', \Config::get('profiling', false));
+        $get_profiler = \Input::get('profiler', null);
+
+        if (null !== $get_profiler)
+        {
+            $profiler = (int) $get_profiler === 1 ? true : false;
+        }
+
+        switch ($profiler)
+        {
+            case 1 :
+                \Fuel::$profiling = true;
+                \Profiler::init();
+            break;
+        }
+
+        \Session::set('_profiler', $profiler);
     }
     
 }

@@ -1,6 +1,8 @@
 <?php
 
 return array(
+    // Alway profiling trigger using ?profiler=1 and disable with ?profiler=0
+    'profiling' => false,
 
     // Template class configuration
     'template' => array(
