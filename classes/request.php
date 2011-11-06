@@ -67,15 +67,15 @@ class Request extends \Fuel\Core\Request
 
         logger(\Fuel::L_INFO, 'Creating a new Request with URI = "'.$uri.'"', __METHOD__);
 
-        static::$active = new static($uri, true, $dataset, $type);
-
-        if ( ! static::$main) 
+        $request = new static($uri, true, $dataset, $type);
+        
+        if (static::$active)
         {
-            logger(\Fuel::L_INFO, 'Setting main Request', __METHOD__);
-            static::$main = static::$active;
+            $request->parent = static::$active;
+            static::$active->children[] = $request;
         }
 
-        return static::$active;
+        return $request;
     }
 
     /**
