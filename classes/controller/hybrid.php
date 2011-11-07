@@ -27,7 +27,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-abstract class Controller_Hybrid extends \Controller 
+abstract class Controller_Hybrid extends \Fuel\Core\Controller 
 {    
     /**
      * Set whether the request is either rest or template
@@ -88,7 +88,8 @@ abstract class Controller_Hybrid extends \Controller
                 {
                     \Lang::load('autho', 'autho');
                     $this->response(array('text' => \Lang::get('autho.no_privilege')), 401);
-                    print $this->response->body;
+                    $this->response->send($this->set_content_type);
+                    \Event::shutdown();
                     exit();
                 }
                 else

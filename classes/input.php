@@ -73,9 +73,9 @@ class Input
     public static function __callStatic($name, $args) 
     {
         // If $request is null, it's a request from \Fuel\Core\Request so use it instead
-        if (in_array(strtolower($name), array('is_ajax', 'user_agent', 'real_ip', 'referrer', 'server'))) 
+        if (in_array(strtolower($name), array('is_ajax', 'protocol', 'real_ip', 'referrer', 'server', 'uri', 'user_agent'))) 
         {
-            return call_user_func(array('\\Input', $name));
+            return call_user_func(array("Fuel\Core\Input", $name));
         }
         
         // Check whether this request is from \Fuel\Core\Request or \Hybrid\Request
@@ -89,9 +89,9 @@ class Input
             $using_hybrid = true;
         }
 
-        if ( ! $using_hybrid and 'method' == $name) 
+        if ( ! $using_hybrid and in_array($name, array('method', 'all'))) 
         {
-            return call_user_func(array('\\Input', 'method'));
+            return call_user_func(array("Fuel\Core\Input", $name));
         }
 
         switch (true) 
@@ -103,9 +103,15 @@ class Input
             break;
         }
 
-        if ('method' === $name) 
+        switch ($name)
         {
-            return static::$request->method;
+            case 'method' :
+                return static::$request->method;
+            break;
+
+            case 'all' :
+                return static::$request->data;
+            break;
         }
 
         // Reach this point but $index is null (which isn't be so we should just return the default value) 
@@ -114,19 +120,23 @@ class Input
             return $default;
         }
 
-        if (false === $using_hybrid) 
+        if ( ! $using_hybrid or $name === 'file') 
         {
             // Not using \Hybrid\Request, it has to be from \Fuel\Core\Input.
-            return call_user_func_array(array('\\Input', $name), array($index, $default));
+            return call_user_func_array(array("Fuel\Core\Input", $name), array($index, $default));
         }
 
-        if (strtoupper($name) === static::$request->method) 
+        switch (true)
         {
-            return isset(static::$request->data[$index]) ? static::$request->data[$index] : $default;
-        } 
-        else 
-        {
-            return $default;
+            case strtoupper($name) === static::$request->method :
+            case 'param' === $name :
+            case 'get_post' === $name and in_array(static::$request->method, array('GET', 'POST')) :
+                return isset(static::$request->data[$index]) ? static::$request->data[$index] : $default;
+            break;
+
+            default :
+                return $default;
+            break;
         }
     }
 

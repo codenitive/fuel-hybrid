@@ -86,7 +86,7 @@ class Auth
 
         if ( ! isset(static::$instances[$name]))
         {
-            $driver = '\\Hybrid\\Auth_Driver_'.ucfirst($name);
+            $driver = "\Hybrid\Auth_Driver_".ucfirst($name);
 
             if ( !! class_exists($driver))
             {

@@ -26,7 +26,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
  
-abstract class Controller_Rest extends \Controller 
+abstract class Controller_Rest extends \Fuel\Core\Controller 
 {    
     /**
      * Rest format to be used
@@ -61,7 +61,8 @@ abstract class Controller_Rest extends \Controller
             case 401 :
                 \Lang::load('autho', 'autho');
                 $this->response(array('text' => \Lang::get('autho.no_privilege')), 401);
-                print $this->response->body;
+                $this->response->send($this->set_content_type);
+                \Event::shutdown();
                 exit();
             break;
         }

@@ -26,7 +26,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class View extends \View 
+class View extends \Fuel\Core\View 
 {
     /**
      * @static
