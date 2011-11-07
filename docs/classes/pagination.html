@@ -38,12 +38,6 @@
         The pagination class allows you to easily setup pagination for records you display.
     </p>
 
-    <h2>Extends</h2>
-
-    <p>
-        Pagination class extends <a href="http://fuelphp.com/docs/classes/pagination.html">Fuel\Core\Pagination</a>.
-    </p>
-
     <hr />
 
     <div class="row">
@@ -58,22 +52,20 @@
 
             <pre class="prettyprint lang-php">
 $config = array(
-    'pagination_url' => 'http://localhost/fuel/welcome/index/',
     'total_items' => 10,
     'per_page' => 5,
-    'uri_segment' => 3,
+    'uri_segment' => null, // Set to null to use $_GET['page']
 );
 
-// Config::set('pagination', $config); // you can use this too!
-\Hybrid\Pagination::set_config($config);
+$pagination = \Hybrid\Pagination::forge($config);
 
 $data['example_data'] = DB::select('id', 'value')->from('pagination')
-    ->limit(\Hybrid\Pagination::$per_page)
-    ->offset(\Hybrid\Pagination::$offset)
+    ->limit($pagination->per_page)
+    ->offset($pagination->offset)
     ->execute()
     ->as_array();
 
-$data['pagination'] = \Hybrid\Pagination::create_links();
+$data['pagination'] = $pagination);
 $this->render('welcome/index', $data);</pre>
         </div>
     </div>
