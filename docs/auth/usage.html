@@ -257,6 +257,50 @@ catch(\Fuel_Exception $e)
     <hr />
 
     <div class="row">
+        <h3 id="reauthenticate()">reauthenticate($driver = 'user')</h3>
+
+        <p>Reauthenticate current user.</p>
+        
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$driver</kbd></th>
+                            <td><code>'user'</td>
+                            <td>Driver type string, default to 'user'.</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>bool</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">\Hybrid\Auth::reauthenticate();</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
         <h3 id="logout()">logout()</h3>
 
         <p>Logout from all loaded instances.</p>
