@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Controller &mdash; Hybrid for FuelPHP Documentation</title>
+    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
+    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
+    <script type="text/javascript" src="../assets/js/nav.js"></script>
+
+    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
+    <script type="text/javascript">
+        $(function() {
+            show_nav('controller', '../');
+            prettyPrint();
+        });
+    </script>
+</head>
+<body>
+<div class="topbar">
+    <div class="topbar-inner">
+        <div id="topbar" class="container">
+            <a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
+            <ul></ul>
+        </div>
+    </div>
+</div>
+
+<div class="container after-topbar">
+
+    <header class="page-header">
+        <h1>Controller <small>Using Hybrid</small></h1>
+    </header>
+
+    <p>
+        <code>Controller_Hybrid</code> is the easier way to combine both the functionality of <code>Controller_Template</code> and <code>Controller_Rest</code> using the same controller.
+    </p>
+
+    <div class="alert-message block-message info">
+        <p>
+            All template feature available in <code>Controller_Template</code> is available in <code>Crontroller_Hybrid</code>.
+        </p>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="span4">
+            <h2 id="example">Example</h2>
+
+            <p>Here's an example of <code>Controller_Hybrid</code>.</p>
+        </div>
+
+        <div class="span12">
+            
+            <pre class="prettyprint lang-php">&lt;?php
+
+class Controller_Login extends Hybrid\Controller_Hybrid
+{
+    public $template = 'normal';
+
+    /**
+     * Display Login page
+     *
+     * @link    /login/index
+     */
+    public function action_index()
+    {
+        return $this->response(array(
+            'content' => \View::forge('login'),
+        ), 200);
+    }
+
+    /**
+     * REST Login a user
+     *
+     * @link    POST /login/index.json
+     */
+    public function post_index()
+    {
+        $username = Input::post('username', '');
+        $password = Input::post('password', '');
+
+        // try to login the user
+
+        return $this->response(array(
+            'text' => 'User logged in'
+        ), 200);
+    }
+
+    /**
+     * REST Logout a user
+     *
+     * @link    DELETE /login/index.json
+     */
+    public function delete_index()
+    {
+        
+    }
+
+}</pre>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="response()">response($data = array(), $status = 200);</h3>
+
+        <p>A unified response method to handle both standard Template and REST request.</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$data</kbd></th>
+                            <td><code>array()</code></td>
+                            <td>An array of data to be parse to view</td>
+                        </tr>
+                        <tr>
+                            <th><kbd>$status</kbd></th>
+                            <td><code>200</code></td>
+                            <td>An integer of HTTP status.</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>void</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">return $this->response(array(
+    'content' => \View::forge('login'),
+), 200);</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <footer>
+        <p>
+            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+            &copy; 2010 - 2011 Fuel Hybrid Development Team
+        </p>
+    </footer>
+</div>
+</body>
+</html>
