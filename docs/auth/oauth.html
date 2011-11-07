@@ -47,6 +47,31 @@
         <div class="span12">
             <ol>
                 <li>
+                    Install OAuth and OAuth2 package for FuelPHP
+                    <pre class="cli">$ php oil package install oauth --direct</pre>
+                    <pre class="cli">$ php oil package install oauth2 --direct</pre>
+                </li>
+                <li>Both need to be included in autoload packages under <code>APPPATH/config/config.php</code>
+                    <pre class="prettyprint lang-php">'always_load'   => array(
+
+    /**
+     * These packages are loaded on Fuel's startup.  You can specify them in
+     * the following manner:
+     *
+     * array('auth'); // This will assume the packages are in PKGPATH
+     *
+     * // Use this format to specify the path to the package explicitly
+     * array(
+     *     array('auth' => PKGPATH.'auth/')
+     * );
+     */
+    'packages'  => array(
+        'orm',
+        'oauth',
+        'oauth2',
+        'hybrid',
+    ),</pre>
+                <li>
                     Create a controller at <code>APPPATH/classes/controller/connect.php</code>
                     <pre class="prettyprint lang-php">&lt;?php
 
