@@ -46,7 +46,7 @@ class Auth_Driver_User extends Auth_Driver
     protected $provider = null;
 
     /**
-     * Get Acl\Role object, it's a quick way of get and use \Acl\Role without having to 
+     * Get Hybrid\Acl object, it's a quick way of get and use Hybrid\Acl without having to 
      * initiate another call when this class already has it
      * 
      * Usage:
@@ -200,7 +200,7 @@ class Auth_Driver_User extends Auth_Driver
     }
 
     /**
-     * Initiate user login out regardless of any method they use
+     * Logout from user instance.
      *
      * Usage:
      * 
@@ -215,6 +215,13 @@ class Auth_Driver_User extends Auth_Driver
         return true;
     }
 
+    /**
+     * Link user account with external provider
+     *
+     * @access  public
+     * @param   array   $user_data
+     * @return  bool
+     */
     public function link_account($user_data)
     {
         if (true !== Auth::link_account($this->provider->data['id'], $user_data))

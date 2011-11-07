@@ -140,6 +140,374 @@ class Controller_Credential extends \Controller_Rest {
             </div>
         </div>
     </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="instance()">instance()</h3>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>Hybrid\Auth_Driver_User Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::instance();
+
+// Alias to
+\Hybrid\Auth::instance('user');</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="acl()">acl($name = null)</h3>
+
+        <p>Get <code>Hybrid\Acl</code> object, it's a quick way of get and use <code>Hybrid\Acl</code> without having to initiate another call when this class already has it.</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$name</kbd></th>
+                            <td><code>null</code></td>
+                            <td>null to fetch the default driver, or a driver id to get a specific one</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>\Hybrid\Acl Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$acl = \Hybrid\Auth_Driver_User::instance()->acl();</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="login()">login($username, $password, $remember_me = false)</h3>
+
+        <p>Login user using normal authentication (username and password).</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$username</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>A string valid username or e-mail address</td>
+                        </tr>
+                        <tr>
+                            <th><kbd>$password</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>A string of user password</td>
+                        </tr>
+                        <tr>
+                            <th><kbd>$remember_me</kbd></th>
+                            <td><code>false</code></td>
+                            <td>Set to true to use persistent cookie</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>bool</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$acl = \Hybrid\Auth_Driver_User::instance()->login($username, $password, true);</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="login_token()">login_token($token, $secret, $remember_me = false)</h3>
+
+        <p>Login user using OAuth/OAuth2 token authentication (token and secret).</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$token</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>A string of OAuth/OAuth2 Access Token Key</td>
+                        </tr>
+                        <tr>
+                            <th><kbd>$secret</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>A string of OAuth/OAuth2 Access Secret Key</td>
+                        </tr>
+                        <tr>
+                            <th><kbd>$remember_me</kbd></th>
+                            <td><code>false</code></td>
+                            <td>Set to true to use persistent cookie</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>bool</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$acl = \Hybrid\Auth_Driver_User::instance()->login_token($secret, $token);</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="alert-message block-message warning">
+            <p>This is normally called ONLY from <code>\Hybrid\Auth_Controller</code>.</p>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="reauthenticate()">reauthenticate()</h3>
+
+        <p>Reauthenticate current user, useful in situation where user hash is modified by update user profile or password.</p>
+        
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>bool</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::instance()->reauthenticate();</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="logout()">logout()</h3>
+        <p>Logout from user instance.</p>
+        
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>bool</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::instance()->logout();</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="is_logged()">is_logged()</h3>
+
+        <p>Return <code>TRUE</code>/<code>FALSE</code> whether visitor is logged in to the system.</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>bool, whether user is logged in</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::instance()->is_logged();</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="get()">get($name = null);</h3>
+
+        <p>Get current user authentication.</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$name</kbd></th>
+                            <td><code>null</code></td>
+                            <td>optional key value, return all if <code>$name</code> is null</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>mixed</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">$user_id = \Hybrid\Auth_Driver_User::instance()->get('id');</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="link_account()">link_account($user_id, $user_data)</h3>
+
+        <p>Link a user with single or multiple account provider.</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>No</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$user_data</kbd></th>
+                            <td><i>Required</i></td>
+                            <td>An array from \Session::get('autho')</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>bool, whether user successfully linked</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::instance()->link_account(\Session::get('autho'));</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     
     <footer>
         <p>
