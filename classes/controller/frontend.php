@@ -22,6 +22,7 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
+ * @deprecated
  * @category    Controller_Frontend
  * @abstract
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
@@ -53,6 +54,8 @@ abstract class Controller_Frontend extends Controller
      */
     public function before() 
     {
+        \Log::warning('This Class is deprecated. Please use a Hybrid\Controller_Template instead.', __CLASS__);
+        
         $this->prepare_template();
 
         return parent::before();

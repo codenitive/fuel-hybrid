@@ -46,12 +46,10 @@ var nav = {
 
 		"Controller": {
 			"Introduction": 		"controller/introduction.html",
-			/*
-			"Usage": {
-				"Hybrid": 			"controller/todo.html",
-				"Frontend": 		"controller/todo.html"
-			},
-			"Using Template": 		"controller/todo.html"*/
+			"Using": {
+				"Hybrid": 			"controller/using_hybrid.html"/*,
+				"Template": 		"controller/using_template.html"*/
+			}
 		},
 		
 		/*

@@ -87,6 +87,30 @@
         </tbody>
     </table>
 
+    <p>
+        Profiling Application can be configured in a <code>config/hybrid.php</code> file and takes the following keys:
+    </p>
+
+    <table class="config">
+        <tbody>
+            <tr class="header">
+                <th>Param</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <th>profiling</th>
+                <td>bool</td>
+                <td><code>false</code></td>
+                <td>
+                    Alway profiling trigger using ?profiler=1 and disable with ?profiler=0.
+                </td>
+            </tr>
+            <tr>
+        </tbody>
+    </table>
+
     <hr />
 
     <div class="row">
@@ -131,6 +155,29 @@ class Controller_Welcome extends \Hybrid\Controller
                     <code>\Hybrid\Factory::_init()</code> need to be loaded onced to detect maintenance mode, if you're not using any of the <code>\Hybrid\Controller</code> please execute <code>\Hybrid\Factory::_init()</code> manually from your code.
                 </p>
             </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span4">
+            <h2>Profiling Mode</h2>
+
+            <p>Here an easy way to set your application into profiling mode temporarily without touching your configuration. For security this is not available from <code>'PRODUCTION'</code> environment.</p>
+        </div>
+        <div class="span12">
+            <ol>
+                <li>
+                    Enable profiling from <code>config/hybrid.php</code>.
+                    <pre class="prettyprint lang-php">&lt;?php
+
+return array(
+    // Alway profiling trigger using ?profiler=1 and disable with ?profiler=0
+    'profiling' => true,
+                    </pre>
+                </li>
+                <li>Run your application from a browser and append <code>?profiler=1</code> to enable profiling.</li>
+                <li>To disable profiling, run it again with <code>?profiler=0</code></li>
+            </ol>
         </div>
     </div>
 

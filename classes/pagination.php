@@ -98,7 +98,7 @@ class Pagination
     }
 
     /**
-     * Shortcode to self::forge().
+     * Retrieve an instance of Hybrid\Pagination.
      *
      * @static
      * @access  public
@@ -107,7 +107,17 @@ class Pagination
      */
     public static function instance($name = null)
     {
-        return static::forge($name);
+        if (null === $name)
+        {
+            $name = md5(\Request::active()->route->translation);
+        }
+
+        if ( ! isset(static::$instances[$name]))
+        {
+            throw new \FuelException(__METHOD__.": Request to unknown instance {$name}");
+        }
+
+        return static::$instances[$name];
     }
 
     /**
