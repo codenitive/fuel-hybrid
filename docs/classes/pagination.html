@@ -64,7 +64,7 @@ $data['example_data'] = DB::select('id', 'value')->from('pagination')
     ->execute()
     ->as_array();
 
-$data['pagination'] = $pagination);
+$data['pagination'] = $pagination;
 $this->render('welcome/index', $data);</pre>
 
             <div class="alert-message block-message info">
