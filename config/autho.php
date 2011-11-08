@@ -84,11 +84,11 @@ return array(
     'salt' => null,
 
     /**
-     * hashing
+     * hash_type
      *
      * Set hashing method (md5, sha1, crypt_hash)
      */
-    'hashing' => 'sha1',
+    'hash_type' => 'sha1',
 
     /**
      * expiration

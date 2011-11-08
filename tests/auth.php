@@ -37,7 +37,7 @@ class Test_Auth extends \Fuel\Core\TestCase
     {
         \Package::load('hybrid');
         \Config::load('autho', 'autho');
-        \Config::set('autho.hashing', 'sha1');
+        \Config::set('autho.hash_type', 'sha1');
         \Config::set('autho.salt', '12345');
     }
 

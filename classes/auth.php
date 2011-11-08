@@ -161,7 +161,7 @@ class Auth
         $salt   = \Config::get('autho.salt', \Config::get('crypt.crypto_key'));
         $string = $string;
 
-        switch (\Config::get('autho.hashing', 'sha1'))
+        switch (\Config::get('autho.hash_type', 'sha1'))
         {
             case 'md5' :
                 return \md5($salt.$string);
@@ -178,7 +178,7 @@ class Auth
     }
 
     /**
-     * Use crypt_hash hashing
+     * Use crypt_hash hash type
      *
      * @static
      * @access  protected
