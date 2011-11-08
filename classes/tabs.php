@@ -194,7 +194,7 @@ namespace Hybrid;
     }
 
     /**
-     * Render self::view
+     * Shortcut to render()
      *
      * @access  public
      * @see     self::render()

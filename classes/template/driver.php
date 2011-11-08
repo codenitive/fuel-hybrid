@@ -188,7 +188,7 @@ abstract class Template_Driver
     public abstract function partial($filename, $data = null);
 
     /**
-     * Render self::view
+     * Render template
      *
      * @abstract
      * @access  public
@@ -196,7 +196,7 @@ abstract class Template_Driver
     public abstract function render();
 
     /**
-     * Render self::view
+     * Shortcut to render()
      *
      * @access  public
      */
