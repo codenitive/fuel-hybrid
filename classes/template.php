@@ -103,7 +103,7 @@ class Template
             }
             else 
             {
-                throw new \Fuel_Exception("Requested {$driver} does not exist.");
+                throw new \FuelException("Requested {$driver} does not exist.");
             }
         }
         
