@@ -334,7 +334,7 @@ class Auth_Provider_Normal
             throw new Auth_Exception(\Lang::get('autho.user.not_exist', array('username' => $username)));
         }
 
-        if ($this->data['password'] !== Auth::add_salt($password))
+        if ($this->data['password'] !== Auth::create_hash($password))
         {
             $this->reset();
             throw new Auth_Exception(\Lang::get('autho.user.bad_combination'));

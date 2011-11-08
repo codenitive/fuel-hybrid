@@ -81,7 +81,14 @@ return array(
      *
      * Application salt for hashing
      */
-    'salt'      => null,
+    'salt' => null,
+
+    /**
+     * hashing
+     *
+     * Set hashing method (md5, sha1, crypt_hash)
+     */
+    'hashing' => 'sha1',
 
     /**
      * expiration

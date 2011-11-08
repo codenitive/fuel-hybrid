@@ -27,7 +27,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Test_Auth extends \Fuel\Core\TestCase {
+class Test_Auth extends \Fuel\Core\TestCase 
+{
 
     /**
      * Setup the test
@@ -36,19 +37,20 @@ class Test_Auth extends \Fuel\Core\TestCase {
     {
         \Package::load('hybrid');
         \Config::load('autho', 'autho');
+        \Config::set('autho.hashing', 'sha1');
         \Config::set('autho.salt', '12345');
     }
 
     /**
-     * Test Auth::add_salt();
+     * Test Auth::create_hash();
      *
      * @test
      */
-    public function test_add_salt()
+    public function test_create_hash()
     {
         $string   = 'helloworld123';
         $expected = sha1('12345'.$string);
-        $output   = Auth::add_salt($string);
+        $output   = Auth::create_hash($string);
 
         $this->assertEquals($expected, $output);
     }

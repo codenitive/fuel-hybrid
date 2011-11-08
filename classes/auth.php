@@ -43,6 +43,8 @@ class Auth
      */
     protected static $instances = array();
 
+    protected static $hasher = null;
+
     /**
      * Redirect user based on type
      *
@@ -134,15 +136,67 @@ class Auth
      * Turn string to hash using sha1() hash with salt.
      *
      * @static
+     * @deprecated
      * @access  public
-     * @param   string  $password       String to be hashed
+     * @param   string  $string       String to be hashed
      * @return  string
      */
     public static function add_salt($string = '')
     {
-        $salt = \Config::get('autho.salt', \Config::get('crypt.crypto_key'));
+        \Log::warning('This method is deprecated. Please use create_hash() instead.', __METHOD__);
+        
+        return static::create_hash($string);
+    }
 
-        return \sha1($salt.$string);
+    /**
+     * Turn string to hash using sha1(), md5() or crypt_hash hash with salt.
+     *
+     * @static
+     * @access  public
+     * @param   string  $string       String to be hashed
+     * @return  string
+     */
+    public static function create_hash($string = '')
+    {
+        $salt   = \Config::get('autho.salt', \Config::get('crypt.crypto_key'));
+        $string = $string;
+
+        switch (\Config::get('autho.hashing', 'sha1'))
+        {
+            case 'md5' :
+                return \md5($salt.$string);
+            break;
+
+            case 'crypt_hash' :
+                return static::crypt_hash($string);
+            break;
+
+            case 'sha1' :
+            default :
+                return \sha1($salt.$string);
+        }
+    }
+
+    /**
+     * Use crypt_hash hashing
+     *
+     * @static
+     * @access  protected
+     * @param   string  $string     String to be hashed
+     * @return  string
+     */
+    protected static function crypt_hash($string = '')
+    {
+        if ( ! class_exists('PHPSecLib\\Crypt_Hash', false))
+        {
+            import('phpseclib/Crypt/Hash', 'vendor');
+        }
+
+        is_null(static::$hasher) and static::$hasher = new \PHPSecLib\Crypt_Hash();
+
+        $salt   = \Config::get('autho.salt', \Config::get('crypt.crypto_key'));
+        
+        return base64_encode(static::$hasher()->pbkdf2($string, $salt, 10000, 32));
     }
 
     /**
