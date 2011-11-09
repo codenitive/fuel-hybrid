@@ -276,6 +276,8 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
             $this->set_content_type = false;
         }
 
+        $this->template = null;
+
         Restserver::auth();
     }
     
