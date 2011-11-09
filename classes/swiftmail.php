@@ -123,7 +123,7 @@ class Swiftmail
 			// set current mailtype, either it plain text or html
 			switch($config['mailtype'])
 			{
-			   case 'html' :
+				case 'html' :
 					$this->messager->setContentType('plain/html');
 				break; 
 
