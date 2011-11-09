@@ -108,19 +108,18 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
 	public function before() 
 	{
 		$this->is_rest_call = Restserver::is_rest_call();
+		$this->language     = Factory::get_language();
+		$this->user         = Auth::instance('user')->get();
 
 		if (true === $this->is_rest_call)
 		{
 			\Fuel::$profiling = false;
 		}
 
-		$this->language = Factory::get_language();
-		$this->user     = Auth::instance('user')->get();
-
 		\Event::trigger('controller_before');
 
 		if (false === $this->is_rest_call)
-		{   
+		{
 			$this->prepare_template();
 		}
 		else 
