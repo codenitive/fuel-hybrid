@@ -218,7 +218,7 @@ HELP;
             $meta_model[] = 'user_id:int';
         }
 
-        $user_model[] = 'status:enum[]';
+        $user_model[] = 'status:enum[unverified,verified,banned,deleted]';
 
         if ('y' === \Cli::prompt("Confirm Generate Model and Migration for User?", array('y', 'n')))
         {
