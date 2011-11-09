@@ -26,4 +26,4 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
- class Auth_Exception extends \FuelException {}
+class Auth_Exception extends \FuelException {}

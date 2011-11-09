@@ -25,43 +25,43 @@ namespace Hybrid;
  * @category    Chart_Table
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
- 
+
 class Chart_Table extends Chart_Driver 
 {
-    public function __construct() 
-    {
-        parent::__construct();
+	public function __construct() 
+	{
+		parent::__construct();
 
-        $this->set_options(\Config::get('chart.table', array()));
-    }
+		$this->set_options(\Config::get('chart.table', array()));
+	}
 
-    public function render($width = '100%', $height = '300px') 
-    {
-        $columns    = $this->columns;
-        $rows       = $this->rows;
+	public function render($width = '100%', $height = '300px') 
+	{
+		$columns    = $this->columns;
+		$rows       = $this->rows;
 
-        $this->set_options('width', $width);
-        $this->set_options('height', $height);
+		$this->set_options('width', $width);
+		$this->set_options('height', $height);
 
-        $options    = json_encode($this->options);
+		$options    = json_encode($this->options);
 
-        $id         = 'table_'.md5($columns.$rows.time());
+		$id         = 'table_'.md5($columns.$rows.time());
 
-        return <<<SCRIPT
+		return <<<SCRIPT
 <div id="{$id}" style="width:{$width}; height:{$height};"></div>
 <script type="text/javascript">
 google.load("visualization", "1", {packages:["table"]});
 google.setOnLoadCallback(draw_{$id});
 function draw_{$id}() {
-    var data = new google.visualization.DataTable();
-    {$columns}
-    {$rows}
-    
-    var chart = new google.visualization.Table(document.getElementById('{$id}'));
-    chart.draw(data, {$options});
+	var data = new google.visualization.DataTable();
+	{$columns}
+	{$rows}
+	
+	var chart = new google.visualization.Table(document.getElementById('{$id}'));
+	chart.draw(data, {$options});
 };
 </script>
 SCRIPT;
-    }
+	}
 
 }

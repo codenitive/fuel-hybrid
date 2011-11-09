@@ -30,29 +30,29 @@ namespace Hybrid;
 class Test_Auth extends \Fuel\Core\TestCase 
 {
 
-    /**
-     * Setup the test
-     */
-    public function setup()
-    {
-        \Package::load('hybrid');
-        \Config::load('autho', 'autho');
-        \Config::set('autho.hash_type', 'sha1');
-        \Config::set('autho.salt', '12345');
-    }
+	/**
+	 * Setup the test
+	 */
+	public function setup()
+	{
+		\Package::load('hybrid');
+		\Config::load('autho', 'autho');
+		\Config::set('autho.hash_type', 'sha1');
+		\Config::set('autho.salt', '12345');
+	}
 
-    /**
-     * Test Auth::create_hash();
-     *
-     * @test
-     */
-    public function test_create_hash()
-    {
-        $string   = 'helloworld123';
-        $expected = sha1('12345'.$string);
-        $output   = Auth::create_hash($string);
+	/**
+	 * Test Auth::create_hash();
+	 *
+	 * @test
+	 */
+	public function test_create_hash()
+	{
+		$string   = 'helloworld123';
+		$expected = sha1('12345'.$string);
+		$output   = Auth::create_hash($string);
 
-        $this->assertEquals($expected, $output);
-    }
-    
+		$this->assertEquals($expected, $output);
+	}
+	
 }

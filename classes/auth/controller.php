@@ -34,35 +34,35 @@ namespace Hybrid;
  */
 
 class Auth_Controller extends \Controller 
-{    
-    public function before()
-    {
-        parent::before();
+{
+	public function before()
+	{
+		parent::before();
 
-        // Load the configuration for this provider
-        \Config::load('autho', 'autho');
-    }
+		// Load the configuration for this provider
+		\Config::load('autho', 'autho');
+	}
 
-    public function action_session($provider = array())
-    {
-        if (empty($provider))
-        {
-            throw new \HttpNotFoundException();
-        }
+	public function action_session($provider = array())
+	{
+		if (empty($provider))
+		{
+			throw new \HttpNotFoundException();
+		}
 
-        Auth_Strategy::forge($provider)->authenticate();
-    }
+		Auth_Strategy::forge($provider)->authenticate();
+	}
 
-    public function action_callback($provider = array())
-    {
-        if (empty($provider))
-        {
-            throw new \HttpNotFoundException();
-        }
-        
-        $strategy = Auth_Strategy::forge($provider);
-        
-        Auth_Strategy::login_or_register($strategy);
-    }
+	public function action_callback($provider = array())
+	{
+		if (empty($provider))
+		{
+			throw new \HttpNotFoundException();
+		}
+		
+		$strategy = Auth_Strategy::forge($provider);
+		
+		Auth_Strategy::login_or_register($strategy);
+	}
 
 }

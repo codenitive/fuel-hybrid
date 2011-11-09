@@ -29,48 +29,48 @@ namespace Hybrid;
 
 class Test_Chart extends \Fuel\Core\TestCase 
 {    
-    /**
-     * Setup the test
-     */
-    public function setup()
-    {
-        \Package::load('hybrid');
-    }
+	/**
+	 * Setup the test
+	 */
+	public function setup()
+	{
+		\Package::load('hybrid');
+	}
 
-    /**
-     * Test Chart::forge()
-     *
-     * @test
-     */
-    public function test_forge()
-    {
-        $output = Chart::forge('timeline');
+	/**
+	 * Test Chart::forge()
+	 *
+	 * @test
+	 */
+	public function test_forge()
+	{
+		$output = Chart::forge('timeline');
 
-        $this->assertTrue($output instanceof \Hybrid\Chart_Timeline);
-    }
+		$this->assertTrue($output instanceof \Hybrid\Chart_Timeline);
+	}
 
-    /**
-     * Test Chart::forge() given invalid driver
-     *
-     * @test
-     * @expectedException \FuelException
-     */
-    public function test_forge_expected_exception_given_invalid_driver()
-    {
-        $output = Chart::forge('date');
-    }
+	/**
+	 * Test Chart::forge() given invalid driver
+	 *
+	 * @test
+	 * @expectedException \FuelException
+	 */
+	public function test_forge_expected_exception_given_invalid_driver()
+	{
+		$output = Chart::forge('date');
+	}
 
-    /**
-     * Test Chart::js()
-     *
-     * @test
-     */
-    public function test_js()
-    {
-        $expected = '<script type="text/javascript" src="https://www.google.com/jsapi"></script>';
-        $output   = Chart::js();
+	/**
+	 * Test Chart::js()
+	 *
+	 * @test
+	 */
+	public function test_js()
+	{
+		$expected = '<script type="text/javascript" src="https://www.google.com/jsapi"></script>';
+		$output   = Chart::js();
 
-        $this->assertEquals($expected, $output);
-    }
+		$this->assertEquals($expected, $output);
+	}
 
  }

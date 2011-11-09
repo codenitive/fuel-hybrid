@@ -25,8 +25,8 @@ namespace Hybrid;
  * @category    Text_Driver
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
- 
+
 abstract class Parser_Driver 
-{    
-    public abstract function parse($text = '');   
+{
+	public abstract function parse($text = '');   
 }

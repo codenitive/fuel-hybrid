@@ -29,34 +29,35 @@ namespace Hybrid;
 
 class Test_Curl extends \Fuel\Core\TestCase 
 {
-    /**
-     * Setup the test
-     */
-    public function setup()
-    {
-        \Package::load('hybrid');
-    }
+	/**
+	 * Setup the test
+	 */
+	public function setup()
+	{
+		\Package::load('hybrid');
+	}
 
-    /**
-     * Test Curl::forge();
-     *
-     * @test
-     */
-    public function test_forge()
-    {
-        $output = Curl::forge('GET http://google.com');
-        
-        $this->assertTrue($output instanceof \Hybrid\Curl); 
-    }
+	/**
+	 * Test Curl::forge();
+	 *
+	 * @test
+	 */
+	public function test_forge()
+	{
+		$output = Curl::forge('GET http://google.com');
+		
+		$this->assertTrue($output instanceof \Hybrid\Curl); 
+	}
 
-    /**
-     * Test Curl::forge() given invalid driver
-     *
-     * @test
-     * @expectedException \FuelException
-     */
-    public function test_forge_expected_exception_given_invalid_method()
-    {
-        Curl::forge('FORK http://google.com');
-    }
+	/**
+	 * Test Curl::forge() given invalid driver
+	 *
+	 * @test
+	 * @expectedException \FuelException
+	 */
+	public function test_forge_expected_exception_given_invalid_method()
+	{
+		Curl::forge('FORK http://google.com');
+	}
+	
 }

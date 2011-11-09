@@ -35,61 +35,61 @@ namespace Hybrid;
 
 class Auth_Strategy_Normal extends Auth_Strategy 
 {
-    public $provider = null;
-    protected $users = null;
+	public $provider = null;
+	protected $users = null;
 
-    public function __construct($provider)
-    {
-        parent::__construct($provider);
+	public function __construct($provider)
+	{
+		parent::__construct($provider);
 
-        $this->provider = Auth_Provider_Normal::forge();
+		$this->provider = Auth_Provider_Normal::forge();
 
-        return $this;
-    }
-    
-    public function authenticate()
-    {
-        // get user data from cookie
-        $users = \Cookie::get('_users');
+		return $this;
+	}
+	
+	public function authenticate()
+	{
+		// get user data from cookie
+		$users = \Cookie::get('_users');
 
-        // user data shouldn't be null if there user authentication available, if not populate from default
-        if (null !== $users) 
-        {
-            $users = unserialize(\Crypt::decode($users));
-        }
-        else
-        {
-            $users        = new \stdClass();
-            $users->id    = 0;
-            $users->_hash = '';
-        }
+		// user data shouldn't be null if there user authentication available, if not populate from default
+		if (null !== $users) 
+		{
+			$users = unserialize(\Crypt::decode($users));
+		}
+		else
+		{
+			$users        = new \stdClass();
+			$users->id    = 0;
+			$users->_hash = '';
+		}
 
-        $this->users = $users;
+		$this->users = $users;
 
-        $this->provider->access_token((array) $users);
+		$this->provider->access_token((array) $users);
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function reauthenticate()
-    {
-        // get user data from cookie
-        $users = $this->users;
+	public function reauthenticate()
+	{
+		// get user data from cookie
+		$users = $this->users;
 
-        // user data shouldn't be null if there user authentication available, if not populate from default
-        if (null === $users) 
-        {
-            $users        = new \stdClass();
-            $users->id    = 0;
-        }
+		// user data shouldn't be null if there user authentication available, if not populate from default
+		if (null === $users) 
+		{
+			$users        = new \stdClass();
+			$users->id    = 0;
+		}
 
-        $users->_hash = null;
+		$users->_hash = null;
 
-        $this->users = $users;
+		$this->users = $users;
 
-        $this->provider->access_token((array) $users);
+		$this->provider->access_token((array) $users);
 
-        return $this;
-    }
+		return $this;
+	}
 
 }

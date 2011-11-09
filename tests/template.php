@@ -29,42 +29,42 @@ namespace Hybrid;
 
 class Test_Template extends \Fuel\Core\TestCase 
 {
-    /**
-     * Setup the test
-     */
-    public function setup()
-    {
-        \Package::load('hybrid');
-    }
+	/**
+	 * Setup the test
+	 */
+	public function setup()
+	{
+		\Package::load('hybrid');
+	}
 
-    /**
-     * Test Template::forge();
-     *
-     * @test
-     */
-    public function test_forge()
-    {
-        try
-        {
-            $output = Template::forge('normal');
-        }
-        catch (\FuelException $e)
-        {
-            $this->markTestSkipped("config/hybrid.php is not configured or Template_Normal not in used");
-        }
-        
-        $this->assertTrue($output instanceof \Hybrid\Template_Normal); 
-    }
+	/**
+	 * Test Template::forge();
+	 *
+	 * @test
+	 */
+	public function test_forge()
+	{
+		try
+		{
+			$output = Template::forge('normal');
+		}
+		catch (\FuelException $e)
+		{
+			$this->markTestSkipped("config/hybrid.php is not configured or Template_Normal not in used");
+		}
+		
+		$this->assertTrue($output instanceof \Hybrid\Template_Normal); 
+	}
 
-    /**
-     * Test Template::forge() given invalid driver
-     *
-     * @test
-     * @expectedException \FuelException
-     */
-    public function test_forge_expected_exception_given_invalid_driver()
-    {
-        Template::forge('helloworld');
-    }
+	/**
+	 * Test Template::forge() given invalid driver
+	 *
+	 * @test
+	 * @expectedException \FuelException
+	 */
+	public function test_forge_expected_exception_given_invalid_driver()
+	{
+		Template::forge('helloworld');
+	}
 
 }
