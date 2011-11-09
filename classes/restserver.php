@@ -402,9 +402,11 @@ class Restserver
 	protected static function detect_format()
 	{
 		// A format has been passed as an argument in the URL and it is supported
-		if (Input::param('format') and static::$supported_formats[Input::param('format')])
+		$format = Input::param('format');
+
+		if ($format and static::$supported_formats[$format])
 		{
-			return Input::param('format');
+			return $format;
 		}
 
 		// Otherwise, check the HTTP_ACCEPT (if it exists and we are allowed)
