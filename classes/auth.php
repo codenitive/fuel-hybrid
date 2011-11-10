@@ -196,7 +196,7 @@ class Auth
 
 		$salt   = \Config::get('autho.salt', \Config::get('crypt.crypto_key'));
 		
-		return base64_encode(static::$hasher()->pbkdf2($string, $salt, 10000, 32));
+		return base64_encode(static::$hasher->pbkdf2($string, $salt, 10000, 32));
 	}
 
 	/**
