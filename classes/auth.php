@@ -154,14 +154,20 @@ class Auth
 	 * @static
 	 * @access  public
 	 * @param   string  $string       String to be hashed
+	 * @param   string  $hash_type    String of hash type
 	 * @return  string
 	 */
-	public static function create_hash($string = '')
+	public static function create_hash($string = '', $hash_type = null)
 	{
 		$salt   = \Config::get('autho.salt', \Config::get('crypt.crypto_key'));
 		$string = $string;
 
-		switch (\Config::get('autho.hash_type', 'sha1'))
+		if (null === $hash_type or ! in_array($hash_type, array('md5', 'crypt_hash', 'sha1')))
+		{
+			$hash_type = \Config::get('autho.hash_type', 'sha1');
+		}
+
+		switch ($hash_type)
 		{
 			case 'md5' :
 				return \md5($salt.$string);
