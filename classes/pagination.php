@@ -256,7 +256,7 @@ class Pagination
 			// we should add in all $_GET (useful for listing with filters)
 			if ( ! empty($get))
 			{
-				$get = '?'.http_build_query($get);
+				$get = Uri::build_get_query($get);
 				$get = str_replace('page=%3Apage', 'page=:page', $get);
 			}
 			else

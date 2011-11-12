@@ -51,9 +51,22 @@ class Uri extends \Fuel\Core\Uri
 			return '';
 		}
 
-		foreach ($data as $get)
+		foreach ($data as $key => $value)
 		{
-			$values[$get] = Input::get($get);
+			// Use $_GET value overwriting if given.
+			if ( ! is_numeric($key))
+			{
+				$input = $value;
+			}
+			else
+			{
+				$input = Input::get($value);
+			}
+			
+			if (null !== $input and ! empty($input))
+			{
+				$values[$key] = $input;
+			}
 		}
 		
 		return $start_with.http_build_query($values);
