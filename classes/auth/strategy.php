@@ -131,6 +131,12 @@ abstract class Auth_Strategy
 		{
 			try 
 			{
+				$secret = '';
+				if (null !== $response->secret)
+				{
+					$secret = $response->secret;
+				}
+				
 				Auth::instance('user')->login_token($response->token, $response->secret);
 				// credentials ok, go right in
 				Auth::redirect('logged_in');

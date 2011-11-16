@@ -368,9 +368,13 @@ class Auth_Provider_Normal
 			->from('users')
 			->join('authentications')
 			->on('authentications.user_id', '=', 'users.id')
-			->where('authentications.token', '=', $token)
-			->where('authentications.secret', '=', $secret);
-		
+			->where('authentications.token', '=', $token);
+
+		if ( ! empty($secret))
+		{
+			$query->where('authentications.secret', '=', $secret);
+		}
+
 		if (true === $this->use_auth)
 		{
 			$query->select(array('users_auths.password', 'password_token'))

@@ -304,7 +304,7 @@ class Auth
 		// some provider does not have secret key
 		if ( ! isset($user_data['credentials']['secret']))
 		{
-			$user_data['credentials']['secret'] = null;
+			$user_data['credentials']['secret'] = '';
 		}
 
 		if ($user_id < 1)
