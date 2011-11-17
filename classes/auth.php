@@ -33,6 +33,7 @@ namespace Hybrid;
  */
 
 class AuthException extends \FuelException {}
+class AuthCancelException extends AuthException {}
 
 class Auth 
 {
@@ -181,7 +182,7 @@ class Auth
 
 			case 'sha1' :
 			default :
-				return \sha1($salt.$string);
+				return sha1($salt.$string);
 		}
 	}
 
