@@ -141,7 +141,7 @@ abstract class Auth_Strategy
 				// credentials ok, go right in
 				Auth::redirect('logged_in');
 			}
-			catch (Auth_Exception $e)
+			catch (AuthException $e)
 			{
 				switch ($strategy->name)
 				{

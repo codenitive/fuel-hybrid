@@ -23,7 +23,8 @@ namespace Hybrid;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Auth_Exception
+ * @deprecated
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Auth_Exception extends \FuelException {}
+class Auth_Exception extends AuthException {}

@@ -282,7 +282,7 @@ class Auth_Provider_Normal
 	 * @param   string  $password
 	 * @param   string  $remember_me
 	 * @return  self
-	 * @throws  Auth_Exception
+	 * @throws  AuthException
 	 */
 	public function login($username, $password, $remember_me = false)
 	{
@@ -331,13 +331,13 @@ class Auth_Provider_Normal
 		if ($this->data['id'] < 1)
 		{
 			$this->reset();
-			throw new Auth_Exception(\Lang::get('autho.user.not_exist', array('username' => $username)));
+			throw new AuthException(\Lang::get('autho.user.not_exist', array('username' => $username)));
 		}
 
 		if ($this->data['password'] !== Auth::create_hash($password))
 		{
 			$this->reset();
-			throw new Auth_Exception(\Lang::get('autho.user.bad_combination'));
+			throw new AuthException(\Lang::get('autho.user.bad_combination'));
 		}
 		
 		$this->verify_token();
@@ -404,7 +404,7 @@ class Auth_Provider_Normal
 
 		if ($this->data['id'] < 1)
 		{
-			throw new Auth_Exception(\Lang::get('autho.user.not_linked'));
+			throw new AuthException(\Lang::get('autho.user.not_linked'));
 		}
 
 		$this->verify_token();

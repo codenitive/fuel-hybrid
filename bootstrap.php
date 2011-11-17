@@ -34,6 +34,7 @@ Autoloader::add_classes(array (
 	'Hybrid\\View'             => __DIR__.'/classes/view.php',
 	
 	'Hybrid\\Auth'                 => __DIR__.'/classes/auth.php',
+	'Hybrid\\AuthException'        => __DIR__.'/classes/auth.php',
 	'Hybrid\\Auth_Controller'      => __DIR__.'/classes/auth/controller.php',
 	'Hybrid\\Auth_Exception'       => __DIR__.'/classes/auth/exception.php',
 	'Hybrid\\Auth_Provider_Normal' => __DIR__.'/classes/auth/provider/normal.php',
