@@ -60,13 +60,20 @@ class Auth_Strategy_OAuth2 extends Auth_Strategy
 		// Load the provider
 		$this->provider = \OAuth2\Provider::factory($this->provider, $this->config);
 		
+		$error = Input::get('error');
+
+		if (null !== $error)
+		{
+			throw new AuthCancelException("Error: ".$error);
+		}
+
 		try
 		{
-			$code = \Input::get('code');
+			$code = Input::get('code');
 
 			if (null === $code)
 			{
-				throw new Exception("Expected Authorization Code not available");
+				throw new AuthException("Expected Authorization Code not available");
 			}
 
 			$params = $this->provider->access($code);
