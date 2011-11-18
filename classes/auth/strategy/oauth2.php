@@ -62,7 +62,14 @@ class Auth_Strategy_OAuth2 extends Auth_Strategy
 		
 		try
 		{
-			$params = $this->provider->access(\Input::get('code'));
+			$code = \Input::get('code');
+
+			if (null === $code)
+			{
+				throw new Exception("Expected Authorization Code not available");
+			}
+			
+			$params = $this->provider->access();
 			
 			return (object) array(
 				'token' => $params['access_token'],
