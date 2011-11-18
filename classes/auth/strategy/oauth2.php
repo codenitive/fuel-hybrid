@@ -68,8 +68,8 @@ class Auth_Strategy_OAuth2 extends Auth_Strategy
 			{
 				throw new Exception("Expected Authorization Code not available");
 			}
-			
-			$params = $this->provider->access();
+
+			$params = $this->provider->access($code);
 			
 			return (object) array(
 				'token' => $params['access_token'],
