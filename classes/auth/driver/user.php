@@ -231,6 +231,11 @@ class Auth_Driver_User extends Auth_Driver
 
 		$credential = $user_data['credentials'];
 
+		if (null === $credential['secret'])
+		{
+			$credential['secret'] = '';
+		}
+
 		$this->provider->data['accounts'][$credential['provider']] = array(
 			'token'  => $credential['token'],
 			'secret' => $credential['secret'],
