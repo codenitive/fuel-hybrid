@@ -51,7 +51,7 @@ class Auth_Strategy_OpenId extends Auth_Strategy
 	public function __construct($provider)
 	{
 		parent::__construct($provider);
-		$this->openid = new \LightOpenID(\Input::server('HTTP_HOST'));
+		$this->openid = new \LightOpenID(Input::server('HTTP_HOST'));
 	}
 
 	/**
@@ -62,11 +62,11 @@ class Auth_Strategy_OpenId extends Auth_Strategy
 	 */
 	public function authenticate()
 	{
-		$identity = \Input::post(\Config::get('ninjauth.providers.openid.identifier_form_name'))
+		$identity = Input::post(\Config::get('ninjauth.providers.openid.identifier_form_name'))
 
 		if (empty($identity))
 		{
-			throw new AuthException('No identity provided');
+			throw new Auth_Strategy_Exception('No identity provided');
 		}
 
 		$this->openid->identity  = $identity;
@@ -78,9 +78,9 @@ class Auth_Strategy_OpenId extends Auth_Strategy
 		{
 			header('Location: '.$this->openid->authUrl());
 		}
-		catch (AuthException $e)
+		catch (Exception $e)
 		{
-			throw new AuthException('Unable to find OpenId provider URL', 404, $e);
+			throw new Auth_Strategy_Exception('Unable to find OpenId provider URL', 404, $e);
 		}
 
 		exit(); // must exit here since we do a redirection.
@@ -95,12 +95,12 @@ class Auth_Strategy_OpenId extends Auth_Strategy
 	{
 		if ($this->openid->mode == 'cancel')
 		{
-			throw new AuthCancelException('User canceled the process');
+			throw new Auth_Strategy_Exception('User canceled the process');
 		}
 
 		if ( ! $this->openid->validate())
 		{
-			throw new AuthException('Invalid OpenId response');
+			throw new Auth_Strategy_Exception('Invalid OpenId response');
 		}
 
 		return (object) array(

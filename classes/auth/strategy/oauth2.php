@@ -13,6 +13,8 @@
 
 namespace Hybrid;
 
+use OAuth2\Provider;
+
 /**
  * Hybrid 
  * 
@@ -40,7 +42,7 @@ class Auth_Strategy_OAuth2 extends Auth_Strategy
 	public function authenticate()
 	{
 		// Load the provider
-		$provider = \OAuth2\Provider::factory($this->provider, $this->config);
+		$provider = Provider::factory($this->provider, $this->config);
 
 		// Grab a callback from the config
 
@@ -58,24 +60,25 @@ class Auth_Strategy_OAuth2 extends Auth_Strategy
 	public function callback()
 	{
 		// Load the provider
-		$this->provider = \OAuth2\Provider::factory($this->provider, $this->config);
+		$this->provider = Provider::factory($this->provider, $this->config);
 		
 		$error = Input::get('error');
 
 		if (null !== $error)
 		{
-			throw new AuthCancelException("Error: ".$error);
+			throw new Auth_Strategy_Exception(ucfirst($this->provider)." Error: ".$error);
+		}
+
+		$code = Input::get('code');
+
+		if (null === $code or empty($code))
+		{
+			// Send the user back to the beginning
+			throw new Auth_Strategy_Exception('invalid token after coming back to site');
 		}
 
 		try
 		{
-			$code = Input::get('code');
-
-			if (null === $code)
-			{
-				throw new AuthException("Expected Authorization Code not available");
-			}
-
 			$params = $this->provider->access($code);
 			
 			return (object) array(
@@ -83,10 +86,9 @@ class Auth_Strategy_OAuth2 extends Auth_Strategy
 				'secret' => null,
 			);
 		}
-	
 		catch (Exception $e)
 		{
-			exit('That didnt work: '.$e);
+			throw new Auth_Strategy_Exception('That didnt work: '.$e);
 		}
 	}
 	

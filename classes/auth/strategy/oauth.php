@@ -13,6 +13,9 @@
 
 namespace Hybrid;
 
+use \OAuth\Consumer;
+use \OAuth\Provider;
+
 /**
  * Hybrid 
  * 
@@ -40,13 +43,14 @@ class Auth_Strategy_OAuth extends Auth_Strategy
 	public function authenticate()
 	{
 		// Create an consumer from the config
-		$consumer = \OAuth\Consumer::factory($this->config);
+		$consumer = Consumer::factory($this->config);
 		
 		// Load the provider
-		$provider = \OAuth\Provider::factory($this->provider);
+		$provider = Provider::factory($this->provider);
 		
 		// Create the URL to return the user to
-		$callback = \Uri::create(\Config::get('autho.urls.callback', \Request::active()->route->segments[0].'/callback').'/'.$this->provider);
+		$callback = \Uri::create(\Config::get('autho.urls.callback', \Request::active()->route->segments[0].'/callback'));
+		$callback = rtrim($callback, '/').'/'.$this->provider;
 		
 		// Add the callback URL to the consumer
 		$consumer->callback($callback); 
@@ -66,10 +70,10 @@ class Auth_Strategy_OAuth extends Auth_Strategy
 	public function callback()
 	{
 		// Create an consumer from the config
-		$this->consumer = \OAuth\Consumer::factory($this->config);
+		$this->consumer = Consumer::factory($this->config);
 
 		// Load the provider
-		$this->provider = \OAuth\Provider::factory($this->provider);
+		$this->provider = Provider::factory($this->provider);
 		
 		if ($token = \Cookie::get('oauth_token'))
 		{
@@ -77,17 +81,17 @@ class Auth_Strategy_OAuth extends Auth_Strategy
 			$this->token = unserialize(base64_decode($token));
 		}
 			
-		if ($this->token AND $this->token->token !== \Input::get_post('oauth_token'))
+		if ($this->token and $this->token->token !== Input::get_post('oauth_token'))
 		{   
 			// Delete the token, it is not valid
 			\Cookie::delete('oauth_token');
 
 			// Send the user back to the beginning
-			exit('invalid token after coming back to site');
+			throw new Auth_Strategy_Exception('invalid token after coming back to site');
 		}
 
 		// Get the verifier
-		$verifier = \Input::get_post('oauth_verifier');
+		$verifier = Input::get_post('oauth_verifier');
 
 		// Store the verifier in the token
 		$this->token->verifier($verifier);

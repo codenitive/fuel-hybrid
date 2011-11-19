@@ -50,7 +50,14 @@ class Auth_Controller extends \Controller
 			throw new \HttpNotFoundException();
 		}
 
-		Auth_Strategy::forge($provider)->authenticate();
+		try 
+		{
+			Auth_Strategy::forge($provider)->authenticate();
+		}
+		catch (Auth_Strategy_Exception $e)
+		{
+			$this->action_error($provider, $e);
+		}
 	}
 
 	public function action_callback($provider = array())
@@ -60,9 +67,20 @@ class Auth_Controller extends \Controller
 			throw new \HttpNotFoundException();
 		}
 		
-		$strategy = Auth_Strategy::forge($provider);
-		
-		Auth_Strategy::login_or_register($strategy);
+		try 
+		{
+			$strategy = Auth_Strategy::forge($provider);
+			Auth_Strategy::login_or_register($strategy);
+		} 
+		catch (Auth_Strategy_Exception $e)
+		{
+			$this->action_error($provider, $e);
+		}
+	}
+
+	public function action_error($provider = array(), $e)
+	{
+		return \View::forge('error');
 	}
 
 }

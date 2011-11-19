@@ -72,7 +72,7 @@ abstract class Auth_Strategy
 		
 		if ( ! $strategy)
 		{
-			throw new \FuelException(sprintf('Provider "%s" has no strategy.', $provider));
+			throw new Auth_Strategy_Exception(sprintf('Provider "%s" has no strategy.', $provider));
 		}
 		
 		$class = "\Hybrid\Auth_Strategy_{$strategy}";
@@ -102,20 +102,7 @@ abstract class Auth_Strategy
 			// Allowed multiple providers, or not authed yet?
 			if (0 === $num_linked or true === \Config::get('autho.link_multiple_providers'))
 			{
-				switch ($strategy->name)
-				{
-					case 'oauth':
-						$user_hash = $strategy->provider->get_user_info($strategy->consumer, $response);
-					break;
-
-					case 'oauth2':
-						$user_hash = $strategy->provider->get_user_info($response->token);
-					break;
-
-					case 'openid':
-						$user_hash = $strategy->get_user_info($response);
-					break;
-				}
+				$user_hash = $this->get_user_info($strategy, $response);
 
 				Auth::instance('user')->link_account($user_hash);
 
@@ -126,7 +113,7 @@ abstract class Auth_Strategy
 			{
 				$providers = array_keys($accounts);
 
-				throw new \FuelException(sprintf('This user is already linked to "%s".', $providers[0]));
+				throw new Auth_Strategy_Exception(sprintf('This user is already linked to "%s".', $providers[0]));
 			}
 		}
 		// The user exists, so send him on his merry way as a user
@@ -146,25 +133,36 @@ abstract class Auth_Strategy
 			}
 			catch (AuthException $e)
 			{
-				switch ($strategy->name)
-				{
-					case 'oauth':
-						$user_hash = $strategy->provider->get_user_info($strategy->consumer, $response);
-					break;
-					
-					case 'oauth2':
-						$user_hash = $strategy->provider->get_user_info($response->token);
-					break;
-					
-					default:
-						exit('Ummm....');
-				}
+				$user_hash = $this->get_user_info($strategy, $response);
 				
 				\Session::set('autho', $user_hash);
 
 				Auth::redirect('registration');
 			}
 		}
+	}
+
+	protected function get_user_info($strategy, $response)
+	{
+		switch ($strategy->name)
+		{
+			case 'oauth':
+				$user_hash = $strategy->provider->get_user_info($strategy->consumer, $response);
+			break;
+
+			case 'oauth2':
+				$user_hash = $strategy->provider->get_user_info($response->token);
+			break;
+
+			case 'openid':
+				$user_hash = $strategy->get_user_info($response);
+			break;
+
+			default:
+				throw new Auth_Strategy_Exception('Unable to get user info with '.$strategy->name);
+		}
+
+		return $user_hash;
 	}
 
 	abstract public function authenticate();

@@ -40,14 +40,15 @@ Autoloader::add_classes(array (
 	'Hybrid\\Auth_Exception'       => __DIR__.'/classes/auth/exception.php',
 	'Hybrid\\Auth_Provider_Normal' => __DIR__.'/classes/auth/provider/normal.php',
 	
-	'Hybrid\\Auth_Driver'          => __DIR__.'/classes/auth/driver.php',
-	'Hybrid\\Auth_Driver_User'     => __DIR__.'/classes/auth/driver/user.php',
+	'Hybrid\\Auth_Driver'      => __DIR__.'/classes/auth/driver.php',
+	'Hybrid\\Auth_Driver_User' => __DIR__.'/classes/auth/driver/user.php',
 	
-	'Hybrid\\Auth_Strategy'        => __DIR__.'/classes/auth/strategy.php',
-	'Hybrid\\Auth_Strategy_Normal' => __DIR__.'/classes/auth/strategy/normal.php',
-	'Hybrid\\Auth_Strategy_OAuth'  => __DIR__.'/classes/auth/strategy/oauth.php',
-	'Hybrid\\Auth_Strategy_OAuth2' => __DIR__.'/classes/auth/strategy/oauth2.php',
-	'Hybrid\\Auth_Strategy_OpenId' => __DIR__.'/classes/auth/strategy/openid.php',
+	'Hybrid\\Auth_Strategy'           => __DIR__.'/classes/auth/strategy.php',
+	'Hybrid\\Auth_Strategy_Exception' => __DIR__.'/classes/auth/strategy/exception.php',
+	'Hybrid\\Auth_Strategy_Normal'    => __DIR__.'/classes/auth/strategy/normal.php',
+	'Hybrid\\Auth_Strategy_OAuth'     => __DIR__.'/classes/auth/strategy/oauth.php',
+	'Hybrid\\Auth_Strategy_OAuth2'    => __DIR__.'/classes/auth/strategy/oauth2.php',
+	'Hybrid\\Auth_Strategy_OpenId'    => __DIR__.'/classes/auth/strategy/openid.php',
 	
 	'Hybrid\\Chart'          => __DIR__.'/classes/chart.php',
 	'Hybrid\\Chart_Driver'   => __DIR__.'/classes/chart/driver.php',
