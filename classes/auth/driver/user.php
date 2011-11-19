@@ -231,7 +231,7 @@ class Auth_Driver_User extends Auth_Driver
 
 		$credential = $user_data['credentials'];
 
-		if (null === $credential['secret'])
+		if ( ! isset($credential['secret']) or null === $credential['secret'])
 		{
 			$credential['secret'] = '';
 		}
