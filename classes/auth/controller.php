@@ -103,12 +103,12 @@ class Auth_Controller extends \Controller
 	/**
 	 * Display error from failed request
 	 *
-	 * @access  public
+	 * @access  protected
 	 * @param   array    $provider
 	 * @param   string   $e
 	 * @return  Response
 	 */
-	public function action_error($provider = array(), $e = '')
+	protected function action_error($provider = array(), $e = '')
 	{
 		return \View::forge('error');
 	}
