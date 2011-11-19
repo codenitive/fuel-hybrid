@@ -304,10 +304,12 @@ class Auth
 			return ;
 		}
 		
+		$credentials = $user_data['credentials'];
+		
 		// some provider does not have secret key
-		if ( ! isset($user_data['credentials']['secret']))
+		if ( ! isset($credentials['secret']) or null === $credentials['secret'])
 		{
-			$user_data['credentials']['secret'] = '';
+			$credentials['secret'] = '';
 		}
 
 		if ($user_id < 1)
@@ -315,32 +317,41 @@ class Auth
 			return ;
 		}
 
+		foreach (array('uid', 'token') as $field)
+		{
+			if ( ! isset($credentials[$field]) or null === $credentials[$field])
+			{
+				throw new AuthException("Missing required information: {$field}");
+			}
+		}
+
+
 		\DB::select()
 			->from('authentications')
 			->where('user_id', '=', $user_id)
-			->where('provider', '=', $user_data['credentials']['provider'])
+			->where('provider', '=', $credentials['provider'])
 			->execute();
 
 		// Attach this account to the logged in user
 		if (\DB::count_last_query() > 0)
 		{
 			\DB::update('authentications')->set(array(
-					'uid'      => $user_data['credentials']['uid'],
-					'token'    => $user_data['credentials']['token'],
-					'secret'   => $user_data['credentials']['secret'],
+					'uid'      => $credentials['uid'],
+					'token'    => $credentials['token'],
+					'secret'   => $credentials['secret'],
 				))
 				->where('user_id', '=', $user_id)
-				->where('provider', '=', $user_data['credentials']['provider'])
+				->where('provider', '=', $credentials['provider'])
 				->execute();
 		}
 		else
 		{
 			\DB::insert('authentications')->set(array(
 					'user_id'  => $user_id,
-					'provider' => $user_data['credentials']['provider'],
-					'uid'      => $user_data['credentials']['uid'],
-					'token'    => $user_data['credentials']['token'],
-					'secret'   => $user_data['credentials']['secret'],
+					'provider' => $credentials['provider'],
+					'uid'      => $credentials['uid'],
+					'token'    => $credentials['token'],
+					'secret'   => $credentials['secret'],
 				))->execute();
 		}
 

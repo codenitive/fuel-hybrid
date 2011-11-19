@@ -141,7 +141,15 @@ abstract class Auth_Strategy
 			{
 				$user_hash = static::get_user_info($strategy, $response);
 
-				Auth::instance('user')->link_account($user_hash);
+				try 
+				{
+					Auth::instance('user')->link_account($user_hash);
+				}
+				catch (AuthException $e)
+				{
+					throw new Auth_Strategy_Exception("Unable to retrieve valid user information from requested access token");
+				}
+
 
 				// Attachment went ok so we'll redirect
 				Auth::redirect('logged_in');
