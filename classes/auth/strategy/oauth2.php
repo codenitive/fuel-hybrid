@@ -66,7 +66,7 @@ class Auth_Strategy_OAuth2 extends Auth_Strategy
 
 		if (null !== $error)
 		{
-			throw new Auth_Strategy_Exception(ucfirst($this->provider)." Error: ".$error);
+			throw new Auth_Strategy_Exception(ucfirst($this->provider->name)." Error: ".$error);
 		}
 
 		$code = Input::get('code');

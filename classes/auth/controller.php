@@ -35,6 +35,12 @@ namespace Hybrid;
 
 class Auth_Controller extends \Controller 
 {
+	/**
+	 * Load autho configuration
+	 *
+	 * @access  public
+	 * @return 	void
+	 */
 	public function before()
 	{
 		parent::before();
@@ -43,6 +49,14 @@ class Auth_Controller extends \Controller
 		\Config::load('autho', 'autho');
 	}
 
+	/**
+	 * Start a session request
+	 *
+	 * @access 	public
+	 * @param   array    $provider
+	 * @return  Response
+	 * @throws  Auth_Strategy_Exception
+	 */
 	public function action_session($provider = array())
 	{
 		if (empty($provider))
@@ -56,10 +70,18 @@ class Auth_Controller extends \Controller
 		}
 		catch (Auth_Strategy_Exception $e)
 		{
-			$this->action_error($provider, $e);
+			return $this->action_error($provider, $e->getMessage());
 		}
 	}
 
+	/**
+	 * Get authorization code from callback and fetch user access_token and other information
+	 *
+	 * @access  public
+	 * @param   array    $provider
+	 * @return  Response
+	 * @throws  Auth_Strategy_Exception
+	 */
 	public function action_callback($provider = array())
 	{
 		if (empty($provider))
@@ -74,11 +96,19 @@ class Auth_Controller extends \Controller
 		} 
 		catch (Auth_Strategy_Exception $e)
 		{
-			$this->action_error($provider, $e);
+			return $this->action_error($provider, $e->getMessage());
 		}
 	}
 
-	public function action_error($provider = array(), $e)
+	/**
+	 * Display error from failed request
+	 *
+	 * @access  public
+	 * @param   array    $provider
+	 * @param   string   $e
+	 * @return  Response
+	 */
+	public function action_error($provider = array(), $e = '')
 	{
 		return \View::forge('error');
 	}

@@ -39,6 +39,13 @@ abstract class Auth_Strategy
 	public $config   = array();
 	public $name     = null;
 	
+	/**
+	 * List of available provider
+	 * 
+	 * @static
+	 * @access  protected
+	 * @var     array
+	 */
 	protected static $providers = array(
 		'normal'    => 'Normal',
 		'facebook'  => 'OAuth2',
@@ -52,6 +59,12 @@ abstract class Auth_Strategy
 		'youtube'   => 'OAuth',
 	);
 
+	/**
+	 * Generic construct method
+	 *
+	 * @access  public
+	 * @return  void
+	 */
 	public function __construct($provider)
 	{
 		$this->provider = $provider;
@@ -66,6 +79,14 @@ abstract class Auth_Strategy
 		}
 	}
 
+	/**
+	 * Forge a new strategy
+	 *
+	 * @static
+	 * @access  public
+	 * @return  Auth_Strategy
+	 * @throws  Auth_Strategy_Exception
+	 */
 	public static function forge($provider)
 	{
 		$strategy = \Config::get("autho.providers.{$provider}.strategy") ?: \Arr::get(static::$providers, $provider);
@@ -79,6 +100,13 @@ abstract class Auth_Strategy
 		return new $class($provider);
 	}
 
+	/**
+	 * Deprecated factory method (adviced to use forge())
+	 *
+	 * @static
+	 * @access  public
+	 * @see     self::forge()
+	 */
 	public static function factory($provider)
 	{
 		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
@@ -86,6 +114,15 @@ abstract class Auth_Strategy
 		return static::forge($provider);
 	}
 
+	/**
+	 * Determine whether authenticated user should be continue to login or register new user
+	 *
+	 * @static
+	 * @access 	public
+	 * @param   object   $strategy
+	 * @return  void
+	 * @throws  Auth_Strategy_Exception
+	 */
 	public static function login_or_register($strategy)
 	{
 		$response = $strategy->callback();
@@ -102,7 +139,7 @@ abstract class Auth_Strategy
 			// Allowed multiple providers, or not authed yet?
 			if (0 === $num_linked or true === \Config::get('autho.link_multiple_providers'))
 			{
-				$user_hash = $this->get_user_info($strategy, $response);
+				$user_hash = static::get_user_info($strategy, $response);
 
 				Auth::instance('user')->link_account($user_hash);
 
@@ -133,7 +170,7 @@ abstract class Auth_Strategy
 			}
 			catch (AuthException $e)
 			{
-				$user_hash = $this->get_user_info($strategy, $response);
+				$user_hash = static::get_user_info($strategy, $response);
 				
 				\Session::set('autho', $user_hash);
 
@@ -142,7 +179,17 @@ abstract class Auth_Strategy
 		}
 	}
 
-	protected function get_user_info($strategy, $response)
+	/**
+	 * Get user information from provider
+	 *
+	 * @static
+	 * @access 	protected
+	 * @param   object      $strategy
+	 * @param   object      $response
+	 * @return  array
+	 * @throws  Auth_Strategy_Exception
+	 */
+	protected static function get_user_info($strategy, $response)
 	{
 		switch ($strategy->name)
 		{
