@@ -41,10 +41,10 @@
     <hr />
 
     <div class="row">
-        <h3 id="add_salt()">add_salt($password = '')</h3>
+        <h3 id="create_hash()">create_hash($password = '')</h3>
 
         <p>
-            Turn string to hash using <code>sha1()</code> hash with salt.
+            Turn string to hash using <code>md5</code>, <code>sha1()</code> or <code>crypt_hash</code> hash with salt.
         </p>
 
         <table class="method">
@@ -63,7 +63,7 @@
                             <th class="description">Description</th>
                         </tr>
                         <tr>
-                            <th><kbd>$password</kbd></th>
+                            <th><kbd>$string</kbd></th>
                             <td><code>''</code></td>
                             <td>String to be hashed</td>
                         </tr>
@@ -77,8 +77,73 @@
             <tr>
                 <th>Example</th>
                 <td>
+                    <pre class="prettyprint lang-php">$password = \Hybrid\Auth::create_hash(Input::post('password'));</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p>To configure the hashing type, edit <code>'hash_type'</code> in <code>config/autho.php</code>.</p>
+    </div>
+
+    <hr />
+    <div class="row">
+        <h3 id="add_salt()">add_salt($string = '')</h3>
+
+        <div class="alert-message block-message warning">
+            <p>
+                Deprecated on scheduled to be remove in Hybrid for FuelPHP v1.3.0, use <a href="create_hash()">create_hash()</a>
+            </p>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+
+        <h3 id="forge()">forge($name = null)</h3>
+
+        <p>Initiate a new Auth instance, alias to <a href="#instance()">\Hybrid\Auth::instance()</a>.</p>
+
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$name</kbd></th>
+                            <td><code>null</code></td>
+                            <td>null to fetch the default driver, or a driver id to get a specific one</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>Auth_Driver Object</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
                     <pre class="prettyprint lang-php">// Logout the default driver
-$password = \Hybrid\Auth::add_salt(Input::post('password'));</pre>
+$auth = \Hybrid\Auth::forge();
+$auth-&gt;logout();
+
+// Login using the User driver
+\Hybrid\Auth::forge('user')-&gt;login(Input::post('username'), Input::post('password'));
+
+// Or you can use
+\Hybrid\Auth_User::forge()-&gt;login(Input::post('username'), Input::post('password'));</pre>
                 </td>
             </tr>
             </tbody>
@@ -133,59 +198,6 @@ $auth-&gt;logout();
 
 // Or you can use
 \Hybrid\Auth_User::instance()-&gt;login(Input::post('username'), Input::post('password'));</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <hr />
-
-    <div class="row">
-
-        <h3 id="forge()">forge($name = null)</h3>
-
-        <p>Initiate a new Auth instance, alias to <a href="#instance()">\Hybrid\Auth::instance()</a>.</p>
-
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>Yes</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>
-                    <table class="parameters">
-                        <tbody><tr>
-                            <th>Param</th>
-                            <th>Default</th>
-                            <th class="description">Description</th>
-                        </tr>
-                        <tr>
-                            <th><kbd>$name</kbd></th>
-                            <td><code>null</code></td>
-                            <td>null to fetch the default driver, or a driver id to get a specific one</td>
-                        </tr>
-                    </tbody></table>
-                </td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>Auth_Driver Object</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">// Logout the default driver
-$auth = \Hybrid\Auth::forge();
-$auth-&gt;logout();
-
-// Login using the User driver
-\Hybrid\Auth::forge('user')-&gt;login(Input::post('username'), Input::post('password'));
-
-// Or you can use
-\Hybrid\Auth_User::forge()-&gt;login(Input::post('username'), Input::post('password'));</pre>
                 </td>
             </tr>
             </tbody>
@@ -252,6 +264,50 @@ catch(\Fuel_Exception $e)
             </tbody>
         </table>
 
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h3 id="reauthenticate()">reauthenticate($driver = 'user')</h3>
+
+        <p>Reauthenticate current user, useful in situation where user hash is modified by update user profile or password.</p>
+        
+        <table class="method">
+            <tbody>
+            <tr>
+                <th class="legend">Static</th>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <th>Parameters</th>
+                <td>
+                    <table class="parameters">
+                        <tbody><tr>
+                            <th>Param</th>
+                            <th>Default</th>
+                            <th class="description">Description</th>
+                        </tr>
+                        <tr>
+                            <th><kbd>$driver</kbd></th>
+                            <td><code>'user'</td>
+                            <td>Driver type string, default to 'user'.</td>
+                        </tr>
+                    </tbody></table>
+                </td>
+            </tr>
+            <tr>
+                <th>Returns</th>
+                <td>bool</td>
+            </tr>
+            <tr>
+                <th>Example</th>
+                <td>
+                    <pre class="prettyprint lang-php">\Hybrid\Auth::reauthenticate();</pre>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
     <hr />

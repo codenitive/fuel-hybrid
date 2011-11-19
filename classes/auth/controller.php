@@ -34,35 +34,83 @@ namespace Hybrid;
  */
 
 class Auth_Controller extends \Controller 
-{    
-    public function before()
-    {
-        parent::before();
+{
+	/**
+	 * Load autho configuration
+	 *
+	 * @access  public
+	 * @return 	void
+	 */
+	public function before()
+	{
+		parent::before();
 
-        // Load the configuration for this provider
-        \Config::load('autho', 'autho');
-    }
+		// Load the configuration for this provider
+		\Config::load('autho', 'autho');
+	}
 
-    public function action_session($provider = array())
-    {
-        if (empty($provider))
-        {
-            throw new \HttpNotFoundException();
-        }
+	/**
+	 * Start a session request
+	 *
+	 * @access 	public
+	 * @param   array    $provider
+	 * @return  Response
+	 * @throws  Auth_Strategy_Exception
+	 */
+	public function action_session($provider = array())
+	{
+		if (empty($provider))
+		{
+			throw new \HttpNotFoundException();
+		}
 
-        Auth_Strategy::forge($provider)->authenticate();
-    }
+		try 
+		{
+			Auth_Strategy::forge($provider)->authenticate();
+		}
+		catch (Auth_Strategy_Exception $e)
+		{
+			return $this->action_error($provider, $e->getMessage());
+		}
+	}
 
-    public function action_callback($provider = array())
-    {
-        if (empty($provider))
-        {
-            throw new \HttpNotFoundException();
-        }
-        
-        $strategy = Auth_Strategy::forge($provider);
-        
-        Auth_Strategy::login_or_register($strategy);
-    }
+	/**
+	 * Get authorization code from callback and fetch user access_token and other information
+	 *
+	 * @access  public
+	 * @param   array    $provider
+	 * @return  Response
+	 * @throws  Auth_Strategy_Exception
+	 */
+	public function action_callback($provider = array())
+	{
+		if (empty($provider))
+		{
+			throw new \HttpNotFoundException();
+		}
+		
+		try 
+		{
+			$strategy = Auth_Strategy::forge($provider);
+			Auth_Strategy::login_or_register($strategy);
+		} 
+		catch (Auth_Strategy_Exception $e)
+		{
+			return $this->action_error($provider, $e->getMessage());
+		}
+	}
+
+	/**
+	 * Display error from failed request
+	 *
+	 * @access  public
+	 * @param   array    $provider
+	 * @param   string   $e
+	 * @return  Response
+	 */
+	public function action_error($provider = array(), $e = '')
+	{
+		return \View::forge('error');
+	}
 
 }

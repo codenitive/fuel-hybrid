@@ -29,35 +29,35 @@ namespace Hybrid;
 
 class Test_Parser extends \Fuel\Core\TestCase 
 {
-    /**
-     * Setup the test
-     */
-    public function setup()
-    {
-        \Package::load('hybrid');
-    }
+	/**
+	 * Setup the test
+	 */
+	public function setup()
+	{
+		\Package::load('hybrid');
+	}
 
-    /**
-     * Test Parser::forge();
-     *
-     * @test
-     */
-    public function test_forge()
-    {
-        $output = Parser::forge('markdown');
+	/**
+	 * Test Parser::forge();
+	 *
+	 * @test
+	 */
+	public function test_forge()
+	{
+		$output = Parser::forge('markdown');
 
-        $this->assertTrue($output instanceof \Hybrid\Parser_Markdown);
-    }
-    
-    /**
-     * Test Parser::forge() given invalid driver
-     *
-     * @test
-     * @expectedException \FuelException
-     */
-    public function test_forge_expected_exception_given_invalid_driver()
-    {
-        Parser::forge('html');
-    }
-    
+		$this->assertTrue($output instanceof \Hybrid\Parser_Markdown);
+	}
+	
+	/**
+	 * Test Parser::forge() given invalid driver
+	 *
+	 * @test
+	 * @expectedException \FuelException
+	 */
+	public function test_forge_expected_exception_given_invalid_driver()
+	{
+		Parser::forge('html');
+	}
+	
 }

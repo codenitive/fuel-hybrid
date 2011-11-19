@@ -28,35 +28,48 @@ namespace Hybrid;
 
 class Uri extends \Fuel\Core\Uri 
 {
-    /**
-     * Build query string
-     * 
-     * @static
-     * @access  public
-     * @param   mixed   $data
-     * @param   string  $start_with     Default string set to ?
-     * @return  string 
-     */
-    public static function build_get_query($data, $start_with = '?') 
-    {
-        $values = array();
+	/**
+	 * Build query string
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   mixed   $data
+	 * @param   string  $start_with     Default string set to ?
+	 * @return  string 
+	 */
+	public static function build_get_query($data, $start_with = '?') 
+	{
+		$values = array();
 
-        if (is_string($data))
-        {
-            $data = array($data);
-        }
+		if (is_string($data))
+		{
+			$data = array($data);
+		}
 
-        if (null === $data or ! is_array($data))
-        {
-            return '';
-        }
+		if (null === $data or ! is_array($data))
+		{
+			return '';
+		}
 
-        foreach ($data as $get)
-        {
-            $values[$get] = Input::get($get);
-        }
-        
-        return $start_with.http_build_query($values);
-    }
-    
+		foreach ($data as $key => $value)
+		{
+			// Use $_GET value overwriting if given.
+			if ( ! is_numeric($key))
+			{
+				$input = $value;
+			}
+			else
+			{
+				$input = Input::get($value);
+			}
+			
+			if (null !== $input and ! empty($input))
+			{
+				$values[$key] = $input;
+			}
+		}
+		
+		return $start_with.http_build_query($values);
+	}
+	
 }

@@ -13,6 +13,8 @@
 
 namespace Hybrid;
 
+use OAuth2\Provider;
+
 /**
  * Hybrid 
  * 
@@ -34,38 +36,60 @@ namespace Hybrid;
  */
 
 class Auth_Strategy_OAuth2 extends Auth_Strategy 
-{    
-    public $provider;
-    
-    public function authenticate()
-    {
-        // Load the provider
-        $provider = \OAuth2\Provider::factory($this->provider, $this->config);
-        
-        $provider->authorize(array(
-            'redirect_uri' => \Uri::create(\Config::get('autho.urls.callback', \Request::active()->route->segments[0].'/callback').'/'.$this->provider)
-        ));
-    }
-    
-    public function callback()
-    {
-        // Load the provider
-        $this->provider = \OAuth2\Provider::factory($this->provider, $this->config);
-        
-        try
-        {
-            $params = $this->provider->access(\Input::get('code'));
-            
-            return (object) array(
-                'token' => $params['access_token'],
-                'secret' => null,
-            );
-        }
-    
-        catch (Exception $e)
-        {
-            exit('That didnt work: '.$e);
-        }
-    }
-    
+{
+	public $provider;
+	
+	public function authenticate()
+	{
+		// Load the provider
+		$provider = Provider::factory($this->provider, $this->config);
+
+		// Grab a callback from the config
+
+		if ($provider->callback === null)
+		{
+			$provider->callback = \Uri::create(\Config::get('autho.urls.callback', \Request::active()->route->segments[0].'/callback'));
+			$provider->callback = rtrim($provider->callback, '/').'/'.$this->provider;
+		}
+		
+		$provider->authorize(array(
+			'redirect_uri' => $provider->callback,
+		));
+	}
+	
+	public function callback()
+	{
+		// Load the provider
+		$this->provider = Provider::factory($this->provider, $this->config);
+		
+		$error = Input::get('error');
+
+		if (null !== $error)
+		{
+			throw new Auth_Strategy_Exception(ucfirst($this->provider->name)." Error: ".$error);
+		}
+
+		$code = Input::get('code');
+
+		if (null === $code or empty($code))
+		{
+			// Send the user back to the beginning
+			throw new Auth_Strategy_Exception('invalid token after coming back to site');
+		}
+
+		try
+		{
+			$params = $this->provider->access($code);
+			
+			return (object) array(
+				'token' => $params['access_token'],
+				'secret' => null,
+			);
+		}
+		catch (Exception $e)
+		{
+			throw new Auth_Strategy_Exception('That didnt work: '.$e);
+		}
+	}
+	
 }

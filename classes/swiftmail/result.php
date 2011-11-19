@@ -28,10 +28,10 @@ namespace Hybrid;
 
 class Swiftmail_Result 
 {
-    public $success    = false;
-    public $failures   = null;
-    public $total_sent = 0;
+	public $success    = false;
+	public $failures   = null;
+	public $total_sent = 0;
 
-    public function __construct() {}
+	public function __construct() {}
 
 }

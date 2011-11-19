@@ -28,39 +28,39 @@ namespace Hybrid;
  */
 
 class Test_Uri extends \Fuel\Core\TestCase 
-{    
-    /**
-     * Setup the test
-     */
-    public function setup() 
-    {
-        \Package::load('hybrid');
+{
+	/**
+	 * Setup the test
+	 */
+	public function setup() 
+	{
+		\Package::load('hybrid');
 
-        $_GET = array(
-            'hello' => 'world',
-            'foo'   => 'bar',
-            'fuel'  => 'php',
-        );
-    }
+		$_GET = array(
+			'hello' => 'world',
+			'foo'   => 'bar',
+			'fuel'  => 'php',
+		);
+	}
 
-    /**
-     * Test Uri::build_get_query()
-     *
-     * @test
-     */
-    public function test_build_get_query() 
-    {
-        $output = \Hybrid\Uri::build_get_query(array('foo', 'hello'));
-        $expected = '?foo=bar&hello=world';
-        $this->assertEquals($expected, $output);
+	/**
+	 * Test Uri::build_get_query()
+	 *
+	 * @test
+	 */
+	public function test_build_get_query() 
+	{
+		$output = \Hybrid\Uri::build_get_query(array('foo', 'hello'));
+		$expected = '?foo=bar&hello=world';
+		$this->assertEquals($expected, $output);
 
-        $output = \Hybrid\Uri::build_get_query(array('foo', 'unavailable'));
-        $expected = '?foo=bar';
-        $this->assertEquals($expected, $output);
-    
-        $output = \Hybrid\Uri::build_get_query(array('unavailable'));
-        $expected = '?';
-        $this->assertEquals($expected, $output);
-    }
+		$output = \Hybrid\Uri::build_get_query(array('foo', 'unavailable'));
+		$expected = '?foo=bar';
+		$this->assertEquals($expected, $output);
+	
+		$output = \Hybrid\Uri::build_get_query(array('unavailable'));
+		$expected = '?';
+		$this->assertEquals($expected, $output);
+	}
 
 }

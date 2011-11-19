@@ -32,256 +32,319 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
+class AuthException extends \FuelException {}
+class AuthCancelException extends AuthException {}
+
 class Auth 
-{    
-    /**
-     * Cache Auth instance so we can reuse it on multiple request.
-     * 
-     * @static
-     * @access  protected
-     * @var     array
-     */
-    protected static $instances = array();
+{
+	/**
+	 * Cache Auth instance so we can reuse it on multiple request.
+	 * 
+	 * @static
+	 * @access  protected
+	 * @var     array
+	 */
+	protected static $instances = array();
 
-    /**
-     * Redirect user based on type
-     *
-     * @static
-     * @access  protected
-     * @param   string  $type
-     * @return  void
-     * @throws  \FuelException
-     */
-    public static function redirect($type)
-    {
-        $path = \Config::get("autho.urls.{$type}");
+	protected static $hasher = null;
 
-        if (null === $path)
-        {
-            throw new \FuelException(__METHOD__.": Unable to redirect using {$type} type.");
-        }
-        
-        \Response::redirect($path);
+	/**
+	 * Redirect user based on type
+	 *
+	 * @static
+	 * @access  protected
+	 * @param   string  $type
+	 * @return  void
+	 * @throws  \FuelException
+	 */
+	public static function redirect($type)
+	{
+		$path = \Config::get("autho.urls.{$type}");
 
-        return true;
-    }
+		if (null === $path)
+		{
+			throw new \FuelException(__METHOD__.": Unable to redirect using {$type} type.");
+		}
+		
+		\Response::redirect($path);
 
-    /**
-     * Initiate a new Auth_Driver instance.
-     * 
-     * @static
-     * @access  public
-     * @param   string  $name       null to fetch the default driver, or a driver id to get a specific one
-     * @return  Auth_Driver
-     * @throws  \FuelException
-     */
-    public static function forge($name = null)
-    {
-        if (null === $name)
-        {
-            $name = 'user';
-        }
+		return true;
+	}
 
-        $name = strtolower($name);
+	/**
+	 * Initiate a new Auth_Driver instance.
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   string  $name       null to fetch the default driver, or a driver id to get a specific one
+	 * @return  Auth_Driver
+	 * @throws  \FuelException
+	 */
+	public static function forge($name = null)
+	{
+		if (null === $name)
+		{
+			$name = 'user';
+		}
 
-        if ( ! isset(static::$instances[$name]))
-        {
-            $driver = "\Hybrid\Auth_Driver_".ucfirst($name);
+		$name = strtolower($name);
 
-            if ( !! class_exists($driver))
-            {
-                static::$instances[$name] = new $driver();
-            }
-            else
-            {
-                throw new \FuelException("Requested {$driver} does not exist.");
-            }
-        }
+		if ( ! isset(static::$instances[$name]))
+		{
+			$driver = "\Hybrid\Auth_Driver_".ucfirst($name);
 
-        return static::$instances[$name];
-    }
+			if ( !! class_exists($driver))
+			{
+				static::$instances[$name] = new $driver();
+			}
+			else
+			{
+				throw new \FuelException("Requested {$driver} does not exist.");
+			}
+		}
 
-    /**
-     * Shortcode to self::forge().
-     *
-     * @deprecated  1.3.0
-     * @static
-     * @access  public
-     * @param   string  $name
-     * @return  self::forge()
-     */
-    public static function factory($name = null)
-    {
-        \Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-        
-        return static::forge($name);
-    }
+		return static::$instances[$name];
+	}
 
-    /**
-     * Get cached instance, or generate new if currently not available.
-     *
-     * @static
-     * @access  public
-     * @return  Auth_Driver
-     * @see     self::forge()
-     */
-    public static function instance($name = null)
-    {
-        return static::forge($name);
-    }
+	/**
+	 * Shortcode to self::forge().
+	 *
+	 * @deprecated  1.3.0
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  self::forge()
+	 */
+	public static function factory($name = null)
+	{
+		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
+		
+		return static::forge($name);
+	}
 
-    /**
-     * Turn string to hash using sha1() hash with salt.
-     *
-     * @static
-     * @access  public
-     * @param   string  $password       String to be hashed
-     * @return  string
-     */
-    public static function add_salt($string = '')
-    {
-        $salt = \Config::get('autho.salt', \Config::get('crypt.crypto_key'));
+	/**
+	 * Get cached instance, or generate new if currently not available.
+	 *
+	 * @static
+	 * @access  public
+	 * @return  Auth_Driver
+	 * @see     self::forge()
+	 */
+	public static function instance($name = null)
+	{
+		return static::forge($name);
+	}
 
-        return \sha1($salt.$string);
-    }
+	/**
+	 * Turn string to hash using sha1() hash with salt.
+	 *
+	 * @static
+	 * @deprecated
+	 * @access  public
+	 * @param   string  $string       String to be hashed
+	 * @return  string
+	 */
+	public static function add_salt($string = '')
+	{
+		\Log::warning('This method is deprecated. Please use create_hash() instead.', __METHOD__);
+		
+		return static::create_hash($string);
+	}
 
-    /**
-     * Check if user has any of provided roles.
-     * 
-     * @static
-     * @access  public
-     * @param   mixed   $check_roles
-     * @return  bool 
-     */
-    public static function has_roles($check_roles) 
-    {
-        $user = static::instance('user')->get();
+	/**
+	 * Turn string to hash using sha1(), md5() or crypt_hash hash with salt.
+	 *
+	 * @static
+	 * @access  public
+	 * @param   string  $string       String to be hashed
+	 * @param   string  $hash_type    String of hash type
+	 * @return  string
+	 */
+	public static function create_hash($string = '', $hash_type = null)
+	{
+		$salt   = \Config::get('autho.salt', \Config::get('crypt.crypto_key'));
+		$string = $string;
 
-        if ( ! is_array($check_roles)) 
-        {
-            $check_roles = func_get_args();
-        }
+		if (null === $hash_type or ! in_array($hash_type, array('md5', 'crypt_hash', 'sha1')))
+		{
+			$hash_type = \Config::get('autho.hash_type', 'sha1');
+		}
 
-        foreach ($user->roles as $role) 
-        {
-            $role = \Inflector::friendly_title($role, '-', TRUE);
+		switch ($hash_type)
+		{
+			case 'md5' :
+				return \md5($salt.$string);
+			break;
 
-            foreach ($check_roles as $check_against) 
-            {
-                if ($role == $check_against) 
-                {
-                    return true;
-                }
-            }
-        }
+			case 'crypt_hash' :
+				return static::crypt_hash($string);
+			break;
 
-        return false;
-    }
+			case 'sha1' :
+			default :
+				return sha1($salt.$string);
+		}
+	}
 
-    /**
-     * Login based on available Auth_Driver.
-     *
-     * @static
-     * @access  public
-     * @param   string  $username       A string of either `user_name` or `email` field from table `users`.
-     * @param   string  $password       An unhashed `password` or `token` string from external API.
-     * @param   string  $driver         Driver type string, default to 'user'.
-     * @return  bool
-     * @throws  \FuelException
-     */
-    public static function login($username, $password, $driver = 'user')
-    {
-        return static::forge($driver)->login($username, $password);
-    }
+	/**
+	 * Use crypt_hash hash type
+	 *
+	 * @static
+	 * @access  protected
+	 * @param   string  $string     String to be hashed
+	 * @return  string
+	 */
+	protected static function crypt_hash($string = '')
+	{
+		if ( ! class_exists('PHPSecLib\\Crypt_Hash', false))
+		{
+			import('phpseclib/Crypt/Hash', 'vendor');
+		}
 
-    /**
-     * Reauthenticate current user.
-     *
-     * @static
-     * @access  public
-     * @param   string  $driver         Driver type string, default to 'user'.
-     * @return  bool
-     * @throws  \FuelException
-     */
-    public static function reauthenticate($driver = 'user')
-    {
-        return static::forge($driver)->reauthenticate();
-    }
+		is_null(static::$hasher) and static::$hasher = new \PHPSecLib\Crypt_Hash();
 
-    /**
-     * Logout from all loaded instances.
-     *
-     * @static
-     * @access  public
-     * @return  bool
-     */
-    public static function logout()
-    {
-        foreach (static::$instances as $name => $instance)
-        {
-            $instance->logout(false);
-        }
+		$salt   = \Config::get('autho.salt', \Config::get('crypt.crypto_key'));
+		
+		return base64_encode(static::$hasher->pbkdf2($string, $salt, 10000, 32));
+	}
 
-        return true;
-    }
+	/**
+	 * Check if user has any of provided roles.
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   mixed   $check_roles
+	 * @return  bool 
+	 */
+	public static function has_roles($check_roles) 
+	{
+		$user = static::instance('user')->get();
 
-    /**
-     * Link user account with external provider
-     *
-     * @static
-     * @access  public
-     * @param   int     $user_id
-     * @param   array   $user_data
-     * @return  bool
-     */
-    public static function link_account($user_id, $user_data)
-    {
-        if (empty($user_data) or ! isset($user_data['credentials']))
-        {
-            return ;
-        }
-        
-        // some provider does not have secret key
-        if ( ! isset($user_data['credentials']['secret']))
-        {
-            $user_data['credentials']['secret'] = null;
-        }
+		if ( ! is_array($check_roles)) 
+		{
+			$check_roles = func_get_args();
+		}
 
-        if ($user_id < 1)
-        {
-            return ;
-        }
+		foreach ($user->roles as $role) 
+		{
+			$role = \Inflector::friendly_title($role, '-', TRUE);
 
-        \DB::select()
-            ->from('authentications')
-            ->where('user_id', '=', $user_id)
-            ->where('provider', '=', $user_data['credentials']['provider'])
-            ->execute();
+			foreach ($check_roles as $check_against) 
+			{
+				if ($role == $check_against) 
+				{
+					return true;
+				}
+			}
+		}
 
-        // Attach this account to the logged in user
-        if (\DB::count_last_query() > 0)
-        {
-            \DB::update('authentications')->set(array(
-                    'uid'      => $user_data['credentials']['uid'],
-                    'token'    => $user_data['credentials']['token'],
-                    'secret'   => $user_data['credentials']['secret'],
-                ))
-                ->where('user_id', '=', $user_id)
-                ->where('provider', '=', $user_data['credentials']['provider'])
-                ->execute();
-        }
-        else
-        {
-            \DB::insert('authentications')->set(array(
-                    'user_id'  => $user_id,
-                    'provider' => $user_data['credentials']['provider'],
-                    'uid'      => $user_data['credentials']['uid'],
-                    'token'    => $user_data['credentials']['token'],
-                    'secret'   => $user_data['credentials']['secret'],
-                ))->execute();
-        }
+		return false;
+	}
 
-        return true;
-    }
-    
+	/**
+	 * Login based on available Auth_Driver.
+	 *
+	 * @static
+	 * @access  public
+	 * @param   string  $username       A string of either `user_name` or `email` field from table `users`.
+	 * @param   string  $password       An unhashed `password` or `token` string from external API.
+	 * @param   string  $driver         Driver type string, default to 'user'.
+	 * @return  bool
+	 * @throws  \FuelException
+	 */
+	public static function login($username, $password, $driver = 'user')
+	{
+		return static::forge($driver)->login($username, $password);
+	}
+
+	/**
+	 * Reauthenticate current user.
+	 *
+	 * @static
+	 * @access  public
+	 * @param   string  $driver         Driver type string, default to 'user'.
+	 * @return  bool
+	 * @throws  \FuelException
+	 */
+	public static function reauthenticate($driver = 'user')
+	{
+		return static::forge($driver)->reauthenticate();
+	}
+
+	/**
+	 * Logout from all loaded instances.
+	 *
+	 * @static
+	 * @access  public
+	 * @return  bool
+	 */
+	public static function logout()
+	{
+		foreach (static::$instances as $name => $instance)
+		{
+			$instance->logout(false);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Link user account with external provider
+	 *
+	 * @static
+	 * @access  public
+	 * @param   int     $user_id
+	 * @param   array   $user_data
+	 * @return  bool
+	 */
+	public static function link_account($user_id, $user_data)
+	{
+		if (empty($user_data) or ! isset($user_data['credentials']))
+		{
+			return ;
+		}
+		
+		// some provider does not have secret key
+		if ( ! isset($user_data['credentials']['secret']))
+		{
+			$user_data['credentials']['secret'] = '';
+		}
+
+		if ($user_id < 1)
+		{
+			return ;
+		}
+
+		\DB::select()
+			->from('authentications')
+			->where('user_id', '=', $user_id)
+			->where('provider', '=', $user_data['credentials']['provider'])
+			->execute();
+
+		// Attach this account to the logged in user
+		if (\DB::count_last_query() > 0)
+		{
+			\DB::update('authentications')->set(array(
+					'uid'      => $user_data['credentials']['uid'],
+					'token'    => $user_data['credentials']['token'],
+					'secret'   => $user_data['credentials']['secret'],
+				))
+				->where('user_id', '=', $user_id)
+				->where('provider', '=', $user_data['credentials']['provider'])
+				->execute();
+		}
+		else
+		{
+			\DB::insert('authentications')->set(array(
+					'user_id'  => $user_id,
+					'provider' => $user_data['credentials']['provider'],
+					'uid'      => $user_data['credentials']['uid'],
+					'token'    => $user_data['credentials']['token'],
+					'secret'   => $user_data['credentials']['secret'],
+				))->execute();
+		}
+
+		return true;
+	}
+	
 }

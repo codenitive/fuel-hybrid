@@ -28,155 +28,155 @@ namespace Hybrid;
 
 class Template_Normal extends Template_Driver 
 {
-    /**
-     * Initiate a new template using factory
-     *
-     * Example:
-     * <code>$template = \Hybrid\Template_Normal::forge();</code>
-     *
-     * @static
-     * @access  public
-     * @param   string  $name
-     * @return  void
-     */
-    public static function forge($name = null)
-    {
-        $driver = 'normal';
-        $name   = strtolower($name);
-        
-        if ( ! empty($name))
-        {
-            $driver .= ".{$name}";
-        }
+	/**
+	 * Initiate a new template using factory
+	 *
+	 * Example:
+	 * <code>$template = \Hybrid\Template_Normal::forge();</code>
+	 *
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  void
+	 */
+	public static function forge($name = null)
+	{
+		$driver = 'normal';
+		$name   = strtolower($name);
+		
+		if ( ! empty($name))
+		{
+			$driver .= ".{$name}";
+		}
 
-        return Template::forge($driver);
-    }
+		return Template::forge($driver);
+	}
 
-    /**
-     * Shortcode to self::forge().
-     *
-     * @deprecated  1.3.0
-     * @static
-     * @access  public
-     * @param   string  $name
-     * @return  self::forge()
-     */
-    public static function factory($name = null)
-    {
-        \Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-        
-        return static::forge($name);
-    }
+	/**
+	 * Shortcode to self::forge().
+	 *
+	 * @deprecated  1.3.0
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  self::forge()
+	 */
+	public static function factory($name = null)
+	{
+		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
+		
+		return static::forge($name);
+	}
 
-    /**
-     * Initiate a new template object
-     *
-     * @access  public
-     * @param   string  $folder
-     * @param   string  $filename
-     * @return  void
-     */
-    public function __construct($folder = null, $filename = null)
-    {
-        // Assets shouldn't be added in APPPATH/views at all
-        if ( ! empty($folder) and '_default_' !== $folder)
-        {
-            $this->set_folder($folder);
-        }
-        elseif (isset(static::$config['default_folder']))
-        {
-            $this->set_folder(static::$config['default_folder']);
-        }
+	/**
+	 * Initiate a new template object
+	 *
+	 * @access  public
+	 * @param   string  $folder
+	 * @param   string  $filename
+	 * @return  void
+	 */
+	public function __construct($folder = null, $filename = null)
+	{
+		// Assets shouldn't be added in APPPATH/views at all
+		if ( ! empty($folder) and '_default_' !== $folder)
+		{
+			$this->set_folder($folder);
+		}
+		elseif (isset(static::$config['default_folder']))
+		{
+			$this->set_folder(static::$config['default_folder']);
+		}
 
-        if ( ! empty($filename) and '_default_' !== $filename)
-        {
-            $this->set_filename($filename);
-        }
-        elseif (isset(static::$config['default_filename']))
-        {
-            $this->set_filename(static::$config['default_filename']);
-        }
+		if ( ! empty($filename) and '_default_' !== $filename)
+		{
+			$this->set_filename($filename);
+		}
+		elseif (isset(static::$config['default_filename']))
+		{
+			$this->set_filename(static::$config['default_filename']);
+		}
 
-        $this->view = \View::forge();
-    }
+		$this->view = \View::forge();
+	}
 
-    /**
-     * Assets shouldn't be added in APPPATH/views at all
-     *
-     * @access  private
-     * @return  self
-     * @throws  \FuelException
-     */
-    public function load_assets($forced_load = false)
-    {
-      throw new \FuelException(__METHOD__.": Asset loading not available.");
-    }
+	/**
+	 * Assets shouldn't be added in APPPATH/views at all
+	 *
+	 * @access  private
+	 * @return  self
+	 * @throws  \FuelException
+	 */
+	public function load_assets($forced_load = false)
+	{
+	  throw new \FuelException(__METHOD__.": Asset loading not available.");
+	}
 
-    /**
-     * Set folder location
-     *
-     * @access  public
-     * @return  self
-     * @throws  \FuelException
-     */
-    public function set_folder($path = null)
-    {
-        // this is not the best way of doing it, the request is not cached and going to be slow
-        // if there's a lot of paths and files
-        $files = \Finder::instance()->list_files(rtrim('views/'.$path, '/'), '*.*');
+	/**
+	 * Set folder location
+	 *
+	 * @access  public
+	 * @return  self
+	 * @throws  \FuelException
+	 */
+	public function set_folder($path = null)
+	{
+		// this is not the best way of doing it, the request is not cached and going to be slow
+		// if there's a lot of paths and files
+		$files = \Finder::instance()->list_files(rtrim('views/'.$path, '/'), '*.*');
 
-        if (empty($files))
-        {
-            throw new \FuelException(__METHOD__.": Path {$path} does not appear to a valid folder or contain any View files.");
-        }
-        else 
-        {
-            $this->folder = $path;
-        }
+		if (empty($files))
+		{
+			throw new \FuelException(__METHOD__.": Path {$path} does not appear to a valid folder or contain any View files.");
+		}
+		else 
+		{
+			$this->folder = $path;
+		}
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * Load partial view
-     *
-     * @access  public
-     * @param   string  $filename
-     * @param   array   $data
-     * @return  string
-     */
-    public function partial($filename, $data = null)
-    {
-        $view = \View::forge();
-        $view->set_filename(rtrim($this->folder, '/').'/'.$filename);
-        $view->auto_filter(static::$config['auto_filter']);
+	/**
+	 * Load partial view
+	 *
+	 * @access  public
+	 * @param   string  $filename
+	 * @param   array   $data
+	 * @return  string
+	 */
+	public function partial($filename, $data = null)
+	{
+		$view = \View::forge();
+		$view->set_filename(rtrim($this->folder, '/').'/'.$filename);
+		$view->auto_filter(static::$config['auto_filter']);
 
-        if (is_array($data) and count($data) > 0)
-        {
-            $view->set($data);
-        }
+		if (is_array($data) and count($data) > 0)
+		{
+			$view->set($data);
+		}
 
-        $view->set('TEMPLATE_FOLDER', $this->folder, false);
-        $view->set('template', $this, false);
+		$view->set('TEMPLATE_FOLDER', $this->folder, false);
+		$view->set('template', $this, false);
 
-        return $view->render();
-    }
+		return $view->render();
+	}
 
-    /**
-     * Render self::view
-     *
-     * @access  public
-     * @return  string
-     */
-    public function render()
-    {
-        $this->view->set_filename(rtrim($this->folder, '/').'/'.$this->filename);
-        $this->view->auto_filter(static::$config['auto_filter']);
+	/**
+	 * Render self::view
+	 *
+	 * @access  public
+	 * @return  string
+	 */
+	public function render()
+	{
+		$this->view->set_filename(rtrim($this->folder, '/').'/'.$this->filename);
+		$this->view->auto_filter(static::$config['auto_filter']);
 
-        $this->view->set('TEMPLATE_FOLDER', $this->folder, false);
-        $this->view->set('template', $this, false);
+		$this->view->set('TEMPLATE_FOLDER', $this->folder, false);
+		$this->view->set('template', $this, false);
 
-        return $this->view->render();
-    }
+		return $this->view->render();
+	}
 
 }

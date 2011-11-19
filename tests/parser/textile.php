@@ -29,26 +29,26 @@ namespace Hybrid;
 
 class Test_Parser_Textile extends \Fuel\Core\TestCase 
 {
-    
-    /**
-     * Setup the test
-     */
-    public function setup()
-    {
-        \Fuel::add_package('hybrid');
-    }
+	/**
+	 * Setup the test
+	 */
+	public function setup()
+	{
+		\Fuel::add_package('hybrid');
+	}
 
-    /**
-     * Test Parser_Textile::parse();
-     *
-     * @test
-     */
-    public function test_parse()
-    {
-        $text     = '*hellow*';
-        $output   = Parser::forge('textile')->parse($text);;
-        $expected = "	<p><strong>hellow</strong></p>";
+	/**
+	 * Test Parser_Textile::parse();
+	 *
+	 * @test
+	 */
+	public function test_parse()
+	{
+		$text     = '*hellow*';
+		$output   = Parser::forge('textile')->parse($text);;
+		$expected = "	<p><strong>hellow</strong></p>";
 
-        $this->assertEquals($expected, $output);
-    }
+		$this->assertEquals($expected, $output);
+	}
+	
 }

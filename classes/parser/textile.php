@@ -29,34 +29,34 @@ use \Textile;
  * @category    Parser_Textile
  * @author      Ignacio Muñoz Fernandez <nmunozfernandez@gmail.com>
  */
- 
+
 class Parser_Textile extends Parser_Driver 
 {
-    private $parser;
-    /**
-     * Construct a new instance (don't do anything right now)
-     *
-     * @access  public
-     * @return  void
-     */
-    public function __construct() 
-    {
-        $this->parser = new Textile();
-    }
-    
-    /**
-     * Parse textile formatted text to HTML
-     *
-     * @access  public
-     */
-    public function parse($text = '')
-    {
-        if (empty($text) or ! strval($text))
-        {
-            $text = '';
-        }
+	private $parser;
+	/**
+	 * Construct a new instance (don't do anything right now)
+	 *
+	 * @access  public
+	 * @return  void
+	 */
+	public function __construct() 
+	{
+		$this->parser = new Textile();
+	}
+	
+	/**
+	 * Parse textile formatted text to HTML
+	 *
+	 * @access  public
+	 */
+	public function parse($text = '')
+	{
+		if (empty($text) or ! strval($text))
+		{
+			$text = '';
+		}
 
-        return $this->parser->TextileThis($text);
-    }
+		return $this->parser->TextileThis($text);
+	}
 
 }

@@ -29,72 +29,72 @@ namespace Hybrid;
 
 class Test_Currency extends \Fuel\Core\TestCase 
 {
-    /**
-     * Setup the test
-     */
-    public function setup()
-    {
-        \Package::load('hybrid');
-    }
-    
-    /**
-     * Test Currency::forge();
-     *
-     * @test
-     */
-    public function test_forge()
-    {
-        $output = Currency::forge(1, 'USD');
+	/**
+	 * Setup the test
+	 */
+	public function setup()
+	{
+		\Package::load('hybrid');
+	}
+	
+	/**
+	 * Test Currency::forge();
+	 *
+	 * @test
+	 */
+	public function test_forge()
+	{
+		$output = Currency::forge(1, 'USD');
 
-        $this->assertTrue($output instanceof \Hybrid\Currency);
-    }
+		$this->assertTrue($output instanceof \Hybrid\Currency);
+	}
 
-    /**
-     * Test Currency::convert_to(); given same currency
-     *
-     * @test
-     */
-    public function test_convert_to_given_same_currency()
-    {
-        $output = Currency::forge(1, 'USD')->convert_to('USD');
-        $expected = (float) 1;
+	/**
+	 * Test Currency::convert_to(); given same currency
+	 *
+	 * @test
+	 */
+	public function test_convert_to_given_same_currency()
+	{
+		$output = Currency::forge(1, 'USD')->convert_to('USD');
+		$expected = (float) 1;
 
-        $this->assertEquals($expected, $output);
-    }
+		$this->assertEquals($expected, $output);
+	}
 
-    /**
-     * Test Currency::to_{currency}(); given same currency
-     *
-     * @test
-     */
-    public function test_to_currency_given_same_currency()
-    {
-        $output = Currency::forge(1, 'USD')->to_usd();
-        $expected = (float) 1;
+	/**
+	 * Test Currency::to_{currency}(); given same currency
+	 *
+	 * @test
+	 */
+	public function test_to_currency_given_same_currency()
+	{
+		$output = Currency::forge(1, 'USD')->to_usd();
+		$expected = (float) 1;
 
-        $this->assertEquals($expected, $output);
-    }
+		$this->assertEquals($expected, $output);
+	}
 
-    /**
-     * Test Currency::fetch_currency_rate(); given invalid currency
-     *
-     * @test
-     * @expectedException \FuelException
-     */
-    public function test_fetch_currency_rate_expected_exception_given_invalid_currency()
-    {
-        Currency::forge(1, 'Foo')->convert_to('USD');
-    }
+	/**
+	 * Test Currency::fetch_currency_rate(); given invalid currency
+	 *
+	 * @test
+	 * @expectedException \FuelException
+	 */
+	public function test_fetch_currency_rate_expected_exception_given_invalid_currency()
+	{
+		Currency::forge(1, 'Foo')->convert_to('USD');
+	}
 
-    /**
-     * Test Currency::convert_to(); given invalid currency
-     *
-     * @test
-     * @expectedException \FuelException
-     */
-    public function test_convert_to_expected_exception_given_invalid_currency()
-    {
-        Currency::forge(1, 'USD')->convert_to('Foo');
-    }
+	/**
+	 * Test Currency::convert_to(); given invalid currency
+	 *
+	 * @test
+	 * @expectedException \FuelException
+	 */
+	public function test_convert_to_expected_exception_given_invalid_currency()
+	{
+		Currency::forge(1, 'USD')->convert_to('Foo');
+	}
 
 }

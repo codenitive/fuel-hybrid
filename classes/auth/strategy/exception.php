@@ -22,11 +22,9 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Text_Driver
+ * @category    Auth_Strategy_Exception
+ * @deprecated
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-abstract class Parser_Driver 
-{
-	public abstract function parse($text = '');   
-}
+class Auth_Strategy_Exception extends AuthException {}
