@@ -30,7 +30,13 @@ namespace Hybrid;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Auth_Controller
- * @author      Mior Muhammad Zaki <crynobone@gmail.com>
+ */
+
+ /**
+ * Auth Controller Class taken from NinjAuth Package for FuelPHP
+ *
+ * @package     NinjAuth
+ * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
 class Auth_Controller extends \Controller 

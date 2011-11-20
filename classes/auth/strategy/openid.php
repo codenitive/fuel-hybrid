@@ -33,7 +33,13 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Auth_Strategy_OAuth2
+ * @category    Auth_Strategy_OpenId
+ */
+
+/**
+ * Auth Strategy OpenId Class taken from NinjAuth Package for FuelPHP
+ *
+ * @package     NinjAuth
  * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 

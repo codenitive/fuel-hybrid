@@ -30,9 +30,15 @@ namespace Hybrid;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Auth_Strategy
- * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
+/**
+ * Auth Strategy Class taken from NinjAuth Package for FuelPHP
+ *
+ * @package     NinjAuth
+ * @author      Phil Sturgeon <https://github.com/philsturgeon>
+ */
+ 
 abstract class Auth_Strategy 
 {
 	public $provider = null;

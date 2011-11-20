@@ -32,6 +32,12 @@ use OAuth2\Provider;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Auth_Strategy_OAuth2
+ */
+
+ /**
+ * Auth Strategy OAuth2 Class taken from NinjAuth Package for FuelPHP
+ *
+ * @package     NinjAuth
  * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
