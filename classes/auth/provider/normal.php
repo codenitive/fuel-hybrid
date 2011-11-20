@@ -595,7 +595,7 @@ class Auth_Provider_Normal
 	{
 		$data = array();
 		
-		$accounts = \DB::select('provider', 'token', 'secret')
+		$accounts = \DB::select('provider', 'uid', 'token', 'secret')
 			->from('authentications')
 			->where('user_id', '=', $this->data['id'])
 			->as_object()
@@ -605,6 +605,7 @@ class Auth_Provider_Normal
 		foreach ($accounts as $account) 
 		{
 			$data[strval($account->provider)] = array(
+				'uid'    => $account->uid,
 				'token'  => $account->token,
 				'secret' => $account->secret,
 			);
