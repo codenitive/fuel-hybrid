@@ -325,34 +325,66 @@ class Auth
 			}
 		}
 
-
 		\DB::select()
 			->from('authentications')
 			->where('user_id', '=', $user_id)
 			->where('provider', '=', $credentials['provider'])
 			->execute();
 
+		$date = \Date::time();
+
+		switch (\Config::get('autho.mysql_timestamp'))
+		{
+			case false :
+				$date = $date->get_timestamp();
+			break;
+
+			case true :
+				$date = $date->format('mysql');
+			break;
+			 
+			case null :
+			default :
+				$date = null;
+			break;
+		}
+
 		// Attach this account to the logged in user
 		if (\DB::count_last_query() > 0)
 		{
-			\DB::update('authentications')->set(array(
-					'uid'      => $credentials['uid'],
-					'token'    => $credentials['token'],
-					'secret'   => $credentials['secret'],
-				))
+			$update = array(
+				'uid'      => $credentials['uid'],
+				'token'    => $credentials['token'],
+				'secret'   => $credentials['secret'],
+			);
+
+			if (null !== $date)
+			{
+				$update['updated_at'] = $date;
+			}
+
+			\DB::update('authentications')->set($update)
 				->where('user_id', '=', $user_id)
 				->where('provider', '=', $credentials['provider'])
 				->execute();
 		}
 		else
 		{
-			\DB::insert('authentications')->set(array(
-					'user_id'  => $user_id,
-					'provider' => $credentials['provider'],
-					'uid'      => $credentials['uid'],
-					'token'    => $credentials['token'],
-					'secret'   => $credentials['secret'],
-				))->execute();
+			$insert = array(
+				'user_id'  => $user_id,
+				'provider' => $credentials['provider'],
+				'uid'      => $credentials['uid'],
+				'token'    => $credentials['token'],
+				'secret'   => $credentials['secret'],
+			);
+
+			if (null !== $date)
+			{
+				$insert['created_at'] = $date;
+				$insert['updated_at'] = $date;
+			}
+
+			\DB::insert('authentications')->set($insert)->execute();
 		}
 
 		return true;
