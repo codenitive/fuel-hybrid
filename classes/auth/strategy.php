@@ -132,6 +132,8 @@ abstract class Auth_Strategy
 	public static function login_or_register($strategy)
 	{
 		$response = $strategy->callback();
+
+		$user_hash = static::get_user_info($strategy, $response);
 		
 		if (true === Auth::instance('user')->is_logged())
 		{
@@ -145,18 +147,17 @@ abstract class Auth_Strategy
 			// Allowed multiple providers, or not authed yet?
 			if (0 === $num_linked or true === \Config::get('autho.link_multiple_providers'))
 			{
-				$user_hash = static::get_user_info($strategy, $response);
-
 				try 
 				{
 					Auth::instance('user')->link_account($user_hash);
+					
+					Event::trigger('link_authentication', $user_hash);
 				}
 				catch (AuthException $e)
 				{
 					throw new Auth_Strategy_Exception("Unable to retrieve valid user information from requested access token");
 				}
-
-
+				
 				// Attachment went ok so we'll redirect
 				Auth::redirect('logged_in');
 			}
@@ -170,9 +171,6 @@ abstract class Auth_Strategy
 		// The user exists, so send him on his merry way as a user
 		else 
 		{
-
-			$user_hash = static::get_user_info($strategy, $response);
-			
 			try 
 			{
 				$secret = '';
@@ -190,6 +188,9 @@ abstract class Auth_Strategy
 				}
 
 				Auth::instance('user')->login_token($response->token, $response->secret);
+
+				Event::trigger('link_authentication', $user_hash);
+
 				// credentials ok, go right in
 				Auth::redirect('logged_in');
 			}
