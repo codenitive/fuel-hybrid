@@ -45,7 +45,7 @@ class Auth_Controller extends \Controller
 	 * Load autho configuration
 	 *
 	 * @access  public
-	 * @return 	void
+	 * @return  void
 	 */
 	public function before()
 	{
@@ -58,7 +58,7 @@ class Auth_Controller extends \Controller
 	/**
 	 * Start a session request
 	 *
-	 * @access 	public
+	 * @access  public
 	 * @param   array    $provider
 	 * @return  Response
 	 * @throws  Auth_Strategy_Exception
