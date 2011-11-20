@@ -124,7 +124,7 @@ abstract class Auth_Strategy
 	 * Determine whether authenticated user should be continue to login or register new user
 	 *
 	 * @static
-	 * @access 	public
+	 * @access  public
 	 * @param   object   $strategy
 	 * @return  void
 	 * @throws  Auth_Strategy_Exception
@@ -206,7 +206,7 @@ abstract class Auth_Strategy
 	 * Get user information from provider
 	 *
 	 * @static
-	 * @access 	protected
+	 * @access  protected
 	 * @param   object      $strategy
 	 * @param   object      $response
 	 * @return  array
@@ -239,10 +239,10 @@ abstract class Auth_Strategy
 	 * Certain provider use a limited access token, we need to reassign new access token if these provider
 	 *
 	 * @static
-	 * @access 	protected
+	 * @access  protected
 	 * @param   array      $user_hash
 	 * @return  mixed
-	 * @throws  Auth_Strategy_Exception
+	 * @throws  AuthException
 	 */
 	protected static function reset_access_token($user_hash)
 	{
