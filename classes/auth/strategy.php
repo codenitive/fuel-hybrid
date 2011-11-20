@@ -170,6 +170,9 @@ abstract class Auth_Strategy
 		// The user exists, so send him on his merry way as a user
 		else 
 		{
+
+			$user_hash = static::get_user_info($strategy, $response);
+			
 			try 
 			{
 				$secret = '';
@@ -177,15 +180,21 @@ abstract class Auth_Strategy
 				{
 					$secret = $response->secret;
 				}
-				
+
+				// google for instance has an limited time entry
+				switch ($strategy->name) 
+				{
+					case 'google' :
+						static::reset_access_token($user_hash);
+					break;
+				}
+
 				Auth::instance('user')->login_token($response->token, $response->secret);
 				// credentials ok, go right in
 				Auth::redirect('logged_in');
 			}
 			catch (AuthException $e)
 			{
-				$user_hash = static::get_user_info($strategy, $response);
-				
 				\Session::set('autho', $user_hash);
 
 				Auth::redirect('registration');
@@ -224,6 +233,47 @@ abstract class Auth_Strategy
 		}
 
 		return $user_hash;
+	}
+
+	/**
+	 * Certain provider use a limited access token, we need to reassign new access token if these provider
+	 *
+	 * @static
+	 * @access 	protected
+	 * @param   array      $user_hash
+	 * @return  mixed
+	 * @throws  Auth_Strategy_Exception
+	 */
+	protected static function reset_access_token($user_hash)
+	{
+		if (empty($user_data) or ! isset($user_data['credentials']))
+		{
+			return ;
+		}
+		
+		$credentials = $user_data['credentials'];
+
+		// some provider does not have secret key
+		if ( ! isset($credentials['secret']) or null === $credentials['secret'])
+		{
+			$credentials['secret'] = '';
+		}
+
+		foreach (array('uid', 'token') as $field)
+		{
+			if ( ! isset($credentials[$field]) or null === $credentials[$field])
+			{
+				throw new AuthException("Missing required information: {$field}");
+			}
+		}
+
+		\DB::update('authentications')->set(array(
+				'token'    => $credentials['token'],
+				'secret'   => $credentials['secret'],
+			))
+			->where('uid', '=', $credentials['uid'])
+			->where('provider', '=', $credentials['provider'])
+			->execute();
 	}
 
 	abstract public function authenticate();
