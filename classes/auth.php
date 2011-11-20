@@ -334,18 +334,18 @@ class Auth
 		$date = \Date::time();
 
 		switch (\Config::get('autho.mysql_timestamp'))
-		{
+		{ 
+			case null :
+			default :
+				$date = null;
+			break;
+
 			case false :
 				$date = $date->get_timestamp();
 			break;
 
 			case true :
 				$date = $date->format('mysql');
-			break;
-			 
-			case null :
-			default :
-				$date = null;
 			break;
 		}
 
