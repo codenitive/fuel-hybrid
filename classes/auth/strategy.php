@@ -268,38 +268,18 @@ abstract class Auth_Strategy
 			}
 		}
 
-		$date = \Date::time();
-
-		switch (\Config::get('autho.mysql_timestamp'))
-		{
-			case null :
-			default :
-				$date = null;
-			break;
-
-			case false :
-				$date = $date->get_timestamp();
-			break;
-
-			case true :
-				$date = $date->format('mysql');
-			break;	
-		}
-
 		$update = array(
 			'token'    => $credentials['token'],
 			'secret'   => $credentials['secret'],
 		);
 
-		if (null !== $date)
-		{
-			$update['updated_at'] = $date;
-		}
-
-		\DB::update('authentications')->set($update)
-			->where('uid', '=', $credentials['uid'])
-			->where('provider', '=', $credentials['provider'])
-			->execute();
+		$auth = Auth_Model_Authentication::update(array(
+			'set'   => $update,
+			'where' => array(
+				array('uid', $credential['uid']),
+				array('provider', $credentials['provider']),
+			),
+		));
 	}
 
 	abstract public function authenticate();
