@@ -315,9 +315,9 @@ class Auth
 			return ;
 		}
 
-		foreach (array('uid', 'access_token') as $field)
+		foreach (array('uid' => 'info', 'access_token' => 'token') as $field => $source)
 		{
-			if ( ! isset($credentials[$field]) or null === $credentials[$field])
+			if ( ! isset($user_data[$source][$field]) or null === $user_data[$source][$field])
 			{
 				throw new AuthException("Missing required information: {$field}");
 			}
