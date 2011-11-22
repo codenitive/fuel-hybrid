@@ -257,7 +257,9 @@ HELP;
 				'user_id:int',
 				'provider:string[50]',
 				'uid:string',
-				'token:string',
+				'access_token:string',
+				'expires:int[12]',
+				'refresh_token:string',
 				'secret:string',
 			));
 			\Oil\Generate::$create_files = array();

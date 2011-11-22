@@ -176,14 +176,13 @@ class Auth_Driver_User extends Auth_Driver
 	 * Login user using OAuth/OAuth2 token authentication (token and secret)
 	 * 
 	 * @access  public
-	 * @param   string  $token
-	 * @param   string  $secret
+	 * @param   array   $user_data
 	 * @param   bool    $remember_me
 	 * @return  bool
 	 */
-	public function login_token($token, $secret, $remember_me = false) 
+	public function login_token($user_data, $remember_me = false) 
 	{
-		$this->provider->login_token($token, $secret, $remember_me);
+		$this->provider->login_token($user_data, $remember_me);
 		return true;
 	}
 
@@ -229,16 +228,12 @@ class Auth_Driver_User extends Auth_Driver
 			return false;
 		}
 
-		$credential = $user_data['credentials'];
+		extract($user_data);
 
-		if ( ! isset($credential['secret']) or null === $credential['secret'])
-		{
-			$credential['secret'] = '';
-		}
-
-		$this->provider->data['accounts'][$credential['provider']] = array(
-			'token'  => $credential['token'],
-			'secret' => $credential['secret'],
+		$this->provider->data['accounts'][$provider] = array(
+			'uid'           => $info['uid'],
+			'access_token'  => isset($token->access_token) ? $token->access_token : '',
+			'secret'        => isset($token->secret) ? $token->secret : '',
 		);
 
 		return true;

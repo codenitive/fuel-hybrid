@@ -299,17 +299,15 @@ class Auth
 	 */
 	public static function link_account($user_id, $user_data)
 	{
-		if (empty($user_data) or ! isset($user_data['credentials']))
+		$provider = null;
+		$token    = null;
+		$info     = null;
+
+		extract($user_data);
+
+		if (empty($token) or empty($info))
 		{
 			return ;
-		}
-		
-		$credentials = $user_data['credentials'];
-		
-		// some provider does not have secret key
-		if ( ! isset($credentials['secret']) or null === $credentials['secret'])
-		{
-			$credentials['secret'] = '';
 		}
 
 		if ($user_id < 1)
@@ -317,7 +315,7 @@ class Auth
 			return ;
 		}
 
-		foreach (array('uid', 'token') as $field)
+		foreach (array('uid', 'access_token') as $field)
 		{
 			if ( ! isset($credentials[$field]) or null === $credentials[$field])
 			{
@@ -328,36 +326,32 @@ class Auth
 		$auth = Auth_Model_Authentication::find(array(
 			'where' => array(
 				array('user_id', $user_id),
-				array('provider', $credentials['provider'])
+				array('provider', $provider)
 			),
 			'limit' => 1,
 		), 0);
 
+		$values = array(
+			'uid'           => $info['uid'],
+			'access_token'  => isset($token->access_token) ? $token->access_token : '',
+			'secret'        => isset($token->secret) ? $token->secret : '',
+			'expires'       => isset($token->expires) ? $token->expires : -1,
+			'refresh_token' => isset($token->refresh_token) ? $token->refresh_token : '',
+		);
+
 		// Attach this account to the logged in user
 		if (null !== $auth)
 		{
-			$update = array(
-				'uid'      => $credentials['uid'],
-				'token'    => $credentials['token'],
-				'secret'   => $credentials['secret'],
-			);
-			
-			foreach ($update as $field => $value)
-			{
-				$auth->{$field} = $value;
-			}
+			$auth->set($values);
 		}
 		else
 		{
-			$insert = array(
+			$values = array(
 				'user_id'  => $user_id,
-				'provider' => $credentials['provider'],
-				'uid'      => $credentials['uid'],
-				'token'    => $credentials['token'],
-				'secret'   => $credentials['secret'],
-			);
+				'provider' => $provider,
+			) + $values;
 
-			$auth = Auth_Model_Authentication::forge($insert);
+			$auth = Auth_Model_Authentication::forge($values);
 		}
 
 		$auth->save();
