@@ -22,7 +22,7 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Auth_Strategy_Exception
+ * @category    Auth_Model_Authentication
  * @deprecated
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
