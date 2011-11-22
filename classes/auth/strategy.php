@@ -62,7 +62,7 @@ abstract class Auth_Strategy
 		'github'    => 'OAuth2',
 		'linkedin'  => 'OAuth',
 		'unmagnify' => 'OAuth2',
-		'youtube'   => 'OAuth',
+		'youtube'   => 'OAuth2',
 	);
 
 	/**
