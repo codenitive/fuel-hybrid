@@ -77,7 +77,7 @@ class Auth_Model_Authentication extends \Fuel\Core\Model_Crud
 
 	protected function pre_save($query)
 	{
-		if (($date = static::_timestamp()) !== $query)
+		if (($date = static::_timestamp()) !== null)
 		{
 			$query->set(array(
 				'created_at' => $date,
@@ -90,7 +90,7 @@ class Auth_Model_Authentication extends \Fuel\Core\Model_Crud
 
 	protected function pre_update($query)
 	{
-		if (($date = static::_timestamp()) !== $query)
+		if (($date = static::_timestamp()) !== null)
 		{
 			$query->set(array(
 				'updated_at' => $date,
