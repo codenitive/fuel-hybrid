@@ -48,6 +48,8 @@ Autoloader::add_classes(array (
 	'Hybrid\\Auth_Strategy_OAuth'     => __DIR__.'/classes/auth/strategy/oauth.php',
 	'Hybrid\\Auth_Strategy_OAuth2'    => __DIR__.'/classes/auth/strategy/oauth2.php',
 	'Hybrid\\Auth_Strategy_OpenId'    => __DIR__.'/classes/auth/strategy/openid.php',
+
+	'Hybrid\\Auth_Model_Authentication' => __DIR__.'/classes/auth/model/authentication.php',
 	
 	'Hybrid\\Chart'          => __DIR__.'/classes/chart.php',
 	'Hybrid\\Chart_Driver'   => __DIR__.'/classes/chart/driver.php',

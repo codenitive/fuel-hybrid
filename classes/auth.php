@@ -315,12 +315,14 @@ class Auth
 			return ;
 		}
 
-		foreach (array('uid' => 'info', 'access_token' => 'token') as $field => $source)
+		if ( ! isset($info['uid']) or null === $info['uid'])
 		{
-			if ( ! isset($user_data[$source][$field]) or null === $user_data[$source][$field])
-			{
-				throw new AuthException("Missing required information: {$field}");
-			}
+			throw new AuthException("Missing required information: uid");
+		}
+		
+		if ( ! isset($token->access_token) or null === $token->access_token)
+		{	
+			throw new AuthException("Missing required information: access_token");	
 		}
 
 		$auth = Auth_Model_Authentication::find(array(

@@ -593,7 +593,7 @@ class Auth_Provider_Normal
 	{
 		$data = array();
 		
-		$accounts = \DB::select('provider', 'uid', 'token', 'secret')
+		$accounts = \DB::select('provider', 'uid', 'access_token', 'secret')
 			->from('authentications')
 			->where('user_id', '=', $this->data['id'])
 			->as_object()
