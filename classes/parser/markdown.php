@@ -13,9 +13,7 @@
 
 namespace Hybrid;
 
-Factory::import('markdown/markdown', 'vendor');
-
-use \Markdown;
+use Fuel\Core\Markdown;
 
 /**
  * Hybrid 
@@ -52,7 +50,7 @@ class Parser_Markdown extends Parser_Driver
 			$text = '';
 		}
 
-		return \Markdown($text);
+		return Markdown::parse($text);
 	}
 
 }
