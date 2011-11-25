@@ -286,7 +286,7 @@ class Restserver
 			return false;
 		}
 
-		$valid_logins = & \Config::get('rest.valid_logins');
+		$valid_logins = \Config::get('rest.valid_logins');
 
 		if ( ! array_key_exists($username, $valid_logins))
 		{
@@ -376,7 +376,7 @@ class Restserver
 			static::force_login($uniqid);
 		}
 
-		$valid_logins   = & \Config::get('rest.valid_logins');
+		$valid_logins   = \Config::get('rest.valid_logins');
 		$valid_pass     = $valid_logins[$digest['username']];
 
 		// This is the valid response expected
