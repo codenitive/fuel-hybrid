@@ -327,8 +327,8 @@ class Auth
 
 		$auth = Auth_Model_Authentication::find(array(
 			'where' => array(
-				array('user_id', $user_id),
-				array('provider', $provider)
+				array('user_id', '=', $user_id),
+				array('provider', '=', $provider)
 			),
 			'limit' => 1,
 		), 0);
