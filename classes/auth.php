@@ -331,7 +331,7 @@ class Auth
 				array('provider', '=', $provider)
 			),
 			'limit' => 1,
-		), 0);
+		));
 
 		$values = array(
 			'uid'           => $info['uid'],
@@ -344,6 +344,7 @@ class Auth
 		// Attach this account to the logged in user
 		if (null !== $auth)
 		{
+			$auth->current();
 			$auth->set($values);
 		}
 		else

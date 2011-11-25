@@ -146,7 +146,7 @@ abstract class Auth_Strategy
 		$user_data = array(
 			'token'    => $token,
 			'info'     => $user_info,
-			'provider' => $strategy->name,
+			'provider' => $strategy->provider->name,
 		);
 		
 		if (true === Auth::instance('user')->is_logged())
