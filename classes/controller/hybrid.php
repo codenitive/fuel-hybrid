@@ -244,14 +244,12 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
 	 */
 	protected function prepare_template()
 	{
-		if (true === $this->auto_render and null !== $this->template)
+		if (true === $this->auto_render)
 		{
-			$this->template = Template::forge($this->template);
-		}
-		else
-		{
-			$this->auto_render = false;
-			$this->template    = null;
+			if (null !== $this->template)
+			{
+				$this->template = Template::forge($this->template);
+			}
 		}
 	}
 	
@@ -271,8 +269,12 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
 
 		if (true === $this->auto_render and ! $response instanceof \Response)
 		{
-			$response       = $this->response;
-			$response->body = $this->template->render();
+			$response = $this->response;
+
+			if (null !== $this->template)
+			{
+				$response->body = $this->template->render();
+			}
 		}
 
 		return $response;
