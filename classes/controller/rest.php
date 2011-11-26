@@ -128,7 +128,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 		
 		if (method_exists($this, $controller_method)) 
 		{
-			call_user_func(array($this, $controller_method));
+			call_user_func_array(array($this, $controller_method), $arguments);
 		}
 		else 
 		{
