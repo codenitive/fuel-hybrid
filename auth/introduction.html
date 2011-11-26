@@ -94,7 +94,7 @@
                 <td>bool</td>
                 <td><code>false</code></td>
                 <td>
-                    Auth to use `users_auth` table for user authentication information, useful to keep `users` table is simple as possible.
+                    Auth to use `users_auths` table for user credential security information, useful to keep `users` table is simple as possible.
                 </td>
             </tr>
 
@@ -156,6 +156,14 @@
                 <td><code>null</code></td>
                 <td>
                     The salt used for password hashing.
+                </td>
+            </tr>
+            <tr>
+                <th>hash_type</th>
+                <td>string</td>
+                <td><code>'sha1'</code></td>
+                <td>
+                    Set hashing method (md5, sha1, crypt_hash).
                 </td>
             </tr>
             <tr>
@@ -265,6 +273,13 @@ return array(
      * Application salt for hashing
      */
     'salt'      => null,
+
+    /**
+     * hash_type
+     *
+     * Set hashing method (md5, sha1, crypt_hash)
+     */
+    'hash_type' => 'sha1',
 
     /**
      * expiration
