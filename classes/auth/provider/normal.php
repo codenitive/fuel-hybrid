@@ -223,7 +223,7 @@ class Auth_Provider_Normal
 	{
 		$this->data['_hash'] = '';
 
-		if (array_key_exists('_hash', $data) and null === $data['_hash'])
+		if (array_key_exists('_hash', $data) or null === $data['_hash'])
 		{
 			$this->data['_hash'] = $data['_hash'];
 		}
