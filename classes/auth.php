@@ -72,6 +72,17 @@ class Auth
 	}
 
 	/**
+	 * Only called once 
+	 * 
+	 * @static 
+	 * @access  public
+	 */
+	public static function _init() 
+	{
+		\Config::load('autho', 'autho');
+	}
+
+	/**
 	 * Initiate a new Auth_Driver instance.
 	 * 
 	 * @static
