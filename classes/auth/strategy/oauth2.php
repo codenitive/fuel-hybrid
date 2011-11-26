@@ -32,6 +32,12 @@ use OAuth2\Provider;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Auth_Strategy_OAuth2
+ */
+
+ /**
+ * Auth Strategy OAuth2 Class taken from NinjAuth Package for FuelPHP
+ *
+ * @package     NinjAuth
  * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
@@ -42,7 +48,7 @@ class Auth_Strategy_OAuth2 extends Auth_Strategy
 	public function authenticate()
 	{
 		// Load the provider
-		$provider = Provider::factory($this->provider, $this->config);
+		$provider = Provider::forge($this->provider, $this->config);
 
 		// Grab a callback from the config
 
@@ -60,7 +66,7 @@ class Auth_Strategy_OAuth2 extends Auth_Strategy
 	public function callback()
 	{
 		// Load the provider
-		$this->provider = Provider::factory($this->provider, $this->config);
+		$this->provider = Provider::forge($this->provider, $this->config);
 		
 		$error = Input::get('error');
 
@@ -79,12 +85,7 @@ class Auth_Strategy_OAuth2 extends Auth_Strategy
 
 		try
 		{
-			$params = $this->provider->access($code);
-			
-			return (object) array(
-				'token' => $params['access_token'],
-				'secret' => null,
-			);
+			return $this->provider->access($code);
 		}
 		catch (Exception $e)
 		{

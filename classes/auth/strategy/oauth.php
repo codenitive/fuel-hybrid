@@ -33,6 +33,12 @@ use \OAuth\Provider;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Auth_Strategy_OAuth
+ */
+
+/**
+ * Auth Strategy OAuth Class taken from NinjAuth Package for FuelPHP
+ *
+ * @package     NinjAuth
  * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
@@ -43,13 +49,13 @@ class Auth_Strategy_OAuth extends Auth_Strategy
 	public function authenticate()
 	{
 		// Create an consumer from the config
-		$consumer = Consumer::factory($this->config);
+		$consumer = Consumer::forge($this->config);
 		
 		// Load the provider
-		$provider = Provider::factory($this->provider);
+		$provider = Provider::forge($this->provider);
 		
 		// Create the URL to return the user to
-		$callback = \Uri::create(\Config::get('autho.urls.callback', \Request::active()->route->segments[0].'/callback'));
+		$callback = \Arr::get($this->config, 'callback') ?: \Uri::create(\Config::get('autho.urls.callback', \Request::active()->route->segments[0].'/callback'));
 		$callback = rtrim($callback, '/').'/'.$this->provider;
 		
 		// Add the callback URL to the consumer
@@ -70,10 +76,10 @@ class Auth_Strategy_OAuth extends Auth_Strategy
 	public function callback()
 	{
 		// Create an consumer from the config
-		$this->consumer = Consumer::factory($this->config);
+		$this->consumer = Consumer::forge($this->config);
 
 		// Load the provider
-		$this->provider = Provider::factory($this->provider);
+		$this->provider = Provider::forge($this->provider);
 		
 		if ($token = \Cookie::get('oauth_token'))
 		{
@@ -81,7 +87,7 @@ class Auth_Strategy_OAuth extends Auth_Strategy
 			$this->token = unserialize(base64_decode($token));
 		}
 			
-		if ($this->token and $this->token->token !== Input::get_post('oauth_token'))
+		if ($this->token and $this->token->access_token !== Input::get_post('oauth_token'))
 		{   
 			// Delete the token, it is not valid
 			\Cookie::delete('oauth_token');

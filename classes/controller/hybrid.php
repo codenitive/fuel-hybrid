@@ -182,7 +182,7 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
 				return;
 			}
 
-			call_user_func(array($this, 'action_'.$resource), $arguments);
+			call_user_func_array(array($this, 'action_'.$resource), $arguments);
 		}
 		else 
 		{
@@ -226,7 +226,14 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
 		{
 			$this->response->status = $http_code;
 			
-			$this->template->set($data);
+			if (null !== $this->template)
+			{
+				$this->template->set($data);
+			}
+			else 
+			{
+				$this->response->body = $data;
+			}
 		}
 	}
 	
@@ -239,7 +246,10 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
 	{
 		if (true === $this->auto_render)
 		{
-			$this->template = Template::forge($this->template);
+			if (null !== $this->template)
+			{
+				$this->template = Template::forge($this->template);
+			}
 		}
 	}
 	
@@ -251,13 +261,20 @@ abstract class Controller_Hybrid extends \Fuel\Core\Controller
 	 */
 	protected function render_template($response)
 	{
-		//we dont want to accidentally change our site_name
-		$this->template->set(array('site_name' => \Config::get('app.site_name')));
-		
+		if (null !== $this->template)
+		{
+			//we dont want to accidentally change our site_name
+			$this->template->set(array('site_name' => \Config::get('app.site_name')));
+		}
+
 		if (true === $this->auto_render and ! $response instanceof \Response)
 		{
-			$response       = $this->response;
-			$response->body = $this->template->render();
+			$response = $this->response;
+
+			if (null !== $this->template)
+			{
+				$response->body = $this->template->render();
+			}
 		}
 
 		return $response;

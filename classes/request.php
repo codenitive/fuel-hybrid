@@ -124,7 +124,7 @@ class Request extends \Fuel\Core\Request
 	 * 
 	 * Usage:
 	 * 
-	 * <code>$exec = \Hybrid\Request::connector('PUT controller/method?hello=world')->execute();
+	 * <code>$exec = \Hybrid\Request::connect('PUT controller/method?hello=world')->execute();
 	 * \Debug::dump($exec);</code>
 	 * 
 	 * @param   array|null  $method_params  An array of parameters to pass to the method being executed

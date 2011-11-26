@@ -33,7 +33,13 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Auth_Strategy_OAuth2
+ * @category    Auth_Strategy_OpenId
+ */
+
+/**
+ * Auth Strategy OpenId Class taken from NinjAuth Package for FuelPHP
+ *
+ * @package     NinjAuth
  * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
@@ -104,8 +110,7 @@ class Auth_Strategy_OpenId extends Auth_Strategy
 		}
 
 		return (object) array(
-			'token'  => $this->openid->identity,
-			'secret' => '', // otherwise the database complains about a null value
+			'access_token'  => $this->openid->identity,
 		);
 	}
 
@@ -149,14 +154,7 @@ class Auth_Strategy_OpenId extends Auth_Strategy
 	 */
 	public function get_user_info($response)
 	{
-		$ret = array(
-			'credentials' => array(
-				'uid'      => $this->openid->identity,
-				'provider' => $this->name,
-				'token'    => $response->token,
-				'secret'   => $response->secret,
-			),
-		);
+		$ret['uid'] = $this->openid->identity;
 
 		$data = $this->openid->getAttributes();
 

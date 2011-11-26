@@ -30,13 +30,26 @@ namespace Hybrid;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Auth_Strategy
- * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
+/**
+ * Auth Strategy Class taken from NinjAuth Package for FuelPHP
+ *
+ * @package     NinjAuth
+ * @author      Phil Sturgeon <https://github.com/philsturgeon>
+ */
+ 
 abstract class Auth_Strategy 
 {
 	public $provider = null;
 	public $config   = array();
+
+	/**
+	 * Strategy name
+	 *
+	 * @access  public
+	 * @var     string
+	 */
 	public $name     = null;
 	
 	/**
@@ -56,7 +69,7 @@ abstract class Auth_Strategy
 		'github'    => 'OAuth2',
 		'linkedin'  => 'OAuth',
 		'unmagnify' => 'OAuth2',
-		'youtube'   => 'OAuth',
+		'youtube'   => 'OAuth2',
 	);
 
 	/**
@@ -97,6 +110,7 @@ abstract class Auth_Strategy
 		}
 		
 		$class = "\Hybrid\Auth_Strategy_{$strategy}";
+
 		return new $class($provider);
 	}
 
@@ -118,14 +132,22 @@ abstract class Auth_Strategy
 	 * Determine whether authenticated user should be continue to login or register new user
 	 *
 	 * @static
-	 * @access 	public
+	 * @access  public
 	 * @param   object   $strategy
 	 * @return  void
 	 * @throws  Auth_Strategy_Exception
 	 */
 	public static function login_or_register($strategy)
 	{
-		$response = $strategy->callback();
+		$token = $strategy->callback();
+
+		$user_info = static::get_user_info($strategy, $token);
+
+		$user_data = array(
+			'token'    => $token,
+			'info'     => $user_info,
+			'provider' => $strategy->provider->name,
+		);
 		
 		if (true === Auth::instance('user')->is_logged())
 		{
@@ -139,10 +161,17 @@ abstract class Auth_Strategy
 			// Allowed multiple providers, or not authed yet?
 			if (0 === $num_linked or true === \Config::get('autho.link_multiple_providers'))
 			{
-				$user_hash = static::get_user_info($strategy, $response);
-
-				Auth::instance('user')->link_account($user_hash);
-
+				try 
+				{
+					Auth::instance('user')->link_account($user_data);
+					
+					\Event::trigger('link_authentication', $user_data);
+				}
+				catch (AuthException $e)
+				{
+					throw new Auth_Strategy_Exception("Unable to retrieve valid user information from requested access token");
+				}
+				
 				// Attachment went ok so we'll redirect
 				Auth::redirect('logged_in');
 			}
@@ -158,21 +187,16 @@ abstract class Auth_Strategy
 		{
 			try 
 			{
-				$secret = '';
-				if (null !== $response->secret)
-				{
-					$secret = $response->secret;
-				}
-				
-				Auth::instance('user')->login_token($response->token, $response->secret);
+				Auth::instance('user')->login_token($user_data);
+
+				\Event::trigger('link_authentication', $user_data);
+
 				// credentials ok, go right in
 				Auth::redirect('logged_in');
 			}
 			catch (AuthException $e)
 			{
-				$user_hash = static::get_user_info($strategy, $response);
-				
-				\Session::set('autho', $user_hash);
+				\Session::set('autho', $user_data);
 
 				Auth::redirect('registration');
 			}
@@ -183,33 +207,31 @@ abstract class Auth_Strategy
 	 * Get user information from provider
 	 *
 	 * @static
-	 * @access 	protected
+	 * @access  protected
 	 * @param   object      $strategy
 	 * @param   object      $response
 	 * @return  array
 	 * @throws  Auth_Strategy_Exception
 	 */
-	protected static function get_user_info($strategy, $response)
+	protected static function get_user_info($strategy, $token)
 	{
 		switch ($strategy->name)
 		{
 			case 'oauth':
-				$user_hash = $strategy->provider->get_user_info($strategy->consumer, $response);
+				return $strategy->provider->get_user_info($strategy->consumer, $token);
 			break;
 
 			case 'oauth2':
-				$user_hash = $strategy->provider->get_user_info($response->token);
+				return $strategy->provider->get_user_info($token);
 			break;
 
 			case 'openid':
-				$user_hash = $strategy->get_user_info($response);
+				return $strategy->get_user_info($token);
 			break;
 
 			default:
-				throw new Auth_Strategy_Exception('Unable to get user info with '.$strategy->name);
+				throw new Auth_Strategy_Exception("Unsupported Strategy: {$strategy->name}");
 		}
-
-		return $user_hash;
 	}
 
 	abstract public function authenticate();

@@ -223,7 +223,7 @@ class Auth_Provider_Normal
 	{
 		$this->data['_hash'] = '';
 
-		if (isset($data['_hash']) or null === $data['_hash'])
+		if (array_key_exists('_hash', $data) or null === $data['_hash'])
 		{
 			$this->data['_hash'] = $data['_hash'];
 		}
@@ -349,12 +349,11 @@ class Auth_Provider_Normal
 	 * User login via token
 	 *
 	 * @access  public
-	 * @param   string  $token
-	 * @param   string  $secret
+	 * @param   array   $user_data
 	 * @param   bool    $remember_me
 	 * @return  self
 	 */
-	public function login_token($token, $secret, $remember_me = false)
+	public function login_token($user_data, $remember_me = false)
 	{
 		$this->data['_hash'] = null;
 		unset($this->data['expired_at']);
@@ -364,16 +363,15 @@ class Auth_Provider_Normal
 			$this->expiration = -1;
 		}
 
+		extract($user_data);
+
+		$uid = $info['uid'];
+
 		$query = \DB::select('users.*')
 			->from('users')
 			->join('authentications')
 			->on('authentications.user_id', '=', 'users.id')
-			->where('authentications.token', '=', $token);
-
-		if ( ! empty($secret))
-		{
-			$query->where('authentications.secret', '=', $secret);
-		}
+			->where('authentications.uid', '=', $uid);
 
 		if (true === $this->use_auth)
 		{
@@ -595,7 +593,7 @@ class Auth_Provider_Normal
 	{
 		$data = array();
 		
-		$accounts = \DB::select('provider', 'token', 'secret')
+		$accounts = \DB::select('provider', 'uid', 'access_token', 'secret')
 			->from('authentications')
 			->where('user_id', '=', $this->data['id'])
 			->as_object()
@@ -605,8 +603,9 @@ class Auth_Provider_Normal
 		foreach ($accounts as $account) 
 		{
 			$data[strval($account->provider)] = array(
-				'token'  => $account->token,
-				'secret' => $account->secret,
+				'uid'          => $account->uid,
+				'access_token' => $account->access_token,
+				'secret'       => $account->secret,
 			);
 		}
 

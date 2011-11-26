@@ -87,6 +87,18 @@ return array(
 	),
 
 	/**
+	 * mysql_timestamp
+	 *
+	 * Set default mysql_timestamp option for authentications table
+	 *
+	 * Available values:
+	 * null     No timestamp
+	 * false    Use time()
+	 * true     Use datetime
+	 */
+	'mysql_timestamp' => null,
+
+	/**
 	 * link_multiple_providers
 	 * 
 	 * Can multiple providers be attached to one user account

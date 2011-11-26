@@ -72,6 +72,17 @@ class Auth
 	}
 
 	/**
+	 * Only called once 
+	 * 
+	 * @static 
+	 * @access  public
+	 */
+	public static function _init() 
+	{
+		\Config::load('autho', 'autho');
+	}
+
+	/**
 	 * Initiate a new Auth_Driver instance.
 	 * 
 	 * @static
@@ -299,15 +310,15 @@ class Auth
 	 */
 	public static function link_account($user_id, $user_data)
 	{
-		if (empty($user_data) or ! isset($user_data['credentials']))
+		$provider = null;
+		$token    = null;
+		$info     = null;
+
+		extract($user_data);
+
+		if (empty($token) or empty($info))
 		{
 			return ;
-		}
-		
-		// some provider does not have secret key
-		if ( ! isset($user_data['credentials']['secret']))
-		{
-			$user_data['credentials']['secret'] = '';
 		}
 
 		if ($user_id < 1)
@@ -315,34 +326,49 @@ class Auth
 			return ;
 		}
 
-		\DB::select()
-			->from('authentications')
-			->where('user_id', '=', $user_id)
-			->where('provider', '=', $user_data['credentials']['provider'])
-			->execute();
+		if ( ! isset($info['uid']) or null === $info['uid'])
+		{
+			throw new AuthException("Missing required information: uid");
+		}
+		
+		if ( ! isset($token->access_token) or null === $token->access_token)
+		{	
+			throw new AuthException("Missing required information: access_token");	
+		}
+
+		$auth = Auth_Model_Authentication::find(array(
+			'where' => array(
+				array('user_id', '=', $user_id),
+				array('provider', '=', $provider)
+			),
+			'limit' => 1,
+		));
+
+		$values = array(
+			'uid'           => $info['uid'],
+			'access_token'  => isset($token->access_token) ? $token->access_token : '',
+			'secret'        => isset($token->secret) ? $token->secret : '',
+			'expires'       => isset($token->expires) ? $token->expires : -1,
+			'refresh_token' => isset($token->refresh_token) ? $token->refresh_token : '',
+		);
 
 		// Attach this account to the logged in user
-		if (\DB::count_last_query() > 0)
+		if (null !== $auth)
 		{
-			\DB::update('authentications')->set(array(
-					'uid'      => $user_data['credentials']['uid'],
-					'token'    => $user_data['credentials']['token'],
-					'secret'   => $user_data['credentials']['secret'],
-				))
-				->where('user_id', '=', $user_id)
-				->where('provider', '=', $user_data['credentials']['provider'])
-				->execute();
+			$auth->current();
+			$auth->set($values);
 		}
 		else
 		{
-			\DB::insert('authentications')->set(array(
-					'user_id'  => $user_id,
-					'provider' => $user_data['credentials']['provider'],
-					'uid'      => $user_data['credentials']['uid'],
-					'token'    => $user_data['credentials']['token'],
-					'secret'   => $user_data['credentials']['secret'],
-				))->execute();
+			$values = array(
+				'user_id'  => $user_id,
+				'provider' => $provider,
+			) + $values;
+
+			$auth = Auth_Model_Authentication::forge($values);
 		}
+
+		$auth->save();
 
 		return true;
 	}

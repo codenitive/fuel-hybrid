@@ -30,7 +30,13 @@ namespace Hybrid;
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Auth_Controller
- * @author      Mior Muhammad Zaki <crynobone@gmail.com>
+ */
+
+ /**
+ * Auth Controller Class taken from NinjAuth Package for FuelPHP
+ *
+ * @package     NinjAuth
+ * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
 class Auth_Controller extends \Controller 
@@ -39,7 +45,7 @@ class Auth_Controller extends \Controller
 	 * Load autho configuration
 	 *
 	 * @access  public
-	 * @return 	void
+	 * @return  void
 	 */
 	public function before()
 	{
@@ -52,7 +58,7 @@ class Auth_Controller extends \Controller
 	/**
 	 * Start a session request
 	 *
-	 * @access 	public
+	 * @access  public
 	 * @param   array    $provider
 	 * @return  Response
 	 * @throws  Auth_Strategy_Exception
@@ -103,12 +109,12 @@ class Auth_Controller extends \Controller
 	/**
 	 * Display error from failed request
 	 *
-	 * @access  public
+	 * @access  protected
 	 * @param   array    $provider
 	 * @param   string   $e
 	 * @return  Response
 	 */
-	public function action_error($provider = array(), $e = '')
+	protected function action_error($provider = array(), $e = '')
 	{
 		return \View::forge('error');
 	}
