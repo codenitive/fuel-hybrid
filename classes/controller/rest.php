@@ -83,7 +83,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 
 		\Event::trigger('controller_before');
 		
-		if (Request::main() !== Request::active()) 
+		if (Request::is_hmvc()) 
 		{
 			$this->set_content_type = false;
 		}
