@@ -76,6 +76,7 @@ abstract class Controller extends \Fuel\Core\Controller
 	 * @param   mixed   $resource
 	 * @param   string  $type 
 	 * @param   string  $name
+	 * @throws  HttpNotFoundException
 	 */
 	final protected function acl($resource, $type = null, $name = null) 
 	{
@@ -103,7 +104,8 @@ abstract class Controller extends \Fuel\Core\Controller
 	/**
 	 * This method will be called before we route to the destinated method
 	 * 
-	 * @access public
+	 * @access  public
+	 * @return  void
 	 */
 	public function before() 
 	{
@@ -135,6 +137,7 @@ abstract class Controller extends \Fuel\Core\Controller
 	 * 
 	 * @access  public
 	 * @param   mixed   $response
+	 * @return  Response
 	 */
 	public function after($response) 
 	{
@@ -159,6 +162,7 @@ abstract class Controller extends \Fuel\Core\Controller
 	 * @access  public
 	 * @param   Request $resource
 	 * @param   array   $arguments
+	 * @return  void
 	 */
 	public function router($resource, $arguments) 
 	{
@@ -204,6 +208,7 @@ abstract class Controller extends \Fuel\Core\Controller
 	 * @access  protected
 	 * @param   array   $data
 	 * @param   int     $http_code
+	 * @return  void
 	 */
 	protected function response($data = array(), $http_code = 200) 
 	{

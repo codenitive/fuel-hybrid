@@ -40,17 +40,19 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	 * Auto render template
 	 * 
 	 * @access  public
-	 * @var     bool    
+	 * @var     bool
 	 */
 	public $auto_render = true;
 
 	/**
 	 * Run ACL check and redirect user automatically if user doesn't have the privilege
 	 * 
-	 * @access  public
+	 * @final
+	 * @access  protected
 	 * @param   mixed   $resource
 	 * @param   string  $type 
 	 * @param   string  $name
+	 * @throws  HttpNotFoundException
 	 */
 	final protected function acl($resource, $type = null, $name = null) 
 	{
@@ -68,6 +70,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	 * This method will be called after we route to the destinated method
 	 * 
 	 * @access  public
+	 * @return  void
 	 */
 	public function before() 
 	{
@@ -86,6 +89,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	 * 
 	 * @access  public
 	 * @param   mixed   $response
+	 * @return  Response
 	 */
 	public function after($response) 
 	{
@@ -97,6 +101,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	/**
 	 * Takes pure data and optionally a status code, then creates the response
 	 * 
+	 * @access  protected
 	 * @param   array       $data
 	 * @param   int         $http_code
 	 */
@@ -111,6 +116,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	 * Prepare template
 	 * 
 	 * @access  protected
+	 * @return  void
 	 */
 	protected function prepare_template()
 	{
@@ -125,6 +131,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	 * 
 	 * @access  protected
 	 * @param   mixed   $response
+	 * @return  Response
 	 */
 	protected function render_template($response)
 	{

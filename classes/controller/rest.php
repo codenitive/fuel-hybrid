@@ -47,7 +47,8 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 	/**
 	 * Run ACL check and redirect user automatically if user doesn't have the privilege
 	 * 
-	 * @access  public
+	 * @final
+	 * @access  protected
 	 * @param   mixed   $resource
 	 * @param   string  $type 
 	 * @param   string  $name
@@ -72,6 +73,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 	 * This method will be called after we route to the destinated method
 	 * 
 	 * @access  public
+	 * @return 	void
 	 */
 	public function before() 
 	{
@@ -96,6 +98,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 	 * 
 	 * @access  public
 	 * @param   mixed   $response
+	 * @return  Response
 	 */
 	public function after($response) 
 	{
@@ -113,15 +116,16 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 	 * Requests are not made to methods directly The request will be for an "object".
 	 * this simply maps the object and method to the correct Controller method.
 	 * 
+	 * @access  public
 	 * @param   Request $resource
 	 * @param   array   $arguments
 	 */
 	public function router($resource, $arguments) 
 	{
-		$pattern           = Restserver::$pattern;
+		$pattern = Restserver::$pattern;
 		
 		// Remove the extension from arguments too
-		$resource          = preg_replace($pattern, '', $resource);
+		$resource = preg_replace($pattern, '', $resource);
 		
 		// If they call user, go to $this->post_user();
 		$controller_method = strtolower(Input::method()).'_'.$resource;
@@ -140,6 +144,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 	/**
 	 * Takes pure data and optionally a status code, then creates the response
 	 * 
+	 * @access  protected
 	 * @param   array   $data
 	 * @param   int     $http_code
 	 */
@@ -158,4 +163,5 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 			$this->response->set_header('Content-Type', Restserver::content_type($rest_server->format));
 		}
 	}
+	
 }

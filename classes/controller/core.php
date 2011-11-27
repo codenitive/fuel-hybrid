@@ -33,10 +33,11 @@ abstract class Controller_Core extends \Fuel\Core\Controller
      * Run ACL check and redirect user automatically if user doesn't have the privilege
      * 
      * @final
-     * @access  public
+     * @access  protected
      * @param   mixed   $resource
      * @param   string  $type 
      * @param   string  $name
+     * @throws  HttpNotFoundException
      */
     final protected function acl($resource, $type = null, $name = null) 
     {
@@ -54,6 +55,7 @@ abstract class Controller_Core extends \Fuel\Core\Controller
      * This method will be called after we route to the destinated method
      * 
      * @access  public
+     * @return  void
      */
     public function before() 
     {
@@ -69,6 +71,8 @@ abstract class Controller_Core extends \Fuel\Core\Controller
      * This method will be called after we route to the destinated method
      * 
      * @access  public
+     * @param   mixed      $response
+     * @return  Response
      */
     public function after($response) 
     {
