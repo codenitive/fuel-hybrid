@@ -510,22 +510,3 @@ class Restserver
 	}
 	
 }
-
-/**
- * @package     Fuel
- * @subpackage  Hybrid
- * @category    Restful
- * @deprecated  1.3.0
- * @author      Mior Muhammad Zaki <crynobone@gmail.com>
- */
-class Restful extends Restserver 
-{
-	
-	public static function forge($data = array(), $http_code = 200)
-	{
-		\Log::warning("\Hybrid\Restful already deprecated, and staged to be removed in v1.3.0. Please use \Hybrid\Restserver.");
-		
-		return parent::forge($data, $http_code);
-		
-	}
-}
