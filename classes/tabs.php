@@ -98,7 +98,7 @@ class Tabs
 	 */
 	public static function instance($name)
 	{
-		return static::forge($name);
+		return static::make($name);
 	}
 
 	/**

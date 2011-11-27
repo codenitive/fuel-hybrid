@@ -279,7 +279,7 @@ class Auth
 	 */
 	public static function login($username, $password, $driver = 'user')
 	{
-		return static::forge($driver)->login($username, $password);
+		return static::make($driver)->login($username, $password);
 	}
 
 	/**
@@ -293,7 +293,7 @@ class Auth
 	 */
 	public static function reauthenticate($driver = 'user')
 	{
-		return static::forge($driver)->reauthenticate();
+		return static::make($driver)->reauthenticate();
 	}
 
 	/**

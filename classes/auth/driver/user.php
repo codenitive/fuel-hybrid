@@ -110,7 +110,7 @@ class Auth_Driver_User extends Auth_Driver
 			return;
 		}
 
-		$this->strategy = Auth_Strategy::forge('normal')->authenticate();
+		$this->strategy = Auth_Strategy::make('normal')->authenticate();
 
 		// short-hand variable
 		$this->provider = $this->strategy->provider;

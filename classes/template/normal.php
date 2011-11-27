@@ -49,7 +49,7 @@ class Template_Normal extends Template_Driver
 			$driver .= ".{$name}";
 		}
 
-		return Template::forge($driver);
+		return Template::make($driver);
 	}
 
 	/**

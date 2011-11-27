@@ -214,7 +214,7 @@ abstract class Controller extends \Fuel\Core\Controller
 	{
 		if (true === $this->is_rest_call)
 		{
-			$rest_server = Restserver::forge($data, $http_code)
+			$rest_server = Restserver::make($data, $http_code)
 				->format($this->rest_format)
 				->execute();
 			
@@ -253,7 +253,7 @@ abstract class Controller extends \Fuel\Core\Controller
 		{
 			if (null !== $this->template)
 			{
-				$this->template = Template::forge($this->template);
+				$this->template = Template::make($this->template);
 			}
 		}
 	}
