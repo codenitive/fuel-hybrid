@@ -152,6 +152,21 @@ class Currency
 	{
 		return new static($amount, $from, $round);
 	}
+
+	/**
+	 * Initiate a new Currency class
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   float   $amount     amount to convert
+	 * @param   string  $from       Currency to convert from
+	 * @param   int     $round      automatic round the currency, defaults to 2 digits
+	 * @return  object  Currency
+	 */
+	public static function make($amount, $from = null, $round = 2)
+	{
+		return static::forge($amount, $from, $round);
+	}
 	
 	/**
 	 * Shortcode to self::forge().

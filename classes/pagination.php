@@ -81,6 +81,20 @@ class Pagination
 	}
 
 	/**
+	 * Initiate a new Pagination instance.
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @param   array   $config
+	 * @return  object  Pagination
+	 */
+	public static function make($name = null, $config = array())
+	{
+		return static::forge($name, $config);
+	}
+
+	/**
 	 * Shortcode to self::forge().
 	 *
 	 * @deprecated  1.3.0

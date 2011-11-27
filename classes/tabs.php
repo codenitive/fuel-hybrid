@@ -74,6 +74,20 @@ class Tabs
 	}
 
 	/**
+	 * Initiate a new Tabs instance.
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @param   array   $config
+	 * @return  object  Tabs
+	 */
+	public static function make($name = null, $config = array())
+	{
+		return static::forge($name, $config);
+	}
+
+	/**
 	 * Get cached instance, or generate new if currently not available.
 	 *
 	 * @static

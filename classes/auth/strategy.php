@@ -115,6 +115,19 @@ abstract class Auth_Strategy
 	}
 
 	/**
+	 * Forge a new strategy
+	 *
+	 * @static
+	 * @access  public
+	 * @return  Auth_Strategy
+	 * @throws  Auth_Strategy_Exception
+	 */
+	public static function make($provider)
+	{
+		return static::forge($provider);
+	}
+
+	/**
 	 * Deprecated factory method (adviced to use forge())
 	 *
 	 * @static

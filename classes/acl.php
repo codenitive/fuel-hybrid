@@ -87,6 +87,19 @@ class Acl
 	}
 
 	/**
+	 * Initiate a new Acl instance.
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  object  Acl
+	 */
+	public static function make($name = null)
+	{
+		return static::forge($name);
+	}
+
+	/**
 	 * Shortcode to self::forge().
 	 *
 	 * @deprecated  1.3.0

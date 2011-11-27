@@ -118,6 +118,20 @@ class Auth
 	}
 
 	/**
+	 * Initiate a new Auth_Driver instance.
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   string  $name       null to fetch the default driver, or a driver id to get a specific one
+	 * @return  Auth_Driver
+	 * @throws  \FuelException
+	 */
+	public static function make($name = null)
+	{
+		return static::forge($name);
+	}
+
+	/**
 	 * Shortcode to self::forge().
 	 *
 	 * @deprecated  1.3.0

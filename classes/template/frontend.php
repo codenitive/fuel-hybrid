@@ -53,6 +53,22 @@ class Template_Frontend extends Template_Driver
 	}
 
 	/**
+	 * Initiate a new template using make
+	 *
+	 * Example:
+	 * <code>$template = \Hybrid\Template_Frontend::make();</code>
+	 *
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  void
+	 */
+	public static function make($name = null)
+	{
+		return static::forge($name);
+	}
+
+	/**
 	 * Shortcode to self::forge().
 	 *
 	 * @deprecated  1.3.0

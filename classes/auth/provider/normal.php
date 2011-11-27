@@ -110,6 +110,18 @@ class Auth_Provider_Normal
 	}
 
 	/**
+	 * Initiate a new Auth_Provider_Normal instance.
+	 * 
+	 * @static
+	 * @access  public
+	 * @return  object  Auth_Provider_Normal
+	 */
+	public static function make()
+	{
+		return static::forge();
+	}
+
+	/**
 	 * Shortcode to self::forge().
 	 *
 	 * @deprecated  1.3.0

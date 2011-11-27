@@ -73,6 +73,18 @@ class Chart
 	}
 
 	/**
+	 * Initiate a new Chart_Driver instance.
+	 * 
+	 * @static
+	 * @access  public
+	 * @return  static 
+	 */
+	public static function make($name = null) 
+	{
+		return static::forge($name);
+	}
+
+	/**
 	 * Shortcode to self::forge().
 	 *
 	 * @deprecated  1.3.0

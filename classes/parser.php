@@ -39,7 +39,7 @@ class Parser
 	protected static $instances = array();
 
 	/**
-	 * Initiate a new Text instance
+	 * Initiate a new Parser instance
 	 * 
 	 * @static
 	 * @access  public
@@ -70,6 +70,18 @@ class Parser
 		}
 
 		return static::$instances[$name];
+	}
+
+	/**
+	 * Initiate a new Parser instance
+	 * 
+	 * @static
+	 * @access  public
+	 * @return  object
+	 */
+	public static function make($name = null)
+	{
+		return static::forge($name);
 	}
 
 	/**

@@ -51,6 +51,19 @@ class Swiftmail
 	}
 
 	/**
+	 * Creates a new instance of the email driver.
+	 *
+	 * @static
+	 * @access  public
+	 * @param   array   $config     An array to overwrite default config from config/email.php.
+	 * @return  self
+	 */
+	public static function make($config = array())
+	{
+		return static::forge($config);
+	}
+
+	/**
 	 * Shortcode to self::forge().
 	 *
 	 * @deprecated  1.3.0

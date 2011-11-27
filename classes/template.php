@@ -111,6 +111,18 @@ class Template
 	}
 
 	/**
+	 * Initiate a new Template instance
+	 * 
+	 * @static
+	 * @access  public
+	 * @return  Template_Abstract
+	 */
+	public static function make($name = null)
+	{
+		return static::forge($name);
+	}
+
+	/**
 	 * Shortcode to self::forge().
 	 *
 	 * @deprecated  1.3.0

@@ -58,6 +58,20 @@ class Curl
 	}
 
 	/**
+	 * Initiate this class as a new object
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   string  $uri
+	 * @param   array   $dataset
+	 * @return  static 
+	 */
+	public static function make($uri, $dataset = array())
+	{
+		return static::forge($uri, $dataset);
+	}
+
+	/**
 	 * Shortcode to self::forge().
 	 *
 	 * @deprecated  1.3.0

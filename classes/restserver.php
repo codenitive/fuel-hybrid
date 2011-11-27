@@ -83,6 +83,20 @@ class Restserver
 	}
 
 	/**
+	 * A shortcode to initiate this class as a new object
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   array   $data
+	 * @param   int     $http_code
+	 * @return  static 
+	 */
+	public static function make($data = array(), $http_code = 200)
+	{
+		return static::forge($data, $http_code);
+	}
+
+	/**
 	 * Shortcode to self::forge().
 	 *
 	 * @deprecated  1.3.0
