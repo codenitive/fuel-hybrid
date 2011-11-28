@@ -80,7 +80,7 @@ abstract class Controller extends \Fuel\Core\Controller
 	 */
 	final protected function acl($resource, $type = null, $name = null) 
 	{
-		$status = Acl::instance($name)->access_status($resource, $type);
+		$status = Acl::make($name)->access_status($resource, $type);
 		
 		switch ($status) 
 		{
@@ -111,7 +111,7 @@ abstract class Controller extends \Fuel\Core\Controller
 	{
 		$this->is_rest_call = Restserver::is_rest_call();
 		$this->language     = Factory::get_language();
-		$this->user         = Auth::instance('user')->get();
+		$this->user         = Auth::make('user')->get();
 
 		if (true === $this->is_rest_call)
 		{
