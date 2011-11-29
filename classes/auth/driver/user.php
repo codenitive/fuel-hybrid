@@ -51,7 +51,7 @@ class Auth_Driver_User extends Auth_Driver
 	 * 
 	 * Usage:
 	 * 
-	 * <code>$role = \Hybrid\Auth::instance('user')->acl();
+	 * <code>$role = \Hybrid\Auth::make('user')->acl();
 	 * $role->add_recources('monkeys');</code>
 	 * 
 	 * @access  public
@@ -60,7 +60,7 @@ class Auth_Driver_User extends Auth_Driver
 	 */
 	public function acl($name = null) 
 	{
-		$this->acl = Acl::instance($name);
+		$this->acl = Acl::make($name);
 
 		return $this->acl;
 	}
@@ -75,7 +75,7 @@ class Auth_Driver_User extends Auth_Driver
 	 */
 	public static function instance()
 	{
-		return Auth::instance('user');
+		return Auth::make('user');
 	}
 
 	/**
@@ -121,7 +121,7 @@ class Auth_Driver_User extends Auth_Driver
 	 * 
 	 * Usage:
 	 * 
-	 * <code>false === \Hybrid\Auth::instance('user')->is_logged()</code>
+	 * <code>false === \Hybrid\Auth::make('user')->is_logged()</code>
 	 *
 	 * @access  public
 	 * @return  bool
@@ -136,7 +136,7 @@ class Auth_Driver_User extends Auth_Driver
 	 * 
 	 * Usage:
 	 * 
-	 * <code>$user = \Hybrid\Auth::instance('user')->get();</code>
+	 * <code>$user = \Hybrid\Auth::make('user')->get();</code>
 	 *
 	 * @access  public
 	 * @param   string  $name optional key value, return all if $name is null

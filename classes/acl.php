@@ -179,7 +179,7 @@ class Acl
 			throw new \FuelException(__METHOD__.": Unable to verify unknown resource {$resource}.");
 		}
 
-		$user    = Auth::instance('user')->get();
+		$user    = Auth::make('user')->get();
 		
 		$type_id = array_search($type, $types);
 		$length  = count($types);

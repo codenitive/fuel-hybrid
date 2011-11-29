@@ -243,7 +243,7 @@ class Auth
 	 */
 	public static function has_roles($check_roles) 
 	{
-		$user = static::instance('user')->get();
+		$user = static::make('user')->get();
 
 		if ( ! is_array($check_roles)) 
 		{
