@@ -63,6 +63,7 @@ abstract class Auth_Strategy
 		'normal'    => 'Normal',
 		'facebook'  => 'OAuth2',
 		'twitter'   => 'OAuth',
+		'tumblr'    => 'OAuth',
 		'dropbox'   => 'OAuth',
 		'flickr'    => 'OAuth',
 		'google'    => 'OAuth2',
