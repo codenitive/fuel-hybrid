@@ -60,6 +60,7 @@ class Uri extends \Fuel\Core\Uri
 			}
 			else
 			{
+				$key   = $value;
 				$input = Input::get($value);
 			}
 			
