@@ -85,7 +85,7 @@ abstract class Auth_Strategy
 		
 		$this->config   = \Config::get("autho.providers.{$provider}");
 
-		if ($this->config === null)
+		if (null === $this->config and 'normal' !== $provider)
 		{
 			throw new Auth_Strategy_Exception(sprintf('Provider "%s" has no config.', $provider));
 		}
