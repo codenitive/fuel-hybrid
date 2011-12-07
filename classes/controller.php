@@ -176,7 +176,7 @@ abstract class Controller extends \Fuel\Core\Controller
 		
 		if (method_exists($this, $controller_method) and true === $this->is_rest_call) 
 		{
-			call_user_func(array($this, $controller_method));
+			return call_user_func(array($this, $controller_method));
 		}
 		elseif (method_exists($this, 'action_'.$resource)) 
 		{
@@ -186,7 +186,7 @@ abstract class Controller extends \Fuel\Core\Controller
 				return;
 			}
 
-			call_user_func_array(array($this, 'action_'.$resource), $arguments);
+			return call_user_func_array(array($this, 'action_'.$resource), $arguments);
 		}
 		else 
 		{
