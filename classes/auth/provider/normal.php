@@ -451,7 +451,7 @@ class Auth_Provider_Normal
 		}
 
 		// create a hash
-		$values['_hash'] = Auth::add_salt($hash);
+		$values['_hash'] = Auth::create_hash($hash);
 
 		// for secure, don't ever include actual password
 		unset($values['password']);
