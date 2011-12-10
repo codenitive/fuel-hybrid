@@ -98,15 +98,30 @@ class Auth_Provider_Normal
 	}
 
 	/**
-	 * Initiate a new Auth_Provider_Normal instance.
-	 * 
+	 * Shortcode to self::make().
+	 *
+	 * @deprecated  1.2.0
 	 * @static
 	 * @access  public
-	 * @return  object  Auth_Provider_Normal
+	 * @return  self::make()
+	 */
+	public static function factory()
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make();
+	}
+
+	/**
+	 * Shortcode to self::make().
+	 *
+	 * @static
+	 * @access  public
+	 * @return  self::make()
 	 */
 	public static function forge()
 	{
-		return new static();
+		return static::make();
 	}
 
 	/**
@@ -118,23 +133,7 @@ class Auth_Provider_Normal
 	 */
 	public static function make()
 	{
-		return static::forge();
-	}
-
-	/**
-	 * Shortcode to self::forge().
-	 *
-	 * @deprecated  1.3.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  object  Auth_Provider_Normal
-	 * @see     self::forge()
-	 */
-	public static function factory()
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-		return static::forge();
+		return new static();
 	}
 
 	/**

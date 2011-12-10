@@ -261,6 +261,7 @@ class Acl
 	 * @access  public
 	 * @param   mixed   $roles
 	 * @return  bool
+	 * @throws  \FuelException
 	 */
 	public function add_roles($roles = null) 
 	{
@@ -298,6 +299,7 @@ class Acl
 	 * @access  public
 	 * @param   mixed   $resources
 	 * @return  bool
+	 * @throws  \FuelException
 	 */
 	public function add_resources($resources = null) 
 	{

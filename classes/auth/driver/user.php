@@ -43,6 +43,12 @@ class Auth_Driver_User extends Auth_Driver
 	 */
 	public $acl         = null;
 	
+	/**
+	 * Relation to Auth_Provider_Normal object
+	 *
+	 * @access  protected
+	 * @var     Auth_Provider_Normal
+	 */
 	protected $provider = null;
 
 	/**

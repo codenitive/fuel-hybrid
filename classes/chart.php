@@ -91,6 +91,7 @@ class Chart
 	 * @access  public
 	 * @param   string  $name
 	 * @return  Chart_Driver 
+	 * @throws  \FuelException
 	 */
 	public static function make($name = null) 
 	{

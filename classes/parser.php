@@ -55,7 +55,7 @@ class Parser
 	}
 
 	/**
-	 * Initiate a new Parser instance
+	 * Shortcode to self::make().
 	 * 
 	 * @static
 	 * @access  public

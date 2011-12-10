@@ -112,7 +112,6 @@ class Auth
 	 * @access  public
 	 * @param   string  $name       null to fetch the default driver, or a driver id to get a specific one
 	 * @return  self::make()
-	 * @throws  \FuelException
 	 */
 	public static function forge($name = null)
 	{

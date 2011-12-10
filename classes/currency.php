@@ -140,7 +140,7 @@ class Currency
 	}
 	
 	/**
-	 * Shortcode to self::forge().
+	 * Shortcode to self::make().
 	 *
 	 * @deprecated  1.2.0
 	 * @static
@@ -158,7 +158,7 @@ class Currency
 	}
 	
 	/**
-	 * Initiate a new Currency class
+	 * Shortcode to self::make().
 	 * 
 	 * @static
 	 * @access  public
