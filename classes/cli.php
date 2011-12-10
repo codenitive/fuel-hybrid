@@ -31,14 +31,19 @@ class Cli extends \Fuel\Core\Cli
 	/**
 	 * An alias for Cli::write() to output $text only when specify -v or --verbose options
 	 * 
+	 * @static
 	 * @access  public
-	 * @param   string|array    $text   the text to output, or array of lines
+	 * @param   mixed    $text         the text to output, or array of lines
+	 * @param   mixed    $foreground   the foreground color
+	 * @param   mixed    $background   the background color
+	 * @return  void
 	 */
 	public static function verbose($text = '', $foreground = null, $background = null)
 	{
-		if (static::option('v') !== null or static::option('verbose') !== null)
+		if (null !== static::option('v', static::option('verbose')))
 		{
 			static::write($text, $foreground, $background);
 		}
 	}
+
 }

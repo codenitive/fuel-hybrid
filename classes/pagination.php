@@ -3,11 +3,12 @@
 /**
  * Fuel is a fast, lightweight, community driven PHP5 framework.
  *
- * @package     Fuel
- * @version     1.0
- * @author      Dan Horrigan <http://dhorrigan.com>
- * @license     MIT License
- * @copyright   2010 - 2011 Fuel Development Team
+ * @package    Fuel
+ * @version    1.1
+ * @author     Fuel Development Team
+ * @license    MIT License
+ * @copyright  2010 - 2011 Fuel Development Team
+ * @link       http://fuelphp.com
  */
 
 namespace Hybrid;
@@ -51,15 +52,46 @@ class Pagination
 	}
 
 	/**
+	 * Shortcode to self::make().
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @param   array   $config
+	 * @return  self::make()
+	 */
+	public static function factory($name = null, $config = array())
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($name, $config);
+	}
+
+	/**
+	 * Shortcode to self::make().
+	 *
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @param   array   $config
+	 * @return  self::make()
+	 */
+	public static function forge($name = null, $config = array())
+	{
+		return static::make($name, $config);
+	}
+
+	/**
 	 * Initiate a new Pagination instance.
 	 * 
 	 * @static
 	 * @access  public
 	 * @param   string  $name
 	 * @param   array   $config
-	 * @return  object  Pagination
+	 * @return  Pagination
 	 */
-	public static function forge($name = null, $config = array())
+	public static function make($name = null, $config = array())
 	{
 		if (is_array($name))
 		{
@@ -81,43 +113,13 @@ class Pagination
 	}
 
 	/**
-	 * Initiate a new Pagination instance.
-	 * 
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @param   array   $config
-	 * @return  object  Pagination
-	 */
-	public static function make($name = null, $config = array())
-	{
-		return static::forge($name, $config);
-	}
-
-	/**
-	 * Shortcode to self::forge().
-	 *
-	 * @deprecated  1.3.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @param   array   $config
-	 * @return  object  Pagination
-	 */
-	public static function factory($name = null, $config = array())
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-		
-		return static::forge($name, $config);
-	}
-
-	/**
 	 * Retrieve an instance of Hybrid\Pagination.
 	 *
 	 * @static
 	 * @access  public
 	 * @param   string  $name
 	 * @return  object  Pagination
+	 * @throws  \FuelException
 	 */
 	public static function instance($name = null)
 	{

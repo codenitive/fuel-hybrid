@@ -62,16 +62,63 @@ class Acl
 	{
 		\Event::trigger('init_acl');
 	}
+
+	/**
+	 * Shortcode to self::make().
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  object  Acl
+	 * @see     self::make()
+	 */
+	public static function factory($name = null)
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($name);
+	}
 	
+	/**
+	 * Shortcode to self::make().
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  self::make()
+	 */
+	public static function forge($name = null)
+	{
+		return static::make($name);
+	}
+
+	/**
+	 * Get cached instance, or generate new if currently not available.
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  object  Acl
+	 * @see     self::make()
+	 */
+	public static function instance($name = null)
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($name);
+	}
+
 	/**
 	 * Initiate a new Acl instance.
 	 * 
 	 * @static
 	 * @access  public
 	 * @param   string  $name
-	 * @return  object  Acl
+	 * @return  Acl
 	 */
-	public static function forge($name = null)
+	public static function make($name = null)
 	{
 		if (null === $name)
 		{
@@ -84,50 +131,6 @@ class Acl
 		}
 
 		return static::$instances[$name];
-	}
-
-	/**
-	 * Initiate a new Acl instance.
-	 * 
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  object  Acl
-	 */
-	public static function make($name = null)
-	{
-		return static::forge($name);
-	}
-
-	/**
-	 * Shortcode to self::forge().
-	 *
-	 * @deprecated  1.3.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  object  Acl
-	 * @see     self::forge()
-	 */
-	public static function factory($name = null)
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-		
-		return static::forge($name);
-	}
-
-	/**
-	 * Get cached instance, or generate new if currently not available.
-	 *
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  object  Acl
-	 * @see     self::forge()
-	 */
-	public static function instance($name = null)
-	{
-		return static::forge($name);
 	}
 
 	/**

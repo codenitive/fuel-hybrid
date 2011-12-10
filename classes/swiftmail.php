@@ -31,14 +31,43 @@ Factory::import('swift/swift_required', 'vendor');
 class Swiftmail 
 {
 	/**
+	 * Shortcode to self::make().
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @param   array   $config     An array to overwrite default config from config/email.php.
+	 * @return  self::make()
+	 */
+	public static function factory($config = array())
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($config);
+	}
+
+	/**
+	 * Shortcode to self::make().
+	 *
+	 * @static
+	 * @access  public
+	 * @param   array   $config     An array to overwrite default config from config/email.php.
+	 * @return  self::make()
+	 */
+	public static function forge($config = array())
+	{
+		return static::make($config);
+	}
+
+	/**
 	 * Creates a new instance of the email driver.
 	 *
 	 * @static
 	 * @access  public
 	 * @param   array   $config     An array to overwrite default config from config/email.php.
-	 * @return  self
+	 * @return  Swiftmail
 	 */
-	public static function forge($config = array())
+	public static function make($config = array())
 	{
 		$initconfig = \Config::load('swiftmail', 'switftmail', true);
 		
@@ -48,35 +77,6 @@ class Swiftmail
 		}
 
 		return new static($config);
-	}
-
-	/**
-	 * Creates a new instance of the email driver.
-	 *
-	 * @static
-	 * @access  public
-	 * @param   array   $config     An array to overwrite default config from config/email.php.
-	 * @return  self
-	 */
-	public static function make($config = array())
-	{
-		return static::forge($config);
-	}
-
-	/**
-	 * Shortcode to self::forge().
-	 *
-	 * @deprecated  1.3.0
-	 * @static
-	 * @access  public
-	 * @param   array   $config     An array to overwrite default config from config/email.php.
-	 * @return  self::forge()
-	 */
-	public static function factory($config = array())
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-		
-		return static::forge($config);
 	}
 
 	/**

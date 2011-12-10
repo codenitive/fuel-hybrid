@@ -67,50 +67,50 @@ class Restserver
 		static::$pattern = sprintf('/\.(%s)$/', implode('|', array_keys(static::$supported_formats)));
 		\Config::load('rest', true);
 	}
-	
-	/**
-	 * A shortcode to initiate this class as a new object
-	 * 
-	 * @static
-	 * @access  public
-	 * @param   array   $data
-	 * @param   int     $http_code
-	 * @return  static 
-	 */
-	public static function forge($data = array(), $http_code = 200)
-	{
-		return new static($data, $http_code);
-	}
 
 	/**
-	 * A shortcode to initiate this class as a new object
-	 * 
-	 * @static
-	 * @access  public
-	 * @param   array   $data
-	 * @param   int     $http_code
-	 * @return  static 
-	 */
-	public static function make($data = array(), $http_code = 200)
-	{
-		return static::forge($data, $http_code);
-	}
-
-	/**
-	 * Shortcode to self::forge().
+	 * Shortcode to self::make().
 	 *
-	 * @deprecated  1.3.0
+	 * @deprecated  1.2.0
 	 * @static
 	 * @access  public
 	 * @param   array   $data
 	 * @param   int     $http_code
-	 * @return  self::forge()
+	 * @return  self::make()
 	 */
 	public static function factory($data = array(), $http_code = 200)
 	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
 		
-		return static::forge($data, $http_code);
+		return static::make($data, $http_code);
+	}
+	
+	/**
+	 * Shortcode to self::make().
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   array   $data
+	 * @param   int     $http_code
+	 * @return  self::make()
+	 */
+	public static function forge($data = array(), $http_code = 200)
+	{
+		return static::make($data, $http_code);
+	}
+
+	/**
+	 * Initiate this class as a new object
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   array   $data
+	 * @param   int     $http_code
+	 * @return  Restserver 
+	 */
+	public static function make($data = array(), $http_code = 200)
+	{
+		return new static($data, $http_code);
 	}
 	
 	/**

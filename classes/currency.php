@@ -10,6 +10,7 @@
  * @copyright  2010 - 2011 Fuel Development Team
  * @link       http://fuelphp.com
  */
+
 namespace Hybrid;
 
 /**
@@ -139,6 +140,24 @@ class Currency
 	}
 	
 	/**
+	 * Shortcode to self::forge().
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @param   float   $amount     amount to convert
+	 * @param   string  $from       Currency to convert from
+	 * @param   int     $round      automatic round the currency, defaults to 2 digits
+	 * @return  self::make()
+	 */
+	public static function factory($amount, $from = null, $round = 2)
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($amount, $from, $round);
+	}
+	
+	/**
 	 * Initiate a new Currency class
 	 * 
 	 * @static
@@ -146,11 +165,11 @@ class Currency
 	 * @param   float   $amount     amount to convert
 	 * @param   string  $from       Currency to convert from
 	 * @param   int     $round      automatic round the currency, defaults to 2 digits
-	 * @return  object  Currency
+	 * @return  self::make()
 	 */
 	public static function forge($amount, $from = null, $round = 2)
 	{
-		return new static($amount, $from, $round);
+		return static::make($amount, $from, $round);
 	}
 
 	/**
@@ -165,25 +184,7 @@ class Currency
 	 */
 	public static function make($amount, $from = null, $round = 2)
 	{
-		return static::forge($amount, $from, $round);
-	}
-	
-	/**
-	 * Shortcode to self::forge().
-	 *
-	 * @deprecated  1.3.0
-	 * @static
-	 * @access  public
-	 * @param   float   $amount     amount to convert
-	 * @param   string  $from       Currency to convert from
-	 * @param   int     $round      automatic round the currency, defaults to 2 digits
-	 * @return  self::forge()
-	 */
-	public static function factory($amount, $from = null, $round = 2)
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-		
-		return static::forge($amount, $from, $round);
+		return new static($amount, $from, $round);
 	}
 
 	/**

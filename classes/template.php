@@ -57,24 +57,52 @@ class Template
 	}
 
 	/**
+	 * Shortcode to self::make().
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  self::make()
+	 */
+	public static function factory($name = null)
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($name);
+	}
+
+	/**
+	 * Shortcut to self::make().
+	 * 
+	 * @static
+	 * @access  public
+	 * @return  self::make()
+	 */
+	public static function forge($name = null)
+	{
+		return static::make($name);
+	}
+
+	/**
 	 * Initiate a new Template instance
 	 * 
 	 * @static
 	 * @access  public
-	 * @return  Template_Abstract
+	 * @return  Template_Driver
 	 */
-	public static function forge($name = null)
+	public static function make($name = null)
 	{
 		if (null === $name)
 		{
 			$name = \Config::get('hybrid.template.default', self::DEFAULT_TEMPLATE);   
 		}
 
-		$name       = strtolower($name);
-
-		$folder     = null;
-		$filename   = null;
-		$type       = explode('.', strval($name));
+		$name     = strtolower($name);
+		
+		$folder   = null;
+		$filename = null;
+		$type     = explode('.', strval($name));
 
 
 		if (count($type) > 1) 
@@ -89,8 +117,8 @@ class Template
 			$folder = $type[1];
 		}
 		
-		$type   = $type[0];
-		$name   = $type.'.'.$folder;
+		$type = $type[0];
+		$name = $type.'.'.$folder;
 
 		if ( ! isset(static::$instances[$name]))
 		{
@@ -108,34 +136,6 @@ class Template
 		}
 		
 		return static::$instances[$name];
-	}
-
-	/**
-	 * Initiate a new Template instance
-	 * 
-	 * @static
-	 * @access  public
-	 * @return  Template_Abstract
-	 */
-	public static function make($name = null)
-	{
-		return static::forge($name);
-	}
-
-	/**
-	 * Shortcode to self::forge().
-	 *
-	 * @deprecated  1.3.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  self::forge()
-	 */
-	public static function factory($name = null)
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-		
-		return static::forge($name);
 	}
 
 }

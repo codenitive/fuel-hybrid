@@ -29,6 +29,22 @@ namespace Hybrid;
 class Template_Normal extends Template_Driver 
 {
 	/**
+	 * Shortcode to self::forge().
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  self::make()
+	 */
+	public static function factory($name = null)
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($name);
+	}
+
+	/**
 	 * Initiate a new template using factory
 	 *
 	 * Example:
@@ -37,19 +53,11 @@ class Template_Normal extends Template_Driver
 	 * @static
 	 * @access  public
 	 * @param   string  $name
-	 * @return  void
+	 * @return  self::make()
 	 */
 	public static function forge($name = null)
 	{
-		$driver = 'normal';
-		$name   = strtolower($name);
-		
-		if ( ! empty($name))
-		{
-			$driver .= ".{$name}";
-		}
-
-		return Template::make($driver);
+		return static::make($name);
 	}
 
 	/**
@@ -61,27 +69,19 @@ class Template_Normal extends Template_Driver
 	 * @static
 	 * @access  public
 	 * @param   string  $name
-	 * @return  void
+	 * @return  Template_Normal
 	 */
 	public static function make($name = null)
 	{
-		return static::forge($name);
-	}
-
-	/**
-	 * Shortcode to self::forge().
-	 *
-	 * @deprecated  1.3.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  self::forge()
-	 */
-	public static function factory($name = null)
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
+		$driver = 'normal';
+		$name   = strtolower($name);
 		
-		return static::forge($name);
+		if ( ! empty($name))
+		{
+			$driver .= ".{$name}";
+		}
+
+		return Template::make($driver);
 	}
 
 	/**

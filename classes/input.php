@@ -31,8 +31,9 @@ class Input
 	/**
 	 * Store \Hybrid\Request object (if available)
 	 * 
-	 * @access      protected
-	 * @staticvar   mixed 
+	 * @static
+	 * @access  protected
+	 * @var     mixed 
 	 */
 	protected static $request = null;
 

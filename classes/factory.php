@@ -100,7 +100,7 @@ class Factory
 		} 
 		else 
 		{
-			$request = \Request::forge(\Config::get('routes._maintenance_mode_'))->execute();
+			$request  = \Request::forge(\Config::get('routes._maintenance_mode_'))->execute();
 			$response = $request->response();
 			$response->send(true);
 			\Event::shutdown();
@@ -145,6 +145,7 @@ class Factory
 	{
 		$dir_path = __DIR__.'/../';
 		$path     = str_replace('/', DIRECTORY_SEPARATOR, $path);
+		
 		require_once $dir_path.$folder.DIRECTORY_SEPARATOR.$path.'.php';
 	}
 

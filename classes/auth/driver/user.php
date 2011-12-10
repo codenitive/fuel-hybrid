@@ -73,7 +73,7 @@ class Auth_Driver_User extends Auth_Driver
 	 * @access  public
 	 * @return  self
 	 */
-	public static function instance()
+	public static function make()
 	{
 		return Auth::make('user');
 	}
@@ -231,9 +231,9 @@ class Auth_Driver_User extends Auth_Driver
 		extract($user_data);
 
 		$this->provider->data['accounts'][$provider] = array(
-			'uid'           => $info['uid'],
-			'access_token'  => isset($token->access_token) ? $token->access_token : '',
-			'secret'        => isset($token->secret) ? $token->secret : '',
+			'uid'          => $info['uid'],
+			'access_token' => isset($token->access_token) ? $token->access_token : '',
+			'secret'       => isset($token->secret) ? $token->secret : '',
 		);
 
 		return true;

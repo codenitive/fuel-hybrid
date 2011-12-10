@@ -166,10 +166,10 @@ abstract class Controller extends \Fuel\Core\Controller
 	 */
 	public function router($resource, $arguments) 
 	{
-		$pattern           = Restserver::$pattern;
+		$pattern = Restserver::$pattern;
 		
 		// Remove the extension from arguments too
-		$resource          = preg_replace($pattern, '', $resource);
+		$resource = preg_replace($pattern, '', $resource);
 		
 		// If they call user, go to $this->post_user();
 		$controller_method = strtolower(Input::method()).'_'.$resource;

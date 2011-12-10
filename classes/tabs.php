@@ -4,7 +4,7 @@
  * Fuel is a fast, lightweight, community driven PHP5 framework.
  *
  * @package    Fuel
- * @version    1.0
+ * @version    1.1
  * @author     Fuel Development Team
  * @license    MIT License
  * @copyright  2010 - 2011 Fuel Development Team
@@ -50,15 +50,45 @@ class Tabs
 	}
 
 	/**
+	 * Shortcut to self::make()
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @param   array   $config
+	 * @return  self::make()
+	 */
+	public static function forge($name = null, $config = array())
+	{
+		return static::make($name, $config);
+	}
+
+	/**
+	 * Get cached instance, or generate new if currently not available.
+	 *
+	 * @static
+	 * @access  public
+	 * @return  Tabs
+	 * @param   string  $name
+	 * @see     self::make()
+	 */
+	public static function instance($name)
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($name);
+	}
+
+	/**
 	 * Initiate a new Tabs instance.
 	 * 
 	 * @static
 	 * @access  public
 	 * @param   string  $name
 	 * @param   array   $config
-	 * @return  object  Tabs
+	 * @return  Tabs
 	 */
-	public static function forge($name = null, $config = array())
+	public static function make($name = null, $config = array())
 	{
 		if (null === $name)
 		{
@@ -71,34 +101,6 @@ class Tabs
 		}
 
 		return static::$instances[$name];
-	}
-
-	/**
-	 * Initiate a new Tabs instance.
-	 * 
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @param   array   $config
-	 * @return  object  Tabs
-	 */
-	public static function make($name = null, $config = array())
-	{
-		return static::forge($name, $config);
-	}
-
-	/**
-	 * Get cached instance, or generate new if currently not available.
-	 *
-	 * @static
-	 * @access  public
-	 * @return  Tabs
-	 * @param   string  $name
-	 * @see     self::forge()
-	 */
-	public static function instance($name)
-	{
-		return static::make($name);
 	}
 
 	/**

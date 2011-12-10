@@ -29,6 +29,38 @@ namespace Hybrid;
 class Curl 
 {
 	/**
+	 * Shortcode to self::make().
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @param   string  $uri
+	 * @param   array   $dataset
+	 * @return  self::make()
+	 */
+	public static function factory($uri, $dataset = array())
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($uri, $dataset);
+	}
+
+	/**
+	 * Initiate this class as a new object
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   string  $uri
+	 * @param   array   $dataset
+	 * @return  self::make() 
+	 */
+	public static function forge($uri, $dataset = array())
+	{
+		return static::make($uri, $dataset);
+	}
+	
+
+	/**
 	 * Initiate this class as a new object
 	 * 
 	 * @static
@@ -37,7 +69,7 @@ class Curl
 	 * @param   array   $dataset
 	 * @return  static 
 	 */
-	public static function forge($uri, $dataset = array())
+	public static function make($uri, $dataset = array())
 	{
 		$uri_segments = explode(' ', $uri);
 		$type         = 'GET';
@@ -57,37 +89,6 @@ class Curl
 		return new static($uri, $dataset, $type);
 	}
 
-	/**
-	 * Initiate this class as a new object
-	 * 
-	 * @static
-	 * @access  public
-	 * @param   string  $uri
-	 * @param   array   $dataset
-	 * @return  static 
-	 */
-	public static function make($uri, $dataset = array())
-	{
-		return static::forge($uri, $dataset);
-	}
-
-	/**
-	 * Shortcode to self::forge().
-	 *
-	 * @deprecated  1.3.0
-	 * @static
-	 * @access  public
-	 * @param   string  $uri
-	 * @param   array   $dataset
-	 * @return  self::forge()
-	 */
-	public static function factory($uri, $dataset = array())
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-		
-		return static::forge($uri, $dataset);
-	}
-	
 	/**
 	 * A shortcode to initiate this class as a new object using GET
 	 * 
