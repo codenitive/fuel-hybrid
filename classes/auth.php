@@ -322,11 +322,16 @@ class Auth
 	 * @param   array   $user_data
 	 * @return  bool
 	 */
-	public static function link_account($user_id, $user_data)
+	public static function link_account($user_id, $user_data = null)
 	{
 		$provider = null;
 		$token    = null;
 		$info     = null;
+
+		if ( ! is_array($user_data) or empty($user_data))
+		{
+			return ;
+		}
 
 		extract($user_data);
 
