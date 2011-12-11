@@ -1,50 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Acl Class &mdash; Hybrid for FuelPHP Documentation</title>
-    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
-    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
-    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
-    <script type="text/javascript" src="../assets/js/nav.js"></script>
+	<meta charset="utf-8">
+	<title>Acl Class &mdash; Hybrid for FuelPHP Documentation</title>
+	<link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
+	<link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
+	<script type="text/javascript" src="../assets/js/nav.js"></script>
 
-    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
-    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript">
-        $(function() {
-            show_nav('classes', '../');
-            prettyPrint();
-        });
-    </script>
+	<script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+	<link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript">
+		$(function() {
+			show_nav('classes', '../');
+			prettyPrint();
+		});
+	</script>
 </head>
 <body>
 <div class="topbar">
-    <div class="topbar-inner">
-        <div id="topbar" class="container">
-            <a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
-            <ul></ul>
-        </div>
-    </div>
+	<div class="topbar-inner">
+		<div id="topbar" class="container">
+			<a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
+			<ul></ul>
+		</div>
+	</div>
 </div>
 
 <div class="container after-topbar">
 
-    <header class="page-header">
-        <h1>Acl <small>Class</small></h1>
-    </header>
+	<header class="page-header">
+		<h1>Acl <small>Class</small></h1>
+	</header>
 
-    <p>
-        The Acl class provides a standardized interface for authorization/priviledge in Fuel, using authentication from <a href="../auth/introduction.html">\Hybrid\Auth</a>. 
-    </p>
+	<p>
+		The Acl class provides a standardized interface for authorization/priviledge in Fuel, using authentication from <a href="../auth/introduction.html">\Hybrid\Auth</a>. 
+	</p>
 
-    <div class="row">
-        <div class="span4">
-            <h2 id="how-to">How to</h2>
-        </div>
-        
-        <div class="span12">
-            <pre class="prettyprint lang-php">$acl = \Hybrid\Acl::forge();
+	<div class="row">
+		<div class="span4">
+			<h2 id="how-to">How to</h2>
+		</div>
+		
+		<div class="span12">
+			<pre class="prettyprint lang-php">$acl = \Hybrid\Acl::make();
 
 // define roles
 $acl->add_roles('guest');
@@ -64,428 +64,478 @@ $acl->allow('user', 'post', 'view');
 $acl->deny('guest', 'account');
 </pre>
 
-            <p>Assume that we are logged in as an "user"</p>
+			<p>Assume that we are logged in as an "user"</p>
 
-            <pre class="prettyprint lang-php">$acl->access('post', 'view');       // return true
+			<pre class="prettyprint lang-php">$acl->access('post', 'view');       // return true
 $acl->access('post', 'all');        // return false</pre>
-        </div>
-    </div>
+		</div>
+	</div>
 
-    <div class="row">
-        <div class="span4">
-            <h2 id="how-to">Access Levels</h2>
-        </div>
-        
-        <div class="span12">
-            <p>
-                List of possible access levels:
-            </p>
-            <ul>
-                <li>deny</li>
-                <li>view</li>
-                <li>create</li>
-                <li>edit</li>
-                <li>delete</li>
-                <li>all</li>
-            </ul>
+	<div class="row">
+		<div class="span4">
+			<h2 id="how-to">Access Levels</h2>
+		</div>
+		
+		<div class="span12">
+			<p>
+				List of possible access levels:
+			</p>
+			<ul>
+				<li>deny</li>
+				<li>view</li>
+				<li>create</li>
+				<li>edit</li>
+				<li>delete</li>
+				<li>all</li>
+			</ul>
 
-            <div class="alert-message block-message info">
-                <p>\Hybrid\Acl will check access (from left to right) <strong>deny</strong>, <strong>view</strong>, <strong>create</strong>, <strong>edit</strong>, <strong>delete</strong>, <strong>all</strong></p>
-            </div>
-        </div>
-    </div>
+			<div class="alert-message block-message info">
+				<p>\Hybrid\Acl will check access (from left to right) <strong>deny</strong>, <strong>view</strong>, <strong>create</strong>, <strong>edit</strong>, <strong>delete</strong>, <strong>all</strong></p>
+			</div>
+		</div>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <h3 id="forge()">forge($name = null)</h3>
+	<div class="row">
+		<h3 id="forge()">forge($name = null)</h3>
 
-        <p>
-           Creates a new instance of the Auth.
-        </p>
+		<p>
+		   Creates a new instance of the Auth.
+		</p>
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>Yes</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>
-                    <table class="parameters">
-                        <tbody><tr>
-                            <th>Param</th>
-                            <th>Default</th>
-                            <th class="description">Description</th>
-                        </tr>
-                        <tr>
-                            <th><kbd>$name</kbd></th>
-                            <td><code>null</code></td>
-                            <td>null to fetch the default driver, or a driver id to get a specific one</td>
-                        </tr>
-                    </tbody></table>
-                </td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>\Hybrid\Acl Object</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">$acl = \Hybrid\Acl::forge();</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+		<div class="alert-message block-message info">
+			<p>Alias to <a href="#make()">Hybrid\Acl::make()</a> for forward compact with FuelPHP 2.0</p>
+		</div>
 
-    <hr />
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>Yes</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tbody><tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$name</kbd></th>
+							<td><code>null</code></td>
+							<td>null to fetch the default driver, or a driver id to get a specific one</td>
+						</tr>
+					</tbody></table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>\Hybrid\Acl Object</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">$acl = \Hybrid\Acl::forge();</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 
-    <div class="row">
-        <h3 id="add_roles()">add_roles($roles = null)</h3>
+	<hr />
 
-        <p>
-            Add new user role(s) to the this instance.
-        </p>
+	<div class="row">
+		<h3 id="make()">make($name = null)</h3>
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>
-                    <table class="parameters">
-                        <tr>
-                            <th>Param</th>
-                            <th>Default</th>
-                            <th class="description">Description</th>
-                        </tr>
-                        <tr>
-                            <th><kbd>$roles</kbd></th>
-                            <td><em>Required</em></td>
-                            <td>A string or an array of roles</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>bool, whether role(s) successfully added</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">\Hybrid\Acl::forge()->add_roles('guest');
+		<p>
+		   Creates a new instance of the Auth.
+		</p>
+
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>Yes</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tbody><tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$name</kbd></th>
+							<td><code>null</code></td>
+							<td>null to fetch the default driver, or a driver id to get a specific one</td>
+						</tr>
+					</tbody></table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>\Hybrid\Acl Object</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">$acl = \Hybrid\Acl::make();</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<hr />
+
+	<div class="row">
+		<h3 id="add_roles()">add_roles($roles = null)</h3>
+
+		<p>
+			Add new user role(s) to the this instance.
+		</p>
+
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$roles</kbd></th>
+							<td><em>Required</em></td>
+							<td>A string or an array of roles</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>bool, whether role(s) successfully added</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">\Hybrid\Acl::make()->add_roles('guest');
 
 // Initiate an instance before adding role
-$acl = \Hybrid\Acl::forge();
+$acl = \Hybrid\Acl::make();
 $acl->add_roles('user');
 
 // Add using array
 $acl->add_roles(array('editor', 'moderator'));</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <h3 id="add_resources()">add_resources($resources = null)</h3>
+	<div class="row">
+		<h3 id="add_resources()">add_resources($resources = null)</h3>
 
-        <p>
-            Add new resource(s) to this instance.
-        </p>
+		<p>
+			Add new resource(s) to this instance.
+		</p>
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>
-                    <table class="parameters">
-                        <tr>
-                            <th>Param</th>
-                            <th>Default</th>
-                            <th class="description">Description</th>
-                        </tr>
-                        <tr>
-                            <th><kbd>$resources</kbd></th>
-                            <td><em>Required</em></td>
-                            <td>A string or an array of resources</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>bool, whether resources successfully added</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">\Hybrid\Acl::forge()->add_resources('post');
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$resources</kbd></th>
+							<td><em>Required</em></td>
+							<td>A string or an array of resources</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>bool, whether resources successfully added</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">\Hybrid\Acl::make()->add_resources('post');
 
 // Initiate an instance before adding resources
-$acl = \Hybrid\Acl::forge();
+$acl = \Hybrid\Acl::make();
 $acl->add_resources('user');
 
 // Add using array
 $acl->add_resources(array('page', 'setting'));</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    
-    <hr />
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<hr />
 
-    <div class="row">
-        <h3 id="allow()">allow($roles, $resources, $type = 'view')</h3>
+	<div class="row">
+		<h3 id="allow()">allow($roles, $resources, $type = 'view')</h3>
 
-        <p>
-            Assign single or multiple role(s) and resource(s) to have access level (deny, view, create, edit, delete, all).
-        </p>
+		<p>
+			Assign single or multiple role(s) and resource(s) to have access level (deny, view, create, edit, delete, all).
+		</p>
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>
-                    <table class="parameters">
-                        <tr>
-                            <th>Param</th>
-                            <th>Default</th>
-                            <th class="description">Description</th>
-                        </tr>
-                        <tr>
-                            <th><kbd>$roles</kbd></th>
-                            <td><em>Required</em></td>
-                            <td>A string or an array of roles</td>
-                        </tr>
-                        <tr>
-                            <th><kbd>$resources</kbd></th>
-                            <td><em>Required</em></td>
-                            <td>A string or an array of resources</td>
-                        </tr>
-                        <tr>
-                            <th><kbd>$type</kbd></th>
-                            <td><code>'view'</code></td>
-                            <td>A string of access level ('deny', 'view', 'create', 'edit', 'delete', 'all')</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>bool, whether setting successfully added</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                <pre class="prettyprint lang-php">\Hybrid\Acl::forge()->allow('admin', 'post', 'all');
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$roles</kbd></th>
+							<td><em>Required</em></td>
+							<td>A string or an array of roles</td>
+						</tr>
+						<tr>
+							<th><kbd>$resources</kbd></th>
+							<td><em>Required</em></td>
+							<td>A string or an array of resources</td>
+						</tr>
+						<tr>
+							<th><kbd>$type</kbd></th>
+							<td><code>'view'</code></td>
+							<td>A string of access level ('deny', 'view', 'create', 'edit', 'delete', 'all')</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>bool, whether setting successfully added</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+				<pre class="prettyprint lang-php">\Hybrid\Acl::make()->allow('admin', 'post', 'all');
 
 // Initiate an instance before adding resources
-$acl = \Hybrid\Acl::forge();
+$acl = \Hybrid\Acl::make();
 $acl->allow('user', 'post', 'view');
 
 // Add using array
 $acl->allow('admin', array('page', 'setting'), 'all');</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <h3 id="deny()">deny($roles, $resources)</h3>
+	<div class="row">
+		<h3 id="deny()">deny($roles, $resources)</h3>
 
-        <p>
-            Shorthand function to deny access for single or multiple role(s) and resouce(s).
-        </p>
+		<p>
+			Shorthand function to deny access for single or multiple role(s) and resouce(s).
+		</p>
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>
-                    <table class="parameters">
-                        <tr>
-                            <th>Param</th>
-                            <th>Default</th>
-                            <th class="description">Description</th>
-                        </tr>
-                        <tr>
-                            <th><kbd>$roles</kbd></th>
-                            <td><em>Required</em></td>
-                            <td>A string or an array of roles</td>
-                        </tr>
-                        <tr>
-                            <th><kbd>$resources</kbd></th>
-                            <td><em>Required</em></td>
-                            <td>A string or an array of resources</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>bool, whether setting successfully added</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">\Hybrid\Acl::forge()->deny('editor', 'setting');
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$roles</kbd></th>
+							<td><em>Required</em></td>
+							<td>A string or an array of roles</td>
+						</tr>
+						<tr>
+							<th><kbd>$resources</kbd></th>
+							<td><em>Required</em></td>
+							<td>A string or an array of resources</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>bool, whether setting successfully added</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">\Hybrid\Acl::make()->deny('editor', 'setting');
 
 // Initiate an instance before adding resources
-$acl = \Hybrid\Acl::forge();
+$acl = \Hybrid\Acl::make();
 $acl->deny('guest', 'post');
 
 // Add using array
 $acl->deny('guest', array('page', 'setting'));</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <h3 id="access()">access($resource, $type = 'view')</h3>
+	<div class="row">
+		<h3 id="access()">access($resource, $type = 'view')</h3>
 
-        <p>
-            Verify whether current user has sufficient roles to access the resources based on available type of access.
-        </p>
+		<p>
+			Verify whether current user has sufficient roles to access the resources based on available type of access.
+		</p>
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>
-                    <table class="parameters">
-                        <tr>
-                            <th>Param</th>
-                            <th>Default</th>
-                            <th class="description">Description</th>
-                        </tr>
-                        <tr>
-                            <th><kbd>$resource</kbd></th>
-                            <td><em>Required</em></td>
-                            <td>A string of resource name</td>
-                        </tr>
-                        <tr>
-                            <th><kbd>$type</kbd></th>
-                            <td><code>'view'</code></td>
-                            <td>A string of access level ('deny', 'view', 'create', 'edit', 'delete', 'all')</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>bool, whether user have access</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">$acl->access('post', 'edit');</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    
-    <hr />
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$resource</kbd></th>
+							<td><em>Required</em></td>
+							<td>A string of resource name</td>
+						</tr>
+						<tr>
+							<th><kbd>$type</kbd></th>
+							<td><code>'view'</code></td>
+							<td>A string of access level ('deny', 'view', 'create', 'edit', 'delete', 'all')</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>bool, whether user have access</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">$acl->access('post', 'edit');</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<hr />
 
-    <div class="row">
-        <h3 id="access_status()">access_status($resource, $type = 'view')</h3>
+	<div class="row">
+		<h3 id="access_status()">access_status($resource, $type = 'view')</h3>
 
-        <p>
-            Verify whether current user has sufficient roles to access the resources based on available type of access and return HTTP status equivalent to the access status.
-        </p>
+		<p>
+			Verify whether current user has sufficient roles to access the resources based on available type of access and return HTTP status equivalent to the access status.
+		</p>
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>
-                    <table class="parameters">
-                        <tr>
-                            <th>Param</th>
-                            <th>Default</th>
-                            <th class="description">Description</th>
-                        </tr>
-                        <tr>
-                            <th><kbd>$resource</kbd></th>
-                            <td><em>Required</em></td>
-                            <td>A string of resource name</td>
-                        </tr>
-                        <tr>
-                            <th><kbd>$type</kbd></th>
-                            <td><code>'view'</code></td>
-                            <td>A string of access level ('deny', 'view', 'create', 'edit', 'delete', 'all')</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>integer, whether user have access based on HTTP status</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">$acl->access_status('post', 'edit');</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$resource</kbd></th>
+							<td><em>Required</em></td>
+							<td>A string of resource name</td>
+						</tr>
+						<tr>
+							<th><kbd>$type</kbd></th>
+							<td><code>'view'</code></td>
+							<td>A string of access level ('deny', 'view', 'create', 'edit', 'delete', 'all')</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>integer, whether user have access based on HTTP status</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">$acl->access_status('post', 'edit');</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <h3 id="has_roles()">has_roles($check_roles)</h3>
+	<div class="row">
+		<h3 id="has_roles()">has_roles($check_roles)</h3>
 
-        <div class="alert-message block-message warning">
-            <p>Deprecated on scheduled to be remove in Hybrid for FuelPHP v1.3.0, use <a href="../auth/usage.html#has_roles()">\Hybrid\Auth::has_role()</a></p>
-        </div>
-    </div>
-    
-    <footer>
-        <p>
-            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
-            &copy; 2010 - 2011 Fuel Hybrid Development Team
-        </p>
-    </footer>
+		<div class="alert-message block-message warning">
+			<p>Deprecated on scheduled to be remove in Hybrid for FuelPHP v1.2.0, use <a href="../auth/usage.html#has_roles()">\Hybrid\Auth::has_role()</a></p>
+		</div>
+	</div>
+	
+	<footer>
+		<p>
+			<a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+			&copy; 2010 - 2011 Fuel Hybrid Development Team
+		</p>
+	</footer>
 </div>
 </body>
 </html>
