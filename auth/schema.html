@@ -1,398 +1,406 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Auth &mdash; Hybrid for FuelPHP Documentation</title>
-    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
-    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
-    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
-    <script type="text/javascript" src="../assets/js/nav.js"></script>
+	<meta charset="utf-8">
+	<title>Auth &mdash; Hybrid for FuelPHP Documentation</title>
+	<link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
+	<link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
+	<script type="text/javascript" src="../assets/js/nav.js"></script>
 
-    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
-    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript">
-        $(function() {
-            show_nav('auth', '../');
-            prettyPrint();
-        });
-    </script>
+	<script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+	<link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript">
+		$(function() {
+			show_nav('auth', '../');
+			prettyPrint();
+		});
+	</script>
 </head>
 <body>
 <div class="topbar">
-    <div class="topbar-inner">
-        <div id="topbar" class="container">
-            <a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
-            <ul></ul>
-        </div>
-    </div>
+	<div class="topbar-inner">
+		<div id="topbar" class="container">
+			<a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
+			<ul></ul>
+		</div>
+	</div>
 </div>
 
 <div class="container after-topbar">
 
-    <header class="page-header">
-        <h1>Auth <small>Schema</small></h1>
-    </header>
+	<header class="page-header">
+		<h1>Auth <small>Schema</small></h1>
+	</header>
 
-    <p>
-        The Auth classes provides a standardized interface for authentication in Fuel. This allows our users to write their own drivers and easily integrate a new driver to work with old code by keeping the basic methods consistent.
-    </p>
+	<p>
+		The Auth classes provides a standardized interface for authentication in Fuel. This allows our users to write their own drivers and easily integrate a new driver to work with old code by keeping the basic methods consistent.
+	</p>
 
-    <h2 id="toc">Suggested Schema</h2>
+	<h2 id="toc">Suggested Schema</h2>
 
-    <p>
-        You can straight away create all the models and migrations class using <code>php oil refine autho --install</code> (commanline interface), however below are the best practise for most development.
-    </p>
-    <ul>
-        <li><a href="#users">Users</a></li>
-        <li><a href="#users_auths">Users Auths</a></li>
-        <li><a href="#users_meta">Users Meta</a></li>
-        <li><a href="#roles">Roles</a></li>
-        <li><a href="#users_roles">Users Roles</a></li>
-        <li><a href="#authentications">Authentications</a></li>
-    </ul>
+	<p>
+		You can straight away create all the models and migrations class using <code>php oil refine autho --install</code> (commanline interface), however below are the best practise for most development.
+	</p>
+	<ul>
+		<li>
+			<a href="#users">Users</a>
+			<ul>
+				<li><a href="#users_auths">Auths</a></li>
+				<li><a href="#users_meta">Meta</a></li>
+			</ul>
+		</li>
+		<li><a href="#roles">Roles</a></li>
+		<li><a href="#users_roles">Users Roles</a></li>
+		<li><a href="#authentications">Authentications</a></li>
+	</ul>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <div class="span4">
-            <h2 id="users">Users</h2>
-        </div>
-        <div class="span12">
-            <h3 id="model_user">Model_User</h3>
-            <pre class="prettyprint lang-php">&lt;?php
+	<div class="row">
+		<div class="span4">
+			<h2 id="users">Users</h2>
+		</div>
+		<div class="span12">
+			<h3 id="model_user">Model_User</h3>
+			<pre class="prettyprint lang-php">&lt;?php
 
 namespace Model;
 
 class User extends \Orm\Model {
-    
-    protected static $_properties = array(
-        'id',
-        'user_name',
-        'full_name',
-        'email',
-        'status',
-    );
+	
+	protected static $_properties = array(
+		'id',
+		'user_name',
+		'full_name',
+		'email',
+		'status',
+	);
 
-    protected static $_has_one = array(
-        'auth' => array('model_to' => "\Model\Users_Auth"),
-        'meta' => array('model_to' => "\Model\Users_Metum"),
-    );
+	protected static $_has_one = array(
+		'auth' => array('model_to' => "\Model\Users_Auth"),
+		'meta' => array('model_to' => "\Model\Users_Metum"),
+	);
 
-    protected static $_has_one = array(
-        'roles'    => array('model_to' => "\Model\Users_Role"),
-        'accounts' => array('model_to' => "\Model\Authentication"),
-    );
+	protected static $_has_one = array(
+		'roles'    => array('model_to' => "\Model\Users_Role"),
+		'accounts' => array('model_to' => "\Model\Authentication"),
+	);
 }
 
 /* End of file user.php */</pre>
-            
-            <h3 id="create_users">Create_users</h3>
-            <pre class="prettyprint lang-php">&lt;?php
+			
+			<h3 id="create_users">Create_users</h3>
+			<pre class="prettyprint lang-php">&lt;?php
 
 namespace Fuel\Migrations;
 
 class Create_users {
 
-    public function up()
-    {
-        \DBUtil::create_table('users', array(
-            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
-            'user_name' => array('constraint' => 100, 'type' => 'varchar'),
-            'full_name' => array('constraint' => 200, 'type' => 'varchar'),
-            'email' => array('constraint' => 150, 'type' => 'varchar'),
-            'status' => array('constraint' => "'unverified','verified','banned'", 'type' => 'enum', 'default' => 'unverified'),
-        ), array('id'));
-    }
+	public function up()
+	{
+		\DBUtil::create_table('users', array(
+			'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
+			'user_name' => array('constraint' => 100, 'type' => 'varchar'),
+			'full_name' => array('constraint' => 200, 'type' => 'varchar'),
+			'email' => array('constraint' => 150, 'type' => 'varchar'),
+			'status' => array('constraint' => "'unverified','verified','banned'", 'type' => 'enum', 'default' => 'unverified'),
+		), array('id'));
+	}
 
-    public function down()
-    {
-        \DBUtil::drop_table('users');
-    }
+	public function down()
+	{
+		\DBUtil::drop_table('users');
+	}
 }</pre>
-        </div>
-    </div>
+		</div>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <div class="span4">
-            <h2 id="users_auths">Users Auths</h2>
-        </div>
-        <div class="span12">
-            <h3 id="model_users_auth">Model_Users_Auth</h3>
-            <pre class="prettyprint lang-php">&lt;?php
+	<div class="row">
+		<div class="span4">
+			<h2 id="users_auths">Users Auths</h2>
+		</div>
+		<div class="span12">
+			<h3 id="model_users_auth">Model_Users_Auth</h3>
+			<pre class="prettyprint lang-php">&lt;?php
 
 namespace Model;
 
 class Users_Auth extends \Orm\Model {
-    
-    protected static $_properties = array(
-        'id',
-        'user_id',
-        'password',
-    );
+	
+	protected static $_properties = array(
+		'id',
+		'user_id',
+		'password',
+	);
 
-    protected static $_belongs_to = array(
-        'users'     => array('model_to'  => "\Model\User"),
-    );
+	protected static $_belongs_to = array(
+		'users'     => array('model_to'  => "\Model\User"),
+	);
 
 }
 
 /* End of file users/auth.php */</pre>
 
-            <h3 id="create_users_auths">Create_Users_Auths</h3>
-            <pre class="prettyprint lang-php">&lt;?php
+			<h3 id="create_users_auths">Create_Users_Auths</h3>
+			<pre class="prettyprint lang-php">&lt;?php
 
 namespace Fuel\Migrations;
 
 class Create_users_auths {
 
-    public function up()
-    {
-        \DBUtil::create_table('users_auths', array(
-            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
-            'user_id' => array('constraint' => 11, 'type' => 'int'),
-            'password' => array('constraint' => 50, 'type' => 'varchar'),
-        ), array('id'));
-    }
+	public function up()
+	{
+		\DBUtil::create_table('users_auths', array(
+			'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
+			'user_id' => array('constraint' => 11, 'type' => 'int'),
+			'password' => array('constraint' => 50, 'type' => 'varchar'),
+		), array('id'));
+	}
 
-    public function down()
-    {
-        \DBUtil::drop_table('users_auths');
-    }
+	public function down()
+	{
+		\DBUtil::drop_table('users_auths');
+	}
 }</pre>
-        </div>
-    </div>
+		</div>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <div class="span4">
-            <h2 id="users_meta">Users Meta</h2>
-        </div>
-        <div class="span12">
-            <h3 id="model_users_metum">Model_Users_Metum</h3>
-            <pre class="prettyprint lang-php">&lt;?php
+	<div class="row">
+		<div class="span4">
+			<h2 id="users_meta">Users Meta</h2>
+		</div>
+		<div class="span12">
+			<h3 id="model_users_metum">Model_Users_Metum</h3>
+			<pre class="prettyprint lang-php">&lt;?php
 
 namespace Model;
 
 class Users_Metum extends \Orm\Model {
 
-    protected static $_properties = array(
-        'id',
-        'user_id',
-        'created_at',
-        'updated_at',
-    );
+	protected static $_properties = array(
+		'id',
+		'user_id',
+		'created_at',
+		'updated_at',
+	);
 
-    protected static $_belongs_to = array(
-        'users' => array('model_to'  => "\Model\User"),
-    );
+	protected static $_belongs_to = array(
+		'users' => array('model_to'  => "\Model\User"),
+	);
 
-    protected static $_observers = array(
-        "Orm\Observer_CreatedAt" => array('before_insert'),
-        "Orm\Observer_UpdatedAt" => array('before_save'),
-    );
+	protected static $_observers = array(
+		"Orm\Observer_CreatedAt" => array('before_insert'),
+		"Orm\Observer_UpdatedAt" => array('before_save'),
+	);
 
 }
 
 /* End of file users/metum.php */</pre>
 
-            <h3 id="create_users_meta">Create_Users_Meta</h3>
-            <pre class="prettyprint lang-php">&lt;?php
+			<h3 id="create_users_meta">Create_Users_Meta</h3>
+			<pre class="prettyprint lang-php">&lt;?php
 
 namespace Fuel\Migrations;
 
 class Create_users_meta {
 
-    public function up()
-    {
-        \DBUtil::create_table('users_meta', array(
-            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
-            'user_id' => array('constraint' => 11, 'type' => 'int'),
-            'created_at' => array('constraint' => 11, 'type' => 'int'),
-            'updated_at' => array('constraint' => 11, 'type' => 'int'),
-        ), array('id'));
-    }
+	public function up()
+	{
+		\DBUtil::create_table('users_meta', array(
+			'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
+			'user_id' => array('constraint' => 11, 'type' => 'int'),
+			'created_at' => array('constraint' => 11, 'type' => 'int'),
+			'updated_at' => array('constraint' => 11, 'type' => 'int'),
+		), array('id'));
+	}
 
-    public function down()
-    {
-        \DBUtil::drop_table('users_meta');
-    }
+	public function down()
+	{
+		\DBUtil::drop_table('users_meta');
+	}
 }</pre>
-        </div>
+		</div>
 
-    </div>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <div class="span4">
-            <h2 id="roles">Roles</h2>
-        </div>
-        <div class="span12">
-            <h3 id="model_role">Model_Role</h3>
-            <pre class="prettyprint lang-php">&lt;?php
+	<div class="row">
+		<div class="span4">
+			<h2 id="roles">Roles</h2>
+		</div>
+		<div class="span12">
+			<h3 id="model_role">Model_Role</h3>
+			<pre class="prettyprint lang-php">&lt;?php
 
 namespace Model;
 
 class Role extends \Orm\Model {
-    
-    protected $_properties = array(
-        'id',
-        'name',
-        'active',
-    );
+	
+	protected $_properties = array(
+		'id',
+		'name',
+		'active',
+	);
 
-    protected $_has_many = array(
-        'users' => array('model_to' => "\Model\Users_Role"),
-    );
+	protected $_has_many = array(
+		'users' => array('model_to' => "\Model\Users_Role"),
+	);
 }
 
 /* End of file role.php */</pre>
 
-            <h3 id="create_roles">Create_Roles</h3>
-            <pre class="prettyprint lang-php">&lt;?php
+			<h3 id="create_roles">Create_Roles</h3>
+			<pre class="prettyprint lang-php">&lt;?php
 
 namespace Fuel\Migrations;
 
 class Create_roles {
 
-    public function up()
-    {
-        \DBUtil::create_table('roles', array(
-            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
-            'name' => array('constraint' => 255, 'type' => 'varchar'),
-            'active' => array('constraint' => 1, 'type' => 'tinyint', 'default' => 1),
-        ), array('id'));
-    }
+	public function up()
+	{
+		\DBUtil::create_table('roles', array(
+			'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
+			'name' => array('constraint' => 255, 'type' => 'varchar'),
+			'active' => array('constraint' => 1, 'type' => 'tinyint', 'default' => 1),
+		), array('id'));
+	}
 
-    public function down()
-    {
-        \DBUtil::drop_table('roles');
-    }
+	public function down()
+	{
+		\DBUtil::drop_table('roles');
+	}
 }</pre>
-        </div>
-    </div>
+		</div>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <div class="span4">
-            <h2 id="users_roles">Users Roles</h2>
-        </div>
+	<div class="row">
+		<div class="span4">
+			<h2 id="users_roles">Users Roles</h2>
+		</div>
 
-        <div class="span12">
-            <h3 id="model_users_role">Model_Users_Role</h3>
-            <pre class="prettyprint lang-php">&lt;?php
+		<div class="span12">
+			<h3 id="model_users_role">Model_Users_Role</h3>
+			<pre class="prettyprint lang-php">&lt;?php
 
 namespace Model;
 
 class Users_Role extends \Orm\Model {
-    
-    protected static $_properties = array(
-        'id',
-        'user_id',
-        'role_id',
-    );
+	
+	protected static $_properties = array(
+		'id',
+		'user_id',
+		'role_id',
+	);
 
-    protected static $_belongs_to = array(
-        'users' => array('model_to' => "\Model\User"),
-        'roles' => array('model_to' => "\Model\Role"),
-    );
+	protected static $_belongs_to = array(
+		'users' => array('model_to' => "\Model\User"),
+		'roles' => array('model_to' => "\Model\Role"),
+	);
 }
 
 /* End of file users/role.php */</pre>
 
-            <h3 id="create_users_roles">Create_Users_Roles</h3>
-            <pre class="prettyprint lang-php">&lt;?php
+			<h3 id="create_users_roles">Create_Users_Roles</h3>
+			<pre class="prettyprint lang-php">&lt;?php
 
 namespace Fuel\Migrations;
 
 class Create_users_roles {
 
-    public function up()
-    {
-        \DBUtil::create_table('users_roles', array(
-            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
-            'user_id' => array('constraint' => 11, 'type' => 'int'),
-            'role_id' => array('constraint' => 11, 'type' => 'int'),
-        ), array('id'));
-    }
+	public function up()
+	{
+		\DBUtil::create_table('users_roles', array(
+			'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
+			'user_id' => array('constraint' => 11, 'type' => 'int'),
+			'role_id' => array('constraint' => 11, 'type' => 'int'),
+		), array('id'));
+	}
 
-    public function down()
-    {
-        \DBUtil::drop_table('users_roles');
-    }
+	public function down()
+	{
+		\DBUtil::drop_table('users_roles');
+	}
 }</pre>
-        </div>
-    </div>
+		</div>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <div class="span4">
-            <h2 id="authentications">Authentications</h2>
-        </div>
+	<div class="row">
+		<div class="span4">
+			<h2 id="authentications">Authentications</h2>
+		</div>
 
-        <div class="span12">
-            <h3 id="model_authentication">Model_Authentication</h3>
-            <pre class="prettyprint lang-php">&lt;?php
+		<div class="span12">
+			<h3 id="model_authentication">Model_Authentication</h3>
+			<pre class="prettyprint lang-php">&lt;?php
 
 namespace Model;
 
 class Authentication extends \Orm\Model {
-    
-    protected static $_observers = array(
-        'id',
-        'user_id',
-        'provider',
-        'uid',
-        'token',
-        'secret',
-    );
+	
+	protected static $_properties = array(
+		'id',
+		'user_id',
+		'provider',
+		'uid',
+		'access_token',
+		'expires',
+		'refresh_token',
+		'secret',
+	);
 
-    protected static $_belongs_to = array(
-        'users' => array('model_to' => "\Model\User"),
-    );
+	protected static $_belongs_to = array(
+		'users' => array('model_to' => "\Model\User"),
+	);
 }
 
 /* End of file authenticate.php */</pre>
 
-            <h3 id="create_authentications">Create_Authentications</h3>
-            <pre class="prettyprint lang-php">&lt;?php
+			<h3 id="create_authentications">Create_Authentications</h3>
+			<pre class="prettyprint lang-php">&lt;?php
 
 namespace Fuel\Migrations;
 
 class Create_authenticates {
 
-    public function up()
-    {
-        \DBUtil::create_table('authentications', array(
-            'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
-            'user_id' => array('constraint' => 11, 'type' => 'int'),
-            'provider' => array('constraint' => 50, 'type' => 'varchar'),
-            'uid' => array('constraint' => 255, 'type' => 'varchar'),
-            'token' => array('constraint' => 255, 'type' => 'varchar'),
-            'secret' => array('constraint' => 255, 'type' => 'varchar'),
-        ), array('id'));
-    }
+	public function up()
+	{
+		\DBUtil::create_table('authentications', array(
+			'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
+			'user_id' => array('constraint' => 11, 'type' => 'int'),
+			'provider' => array('constraint' => 50, 'type' => 'varchar'),
+			'uid' => array('constraint' => 255, 'type' => 'varchar'),
+			'access_token' => array('constraint' => 255, 'type' => 'varchar'),
+			'expires' => array('constraint' => 12, 'type' => 'int'),
+			'refresh_token' => array('constraint' => 255, 'type' => 'varchar'),
+			'secret' => array('constraint' => 255, 'type' => 'varchar'),
+		), array('id'));
+	}
 
-    public function down()
-    {
-        \DBUtil::drop_table('authentications');
-    }
+	public function down()
+	{
+		\DBUtil::drop_table('authentications');
+	}
 }</pre>
-        </div>
-    </div>
-    
-    <footer>
-        <p>
-            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
-            &copy; 2010 - 2011 Fuel Hybrid Development Team
-        </p>
-    </footer>
+		</div>
+	</div>
+	
+	<footer>
+		<p>
+			<a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+			&copy; 2010 - 2011 Fuel Hybrid Development Team
+		</p>
+	</footer>
 </div>
 </body>
 </html>

@@ -1,101 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Installation Instructions &mdash; Hybrid for FuelPHP Documentation</title>
-    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
-    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
-    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
-    <script type="text/javascript" src="../assets/js/nav.js"></script>
+	<meta charset="utf-8">
+	<title>Installation Instructions &mdash; Hybrid for FuelPHP Documentation</title>
+	<link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
+	<link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
+	<script type="text/javascript" src="../assets/js/nav.js"></script>
 
-    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
-    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript">
-        $(function() {
-            show_nav('installation', '../');
-            prettyPrint();
-        });
-    </script>
+	<script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+	<link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript">
+		$(function() {
+			show_nav('installation', '../');
+			prettyPrint();
+		});
+	</script>
 </head>
 <body>
 <div class="topbar">
-    <div class="topbar-inner">
-        <div id="topbar" class="container">
-            <a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
-            <ul></ul>
-        </div>
-    </div>
+	<div class="topbar-inner">
+		<div id="topbar" class="container">
+			<a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
+			<ul></ul>
+		</div>
+	</div>
 </div>
 
 <div class="container after-topbar">
 
-    <header class="page-header">
-        <h1>Installation <small>Instructions</small></h1>
-    </header>
+	<header class="page-header">
+		<h1>Installation <small>Instructions</small></h1>
+	</header>
 
-    <div class="row">
-        <div class="span4">
-            <h2>Manual Installation</h2>
-            
-            <p>This will create the default installation of the Fuel Hybrid in your Fuel Framework installation.</p>
-        </div>
-        <div class="span12">
-            <ol>
-                <li><a href="download.html">Download the Hybrid for FuelPHP</a></li>
-                <li>Unzip/Extract the download</li>
-                <li>Move the files to your server, extracted files should be added to <code>fuel/packages/hybrid</code>
+	<div class="row">
+		<div class="span4">
+			<h2>Manual Installation</h2>
+			
+			<p>This will create the default installation of the Fuel Hybrid in your Fuel Framework installation.</p>
+		</div>
+		<div class="span12">
+			<ol>
+				<li><a href="download.html">Download the Hybrid for FuelPHP</a></li>
+				<li>Unzip/Extract the download</li>
+				<li>Move the files to your server, extracted files should be added to <code>fuel/packages/hybrid</code>
 <pre>/
   fuel/
-    app/
-    core/
-    packages/
-      hybrid/
-        classes/
-        config/
-        docs/
-        lang/
-        tasks/
-        tests/
-        vendor/
-        bootstrap.php
-        README.md
+	app/
+	core/
+	packages/
+	  hybrid/
+		classes/
+		config/
+		docs/
+		lang/
+		tasks/
+		tests/
+		vendor/
+		bootstrap.php
+		README.md
   public/
-    .htaccess
-    assets/
-    index.php
+	.htaccess
+	assets/
+	index.php
   oil
 </pre>
-                </li>
-                <li>Fuel Hybrid and Orm package need to be included in the autoload packages under <code>APPPATH/config/config.php</code>
-                    <pre class="prettyprint lang-php">'always_load'   => array(
+				</li>
+				<li>Fuel Hybrid and Orm package need to be included in the autoload packages under <code>APPPATH/config/config.php</code>
+					<pre class="prettyprint lang-php">'always_load'   => array(
 
-    /**
-     * These packages are loaded on Fuel's startup.  You can specify them in
-     * the following manner:
-     *
-     * array('auth'); // This will assume the packages are in PKGPATH
-     *
-     * // Use this format to specify the path to the package explicitly
-     * array(
-     *     array('auth' => PKGPATH.'auth/')
-     * );
-     */
-    'packages'  => array(
-        'orm',
-        'hybrid',
-    ),</pre>
-                </li>
-            </ol>
-        </div>
-    </div>
-    
-    <footer>
-        <p>
-            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
-            &copy; 2010 - 2011 Fuel Hybrid Development Team
-        </p>
-    </footer>
+	/**
+	 * These packages are loaded on Fuel's startup.  You can specify them in
+	 * the following manner:
+	 *
+	 * array('auth'); // This will assume the packages are in PKGPATH
+	 *
+	 * // Use this format to specify the path to the package explicitly
+	 * array(
+	 *     array('auth' => PKGPATH.'auth/')
+	 * );
+	 */
+	'packages'  => array(
+		'orm',
+		'hybrid',
+	),</pre>
+				</li>
+			</ol>
+		</div>
+	</div>
+	
+	<footer>
+		<p>
+			<a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+			&copy; 2010 - 2011 Fuel Hybrid Development Team
+		</p>
+	</footer>
 </div>
 </body>
 </html>

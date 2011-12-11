@@ -1,371 +1,436 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Pagination Class &mdash; Hybrid for FuelPHP Documentation</title>
-    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
-    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
-    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
-    <script type="text/javascript" src="../assets/js/nav.js"></script>
+	<meta charset="utf-8">
+	<title>Pagination Class &mdash; Hybrid for FuelPHP Documentation</title>
+	<link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
+	<link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
+	<script type="text/javascript" src="../assets/js/nav.js"></script>
 
-    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
-    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript">
-        $(function() {
-            show_nav('classes', '../');
-            prettyPrint();
-        });
-    </script>
+	<script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+	<link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript">
+		$(function() {
+			show_nav('classes', '../');
+			prettyPrint();
+		});
+	</script>
 </head>
 <body>
 <div class="topbar">
-    <div class="topbar-inner">
-        <div id="topbar" class="container">
-            <a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
-            <ul></ul>
-        </div>
-    </div>
+	<div class="topbar-inner">
+		<div id="topbar" class="container">
+			<a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
+			<ul></ul>
+		</div>
+	</div>
 </div>
 
 <div class="container after-topbar">
 
-    <header class="page-header">
-        <h1>Pagination <small>Class</small></h1>
-    </header>
+	<header class="page-header">
+		<h1>Pagination <small>Class</small></h1>
+	</header>
 
-    <p>
-        The pagination class allows you to easily setup pagination for records you display.
-    </p>
+	<p>
+		The pagination class allows you to easily setup pagination for records you display.
+	</p>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <div class="span4">
-            <h2 id="how-to">How To</h2>
+	<div class="row">
+		<div class="span4">
+			<h2 id="how-to">How To</h2>
 
-            <p>Basic example how to use <code>Hybrid\Pagination</code>.</p>
-        </div>
+			<p>Basic example how to use <code>Hybrid\Pagination</code>.</p>
+		</div>
 
-        <div class="span12">
+		<div class="span12">
 
-            <pre class="prettyprint lang-php">
+			<pre class="prettyprint lang-php">
 $config = array(
-    'total_items' => 10,
-    'per_page' => 5,
-    'uri_segment' => null,
+	'total_items' => 10,
+	'per_page' => 5,
+	'uri_segment' => null,
 );
 
-$pagination = \Hybrid\Pagination::forge($config);
+$pagination = \Hybrid\Pagination::make($config);
 
 $data['example_data'] = DB::select('id', 'value')->from('pagination')
-    ->limit($pagination->per_page)
-    ->offset($pagination->offset)
-    ->execute()
-    ->as_array();
+	->limit($pagination->per_page)
+	->offset($pagination->offset)
+	->execute()
+	->as_array();
 
 $data['pagination'] = $pagination;
 $this->render('welcome/index', $data);</pre>
 
-            <div class="alert-message block-message info">
-                <p>
-                    By default, <code>\Hybrid\Pagination</code> class use <strong>Twitter Bootstrap</strong> CSS Framework and the template configurable from <code>config/hybrid.php</code>.
-                </p>
-            </div>
-        </div>
-    </div>
+			<div class="alert-message block-message info">
+				<p>
+					By default, <code>\Hybrid\Pagination</code> class use <strong>Twitter Bootstrap</strong> CSS Framework and the template configurable from <code>config/hybrid.php</code>.
+				</p>
+			</div>
+		</div>
+	</div>
 
-    <div class="row">
-        <div class="span4">
-            <h2 id="example-1">Example 1</h2>
+	<div class="row">
+		<div class="span4">
+			<h2 id="example-1">Example 1</h2>
 
-            <p>
-                Create an instance by parsing a name <code>'default'</code> and automatically detect uri by using the third uri segment as page number.
-            </p>
-        </div>
+			<p>
+				Create an instance by parsing a name <code>'default'</code> and automatically detect uri by using the third uri segment as page number.
+			</p>
+		</div>
 
-        <div class="span12">
+		<div class="span12">
 
-            <pre class="prettyprint lang-php">
-\Hybrid\Pagination::forge('default', array(
-    'uri_segment' => 3,
-    'per_page'    => 10,
-    'total_items' => 100,
+			<pre class="prettyprint lang-php">
+\Hybrid\Pagination::make('default', array(
+	'uri_segment' => 3,
+	'per_page'    => 10,
+	'total_items' => 100,
 ))->render();</pre>
-        </div>
-    </div>
+		</div>
+	</div>
 
-    <div class="row">
-        <div class="span4">
-            <h2 id="example-2">Example 2</h2>
+	<div class="row">
+		<div class="span4">
+			<h2 id="example-2">Example 2</h2>
 
-            <p>
-                Ignore the name it will automatically <code>Request::$active</code> route instance. Use <code>'uri'</code> to use <code>Hybrid\Pagination</code> with custom routing.
-            </p>
-        </div>
+			<p>
+				Ignore the name it will automatically <code>Request::$active</code> route instance. Use <code>'uri'</code> to use <code>Hybrid\Pagination</code> with custom routing.
+			</p>
+		</div>
 
-        <div class="span12">
+		<div class="span12">
 
-            <pre class="prettyprint lang-php">
-\Hybrid\Pagination::forge(array(
-    'uri'          => 'welcome/index/page.:page', // Would be useful if you use custom routing
-    'per_page'     => 10,
-    'total_items'  => 100,
-    'current_page' => $this->param('page'),
+			<pre class="prettyprint lang-php">
+\Hybrid\Pagination::make(array(
+	'uri'          => 'welcome/index/page.:page', // Would be useful if you use custom routing
+	'per_page'     => 10,
+	'total_items'  => 100,
+	'current_page' => $this->param('page'),
 ))->render(); // automatically parse page number from :page</pre>
-        </div>
-    </div>
+		</div>
+	</div>
 
-    <div class="row">
-        <div class="span4">
-            <h2 id="example-3">Example 3</h2>
-            <p>Automatically identify current page from <code>$_GET['page']</code>.</p>
-        </div>
+	<div class="row">
+		<div class="span4">
+			<h2 id="example-3">Example 3</h2>
+			<p>Automatically identify current page from <code>$_GET['page']</code>.</p>
+		</div>
 
-        <div class="span12">
+		<div class="span12">
 
-            <pre class="prettyprint lang-php">
-\Hybrid\Pagination::forge(array(
-    'uri_segment' => null,
-    'per_page'    => 10,
-    'total_items' => 100,
+			<pre class="prettyprint lang-php">
+\Hybrid\Pagination::make(array(
+	'uri_segment' => null,
+	'per_page'    => 10,
+	'total_items' => 100,
 ))->render();</pre>
-        </div>
-    </div>
+		</div>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <h3 id="forge()">forge($config = array())</h3>
+	<div class="row">
+		<h3 id="forge()">forge($config = array())</h3>
 
-        <p>Initiate a new Pagination instance.</p>
+		<p>Initiate a new Pagination instance.</p>
 
-        <div class="alert-message block-message info">
-            <p>By default, all instance name will be based on <code>Request::$active</code> route.</p>
-        </div>
+		<div class="alert-message block-message info">
+			<p>By default, all instance name will be based on <code>Request::$active</code> route.</p>
+		</div>
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>Yes</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>
-                    <table class="parameters">
-                        <tbody><tr>
-                            <th>Param</th>
-                            <th>Default</th>
-                            <th class="description">Description</th>
-                        </tr>
-                        <tr>
-                            <th><kbd>$name</kbd></th>
-                            <td><code>null</code></td>
-                            <td>String of a Hybrid\Pagination instance.</td>
-                        </tr>
-                        <tr>
-                            <th><kbd>$config</kbd></th>
-                            <td><code>null</code></td>
-                            <td>An array of a Hybrid\Pagination configuration.</td>
-                        </tr>
-                    </tbody></table>
-                </td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>Pagination Object</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">$pagination = \Hybrid\Pagination::forge(array(
-    'total_items' => 10,
-    'per_page' => 5,
-    'uri_segment' => null,
+		<div class="alert-message block-message info">
+			<p>Alias to <a href="#make()">Hybrid\Pagination::make()</a> for forward compact with FuelPHP 2.0</p>
+		</div>
+
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>Yes</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tbody><tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$name</kbd></th>
+							<td><code>null</code></td>
+							<td>String of a Hybrid\Pagination instance.</td>
+						</tr>
+						<tr>
+							<th><kbd>$config</kbd></th>
+							<td><code>null</code></td>
+							<td>An array of a Hybrid\Pagination configuration.</td>
+						</tr>
+					</tbody></table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>Pagination Object</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">$pagination = \Hybrid\Pagination::forge(array(
+	'total_items' => 10,
+	'per_page' => 5,
+	'uri_segment' => null,
 ));</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <h3 id="instance()">instance()</h3>
+	<div class="row">
+		<h3 id="make()">make($config = array())</h3>
 
-        <p>Retrieve an instance of <code>Hybrid\Pagination</code>.</p>
+		<p>Initiate a new Pagination instance.</p>
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>Yes</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>
-                    <table class="parameters">
-                        <tbody><tr>
-                            <th>Param</th>
-                            <th>Default</th>
-                            <th class="description">Description</th>
-                        </tr>
-                        <tr>
-                            <th><kbd>$name</kbd></th>
-                            <td><code>null</code></td>
-                            <td>String of a Hybrid\Pagination instance.</td>
-                        </tr>
-                    </tbody></table>
-                </td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>Pagination Object</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">$pagination = \Hybrid\Pagination::instance();</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    
-    <hr />
+		<div class="alert-message block-message info">
+			<p>By default, all instance name will be based on <code>Request::$active</code> route.</p>
+		</div>
 
-    <div class="row">
-        <h3 id="render()">render()</h3>
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>Yes</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tbody><tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$name</kbd></th>
+							<td><code>null</code></td>
+							<td>String of a Hybrid\Pagination instance.</td>
+						</tr>
+						<tr>
+							<th><kbd>$config</kbd></th>
+							<td><code>null</code></td>
+							<td>An array of a Hybrid\Pagination configuration.</td>
+						</tr>
+					</tbody></table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>Pagination Object</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">$pagination = \Hybrid\Pagination::make(array(
+	'total_items' => 10,
+	'per_page' => 5,
+	'uri_segment' => null,
+));</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 
-        <p>Render Pagnation as a view.</p>
+	<hr />
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>string</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">echo $pagination->render();</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+	<div class="row">
+		<h3 id="instance()">instance()</h3>
 
-    <hr />
+		<p>Retrieve an instance of <code>Hybrid\Pagination</code>.</p>
 
-    <div class="row">
-        <h3 id="__toString()">__toString()</h3>
+		<div class="alert-message block-message error">
+			<p>Throws <code>\FuelException</code> error if is not initiated.</p>
+		</div>
 
-        <div class="alert-message block-message warning">
-            <p>Alias to <a href="#render()">render()</a>.</p>
-        </div>
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>Yes</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tbody><tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$name</kbd></th>
+							<td><code>null</code></td>
+							<td>String of a Hybrid\Pagination instance.</td>
+						</tr>
+					</tbody></table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>Pagination Object</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">$pagination = \Hybrid\Pagination::instance();</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<hr />
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>string</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">echo $pagination;</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+	<div class="row">
+		<h3 id="render()">render()</h3>
 
-    <hr />
+		<p>Render Pagnation as a view.</p>
 
-    <div class="row">
-        <h3 id="$offset">$offset</h3>
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>string</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">echo $pagination->render();</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 
-        <p>Return current instance items offset, equivalent <code>Fuel\Core\Pagination::$offset</code>.</p>
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>integer</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">echo $pagination->offset;</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+	<hr />
 
-    <hr />
+	<div class="row">
+		<h3 id="__toString()">__toString()</h3>
 
-    <div class="row">
-        <h3 id="$per_page">$per_page</h3>
+		<div class="alert-message block-message warning">
+			<p>Alias to <a href="#render()">Hybrid\Pagination::render()</a>.</p>
+		</div>
 
-        <p>Return current instance per page, equivalent <code>Fuel\Core\Pagination::$per_page</code>.</p>
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>string</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">echo $pagination;</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>integer</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">echo $pagination->per_page;</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+	<hr />
 
-    
-    <footer>
-        <p>
-            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
-            &copy; 2010 - 2011 Fuel Hybrid Development Team
-        </p>
-    </footer>
+	<div class="row">
+		<h3 id="$offset">$offset</h3>
+
+		<p>Return current instance items offset, equivalent <code>Fuel\Core\Pagination::$offset</code>.</p>
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>integer</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">echo $pagination->offset;</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<hr />
+
+	<div class="row">
+		<h3 id="$per_page">$per_page</h3>
+
+		<p>Return current instance per page, equivalent <code>Fuel\Core\Pagination::$per_page</code>.</p>
+
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>integer</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">echo $pagination->per_page;</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	
+	<footer>
+		<p>
+			<a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+			&copy; 2010 - 2011 Fuel Hybrid Development Team
+		</p>
+	</footer>
 
 </body>
 </html>
