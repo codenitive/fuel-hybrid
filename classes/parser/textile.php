@@ -33,8 +33,9 @@ use \Textile;
 class Parser_Textile extends Parser_Driver 
 {
 	private $parser;
+
 	/**
-	 * Construct a new instance (don't do anything right now)
+	 * Construct a new instance
 	 *
 	 * @access  public
 	 * @return  void
@@ -48,6 +49,8 @@ class Parser_Textile extends Parser_Driver
 	 * Parse textile formatted text to HTML
 	 *
 	 * @access  public
+	 * @param   string   $text
+	 * @return  string
 	 */
 	public function parse($text = '')
 	{

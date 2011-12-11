@@ -66,6 +66,7 @@
 				<td>array|null</td>
 				<td><code>null</code></td>
 				<td>
+					List of user fields to be used (default to array('status', 'full_name'))
 				</td>
 			</tr>
 			<tr>
@@ -73,6 +74,7 @@
 				<td>array|null</td>
 				<td><code>null</code></td>
 				<td>
+					Allow status to login based on `users`.`status` (default to ('verified'))
 				</td>
 			</tr>
 			<tr>
@@ -113,8 +115,8 @@ class Controller_Credential extends \Controller_Rest {
 
 		try 
 		{
-			\Hybrid\Auth::instance('user')->login($username, $password);
-			// or you can also use \Hybrid\Auth::instance()->login($username, $password);
+			\Hybrid\Auth::make('user')->login($username, $password);
+			// or you can also use \Hybrid\Auth::make()->login($username, $password);
 		}
 		catch (\Fuel_Exception $e) 
 		{
@@ -146,6 +148,22 @@ class Controller_Credential extends \Controller_Rest {
 	<div class="row">
 		<h3 id="instance()">instance()</h3>
 
+		<div class="alert-message block-message warning">
+			<p>
+				Deprecated on scheduled to be remove in Hybrid for FuelPHP v1.2.0, use <a href="#make()">Hybrid\Auth_Driver_User::make()</a>
+			</p>
+		</div>
+	</div>
+
+	<hr />
+
+	<div class="row">
+		<h3 id="make()">make()</h3>
+
+		<p>
+			Get self instance from cache instead of initiating a new object if time we need to use this object.
+		</p>
+
 		<table class="method">
 			<tbody>
 			<tr>
@@ -163,10 +181,10 @@ class Controller_Credential extends \Controller_Rest {
 			<tr>
 				<th>Example</th>
 				<td>
-					<pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::instance();
+					<pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::make();
 
 // Alias to
-\Hybrid\Auth::instance('user');</pre>
+\Hybrid\Auth::make('user');</pre>
 				</td>
 			</tr>
 			</tbody>
@@ -210,7 +228,7 @@ class Controller_Credential extends \Controller_Rest {
 			<tr>
 				<th>Example</th>
 				<td>
-					<pre class="prettyprint lang-php">$acl = \Hybrid\Auth_Driver_User::instance()->acl();</pre>
+					<pre class="prettyprint lang-php">$acl = \Hybrid\Auth_Driver_User::make()->acl();</pre>
 				</td>
 			</tr>
 			</tbody>
@@ -264,7 +282,7 @@ class Controller_Credential extends \Controller_Rest {
 			<tr>
 				<th>Example</th>
 				<td>
-					<pre class="prettyprint lang-php">$acl = \Hybrid\Auth_Driver_User::instance()->login($username, $password, true);</pre>
+					<pre class="prettyprint lang-php">$acl = \Hybrid\Auth_Driver_User::make()->login($username, $password, true);</pre>
 				</td>
 			</tr>
 			</tbody>
@@ -318,7 +336,7 @@ class Controller_Credential extends \Controller_Rest {
 			<tr>
 				<th>Example</th>
 				<td>
-					<pre class="prettyprint lang-php">$acl = \Hybrid\Auth_Driver_User::instance()->login_token($secret, $token);</pre>
+					<pre class="prettyprint lang-php">$acl = \Hybrid\Auth_Driver_User::make()->login_token($secret, $token);</pre>
 				</td>
 			</tr>
 			</tbody>
@@ -353,7 +371,7 @@ class Controller_Credential extends \Controller_Rest {
 			<tr>
 				<th>Example</th>
 				<td>
-					<pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::instance()->reauthenticate();</pre>
+					<pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::make()->reauthenticate();</pre>
 				</td>
 			</tr>
 			</tbody>
@@ -383,7 +401,7 @@ class Controller_Credential extends \Controller_Rest {
 			<tr>
 				<th>Example</th>
 				<td>
-					<pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::instance()->logout();</pre>
+					<pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::make()->logout();</pre>
 				</td>
 			</tr>
 			</tbody>
@@ -414,7 +432,7 @@ class Controller_Credential extends \Controller_Rest {
 			<tr>
 				<th>Example</th>
 				<td>
-					<pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::instance()->is_logged();</pre>
+					<pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::make()->is_logged();</pre>
 				</td>
 			</tr>
 			</tbody>
@@ -458,7 +476,7 @@ class Controller_Credential extends \Controller_Rest {
 			<tr>
 				<th>Example</th>
 				<td>
-					<pre class="prettyprint lang-php">$user_id = \Hybrid\Auth_Driver_User::instance()->get('id');</pre>
+					<pre class="prettyprint lang-php">$user_id = \Hybrid\Auth_Driver_User::make()->get('id');</pre>
 				</td>
 			</tr>
 			</tbody>
@@ -502,7 +520,7 @@ class Controller_Credential extends \Controller_Rest {
 			<tr>
 				<th>Example</th>
 				<td>
-					<pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::instance()->link_account(\Session::get('autho'));</pre>
+					<pre class="prettyprint lang-php">\Hybrid\Auth_Driver_User::make()->link_account(\Session::get('autho'));</pre>
 				</td>
 			</tr>
 			</tbody>

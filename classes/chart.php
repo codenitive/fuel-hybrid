@@ -40,15 +40,62 @@ class Chart
 	protected static $instances = array();
 
 	/**
+	 * Shortcode to self::make().
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  self::make()
+	 */
+	public static function factory($name = null)
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($name);
+	}
+
+	/**
+	 * Shortcode to self::make().
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  self::make() 
+	 */
+	public static function forge($name = null) 
+	{
+		return static::make($name);
+	}
+
+	/**
+	 * Get cached instance, or generate new if currently not available.
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  self::make()
+	 */
+	public static function instance($name = null)
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+
+		return static::make($name);
+	}
+
+	/**
 	 * Initiate a new Chart_Driver instance.
 	 * 
 	 * @static
 	 * @access  public
-	 * @return  static 
+	 * @param   string  $name
+	 * @return  Chart_Driver 
+	 * @throws  \FuelException
 	 */
-	public static function forge($name = null) 
+	public static function make($name = null) 
 	{
-		if (is_null($name))
+		if (null === $name)
 		{
 			$name = 'default';
 		}
@@ -70,35 +117,6 @@ class Chart
 		}
 
 		return static::$instances[$name];
-	}
-
-	/**
-	 * Shortcode to self::forge().
-	 *
-	 * @deprecated  1.3.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  self::forge()
-	 */
-	public static function factory($name = null)
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-		
-		return static::forge($name);
-	}
-
-	/**
-	 * Get cached instance, or generate new if currently not available.
-	 *
-	 * @static
-	 * @access  public
-	 * @return  Chart_Driver
-	 * @see     self::forge()
-	 */
-	public static function instance($name = null)
-	{
-		return static::forge($name);
 	}
 	
 	/**

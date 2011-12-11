@@ -43,30 +43,42 @@ abstract class Chart_Driver
 	}
 
 	/**
+	 * Shortcode to self::make().
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @return  self::make()
+	 */
+	public static function factory()
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make();
+	}
+
+	/**
+	 * Shortcode to self::make().
+	 * 
+	 * @static
+	 * @access  public
+	 * @return  self::make() 
+	 */
+	public static function forge() 
+	{
+		return static::make();
+	}
+
+	/**
 	 * A shortcode to initiate this class as a new object
 	 * 
 	 * @static
 	 * @access  public
 	 * @return  static 
 	 */
-	public static function forge() 
+	public static function make() 
 	{
 		return new static();
-	}
-
-	/**
-	 * Shortcode to self::forge().
-	 *
-	 * @deprecated  1.3.0
-	 * @static
-	 * @access  public
-	 * @return  self::forge()
-	 */
-	public static function factory()
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-		
-		return static::forge();
 	}
 
 	protected $options = array();

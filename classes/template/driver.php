@@ -80,8 +80,9 @@ abstract class Template_Driver
 	 /**
 	 * List of loaded asset
 	 *
+	 * @static
 	 * @access  protected
-	 * @staticvar   array
+	 * @var     array
 	 */
 	protected static $assets = array();
 
@@ -171,6 +172,23 @@ abstract class Template_Driver
 		if (is_array($data) and count($data) > 0)
 		{
 			$this->view->set($data);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Set data (safe mode)
+	 *
+	 * @access  public
+	 * @param   array   $data
+	 * @return  self
+	 */
+	public function set_safe($data = array())
+	{
+		if (is_array($data) and count($data) > 0)
+		{
+			$this->view->set_safe($data);
 		}
 
 		return $this;

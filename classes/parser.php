@@ -39,13 +39,41 @@ class Parser
 	protected static $instances = array();
 
 	/**
-	 * Initiate a new Text instance
+	 * Shortcode to self::make().
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  self::make()
+	 */
+	public static function factory($name = null)
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($name);
+	}
+
+	/**
+	 * Shortcode to self::make().
+	 * 
+	 * @static
+	 * @access  public
+	 * @return  self::make()
+	 */
+	public static function forge($name = null)
+	{
+		return static::make($name);
+	}
+
+	/**
+	 * Initiate a new Parser instance
 	 * 
 	 * @static
 	 * @access  public
 	 * @return  object
 	 */
-	public static function forge($name = null)
+	public static function make($name = null)
 	{
 		if (null === $name)
 		{
@@ -70,22 +98,6 @@ class Parser
 		}
 
 		return static::$instances[$name];
-	}
-
-	/**
-	 * Shortcode to self::forge().
-	 *
-	 * @deprecated  1.3.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  self::forge()
-	 */
-	public static function factory($name = null)
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-		
-		return static::forge($name);
 	}
 
 }

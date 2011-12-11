@@ -40,21 +40,23 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	 * Auto render template
 	 * 
 	 * @access  public
-	 * @var     bool    
+	 * @var     bool
 	 */
 	public $auto_render = true;
 
 	/**
 	 * Run ACL check and redirect user automatically if user doesn't have the privilege
 	 * 
-	 * @access  public
+	 * @final
+	 * @access  protected
 	 * @param   mixed   $resource
 	 * @param   string  $type 
 	 * @param   string  $name
+	 * @throws  HttpNotFoundException
 	 */
 	final protected function acl($resource, $type = null, $name = null) 
 	{
-		$status = Acl::instance($name)->access_status($resource, $type);
+		$status = Acl::make($name)->access_status($resource, $type);
 
 		switch ($status) 
 		{
@@ -68,11 +70,12 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	 * This method will be called after we route to the destinated method
 	 * 
 	 * @access  public
+	 * @return  void
 	 */
 	public function before() 
 	{
 		$this->language = Factory::get_language();
-		$this->user     = Auth::instance('user')->get();
+		$this->user     = Auth::make('user')->get();
 
 		\Event::trigger('controller_before');
 		
@@ -86,6 +89,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	 * 
 	 * @access  public
 	 * @param   mixed   $response
+	 * @return  Response
 	 */
 	public function after($response) 
 	{
@@ -97,6 +101,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	/**
 	 * Takes pure data and optionally a status code, then creates the response
 	 * 
+	 * @access  protected
 	 * @param   array       $data
 	 * @param   int         $http_code
 	 */
@@ -111,12 +116,13 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	 * Prepare template
 	 * 
 	 * @access  protected
+	 * @return  void
 	 */
 	protected function prepare_template()
 	{
 		if (true === $this->auto_render)
 		{
-			$this->template = Template::forge($this->template);
+			$this->template = Template::make($this->template);
 		}
 	}
 	
@@ -125,6 +131,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	 * 
 	 * @access  protected
 	 * @param   mixed   $response
+	 * @return  Response
 	 */
 	protected function render_template($response)
 	{

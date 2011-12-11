@@ -43,6 +43,12 @@ class Auth_Driver_User extends Auth_Driver
 	 */
 	public $acl         = null;
 	
+	/**
+	 * Relation to Auth_Provider_Normal object
+	 *
+	 * @access  protected
+	 * @var     Auth_Provider_Normal
+	 */
 	protected $provider = null;
 
 	/**
@@ -51,7 +57,7 @@ class Auth_Driver_User extends Auth_Driver
 	 * 
 	 * Usage:
 	 * 
-	 * <code>$role = \Hybrid\Auth::instance('user')->acl();
+	 * <code>$role = \Hybrid\Auth::make('user')->acl();
 	 * $role->add_recources('monkeys');</code>
 	 * 
 	 * @access  public
@@ -60,12 +66,28 @@ class Auth_Driver_User extends Auth_Driver
 	 */
 	public function acl($name = null) 
 	{
-		$this->acl = Acl::instance($name);
+		$this->acl = Acl::make($name);
 
 		return $this->acl;
 	}
 
-	 /**
+	/**
+	 * Get self instance from cache instead of initiating a new object if time 
+	 * we need to use this object
+	 *
+	 * @static
+	 * @deprecated  1.2.0
+	 * @access  public
+	 * @return  self
+	 */
+	public static function instance()
+	{
+		\Log::warning('This method is deprecated. Please use make() instead.', __METHOD__);
+		
+		return static::make();
+	}
+
+	/**
 	 * Get self instance from cache instead of initiating a new object if time 
 	 * we need to use this object
 	 *
@@ -73,9 +95,9 @@ class Auth_Driver_User extends Auth_Driver
 	 * @access  public
 	 * @return  self
 	 */
-	public static function instance()
+	public static function make()
 	{
-		return Auth::instance('user');
+		return Auth::make('user');
 	}
 
 	/**
@@ -110,7 +132,7 @@ class Auth_Driver_User extends Auth_Driver
 			return;
 		}
 
-		$this->strategy = Auth_Strategy::forge('normal')->authenticate();
+		$this->strategy = Auth_Strategy::make('normal')->authenticate();
 
 		// short-hand variable
 		$this->provider = $this->strategy->provider;
@@ -121,7 +143,7 @@ class Auth_Driver_User extends Auth_Driver
 	 * 
 	 * Usage:
 	 * 
-	 * <code>false === \Hybrid\Auth::instance('user')->is_logged()</code>
+	 * <code>false === \Hybrid\Auth::make('user')->is_logged()</code>
 	 *
 	 * @access  public
 	 * @return  bool
@@ -136,7 +158,7 @@ class Auth_Driver_User extends Auth_Driver
 	 * 
 	 * Usage:
 	 * 
-	 * <code>$user = \Hybrid\Auth::instance('user')->get();</code>
+	 * <code>$user = \Hybrid\Auth::make('user')->get();</code>
 	 *
 	 * @access  public
 	 * @param   string  $name optional key value, return all if $name is null
@@ -231,9 +253,9 @@ class Auth_Driver_User extends Auth_Driver
 		extract($user_data);
 
 		$this->provider->data['accounts'][$provider] = array(
-			'uid'           => $info['uid'],
-			'access_token'  => isset($token->access_token) ? $token->access_token : '',
-			'secret'        => isset($token->secret) ? $token->secret : '',
+			'uid'          => $info['uid'],
+			'access_token' => isset($token->access_token) ? $token->access_token : '',
+			'secret'       => isset($token->secret) ? $token->secret : '',
 		);
 
 		return true;

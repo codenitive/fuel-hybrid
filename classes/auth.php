@@ -46,6 +46,13 @@ class Auth
 	 */
 	protected static $instances = array();
 
+	/**
+	 * Relation to PHPSecLib\Crypt_Hash object
+	 *
+	 * @static
+	 * @access  protected
+	 * @var     PHPSecLib\Crypt_Hash
+	 */
 	protected static $hasher = null;
 
 	/**
@@ -55,7 +62,7 @@ class Auth
 	 * @access  protected
 	 * @param   string  $type
 	 * @return  void
-	 * @throws  \FuelException
+	 * @throws  AuthException
 	 */
 	public static function redirect($type)
 	{
@@ -63,7 +70,7 @@ class Auth
 
 		if (null === $path)
 		{
-			throw new \FuelException(__METHOD__.": Unable to redirect using {$type} type.");
+			throw new AuthException(__METHOD__.": Unable to redirect using {$type} type.");
 		}
 		
 		\Response::redirect($path);
@@ -83,6 +90,50 @@ class Auth
 	}
 
 	/**
+	 * Shortcode to self::make().
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  self::make()
+	 */
+	public static function factory($name = null)
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($name);
+	}
+
+	/**
+	 * Shortcode to self::make().
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   string  $name       null to fetch the default driver, or a driver id to get a specific one
+	 * @return  self::make()
+	 */
+	public static function forge($name = null)
+	{
+		return static::make($name);
+	}
+
+	/**
+	 * Get cached instance, or generate new if currently not available.
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @return  self::make()
+	 */
+	public static function instance($name = null)
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($name);
+	}
+
+	/**
 	 * Initiate a new Auth_Driver instance.
 	 * 
 	 * @static
@@ -91,7 +142,7 @@ class Auth
 	 * @return  Auth_Driver
 	 * @throws  \FuelException
 	 */
-	public static function forge($name = null)
+	public static function make($name = null)
 	{
 		if (null === $name)
 		{
@@ -118,39 +169,10 @@ class Auth
 	}
 
 	/**
-	 * Shortcode to self::forge().
-	 *
-	 * @deprecated  1.3.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  self::forge()
-	 */
-	public static function factory($name = null)
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-		
-		return static::forge($name);
-	}
-
-	/**
-	 * Get cached instance, or generate new if currently not available.
-	 *
-	 * @static
-	 * @access  public
-	 * @return  Auth_Driver
-	 * @see     self::forge()
-	 */
-	public static function instance($name = null)
-	{
-		return static::forge($name);
-	}
-
-	/**
 	 * Turn string to hash using sha1() hash with salt.
 	 *
 	 * @static
-	 * @deprecated
+	 * @deprecated  1.2.0
 	 * @access  public
 	 * @param   string  $string       String to be hashed
 	 * @return  string
@@ -159,7 +181,7 @@ class Auth
 	{
 		\Log::warning('This method is deprecated. Please use create_hash() instead.', __METHOD__);
 		
-		return static::create_hash($string);
+		return static::create_hash($string, 'sha1');
 	}
 
 	/**
@@ -174,7 +196,7 @@ class Auth
 	public static function create_hash($string = '', $hash_type = null)
 	{
 		$salt   = \Config::get('autho.salt', \Config::get('crypt.crypto_key'));
-		$string = $string;
+		$string = (string) $string;
 
 		if (null === $hash_type or ! in_array($hash_type, array('md5', 'crypt_hash', 'sha1')))
 		{
@@ -184,7 +206,7 @@ class Auth
 		switch ($hash_type)
 		{
 			case 'md5' :
-				return \md5($salt.$string);
+				return md5($salt.$string);
 			break;
 
 			case 'crypt_hash' :
@@ -212,7 +234,7 @@ class Auth
 			import('phpseclib/Crypt/Hash', 'vendor');
 		}
 
-		is_null(static::$hasher) and static::$hasher = new \PHPSecLib\Crypt_Hash();
+		null === static::$hasher and static::$hasher = new \PHPSecLib\Crypt_Hash();
 
 		$salt   = \Config::get('autho.salt', \Config::get('crypt.crypto_key'));
 		
@@ -229,7 +251,7 @@ class Auth
 	 */
 	public static function has_roles($check_roles) 
 	{
-		$user = static::instance('user')->get();
+		$user = static::make('user')->get();
 
 		if ( ! is_array($check_roles)) 
 		{
@@ -265,7 +287,7 @@ class Auth
 	 */
 	public static function login($username, $password, $driver = 'user')
 	{
-		return static::forge($driver)->login($username, $password);
+		return static::make($driver)->login($username, $password);
 	}
 
 	/**
@@ -279,7 +301,7 @@ class Auth
 	 */
 	public static function reauthenticate($driver = 'user')
 	{
-		return static::forge($driver)->reauthenticate();
+		return static::make($driver)->reauthenticate();
 	}
 
 	/**
@@ -314,14 +336,14 @@ class Auth
 		$token    = null;
 		$info     = null;
 
-		extract($user_data);
-
-		if (empty($token) or empty($info))
+		if ( ! is_array($user_data) or empty($user_data))
 		{
 			return ;
 		}
 
-		if ($user_id < 1)
+		extract($user_data);
+
+		if (empty($token) or empty($info) or $user_id < 1)
 		{
 			return ;
 		}

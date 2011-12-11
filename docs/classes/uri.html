@@ -1,111 +1,111 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Uri Class &mdash; Hybrid for FuelPHP Documentation</title>
-    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
-    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
-    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
-    <script type="text/javascript" src="../assets/js/nav.js"></script>
+	<meta charset="utf-8">
+	<title>Uri Class &mdash; Hybrid for FuelPHP Documentation</title>
+	<link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
+	<link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
+	<script type="text/javascript" src="../assets/js/nav.js"></script>
 
-    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
-    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript">
-        $(function() {
-            show_nav('classes', '../');
-            prettyPrint();
-        });
-    </script>
+	<script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+	<link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript">
+		$(function() {
+			show_nav('classes', '../');
+			prettyPrint();
+		});
+	</script>
 </head>
 <body>
 <div class="topbar">
-    <div class="topbar-inner">
-        <div id="topbar" class="container">
-            <a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
-            <ul></ul>
-        </div>
-    </div>
+	<div class="topbar-inner">
+		<div id="topbar" class="container">
+			<a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
+			<ul></ul>
+		</div>
+	</div>
 </div>
 
 <div class="container after-topbar">
 
-    <header class="page-header">
-        <h1>Uri <small>Class</small></h1>
-    </header>
+	<header class="page-header">
+		<h1>Uri <small>Class</small></h1>
+	</header>
 
-    <p>
-        The Uri class allows you to interact with the URI.
-    </p>
+	<p>
+		The Uri class allows you to interact with the URI.
+	</p>
 
-    <h2>Extends</h2>
+	<h2>Extends</h2>
 
-    <p>
-        Uri class extends <a href="http://fuelphp.com/docs/classes/uri.html">Fuel\Core\Uri</a>.
-    </p>
-    
-    <hr />
+	<p>
+		Uri class extends <a href="http://fuelphp.com/docs/classes/uri.html">Fuel\Core\Uri</a>.
+	</p>
+	
+	<hr />
 
-    <div class="row">
-        <h3 id="build_get_query()">build_get_query($values, $start_with = '?')</h3>
+	<div class="row">
+		<h3 id="build_get_query()">build_get_query($values, $start_with = '?')</h3>
 
-        <p>Build query string allow you to combine search/filtering option using $_GET for your application with <a href="pagination.html">\Hybrid\Pagination</a> class.</p>
-    
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>Yes</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>
-                    <table class="parameters">
-                        <tr>
-                            <th>Param</th>
-                            <th>Default</th>
-                            <th class="description">Description</th>
-                        </tr>
-                        <tr>
-                            <th><kbd>$values</kbd></th>
-                            <td><i>Required</i></td>
-                            <td>A string or an array of $_GET attributes</td>
-                        </tr>
-                        <tr>
-                            <th><kbd>$start_with</kbd></th>
-                            <td><code>'?'</code></td>
-                            <td>Value of the first string, normally either ? or &amp;</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>String</td>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">&lt;?php
+		<p>Build query string allow you to combine search/filtering option using $_GET for your application, e.g: <a href="pagination.html">\Hybrid\Pagination</a> class.</p>
+	
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>Yes</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$values</kbd></th>
+							<td><i>Required</i></td>
+							<td>A string or an array of $_GET attributes</td>
+						</tr>
+						<tr>
+							<th><kbd>$start_with</kbd></th>
+							<td><code>'?'</code></td>
+							<td>Value of the first string, normally either ? or &amp;</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>String</td>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">&lt;?php
 $_GET = array(
-    'hello' => 'world',
-    'foo'   => 'bar',
-    'fuel'  => 'php',
+	'hello' => 'world',
+	'foo'   => 'bar',
+	'fuel'  => 'php',
 );
 
 echo \Hybrid\Uri::build_get_query(array('foo', 'hello')); // return '?foo=bar&amp;hello=world'
 </pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    
-    <footer>
-        <p>
-            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
-            &copy; 2010 - 2011 Fuel Hybrid Development Team
-        </p>
-    </footer>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<footer>
+		<p>
+			<a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+			&copy; 2010 - 2011 Fuel Hybrid Development Team
+		</p>
+	</footer>
 </div>
 </body>
 </html>

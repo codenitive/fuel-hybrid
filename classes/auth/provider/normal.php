@@ -98,31 +98,42 @@ class Auth_Provider_Normal
 	}
 
 	/**
+	 * Shortcode to self::make().
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @return  self::make()
+	 */
+	public static function factory()
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make();
+	}
+
+	/**
+	 * Shortcode to self::make().
+	 *
+	 * @static
+	 * @access  public
+	 * @return  self::make()
+	 */
+	public static function forge()
+	{
+		return static::make();
+	}
+
+	/**
 	 * Initiate a new Auth_Provider_Normal instance.
 	 * 
 	 * @static
 	 * @access  public
 	 * @return  object  Auth_Provider_Normal
 	 */
-	public static function forge()
+	public static function make()
 	{
 		return new static();
-	}
-
-	/**
-	 * Shortcode to self::forge().
-	 *
-	 * @deprecated  1.3.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  object  Auth_Provider_Normal
-	 * @see     self::forge()
-	 */
-	public static function factory()
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-		return static::forge();
 	}
 
 	/**
@@ -439,7 +450,7 @@ class Auth_Provider_Normal
 		}
 
 		// create a hash
-		$values['_hash'] = Auth::add_salt($hash);
+		$values['_hash'] = Auth::create_hash($hash);
 
 		// for secure, don't ever include actual password
 		unset($values['password']);
@@ -517,7 +528,7 @@ class Auth_Provider_Normal
 		}
 
 		// validate our hash data
-		if (null !== $this->data['_hash'] and $this->data['_hash'] !== Auth::add_salt($hash)) 
+		if (null !== $this->data['_hash'] and $this->data['_hash'] !== Auth::create_hash($hash)) 
 		{
 			return $this->reset();
 		}

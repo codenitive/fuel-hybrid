@@ -62,16 +62,63 @@ class Acl
 	{
 		\Event::trigger('init_acl');
 	}
+
+	/**
+	 * Shortcode to self::make().
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  object  Acl
+	 * @see     self::make()
+	 */
+	public static function factory($name = null)
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($name);
+	}
 	
+	/**
+	 * Shortcode to self::make().
+	 * 
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  self::make()
+	 */
+	public static function forge($name = null)
+	{
+		return static::make($name);
+	}
+
+	/**
+	 * Get cached instance, or generate new if currently not available.
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @param   string  $name
+	 * @return  object  Acl
+	 * @see     self::make()
+	 */
+	public static function instance($name = null)
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		
+		return static::make($name);
+	}
+
 	/**
 	 * Initiate a new Acl instance.
 	 * 
 	 * @static
 	 * @access  public
 	 * @param   string  $name
-	 * @return  object  Acl
+	 * @return  Acl
 	 */
-	public static function forge($name = null)
+	public static function make($name = null)
 	{
 		if (null === $name)
 		{
@@ -84,37 +131,6 @@ class Acl
 		}
 
 		return static::$instances[$name];
-	}
-
-	/**
-	 * Shortcode to self::forge().
-	 *
-	 * @deprecated  1.3.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  object  Acl
-	 * @see     self::forge()
-	 */
-	public static function factory($name = null)
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-		
-		return static::forge($name);
-	}
-
-	/**
-	 * Get cached instance, or generate new if currently not available.
-	 *
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  object  Acl
-	 * @see     self::forge()
-	 */
-	public static function instance($name = null)
-	{
-		return static::forge($name);
 	}
 
 	/**
@@ -166,7 +182,7 @@ class Acl
 			throw new \FuelException(__METHOD__.": Unable to verify unknown resource {$resource}.");
 		}
 
-		$user    = Auth::instance('user')->get();
+		$user    = Auth::make('user')->get();
 		
 		$type_id = array_search($type, $types);
 		$length  = count($types);
@@ -245,6 +261,7 @@ class Acl
 	 * @access  public
 	 * @param   mixed   $roles
 	 * @return  bool
+	 * @throws  \FuelException
 	 */
 	public function add_roles($roles = null) 
 	{
@@ -282,6 +299,7 @@ class Acl
 	 * @access  public
 	 * @param   mixed   $resources
 	 * @return  bool
+	 * @throws  \FuelException
 	 */
 	public function add_resources($resources = null) 
 	{

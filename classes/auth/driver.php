@@ -57,7 +57,7 @@ abstract class Auth_Driver
 	 * 
 	 * Usage:
 	 * 
-	 * <code>false === \Hybrid\Auth::instance()->is_logged()</code>
+	 * <code>false === \Hybrid\Auth::make()->is_logged()</code>
 	 *
 	 * @access  public
 	 * @return  bool
@@ -72,7 +72,7 @@ abstract class Auth_Driver
 	 * 
 	 * Usage:
 	 * 
-	 * <code>$user = \Hybrid\Auth::instance()->get();</code>
+	 * <code>$user = \Hybrid\Auth::make()->get();</code>
 	 *
 	 * @access  public
 	 * @param   string  $name optional key value, return all if $name is null

@@ -25,7 +25,6 @@ Autoloader::add_classes(array (
 	'Hybrid\\Html'             => __DIR__.'/classes/html.php',
 	'Hybrid\\Pagination'       => __DIR__.'/classes/pagination.php',
 	'Hybrid\\Request'          => __DIR__.'/classes/request.php',
-	'Hybrid\\Restful'          => __DIR__.'/classes/restserver.php',
 	'Hybrid\\Restserver'       => __DIR__.'/classes/restserver.php',
 	'Hybrid\\Swiftmail'        => __DIR__.'/classes/swiftmail.php',
 	'Hybrid\\Swiftmail_Result' => __DIR__.'/classes/swiftmail/result.php',
@@ -63,6 +62,7 @@ Autoloader::add_classes(array (
 	'Hybrid\\Chart_Timeline' => __DIR__.'/classes/chart/timeline.php',
 	
 	'Hybrid\\Controller'          => __DIR__.'/classes/controller.php',
+	'Hybrid\\Controller_Core'     => __DIR__.'/classes/controller/core.php',
 	'Hybrid\\Controller_Frontend' => __DIR__.'/classes/controller/frontend.php',
 	'Hybrid\\Controller_Template' => __DIR__.'/classes/controller/template.php',
 	'Hybrid\\Controller_Rest'     => __DIR__.'/classes/controller/rest.php',

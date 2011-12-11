@@ -31,17 +31,11 @@ use Fuel\Core\Markdown;
 class Parser_Markdown extends Parser_Driver 
 {
 	/**
-	 * Construct a new instance (don't do anything right now)
-	 *
-	 * @access  public
-	 * @return  void
-	 */
-	public function __construct() {}
-
-	/**
 	 * Parse markdown formatted text to HTML
 	 *
 	 * @access  public
+	 * @param   string   $text
+	 * @return  string
 	 */
 	public function parse($text = '')
 	{

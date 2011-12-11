@@ -63,6 +63,7 @@ abstract class Auth_Strategy
 		'normal'    => 'Normal',
 		'facebook'  => 'OAuth2',
 		'twitter'   => 'OAuth',
+		'tumblr'    => 'OAuth',
 		'dropbox'   => 'OAuth',
 		'flickr'    => 'OAuth',
 		'google'    => 'OAuth2',
@@ -83,6 +84,11 @@ abstract class Auth_Strategy
 		$this->provider = $provider;
 		
 		$this->config   = \Config::get("autho.providers.{$provider}");
+
+		if (null === $this->config and 'normal' !== $provider)
+		{
+			throw new Auth_Strategy_Exception(sprintf('Provider "%s" has no config.', $provider));
+		}
 		
 		if (null === $this->name)
 		{
@@ -93,6 +99,33 @@ abstract class Auth_Strategy
 	}
 
 	/**
+	 * Shortcut to self::make()
+	 *
+	 * @deprecated  1.2.0
+	 * @static
+	 * @access  public
+	 * @see     self::make()
+	 */
+	public static function factory($provider)
+	{
+		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+
+		return static::make($provider);
+	}
+
+	/**
+	 * Shortcut to self::make()
+	 *
+	 * @static
+	 * @access  public
+	 * @return  self::make()
+	 */
+	public static function forge($provider)
+	{
+		return static::make($provider);
+	}
+
+	/**
 	 * Forge a new strategy
 	 *
 	 * @static
@@ -100,7 +133,7 @@ abstract class Auth_Strategy
 	 * @return  Auth_Strategy
 	 * @throws  Auth_Strategy_Exception
 	 */
-	public static function forge($provider)
+	public static function make($provider)
 	{
 		$strategy = \Config::get("autho.providers.{$provider}.strategy") ?: \Arr::get(static::$providers, $provider);
 		
@@ -115,20 +148,6 @@ abstract class Auth_Strategy
 	}
 
 	/**
-	 * Deprecated factory method (adviced to use forge())
-	 *
-	 * @static
-	 * @access  public
-	 * @see     self::forge()
-	 */
-	public static function factory($provider)
-	{
-		\Log::warning('This method is deprecated. Please use a forge() instead.', __METHOD__);
-
-		return static::forge($provider);
-	}
-
-	/**
 	 * Determine whether authenticated user should be continue to login or register new user
 	 *
 	 * @static
@@ -139,8 +158,8 @@ abstract class Auth_Strategy
 	 */
 	public static function login_or_register($strategy)
 	{
-		$token = $strategy->callback();
-
+		$token     = $strategy->callback();
+		
 		$user_info = static::get_user_info($strategy, $token);
 
 		$user_data = array(
@@ -148,13 +167,15 @@ abstract class Auth_Strategy
 			'info'     => $user_info,
 			'provider' => $strategy->provider->name,
 		);
+
+		$user_auth = Auth::make('user');
 		
-		if (true === Auth::instance('user')->is_logged())
+		if (true === $user_auth->is_logged())
 		{
 			// User already logged in 
-			$user_id    = Auth::instance('user')->get('id');
+			$user_id    = $user_auth->get('id');
 			
-			$accounts   = Auth::instance('user')->get('accounts');
+			$accounts   = $user_auth->get('accounts');
 			
 			$num_linked = count($accounts);
 		
@@ -163,7 +184,7 @@ abstract class Auth_Strategy
 			{
 				try 
 				{
-					Auth::instance('user')->link_account($user_data);
+					$user_auth->link_account($user_data);
 					
 					\Event::trigger('link_authentication', $user_data);
 				}
@@ -187,7 +208,7 @@ abstract class Auth_Strategy
 		{
 			try 
 			{
-				Auth::instance('user')->login_token($user_data);
+				$user_auth->login_token($user_data);
 
 				\Event::trigger('link_authentication', $user_data);
 

@@ -1,201 +1,201 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Controller &mdash; Hybrid for FuelPHP Documentation</title>
-    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
-    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
-    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
-    <script type="text/javascript" src="../assets/js/nav.js"></script>
+	<meta charset="utf-8">
+	<title>Controller &mdash; Hybrid for FuelPHP Documentation</title>
+	<link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
+	<link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
+	<script type="text/javascript" src="../assets/js/nav.js"></script>
 
-    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
-    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript">
-        $(function() {
-            show_nav('controller', '../');
-            prettyPrint();
-        });
-    </script>
+	<script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+	<link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript">
+		$(function() {
+			show_nav('controller', '../');
+			prettyPrint();
+		});
+	</script>
 </head>
 <body>
 <div class="topbar">
-    <div class="topbar-inner">
-        <div id="topbar" class="container">
-            <a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
-            <ul></ul>
-        </div>
-    </div>
+	<div class="topbar-inner">
+		<div id="topbar" class="container">
+			<a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
+			<ul></ul>
+		</div>
+	</div>
 </div>
 
 <div class="container after-topbar">
 
-    <header class="page-header">
-        <h1>Controller <small>Introduction</small></h1>
-    </header>
-    <p>
-        Controllers are classes that can be reached through the URL and take care of handling the request. A controller calls models and other classes to fetch the information. Finally, it will pass everything to a view for output. If a URL like www.yoursite.com/example/index is requested, the first segment ("example") will be the controller that is called and the second segment ("index") will be the method of that controller that is called.
-    </p>
+	<header class="page-header">
+		<h1>Controller <small>Introduction</small></h1>
+	</header>
+	<p>
+		Controllers are classes that can be reached through the URL and take care of handling the request. A controller calls models and other classes to fetch the information. Finally, it will pass everything to a view for output. If a URL like www.yoursite.com/example/index is requested, the first segment ("example") will be the controller that is called and the second segment ("index") will be the method of that controller that is called.
+	</p>
 
-    <hr />
-    <div class="row">
-        <div class="span4">
-            <h2>Example</h2>
-            <p>
-                Here's a basic Controller
-            </p>
-        </div>
-        <div class="span12">
-            <pre class="prettyprint lang-php">&lt;?php
+	<hr />
+	<div class="row">
+		<div class="span4">
+			<h2>Example</h2>
+			<p>
+				Here's a basic Controller
+			</p>
+		</div>
+		<div class="span12">
+			<pre class="prettyprint lang-php">&lt;?php
 
 class Controller_Welcome extends \Hybrid\Controller 
 {
-    public function before()
-    {
-        parent::before();
+	public function before()
+	{
+		parent::before();
 
-        // verify user has access using \Hybrid\Acl
-        $this->acl('welcome', 'all');
-    }
+		// verify user has access using \Hybrid\Acl
+		$this->acl('welcome', 'all');
+	}
 
-    public function action_index()
-    {
-        // redirect based on user authentication (different from ACL)
-        if ($this->user->id < 1)
-        {
-            return \Response::redirect('login');
-        }
+	public function action_index()
+	{
+		// redirect based on user authentication (different from ACL)
+		if ($this->user->id < 1)
+		{
+			return \Response::redirect('login');
+		}
 
-        $this->response->body = \View::forge('welcome/index');
-    }
+		$this->response->body = \View::forge('welcome/index');
+	}
 }</pre>
-        </div>
-    </div>
+		</div>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <h3 id="acl()">acl($resource, $type = null, $name = null)</h3>
+	<div class="row">
+		<h3 id="acl()">acl($resource, $type = null, $name = null)</h3>
 
-        <p>Validate user authorization to given resource with access level using <a href="../classes/acl.html">\Hybrid\Acl</a> class, exception <code>\HttpNotFoundException</code> or equivalent response will be given if there no authorization.</p>
+		<p>Validate user authorization to given resource with access level using <a href="../classes/acl.html">\Hybrid\Acl</a> class, exception <code>\HttpNotFoundException</code> or equivalent response will be given if there no authorization.</p>
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>Yes</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>
-                    <table class="parameters">
-                        <tbody><tr>
-                            <th>Param</th>
-                            <th>Default</th>
-                            <th class="description">Description</th>
-                        </tr>
-                        <tr>
-                            <th><kbd>$resource</kbd></th>
-                            <td><em>Required</em></td>
-                            <td>A string of resource name</td>
-                        </tr>
-                        <tr>
-                            <th><kbd>$type</kbd></th>
-                            <td><code>null</code></td>
-                            <td>A string of access level ('deny', 'view', 'create', 'edit', 'delete', 'all')</td>
-                        </tr>
-                        <tr>
-                            <th><kbd>$name</kbd></th>
-                            <td><code>null</code></td>
-                            <td>\Hybrid\Acl instance name, default to <code>null</code>.</td>
-                        </tr>
-                    </tbody></table>
-                </td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>void</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">$this->acl('welcome', 'edit', null);</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>Yes</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tbody><tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$resource</kbd></th>
+							<td><em>Required</em></td>
+							<td>A string of resource name</td>
+						</tr>
+						<tr>
+							<th><kbd>$type</kbd></th>
+							<td><code>null</code></td>
+							<td>A string of access level ('deny', 'view', 'create', 'edit', 'delete', 'all')</td>
+						</tr>
+						<tr>
+							<th><kbd>$name</kbd></th>
+							<td><code>null</code></td>
+							<td>\Hybrid\Acl instance name, default to <code>null</code>.</td>
+						</tr>
+					</tbody></table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>void</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">$this->acl('welcome', 'edit', null);</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
 
-        <div class="alert-message block-message info">
-            <p>This method can be called from <code>before()</code> or any of the <code>action_</code> method.</p>
-        </div>
-    </div>
+		<div class="alert-message block-message info">
+			<p>This method can be called from <code>before()</code> or any of the <code>action_</code> method.</p>
+		</div>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <h3 id="$user">$user</h3>
+	<div class="row">
+		<h3 id="$user">$user</h3>
 
-        <p>User instance from <code>\Hybrid\Auth::instance('user')->get();</code>.
+		<p>User instance from <code>\Hybrid\Auth::instance('user')->get();</code>.
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>Object</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">public function action_hello()
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>Object</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">public function action_hello()
 {
-    printf('Hello %s', $this->user->full_name); // Return 'Hello guest'
+	printf('Hello %s', $this->user->full_name); // Return 'Hello guest'
 }</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <h3 id="$language">$language</h3>
+	<div class="row">
+		<h3 id="$language">$language</h3>
 
-        <p>Current active language from <code>\Hybrid\Factory::get_language();</code>.
+		<p>Current active language from <code>\Hybrid\Factory::get_language();</code>.
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>No</td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>string</td>
-            </tr>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">public function action_hello()
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>string</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">public function action_hello()
 {
-    printf('Current language: %s', $this->language); // Return 'Current language: en'
+	printf('Current language: %s', $this->language); // Return 'Current language: en'
 }</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 
-    <footer>
-        <p>
-            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
-            &copy; 2010 - 2011 Fuel Hybrid Development Team
-        </p>
-    </footer>
+	<footer>
+		<p>
+			<a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+			&copy; 2010 - 2011 Fuel Hybrid Development Team
+		</p>
+	</footer>
 </div>
 </body>
 </html>

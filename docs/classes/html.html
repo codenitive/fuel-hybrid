@@ -1,94 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Html Class &mdash; Hybrid for FuelPHP Documentation</title>
-    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
-    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
-    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
-    <script type="text/javascript" src="../assets/js/nav.js"></script>
+	<meta charset="utf-8">
+	<title>Html Class &mdash; Hybrid for FuelPHP Documentation</title>
+	<link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
+	<link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
+	<script type="text/javascript" src="../assets/js/nav.js"></script>
 
-    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
-    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript">
-        $(function() {
-            show_nav('classes', '../');
-            prettyPrint();
-        });
-    </script>
+	<script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+	<link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript">
+		$(function() {
+			show_nav('classes', '../');
+			prettyPrint();
+		});
+	</script>
 </head>
 <body>
 <div class="topbar">
-    <div class="topbar-inner">
-        <div id="topbar" class="container">
-            <a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
-            <ul></ul>
-        </div>
-    </div>
+	<div class="topbar-inner">
+		<div id="topbar" class="container">
+			<a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
+			<ul></ul>
+		</div>
+	</div>
 </div>
 
 <div class="container after-topbar">
 
-    <header class="page-header">
-        <h1>Html <small>Class</small></h1>
-    </header>
+	<header class="page-header">
+		<h1>Html <small>Class</small></h1>
+	</header>
 
-    <p>
-        The Html class is an HTML wrapper for nearly all HTML tags.
-    </p>
+	<p>
+		The Html class is an HTML wrapper for nearly all HTML tags.
+	</p>
 
-    <h2>Extends</h2>
+	<h2>Extends</h2>
 
-    <p>
-        Html class extends <a href="http://fuelphp.com/docs/classes/html.html">Fuel\Core\Html</a>.
-    </p>
+	<p>
+		Html class extends <a href="http://fuelphp.com/docs/classes/html.html">Fuel\Core\Html</a>.
+	</p>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-            
-        <h3 id="title">title($content = '', $attributes = array())</h3>
+	<div class="row">
+			
+		<h3 id="title">title($content = '', $attributes = array())</h3>
 
-        <p>
-            Generates a html title tag complete with site name from <code>config/app.php</code>.
-        </p>
+		<p>
+			Generates a html title tag complete with site name from <code>config/app.php</code>.
+		</p>
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>Yes</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>
-                    <table class="parameters">
-                        <tr>
-                            <th>Param</th>
-                            <th>Default</th>
-                            <th class="description">Description</th>
-                        </tr>
-                        <tr>
-                            <th><kbd>$content</kbd></th>
-                            <td><code>''</code></td>
-                            <td>A string of page title</td>
-                        </tr>
-                        <tr>
-                            <th><kbd>$attributes</kbd></th>
-                            <td><code>array()</code></td>
-                            <td>An array of &lt;title&gt; attributes</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td>string</td>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">\Config::load('app', 'app');
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>Yes</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$content</kbd></th>
+							<td><code>''</code></td>
+							<td>A string of page title</td>
+						</tr>
+						<tr>
+							<th><kbd>$attributes</kbd></th>
+							<td><code>array()</code></td>
+							<td>An array of &lt;title&gt; attributes</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>string</td>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">\Config::load('app', 'app');
 \Config::set('app.site_name', 'FuelPHP');
 
 $title = \Hybrid\Html::title('Hello');
@@ -96,18 +96,18 @@ $title = \Hybrid\Html::title('Hello');
 
 $title = \Hybrid\Html::title('');
 // return '&lt;title&gt;FuelPHP&lt;/title&gt;'</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 
-    <footer>
-        <p>
-            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
-            &copy; 2010 - 2011 Fuel Hybrid Development Team
-        </p>
-    </footer>
+	<footer>
+		<p>
+			<a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+			&copy; 2010 - 2011 Fuel Hybrid Development Team
+		</p>
+	</footer>
 </div>
 </body>
 </html>

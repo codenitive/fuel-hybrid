@@ -1,104 +1,104 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>View Class &mdash; Hybrid for FuelPHP Documentation</title>
-    <link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
-    <link href="../assets/css/main.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
-    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
-    <script type="text/javascript" src="../assets/js/nav.js"></script>
+	<meta charset="utf-8">
+	<title>View Class &mdash; Hybrid for FuelPHP Documentation</title>
+	<link href="../assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
+	<link href="../assets/css/main.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript" src="../assets/js/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
+	<script type="text/javascript" src="../assets/js/nav.js"></script>
 
-    <script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
-    <link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
-    <script type="text/javascript">
-        $(function() {
-            show_nav('classes', '../');
-            prettyPrint();
-        });
-    </script>
+	<script type="text/javascript" src="../assets/js/prettify/prettify.js"></script>
+	<link href="../assets/js/prettify/prettify.css" media="screen" rel="stylesheet" />
+	<script type="text/javascript">
+		$(function() {
+			show_nav('classes', '../');
+			prettyPrint();
+		});
+	</script>
 </head>
 <body>
 <div class="topbar">
-    <div class="topbar-inner">
-        <div id="topbar" class="container">
-            <a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
-            <ul></ul>
-        </div>
-    </div>
+	<div class="topbar-inner">
+		<div id="topbar" class="container">
+			<a href="../index.html" class="brand">Hybrid for FuelPHP Documentation</a>
+			<ul></ul>
+		</div>
+	</div>
 </div>
 
 <div class="container after-topbar">
 
-    <header class="page-header">
-        <h1>View <small>Class</small></h1>
-    </header>
+	<header class="page-header">
+		<h1>View <small>Class</small></h1>
+	</header>
 
-    <p>
-        The View class acts as an object wrapper for HTML pages with embedded PHP, called "views". Variables can be assigned with the view object and referenced locally within the view.
-    </p>
+	<p>
+		The View class acts as an object wrapper for HTML pages with embedded PHP, called "views". Variables can be assigned with the view object and referenced locally within the view.
+	</p>
 
-    <h2>Extends</h2>
+	<h2>Extends</h2>
 
-    <p>
-        View class extends <a href="http://fuelphp.com/docs/classes/view.html">Fuel\Core\View</a>.
-    </p>
+	<p>
+		View class extends <a href="http://fuelphp.com/docs/classes/view.html">Fuel\Core\View</a>.
+	</p>
 
-    <hr />
+	<hr />
 
-    <div class="row">
-        <h3 id="add_path()">add_path($path)</h3>
+	<div class="row">
+		<h3 id="add_path()">add_path($path)</h3>
 
-        <p>Set the global path, overwrite default using <strong>/app/views/</strong> folder.</p>
+		<p>Set the global path, overwrite default using <strong>/app/views/</strong> folder.</p>
 
-        <table class="method">
-            <tbody>
-            <tr>
-                <th class="legend">Static</th>
-                <td>Yes</td>
-            </tr>
-            <tr>
-                <th>Parameters</th>
-                <td>
-                    <table class="parameters">
-                        <tr>
-                            <th>Param</th>
-                            <th>Default</th>
-                            <th class="description">Description</th>
-                        </tr>
-                        <tr>
-                            <th><kbd>$path</kbd></th>
-                            <td><i>Required</i></td>
-                            <td>A string of valid absoluted path to view</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <th>Returns</th>
-                <td><i>void</i></td>
-            <tr>
-                <th>Example</th>
-                <td>
-                    <pre class="prettyprint lang-php">$view = \Hybrid\View::forge('index');
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>Yes</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$path</kbd></th>
+							<td><i>Required</i></td>
+							<td>A string of valid absoluted path to view</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td><i>void</i></td>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">$view = \Hybrid\View::forge('index');
 
 // set folder location
 $view->set_path(DOCROOT . 'views/');
 
 // render the view
 $this->response->body = $view->render();    // this will render DOCROOT/views/index.php</pre>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    
-    <footer>
-        <p>
-            <a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
-            &copy; 2010 - 2011 Fuel Hybrid Development Team
-        </p>
-    </footer>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<footer>
+		<p>
+			<a href="http://github.com/codenitive/fuel-hybrid">Fuel Hybrid Package</a> is released under the MIT license.<br />
+			&copy; 2010 - 2011 Fuel Hybrid Development Team
+		</p>
+	</footer>
 </div>
 </body>
 </html>

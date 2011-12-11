@@ -72,7 +72,7 @@ class Auth_Controller extends \Controller
 
 		try 
 		{
-			Auth_Strategy::forge($provider)->authenticate();
+			Auth_Strategy::make($provider)->authenticate();
 		}
 		catch (Auth_Strategy_Exception $e)
 		{
@@ -97,7 +97,7 @@ class Auth_Controller extends \Controller
 		
 		try 
 		{
-			$strategy = Auth_Strategy::forge($provider);
+			$strategy = Auth_Strategy::make($provider);
 			Auth_Strategy::login_or_register($strategy);
 		} 
 		catch (Auth_Strategy_Exception $e)

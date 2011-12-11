@@ -28,7 +28,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-abstract class Controller_Frontend extends Controller 
+abstract class Controller_Frontend extends Controller_Template 
 {
 	/**
 	 * Page template
@@ -56,71 +56,7 @@ abstract class Controller_Frontend extends Controller
 	{
 		\Log::warning('This Class is deprecated. Please use a Hybrid\Controller_Template instead.', __CLASS__);
 		
-		$this->prepare_template();
-
 		return parent::before();
-	}
-
-	/**
-	 * Takes pure data and optionally a status code, then creates the response
-	 * 
-	 * @access  protected
-	 * @param   array   $data
-	 * @param   int     $http_code
-	 * @return  void
-	 */
-	protected function response($data = array(), $http_code = 200) 
-	{
-		$this->response->status = $http_code;
-
-		$this->template->set($data);
-	}
-
-	/**
-	 * This method will be called after we route to the destinated method
-	 * 
-	 * @access  public
-	 * @param   mixed   $response
-	 * @return  void
-	 */
-	public function after($response) 
-	{
-		return parent::after($this->render_template($response));
-	}
-	
-	/**
-	 * Prepare template
-	 * 
-	 * @access  protected
-	 * @return  void
-	 */
-	protected function prepare_template()
-	{
-		if (true === $this->auto_render)
-		{
-			$this->template = Template::forge($this->template);
-		}
-	}
-	
-	/**
-	 * Render template
-	 * 
-	 * @access  protected
-	 * @param   mixed   $response
-	 * @return  void
-	 */
-	protected function render_template($response)
-	{
-		//we dont want to accidentally change our site_name
-		$this->template->set(array('site_name' => \Config::get('app.site_name')));
-		
-		if (true === $this->auto_render and ! $response instanceof \Response)
-		{
-			$response       = $this->response;
-			$response->body = $this->template->render();
-		}
-
-		return $response;
 	}
 
 }

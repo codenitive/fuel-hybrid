@@ -42,7 +42,7 @@ class Auth_Strategy_Normal extends Auth_Strategy
 	{
 		parent::__construct($provider);
 
-		$this->provider = Auth_Provider_Normal::forge();
+		$this->provider = Auth_Provider_Normal::make();
 
 		return $this;
 	}
