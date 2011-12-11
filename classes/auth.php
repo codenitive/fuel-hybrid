@@ -172,7 +172,7 @@ class Auth
 	 * Turn string to hash using sha1() hash with salt.
 	 *
 	 * @static
-	 * @deprecated
+	 * @deprecated  1.2.0
 	 * @access  public
 	 * @param   string  $string       String to be hashed
 	 * @return  string

@@ -44,9 +44,13 @@
 		You can straight away create all the models and migrations class using <code>php oil refine autho --install</code> (commanline interface), however below are the best practise for most development.
 	</p>
 	<ul>
-		<li><a href="#users">Users</a></li>
-		<li><a href="#users_auths">Users Auths</a></li>
-		<li><a href="#users_meta">Users Meta</a></li>
+		<li>
+			<a href="#users">Users</a>
+			<ul>
+				<li><a href="#users_auths">Auths</a></li>
+				<li><a href="#users_meta">Meta</a></li>
+			</ul>
+		</li>
 		<li><a href="#roles">Roles</a></li>
 		<li><a href="#users_roles">Users Roles</a></li>
 		<li><a href="#authentications">Authentications</a></li>
@@ -344,12 +348,14 @@ namespace Model;
 
 class Authentication extends \Orm\Model {
 	
-	protected static $_observers = array(
+	protected static $_properties = array(
 		'id',
 		'user_id',
 		'provider',
 		'uid',
-		'token',
+		'access_token',
+		'expires',
+		'refresh_token',
 		'secret',
 	);
 
@@ -374,7 +380,9 @@ class Create_authenticates {
 			'user_id' => array('constraint' => 11, 'type' => 'int'),
 			'provider' => array('constraint' => 50, 'type' => 'varchar'),
 			'uid' => array('constraint' => 255, 'type' => 'varchar'),
-			'token' => array('constraint' => 255, 'type' => 'varchar'),
+			'access_token' => array('constraint' => 255, 'type' => 'varchar'),
+			'expires' => array('constraint' => 12, 'type' => 'int'),
+			'refresh_token' => array('constraint' => 255, 'type' => 'varchar'),
 			'secret' => array('constraint' => 255, 'type' => 'varchar'),
 		), array('id'));
 	}

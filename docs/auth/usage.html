@@ -41,7 +41,7 @@
 	<hr />
 
 	<div class="row">
-		<h3 id="create_hash()">create_hash($password = '')</h3>
+		<h3 id="create_hash()">create_hash($password = '', $hash_type = null)</h3>
 
 		<p>
 			Turn string to hash using <code>md5</code>, <code>sha1()</code> or <code>crypt_hash</code> hash with salt.
@@ -66,6 +66,11 @@
 							<th><kbd>$string</kbd></th>
 							<td><code>''</code></td>
 							<td>String to be hashed</td>
+						</tr>
+						<tr>
+							<th><kbd>$hash_type</kbd></th>
+							<td><code>null</code></td>
+							<td>String of hash type (either 'sha1', 'md5' or 'crypt_hash')</td>
 						</tr>
 					</tbody></table>
 				</td>
@@ -92,7 +97,7 @@
 
 		<div class="alert-message block-message warning">
 			<p>
-				Deprecated on scheduled to be remove in Hybrid for FuelPHP v1.3.0, use <a href="create_hash()">create_hash()</a>
+				Deprecated on scheduled to be remove in Hybrid for FuelPHP v1.2.0, use <a href="#create_hash()">Hybrid\Auth::create_hash()</a>
 			</p>
 		</div>
 	</div>
@@ -103,7 +108,11 @@
 
 		<h3 id="forge()">forge($name = null)</h3>
 
-		<p>Initiate a new Auth instance, alias to <a href="#instance()">\Hybrid\Auth::instance()</a>.</p>
+		<p>Initiate a new Auth instance.</p>
+
+		<div class="alert-message block-message info">
+			<p>Alias to <a href="#make()">Hybrid\Acl::make()</a> for forward compact with FuelPHP 2.0</p>
+		</div>
 
 		<table class="method">
 			<tbody>
@@ -155,9 +164,18 @@ $auth-&gt;logout();
 	<div class="row">
 		<h3 id="instance()">instance($name = null)</h3>
 
-		<p>
-			Retrieves a loaded driver, when drivers are set in config the first driver will also be the default.
-		</p>
+		<div class="alert-message block-message warning">
+			<p>Deprecated on scheduled to be remove in Hybrid for FuelPHP v1.2.0, use <a href="#make()">\Hybrid\Auth::make()</a></p>
+		</div>
+	</div>
+
+	<hr />
+
+	<div class="row">
+
+		<h3 id="make()">make($name = null)</h3>
+
+		<p>Initiate a new Auth instance.</p>
 
 		<table class="method">
 			<tbody>
@@ -190,14 +208,14 @@ $auth-&gt;logout();
 				<th>Example</th>
 				<td>
 					<pre class="prettyprint lang-php">// Logout the default driver
-$auth = \Hybrid\Auth::instance();
+$auth = \Hybrid\Auth::make();
 $auth-&gt;logout();
 
 // Login using the User driver
-\Hybrid\Auth::instance('user')-&gt;login(Input::post('username'), Input::post('password'));
+\Hybrid\Auth::make('user')-&gt;login(Input::post('username'), Input::post('password'));
 
 // Or you can use
-\Hybrid\Auth_User::instance()-&gt;login(Input::post('username'), Input::post('password'));</pre>
+\Hybrid\Auth_User::make()-&gt;login(Input::post('username'), Input::post('password'));</pre>
 				</td>
 			</tr>
 			</tbody>

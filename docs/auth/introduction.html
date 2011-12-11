@@ -71,6 +71,7 @@
 				<td>array|null</td>
 				<td><code>null</code></td>
 				<td>
+					List of user fields to be used (default to array('status', 'full_name'))
 				</td>
 			</tr>
 			<tr>
@@ -78,6 +79,7 @@
 				<td>array|null</td>
 				<td><code>null</code></td>
 				<td>
+					Allow status to login based on `users`.`status` (default to ('verified'))
 				</td>
 			</tr>
 
@@ -143,6 +145,22 @@
 			</tr>
 
 			<tr>
+				<th>mysql_timestamp</th>
+				<td>mixed</td>
+				<td><code>null</code></td>
+				<td>
+					Set default mysql_timestamp option for authentications table.
+					<br /><br />
+					<strong>Available values:</strong>
+					<ul>
+						<li><code>null</code> No timestamp</li>
+						<li><code>false</code> use time()</li>
+						<li><code>true</code> use datetime</li>
+					</ul>
+				</td>
+			</tr>
+
+			<tr>
 				<th>link_multiple_providers</th>
 				<td>bool</td>
 				<td><code>true</code></td>
@@ -150,6 +168,7 @@
 					Can multiple providers be attached to one user account.
 				</td>
 			</tr>
+
 			<tr>
 				<th>salt</th>
 				<td>string</td>
@@ -259,6 +278,18 @@ return array(
 		),
 	
 	),
+
+	/**
+	 * mysql_timestamp
+	 *
+	 * Set default mysql_timestamp option for authentications table
+	 *
+	 * Available values:
+	 * null     No timestamp
+	 * false    Use time()
+	 * true     Use datetime
+	 */
+	'mysql_timestamp' => null,
 
 	/**
 	 * link_multiple_providers
