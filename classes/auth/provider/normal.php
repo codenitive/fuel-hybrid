@@ -528,7 +528,7 @@ class Auth_Provider_Normal
 		}
 
 		// validate our hash data
-		if (null !== $this->data['_hash'] and $this->data['_hash'] !== Auth::add_salt($hash)) 
+		if (null !== $this->data['_hash'] and $this->data['_hash'] !== Auth::create_hash($hash)) 
 		{
 			return $this->reset();
 		}
