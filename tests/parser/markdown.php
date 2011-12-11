@@ -27,6 +27,12 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
+/**
+ * Parser_Bbcode class tests
+ *
+ * @group Hybrid
+ * @group Parser_Bbcode
+ */
 class Test_Parser_Markdown extends \Fuel\Core\TestCase 
 {
 	/**

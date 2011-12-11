@@ -27,6 +27,12 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
+/**
+ * Uri class tests
+ *
+ * @group Hybrid
+ * @group Uri
+ */
 class Test_Uri extends \Fuel\Core\TestCase 
 {
 	/**
@@ -50,15 +56,15 @@ class Test_Uri extends \Fuel\Core\TestCase
 	 */
 	public function test_build_get_query() 
 	{
-		$output = \Hybrid\Uri::build_get_query(array('foo', 'hello'));
+		$output   = Uri::build_get_query(array('foo', 'hello'));
 		$expected = '?foo=bar&hello=world';
 		$this->assertEquals($expected, $output);
-
-		$output = \Hybrid\Uri::build_get_query(array('foo', 'unavailable'));
+		
+		$output   = Uri::build_get_query(array('foo', 'unavailable'));
 		$expected = '?foo=bar';
 		$this->assertEquals($expected, $output);
-	
-		$output = \Hybrid\Uri::build_get_query(array('unavailable'));
+		
+		$output   = Uri::build_get_query(array('unavailable'));
 		$expected = '?';
 		$this->assertEquals($expected, $output);
 	}

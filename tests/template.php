@@ -27,6 +27,12 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
+/**
+ * Template class tests
+ *
+ * @group Hybrid
+ * @group Template
+ */
 class Test_Template extends \Fuel\Core\TestCase 
 {
 	/**
@@ -46,7 +52,7 @@ class Test_Template extends \Fuel\Core\TestCase
 	{
 		try
 		{
-			$output = Template::forge('normal');
+			$output = Template::make('normal');
 		}
 		catch (\FuelException $e)
 		{
@@ -64,7 +70,7 @@ class Test_Template extends \Fuel\Core\TestCase
 	 */
 	public function test_forge_expected_exception_given_invalid_driver()
 	{
-		Template::forge('helloworld');
+		Template::make('helloworld');
 	}
 
 }

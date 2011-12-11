@@ -27,6 +27,12 @@ namespace Hybrid;
  * @author      Ignacio Muñoz Fernandez <nmunozfernandez@gmail.com>
  */
 
+/**
+ * Parser_Bbcode class tests
+ *
+ * @group Hybrid
+ * @group Parser_Bbcode
+ */
 class Test_Parser_Bbcode extends \Fuel\Core\TestCase 
 {
 	/**

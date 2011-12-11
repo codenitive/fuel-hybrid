@@ -27,6 +27,12 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
+/**
+ * Acl class tests
+ *
+ * @group Hybrid
+ * @group Acl
+ */
 class Test_Acl extends \Fuel\Core\TestCase 
 {
 	/**
@@ -36,7 +42,7 @@ class Test_Acl extends \Fuel\Core\TestCase
 	{
 		\Package::load('hybrid');
 
-		$acl = Acl::forge('mock');
+		$acl = Acl::make('mock');
 		$acl->add_roles('guest');
 		$acl->add_resources(array('blog', 'forum', 'news'));
 		$acl->allow('guest', array('blog'), 'view');
@@ -60,7 +66,7 @@ class Test_Acl extends \Fuel\Core\TestCase
 	 */
 	public function test_forge()
 	{
-		$output = Acl::forge('mock');
+		$output = Acl::make('mock');
 
 		$this->assertTrue($output instanceof \Hybrid\Acl);
 	}
@@ -72,7 +78,7 @@ class Test_Acl extends \Fuel\Core\TestCase
 	 */
 	public function test_access()
 	{
-		$acl      = Acl::instance('mock');
+		$acl      = Acl::make('mock');
 		
 		$expected = true;
 		$output   = $acl->access('blog', 'view');
@@ -98,7 +104,7 @@ class Test_Acl extends \Fuel\Core\TestCase
 	 */
 	public function test_access_status()
 	{   
-		$acl      = Acl::instance('mock');
+		$acl      = Acl::make('mock');
 		
 		$expected = 200;
 		$output   = $acl->access_status('blog', 'view');

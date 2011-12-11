@@ -27,6 +27,12 @@ namespace Hybrid;
  * @author      Ignacio Muñoz Fernandez <nmunozfernandez@gmail.com>
  */
 
+/**
+ * Parser_Textile class tests
+ *
+ * @group Hybrid
+ * @group Parser_Textile
+ */
 class Test_Parser_Textile extends \Fuel\Core\TestCase 
 {
 	/**

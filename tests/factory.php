@@ -27,6 +27,12 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
+/**
+ * Factory class tests
+ *
+ * @group Hybrid
+ * @group Factory
+ */
 class Test_Factory extends \Fuel\Core\TestCase 
 {
 	/**
@@ -58,7 +64,7 @@ class Test_Factory extends \Fuel\Core\TestCase
 	public function test_identity() 
 	{
 		$expected = \Config::get('app.identity');
-		$output = \Hybrid\Factory::get_identity();
+		$output   = Factory::get_identity();
 		
 		$this->assertEquals($expected, $output);
 	}
