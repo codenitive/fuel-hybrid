@@ -27,6 +27,12 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
+/**
+ * Parser class tests
+ *
+ * @group Hybrid
+ * @group Parser
+ */
 class Test_Parser extends \Fuel\Core\TestCase 
 {
 	/**
@@ -44,7 +50,7 @@ class Test_Parser extends \Fuel\Core\TestCase
 	 */
 	public function test_forge()
 	{
-		$output = Parser::forge('markdown');
+		$output = Parser::make('markdown');
 
 		$this->assertTrue($output instanceof \Hybrid\Parser_Markdown);
 	}
@@ -57,7 +63,7 @@ class Test_Parser extends \Fuel\Core\TestCase
 	 */
 	public function test_forge_expected_exception_given_invalid_driver()
 	{
-		Parser::forge('html');
+		Parser::make('html');
 	}
 	
 }

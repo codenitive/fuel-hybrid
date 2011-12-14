@@ -27,6 +27,12 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
+/**
+ * Chart class tests
+ *
+ * @group Hybrid
+ * @group Chart
+ */
 class Test_Chart extends \Fuel\Core\TestCase 
 {    
 	/**
@@ -44,7 +50,7 @@ class Test_Chart extends \Fuel\Core\TestCase
 	 */
 	public function test_forge()
 	{
-		$output = Chart::forge('timeline');
+		$output = Chart::make('timeline');
 
 		$this->assertTrue($output instanceof \Hybrid\Chart_Timeline);
 	}
@@ -57,7 +63,7 @@ class Test_Chart extends \Fuel\Core\TestCase
 	 */
 	public function test_forge_expected_exception_given_invalid_driver()
 	{
-		$output = Chart::forge('date');
+		$output = Chart::make('date');
 	}
 
 	/**

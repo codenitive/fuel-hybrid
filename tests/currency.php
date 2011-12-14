@@ -27,6 +27,12 @@ namespace Hybrid;
  * @author      Ignacio Muñoz Fernandez <nmunozfernandez@gmail.com>
  */
 
+/**
+ * Currency class tests
+ *
+ * @group Hybrid
+ * @group Currency
+ */
 class Test_Currency extends \Fuel\Core\TestCase 
 {
 	/**
@@ -44,7 +50,7 @@ class Test_Currency extends \Fuel\Core\TestCase
 	 */
 	public function test_forge()
 	{
-		$output = Currency::forge(1, 'USD');
+		$output = Currency::make(1, 'USD');
 
 		$this->assertTrue($output instanceof \Hybrid\Currency);
 	}
@@ -56,7 +62,7 @@ class Test_Currency extends \Fuel\Core\TestCase
 	 */
 	public function test_convert_to_given_same_currency()
 	{
-		$output = Currency::forge(1, 'USD')->convert_to('USD');
+		$output = Currency::make(1, 'USD')->convert_to('USD');
 		$expected = (float) 1;
 
 		$this->assertEquals($expected, $output);
@@ -69,7 +75,7 @@ class Test_Currency extends \Fuel\Core\TestCase
 	 */
 	public function test_to_currency_given_same_currency()
 	{
-		$output = Currency::forge(1, 'USD')->to_usd();
+		$output = Currency::make(1, 'USD')->to_usd();
 		$expected = (float) 1;
 
 		$this->assertEquals($expected, $output);
@@ -83,7 +89,7 @@ class Test_Currency extends \Fuel\Core\TestCase
 	 */
 	public function test_fetch_currency_rate_expected_exception_given_invalid_currency()
 	{
-		Currency::forge(1, 'Foo')->convert_to('USD');
+		Currency::make(1, 'Foo')->convert_to('USD');
 	}
 
 	/**
@@ -94,7 +100,7 @@ class Test_Currency extends \Fuel\Core\TestCase
 	 */
 	public function test_convert_to_expected_exception_given_invalid_currency()
 	{
-		Currency::forge(1, 'USD')->convert_to('Foo');
+		Currency::make(1, 'USD')->convert_to('Foo');
 	}
 
 }

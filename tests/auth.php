@@ -27,6 +27,12 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
+/**
+ * Auth class tests
+ *
+ * @group Hybrid
+ * @group Auth
+ */
 class Test_Auth extends \Fuel\Core\TestCase 
 {
 
@@ -36,7 +42,9 @@ class Test_Auth extends \Fuel\Core\TestCase
 	public function setup()
 	{
 		\Package::load('hybrid');
+
 		\Config::load('autho', 'autho');
+
 		\Config::set('autho.hash_type', 'sha1');
 		\Config::set('autho.salt', '12345');
 	}
@@ -51,6 +59,12 @@ class Test_Auth extends \Fuel\Core\TestCase
 		$string   = 'helloworld123';
 		$expected = sha1('12345'.$string);
 		$output   = Auth::create_hash($string);
+
+		$this->assertEquals($expected, $output);
+
+		$string   = 'helloworld123';
+		$expected = md5('12345'.$string);
+		$output   = Auth::create_hash($string, 'md5');
 
 		$this->assertEquals($expected, $output);
 	}

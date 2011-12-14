@@ -27,6 +27,12 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
+/**
+ * Html class tests
+ *
+ * @group Hybrid
+ * @group Html
+ */
 class Test_Html extends \Fuel\Core\TestCase 
 {
 	/**
@@ -35,6 +41,7 @@ class Test_Html extends \Fuel\Core\TestCase
 	public function setup() 
 	{
 		\Package::load('hybrid');
+		
 		\Config::set('app.site_name', 'FuelPHP');
 	}
 

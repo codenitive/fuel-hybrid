@@ -27,6 +27,12 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
+/**
+ * Curl class tests
+ *
+ * @group Hybrid
+ * @group Curl
+ */
 class Test_Curl extends \Fuel\Core\TestCase 
 {
 	/**
@@ -44,7 +50,7 @@ class Test_Curl extends \Fuel\Core\TestCase
 	 */
 	public function test_forge()
 	{
-		$output = Curl::forge('GET http://google.com');
+		$output = Curl::make('GET http://google.com');
 		
 		$this->assertTrue($output instanceof \Hybrid\Curl); 
 	}
@@ -57,7 +63,7 @@ class Test_Curl extends \Fuel\Core\TestCase
 	 */
 	public function test_forge_expected_exception_given_invalid_method()
 	{
-		Curl::forge('FORK http://google.com');
+		Curl::make('FORK http://google.com');
 	}
 	
 }
