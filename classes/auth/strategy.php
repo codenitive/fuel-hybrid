@@ -61,14 +61,16 @@ abstract class Auth_Strategy
 	 */
 	protected static $providers = array(
 		'normal'    => 'Normal',
-		'facebook'  => 'OAuth2',
-		'twitter'   => 'OAuth',
-		'tumblr'    => 'OAuth',
+		
 		'dropbox'   => 'OAuth',
+		'facebook'  => 'OAuth2',
 		'flickr'    => 'OAuth',
-		'google'    => 'OAuth2',
 		'github'    => 'OAuth2',
+		'google'    => 'OAuth2',
 		'linkedin'  => 'OAuth',
+		'openid'    => 'OpenId',
+		'tumblr'    => 'OAuth',
+		'twitter'   => 'OAuth',
 		'unmagnify' => 'OAuth2',
 		'youtube'   => 'OAuth2',
 	);
@@ -137,7 +139,7 @@ abstract class Auth_Strategy
 	{
 		$strategy = \Config::get("autho.providers.{$provider}.strategy") ?: \Arr::get(static::$providers, $provider);
 		
-		if ( ! $strategy)
+		if (null === $strategy)
 		{
 			throw new Auth_Strategy_Exception(sprintf('Provider "%s" has no strategy.', $provider));
 		}
