@@ -60,19 +60,20 @@ abstract class Auth_Strategy
 	 * @var     array
 	 */
 	protected static $providers = array(
-		'normal'    => 'Normal',
+		'normal'     => 'Normal',
 		
-		'dropbox'   => 'OAuth',
-		'facebook'  => 'OAuth2',
-		'flickr'    => 'OAuth',
-		'github'    => 'OAuth2',
-		'google'    => 'OAuth2',
-		'linkedin'  => 'OAuth',
-		'openid'    => 'OpenId',
-		'tumblr'    => 'OAuth',
-		'twitter'   => 'OAuth',
-		'unmagnify' => 'OAuth2',
-		'youtube'   => 'OAuth2',
+		'dropbox'    => 'OAuth',
+		'facebook'   => 'OAuth2',
+		'flickr'     => 'OAuth',
+		'github'     => 'OAuth2',
+		'google'     => 'OAuth2',
+		'linkedin'   => 'OAuth',
+		'openid'     => 'OpenId',
+		'tumblr'     => 'OAuth',
+		'twitter'    => 'OAuth',
+		'unmagnify'  => 'OAuth2',
+		'youtube'    => 'OAuth2',
+		'windowlive' => 'OAuth2',
 	);
 
 	/**
