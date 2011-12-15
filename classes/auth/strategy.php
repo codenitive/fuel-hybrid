@@ -67,6 +67,7 @@ abstract class Auth_Strategy
 		'flickr'     => 'OAuth',
 		'github'     => 'OAuth2',
 		'google'     => 'OAuth2',
+		'instagram'  => 'OAuth2',
 		'linkedin'   => 'OAuth',
 		'openid'     => 'OpenId',
 		'tumblr'     => 'OAuth',
