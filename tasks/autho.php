@@ -257,10 +257,10 @@ HELP;
 				'user_id:int',
 				'provider:string[50]',
 				'uid:string',
-				'access_token:string',
-				'expires:int[12]',
-				'refresh_token:string',
-				'secret:string',
+				'access_token:string:null',
+				'expires:int[12]:null',
+				'refresh_token:string:null',
+				'secret:string:null',
 			));
 			\Oil\Generate::$create_files = array();
 		}
