@@ -65,6 +65,7 @@ abstract class Auth_Strategy
 		'dropbox'    => 'OAuth',
 		'facebook'   => 'OAuth2',
 		'flickr'     => 'OAuth',
+		'foursquare' => 'OAuth2',
 		'github'     => 'OAuth2',
 		'google'     => 'OAuth2',
 		'instagram'  => 'OAuth2',

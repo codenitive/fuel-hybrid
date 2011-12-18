@@ -46,20 +46,40 @@ return array(
 	 * oAuth takes a key and a secret, oAuth2 takes a (client) id and a secret, optionally a scope.
 	 */
 	'providers' => array(
+
+		'dropbox' => array(
+			'key'    => '',
+			'secret' => '',
+		),
 		
 		'facebook' => array(
 			'id'     => '',
 			'secret' => '',
 			'scope'  => 'email,offline_access',
 		),
-		
-		'twitter' => array(
+
+		'flickr' => array(
 			'key'    => '',
 			'secret' => '',
 		),
 
-		'dropbox' => array(
-			'key'    => '',
+		'foursquare' => array(
+			'id'     => '',
+			'secret' => '',
+		),
+
+		'github' => array(
+			'id'     => '',
+			'secret' => '',
+		),
+
+		'google' => array(
+			'id'     => '',
+			'secret' => '',
+		),
+
+		'instagram' => array(
+			'id'     => '',
 			'secret' => '',
 		),
 
@@ -67,8 +87,13 @@ return array(
 			'key'    => '',
 			'secret' => '',
 		),
+		
+		'tumblr' => array(
+			'key'    => '',
+			'secret' => '',
+		),
 
-		'flickr' => array(
+		'twitter' => array(
 			'key'    => '',
 			'secret' => '',
 		),
