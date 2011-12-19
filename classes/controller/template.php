@@ -62,9 +62,14 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 		switch ($status) 
 		{
 			case 401 :
-				if (($action = $acl->action($resource)) instanceof \Closure)
+				$action = $acl->action($resource);
+					
+				if ($action instanceof \Closure)
 				{
 					$action();
+					$this->response->send(true);
+					\Event::shutdown();
+					exit();
 				}
 				else
 				{

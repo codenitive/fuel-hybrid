@@ -96,9 +96,14 @@ abstract class Controller extends \Fuel\Core\Controller
 				}
 				else
 				{
-					if (($action = $acl->action($resource)) instanceof \Closure)
+					$action = $acl->action($resource);
+					
+					if ($action instanceof \Closure)
 					{
 						$action();
+						$this->response->send(true);
+						\Event::shutdown();
+						exit();
 					}
 					else
 					{
