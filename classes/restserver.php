@@ -120,7 +120,7 @@ class Restserver
 	 * @access  public
 	 * @return  bool
 	 */
-	public static function is_rest_call()
+	public static function is_rest()
 	{
 		$pattern  = static::$pattern;
 		$resource = \Request::active()->action;

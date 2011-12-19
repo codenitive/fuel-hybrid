@@ -155,6 +155,14 @@ class Acl
 	 * @var     array
 	 */
 	protected $resources = array();
+
+	/**
+	 * List of default actions
+	 * 
+	 * @access  protected
+	 * @var     array
+	 */
+	protected $actions = array();
 	 
 	/**
 	 * List of ACL map between roles, resources and types
@@ -242,9 +250,9 @@ class Acl
 	}
 
 	/**
-	 * Check if user has any of provided roles, deprecated and will be removed in v1.3.0
+	 * Check if user has any of provided roles, deprecated and will be removed in v1.2.0
 	 * 
-	 * @deprecated
+	 * @deprecated  v1.2.0
 	 * @static
 	 * @access  public
 	 * @param   mixed   $check_roles
@@ -316,13 +324,20 @@ class Acl
 
 		if (is_array($resources)) 
 		{
-			foreach ($resources as $resource)
+			foreach ($resources as $resource => $action)
 			{
+				if (is_numeric($resource))
+				{
+					$resource = $action;
+					$action   = null;
+				}
+
 				$resource = trim(\Inflector::friendly_title($resource, '-', true));
 				
 				if ( ! in_array($resource, $this->resources))
 				{
 					array_push($this->resources, $resource);
+					$this->add_action(array("{$resource}" => $action));
 				}
 			}
 
@@ -330,6 +345,44 @@ class Acl
 		}
 
 		return false;
+	}
+
+	public function add_action($resources, $action = null)
+	{
+		if ( ! is_array($resources))
+		{
+			$resources = array("{$resources}" => $action);
+		}
+
+		if (is_array($resources))
+		{
+			foreach ($resources as $resource => $action)
+			{
+				if ( ! $action instanceof \Closure)
+				{
+					$action = null;
+				}
+
+				if (in_array($resource, $this->resources))
+				{
+					$this->actions[$resource] = null;
+				}
+			}
+			
+			return true;
+		}
+
+		return false;
+	}
+
+	public function action($resource)
+	{
+		if ( ! array_key_exists($resource, $this->actions))
+		{
+			throw new \FuelException(__METHOD__.": Can't fetch NULL resources.");
+		}
+		
+		return $this->actions[$resource];
 	}
 
 	/**

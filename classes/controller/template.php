@@ -56,12 +56,20 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	 */
 	final protected function acl($resource, $type = null, $name = null) 
 	{
-		$status = Acl::make($name)->access_status($resource, $type);
+		$acl    = Acl::make($name);
+		$status = $acl->access_status($resource, $type);
 
 		switch ($status) 
 		{
 			case 401 :
-				throw new \HttpNotFoundException();
+				if (($action = $acl->action($resource)) instanceof \Closure)
+				{
+					$action();
+				}
+				else
+				{
+					throw new \HttpNotFoundException();
+				}
 			break;
 		}
 	}
