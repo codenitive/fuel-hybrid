@@ -3,7 +3,7 @@ A set of class that extends the functionality of FuelPHP without affecting the s
 
 ## Key Features
 
-* ACL class support unlimited roles and resources, type using either `deny`, `view`, `create`, `edit`, `delete` or `all` access type.
+* ACL class support unlimited roles and resources, configurable using either `deny`, `view`, `create`, `edit`, `delete` or `all` access type.
 * Auth class support normal user authentication or authentication using OAuth, OAuth2 or OpenID without any hassle, code inspired by [NinjAuth Package](https://github.com/happyninjas/fuel-ninjauth).
 * 6 predefined Controller class for you to choose from, you can choose from either a Quick and Dirty, Template, Restful or Hybrid (Template + Restful) support.
 * Chart collection class using [Google Visualization Library](http://code.google.com/apis/chart/).
@@ -28,3 +28,8 @@ A set of class that extends the functionality of FuelPHP without affecting the s
 ## Documentation
 
 Hybrid for FuelPHP documentation is available at <http://codenitive.github.com/fuel-hybrid> and included on each download archive.
+
+* [Bug and Feature Request](https://github.com/codenitive/fuel-hybrid/issues)
+* Roadmaps:
+  * [Release 1.2](http://roadma.ps/1FS)
+* IRC Discussion: join #fuel-hybrid on irc.freenode.net
