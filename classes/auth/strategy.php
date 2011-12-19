@@ -75,6 +75,7 @@ abstract class Auth_Strategy
 		'twitter'    => 'OAuth',
 		'unmagnify'  => 'OAuth2',
 		'youtube'    => 'OAuth2',
+		'vimeo'      => 'OAuth',
 		'windowlive' => 'OAuth2',
 	);
 
