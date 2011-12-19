@@ -79,7 +79,6 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 	{
 		$this->language   = Factory::get_language();
 		$this->user       = Auth::make('user')->get();
-		\Fuel::$profiling = false;
 
 		\Event::trigger('controller_before');
 		

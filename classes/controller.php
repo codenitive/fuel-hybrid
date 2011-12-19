@@ -113,11 +113,6 @@ abstract class Controller extends \Fuel\Core\Controller
 		$this->language     = Factory::get_language();
 		$this->user         = Auth::make('user')->get();
 
-		if (true === $this->is_rest_call)
-		{
-			\Fuel::$profiling = false;
-		}
-
 		\Event::trigger('controller_before');
 
 		if (false === $this->is_rest_call)
