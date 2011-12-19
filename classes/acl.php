@@ -347,6 +347,14 @@ class Acl
 		return false;
 	}
 
+	/**
+	 * Add an action (or callback) if a ACL return access to resource as unavailable
+	 *
+	 * @access  public
+	 * @param   mixed     $resources
+	 * @param   \Closure  $action
+	 * @return  bool
+	 */
 	public function add_action($resources, $action = null)
 	{
 		if ( ! is_array($resources))
@@ -375,13 +383,21 @@ class Acl
 		return false;
 	}
 
+	/**
+	 * Return available action for a resource, default to null
+	 *
+	 * @access  public
+	 * @param   string   $resource
+	 * @return  Closure
+	 * @throws  \FuelException
+	 */
 	public function action($resource)
 	{
 		if ( ! array_key_exists($resource, $this->actions))
 		{
 			throw new \FuelException(__METHOD__.": Can't fetch NULL resources.");
 		}
-		
+
 		return $this->actions[$resource];
 	}
 
