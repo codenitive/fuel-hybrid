@@ -61,7 +61,8 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 		switch ($status) 
 		{
 			case 401 :
-				throw new AclUnauthorizedException($acl, $resource, true);
+				$acl->unauthorized($resource, true);
+				exit();
 			break;
 		}
 	}

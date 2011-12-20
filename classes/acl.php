@@ -13,7 +13,6 @@
 
 namespace Hybrid;
 
-use \Fuel\Core\HttpNotFoundException;
 
 /**
  * Hybrid 
@@ -34,75 +33,6 @@ use \Fuel\Core\HttpNotFoundException;
  * @category    Acl
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
-
-class AclUnauthorizedException extends HttpNotFoundException
-{
-	protected $instance = null;
-
-	protected $resource = null;
-
-	protected $rest  = false;
-
-	public function __construct($acl, $resource = null, $rest = false)
-	{
-		if ($acl instanceof Acl)
-		{
-			$this->instance = $acl;
-		}
-		elseif (is_string($acl))
-		{
-			$this->instance = Acl::make($acl);
-		}
-
-		$this->resource = $resource;
-
-		if (true === $rest)
-		{
-			$this->rest = true;
-		}
-
-		parent::__construct('Unauthorized', 401);
-	}
-	/**
-	 * When this type of exception isn't caught this method is called by
-	 * Error::exception_handler() to deal with the problem.
-	 */
-	public function handle()
-	{
-		$action           = null;
-		$set_content_type = true;
-
-		if (null !== $this->instance)
-		{
-			$action = $this->instance->action($this->resource);
-		}
-
-		if (true === $this->rest)
-		{
-			if (true === \Request::is_hmvc())
-			{
-				$set_content_type = false;
-			}
-
-			\Lang::load('autho', 'autho');
-			$this->response(array('text' => \Lang::get('autho.unauthorized')), 401);
-		}
-		else
-		{
-			if ($action instanceof \Closure)
-			{
-				$action();
-			}
-			else
-			{
-				throw new \HttpNotFoundException();
-			}
-		}
-
-		\Event::shutdown();
-		$response->send(true);
-	}
-}
 
 class Acl 
 {
@@ -444,7 +374,7 @@ class Acl
 
 				if (in_array($resource, $this->resources))
 				{
-					$this->actions[$resource] = null;
+					$this->actions[$resource] = $action;
 				}
 			}
 			
@@ -459,17 +389,50 @@ class Acl
 	 *
 	 * @access  public
 	 * @param   string   $resource
+	 * @param   bool     $rest        Validate weither it's a restful call
 	 * @return  Closure
 	 * @throws  \FuelException
 	 */
-	public function action($resource)
+	public function unauthorized($resource, $rest = false)
 	{
+		\Lang::load('autho', 'autho');
+
 		if ( ! array_key_exists($resource, $this->actions))
 		{
 			throw new \FuelException(__METHOD__.": Can't fetch NULL resources.");
 		}
 
-		return $this->actions[$resource];
+		$set_content_type = true;
+		$action           = $this->actions[$resource];
+		$response         = \Response::forge(\Lang::get('autho.unauthorized', array(), 'Unauthorized'), 401);
+
+		// run the callback action
+		if ($action instanceof \Closure and true !== $rest)
+		{
+			$callback = $action();
+
+			if ($callback instanceof \Response)
+			{
+				$response = $callback;
+			}
+		}
+		else
+		{
+			if ($rest === true)
+			{
+				if (true === \Request::is_hmvc())
+				{
+					$set_content_type = false;
+				}
+			}
+			else 
+			{
+				throw new \HttpNotFoundException();
+			}
+		}
+
+		\Event::shutdown();
+		$response->send($set_content_type);
 	}
 
 	/**
