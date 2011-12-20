@@ -13,6 +13,8 @@
 
 namespace Hybrid;
 
+use \Fuel\Core\HttpNotFoundException;
+
 /**
  * Hybrid 
  * 
@@ -32,6 +34,71 @@ namespace Hybrid;
  * @category    Acl
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
+
+class AclUnauthorizedException extends HttpNotFoundException
+{
+	protected $instance = null;
+
+	protected $rest  = false;
+
+	public function __construct($acl, $rest = false)
+	{
+		if ($acl instanceof Acl)
+		{
+			$this->instance = $acl;
+		}
+		elseif (is_string($acl))
+		{
+			$this->instance = Acl::make($acl);
+		}
+
+		if (true === $rest)
+		{
+			$this->rest = true;
+		}
+
+		parent::__construct('Unauthorized', 401);
+	}
+	/**
+	 * When this type of exception isn't caught this method is called by
+	 * Error::exception_handler() to deal with the problem.
+	 */
+	public function handle()
+	{
+		$action           = null;
+		$set_content_type = true;
+
+		if (null !== $this->instance)
+		{
+			$action = $this->instance->action();
+		}
+
+		if (true === $this->rest)
+		{
+			if (true === \Request::is_hmvc())
+			{
+				$set_content_type = false;
+			}
+
+			\Lang::load('autho', 'autho');
+			$this->response(array('text' => \Lang::get('autho.unauthorized')), 401);
+		}
+		else
+		{
+			if ($action instanceof \Closure)
+			{
+				$action();
+			}
+			else
+			{
+				throw new \HttpNotFoundException();
+			}
+		}
+
+		\Event::shutdown();
+		$response->send(true);
+	}
+}
 
 class Acl 
 {

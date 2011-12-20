@@ -62,19 +62,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 		switch ($status) 
 		{
 			case 401 :
-				$action = $acl->action($resource);
-					
-				if ($action instanceof \Closure)
-				{
-					$action();
-					$this->response->send(true);
-					\Event::shutdown();
-					exit();
-				}
-				else
-				{
-					throw new \HttpNotFoundException();
-				}
+				throw new AclUnauthorizedException($acl, true);
 			break;
 		}
 	}

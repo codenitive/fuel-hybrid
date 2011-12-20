@@ -86,30 +86,7 @@ abstract class Controller extends \Fuel\Core\Controller
 		switch ($status) 
 		{
 			case 401 :
-				if (true === $this->rest)
-				{
-					\Lang::load('autho', 'autho');
-					$this->response(array('text' => \Lang::get('autho.no_privilege')), 401);
-					$this->response->send($this->set_content_type);
-					\Event::shutdown();
-					exit();
-				}
-				else
-				{
-					$action = $acl->action($resource);
-					
-					if ($action instanceof \Closure)
-					{
-						$action();
-						$this->response->send(true);
-						\Event::shutdown();
-						exit();
-					}
-					else
-					{
-						throw new \HttpNotFoundException();
-					}
-				}
+				throw new AclUnauthorizedException($acl, $this->rest);
 			break;
 		}
 	}
