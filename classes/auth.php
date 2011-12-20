@@ -322,6 +322,19 @@ class Auth
 	}
 
 	/**
+	 * Check if current user is authenticated.
+	 *
+	 * @static
+	 * @access  public
+	 * @param   string  $driver         Driver type string, default to 'user'.
+	 * @return  bool
+	 */
+	public static function check($driver = 'user')
+	{
+		return static::make($driver)->check();
+	}
+
+	/**
 	 * Link user account with external provider
 	 *
 	 * @static
