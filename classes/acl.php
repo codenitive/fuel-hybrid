@@ -39,9 +39,11 @@ class AclUnauthorizedException extends HttpNotFoundException
 {
 	protected $instance = null;
 
+	protected $resource = null;
+
 	protected $rest  = false;
 
-	public function __construct($acl, $rest = false)
+	public function __construct($acl, $resource = null, $rest = false)
 	{
 		if ($acl instanceof Acl)
 		{
@@ -51,6 +53,8 @@ class AclUnauthorizedException extends HttpNotFoundException
 		{
 			$this->instance = Acl::make($acl);
 		}
+
+		$this->resource = $resource;
 
 		if (true === $rest)
 		{
@@ -70,7 +74,7 @@ class AclUnauthorizedException extends HttpNotFoundException
 
 		if (null !== $this->instance)
 		{
-			$action = $this->instance->action();
+			$action = $this->instance->action($this->resource);
 		}
 
 		if (true === $this->rest)
@@ -298,7 +302,7 @@ class Acl
 	 * @access  public
 	 * @param   mixed   $resource
 	 * @param   string  $type       need to be any one of static::$type
-	 * @return  bool
+	 * @return  int					http status
 	 * @see     self::access()
 	 */
 	public function access_status($resource, $type = 'view') 
