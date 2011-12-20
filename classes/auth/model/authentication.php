@@ -50,6 +50,8 @@ class Auth_Model_Authentication extends \Fuel\Core\Model_Crud
 				$date = $date->format('mysql');
 			break;
 		}
+
+		return $date;
 	}
 
 	public static function update($config = array())
