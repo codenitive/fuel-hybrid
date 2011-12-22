@@ -15,6 +15,8 @@
 
 namespace Fuel\Tasks;
 
+use Oil\Generate;
+
 /**
  * Setup commandline:
  *      php oil refine autho
@@ -54,6 +56,33 @@ class Autho {
 				static::help();
 			break;
 		}
+	}
+
+	/**
+	 * Show help menu
+	 *
+	 * @static
+	 * @access  public
+	 * @return  void
+	 */
+	public static function help()
+	{
+		echo <<<HELP
+
+Usage:
+	php oil refine autho
+
+Runtime options:
+	-h, [--help]      # Show option
+	-i, [--install]   # Install configuration file and user model/migrations script
+	-t, [--test]      # Test installation to match configuration
+
+Description:
+	The 'oil refine autho' command can be used in several ways to facilitate quick development, help with
+	user database generation and installation
+
+HELP;
+
 	}
 
 	/**
@@ -97,33 +126,6 @@ class Autho {
 		{
 			\Cli::write('Your application is correctly configured', 'green');
 		}
-	}
-
-	/**
-	 * Show help menu
-	 *
-	 * @static
-	 * @access  public
-	 * @return  void
-	 */
-	public static function help()
-	{
-		echo <<<HELP
-
-Usage:
-	php oil refine autho
-
-Runtime options:
-	-h, [--help]      # Show option
-	-i, [--install]   # Install configuration file and user model/migrations script
-	-t, [--test]      # Test installation to match configuration
-
-Description:
-	The 'oil refine autho' command can be used in several ways to facilitate quick development, help with
-	user database generation and installation
-
-HELP;
-
 	}
 
 	/**
@@ -198,8 +200,9 @@ HELP;
 			'email:string[150]',
 		);
 
-		$auth_model = array();
-		$meta_model = array();
+		$auth_model           = array();
+		$meta_model           = array();
+		$authentication_model = array();
 
 		if ('y' === \Cli::prompt("Would you like to install `users_auth` table?", array('y', 'n')))
 		{
@@ -218,41 +221,9 @@ HELP;
 			$meta_model[] = 'user_id:int';
 		}
 
-		$user_model[] = 'status:enum[unverified,verified,banned,deleted]';
-
-		if ('y' === \Cli::prompt("Confirm Generate Model and Migration for User?", array('y', 'n')))
+		if ('y' === \Cli::prompt("Would you like to install `authentication` table?", array('y', 'n')))
 		{
-
-			\Oil\Generate::model($user_model);
-			\Oil\Generate::$create_files = array();
-
-			if (!empty($auth_model))
-			{
-				\Oil\Generate::model($auth_model);
-				\Oil\Generate::$create_files = array();
-			}
-
-			if (!empty($meta_model))
-			{
-				\Oil\Generate::model($meta_model);
-				\Oil\Generate::$create_files = array();
-			}
-
-			\Oil\Generate::model(array(
-				'role',
-				'name:string',
-				'active:tinyint[1]',
-			));
-			\Oil\Generate::$create_files = array();
-
-			\Oil\Generate::model(array(
-				'users_role',
-				'user_id:int',
-				'role_id:int',
-			));
-			\Oil\Generate::$create_files = array();
-
-			\Oil\Generate::model(array(
+			$authentication_model = array(
 				'authentication',
 				'user_id:int',
 				'provider:string[50]',
@@ -261,8 +232,42 @@ HELP;
 				'expires:int[12]:null',
 				'refresh_token:string:null',
 				'secret:string:null',
+			);
+		}
+
+		$user_model[] = 'status:enum[unverified,verified,banned,deleted]';
+
+		if ('y' === \Cli::prompt("Confirm Generate Model and Migration for User?", array('y', 'n')))
+		{
+
+			static::generate($user_model);
+
+			static::generate($auth_model);
+
+			static::generate($meta_model);
+
+			static::generate(array(
+				'role',
+				'name:string',
+				'active:tinyint[1]',
 			));
-			\Oil\Generate::$create_files = array();
+
+			static::generate(array(
+				'users_role',
+				'user_id:int',
+				'role_id:int',
+			));
+
+			static::generate($authentication_model);
+		}
+	}
+
+	protected static function generator($data)
+	{
+		if ( ! empty($data))
+		{
+			Generate::model($data);
+			Generate::$create_files = array();
 		}
 	}
 		
