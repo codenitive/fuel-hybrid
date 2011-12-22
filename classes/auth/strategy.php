@@ -89,7 +89,7 @@ abstract class Auth_Strategy
 	{
 		$this->provider = $provider;
 		
-		$this->config   = \Config::get("autho.providers.{$provider}");
+		$this->config   = \Config::get("app.providers.{$provider}", \Config::get("autho.providers.{$provider}"));
 
 		if (null === $this->config and 'normal' !== $provider)
 		{
