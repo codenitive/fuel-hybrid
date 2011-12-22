@@ -37,21 +37,21 @@ class Autho {
 	 */
 	public static function run()
 	{
-		$install = \Cli::option('i') or \Cli::option('install');
-		$help    = \Cli::option('h') or \Cli::option('help');
-		$test    = \Cli::option('t') or \Cli::option('test');
+		$install = \Cli::option('i', \Cli::option('install'));
+		$help    = \Cli::option('h', \Cli::option('help'));
+		$test    = \Cli::option('t', \Cli::option('test'));
 
 		switch (true)
 		{
-			case $install :
-				static::install();
+			case null !== $install :
+				static::install($install);
 			break;
 
-			case $test :
+			case null !== $test :
 				static::test();
 			break;
 
-			case $help :
+			case null !== $help :
 			default :
 				static::help();
 			break;
@@ -135,14 +135,34 @@ HELP;
 	 * @access  public
 	 * @return  void
 	 */
-	public static function install()
+	public static function install($install = true)
 	{
 		\Cli::write("Start Installation", "green");
 
-		static::install_config('autho');
-		static::install_config('app');
-		static::install_user();
+		if (in_array($install, array(true, 'config')))
+		{
+			static::install_config('autho');
+			static::install_config('app');
+		}
+
+		if (in_array($install, array(true, 'user')))
+		{
+			static::install_user();
+		}
+
+		if (in_array($install, array(true, 'role')))
+		{
+			static::install_role();
+		}
+
+		if (in_array($install, array(true, 'authentication')))
+		{
+			static::install_authentication();
+		}
 	}
+
+	protected static $query = array();
+
 	/**
 	 * Install configuration file
 	 *
@@ -180,7 +200,7 @@ HELP;
 	}
 
 	/**
-	 * Install user table
+	 * Install users table
 	 *
 	 * @static
 	 * @access  protected
@@ -200,9 +220,8 @@ HELP;
 			'email:string[150]',
 		);
 
-		$auth_model           = array();
-		$meta_model           = array();
-		$authentication_model = array();
+		$auth_model = array();
+		$meta_model = array();
 
 		if ('y' === \Cli::prompt("Would you like to install `users_auth` table?", array('y', 'n')))
 		{
@@ -221,9 +240,57 @@ HELP;
 			$meta_model[] = 'user_id:int';
 		}
 
-		if ('y' === \Cli::prompt("Would you like to install `authentication` table?", array('y', 'n')))
+		$user_model[] = 'status:enum[unverified,verified,banned,deleted]';
+
+		static::queue($user_model);
+
+		static::queue($auth_model);
+
+		static::queue($meta_model);
+	}
+
+	/**
+	 * Install roles related table
+	 *
+	 * @static
+	 * @access  protected
+	 * @return  void
+	 */
+	protected static function install_role()
+	{
+		if ('y' === \Cli::prompt("Would you like to install `roles` table?", array('y', 'n')))
 		{
-			$authentication_model = array(
+			static::queue(array(
+				'role',
+				'name:string',
+				'active:tinyint[1]',
+			));
+
+			static::queue(array(
+				'users_role',
+				'user_id:int',
+				'role_id:int',
+			));
+		}
+	}
+
+	/**
+	 * Install authentications table
+	 *
+	 * @static
+	 * @access  protected
+	 * @return  void
+	 */
+	protected static function install_authentication()
+	{
+		if (true === class_exists("\Model_Authentication") or true === class_exists("\Model\Authentication"))
+		{
+			throw new \FuelException("Model Authentication already exist, skipping this process");
+		}
+
+		if ('y' === \Cli::prompt("Would you like to install `authentications` table?", array('y', 'n')))
+		{
+			static::queue(array(
 				'authentication',
 				'user_id:int',
 				'provider:string[50]',
@@ -232,42 +299,46 @@ HELP;
 				'expires:int[12]:null',
 				'refresh_token:string:null',
 				'secret:string:null',
-			);
-		}
-
-		$user_model[] = 'status:enum[unverified,verified,banned,deleted]';
-
-		if ('y' === \Cli::prompt("Confirm Generate Model and Migration for User?", array('y', 'n')))
-		{
-
-			static::generate($user_model);
-
-			static::generate($auth_model);
-
-			static::generate($meta_model);
-
-			static::generate(array(
-				'role',
-				'name:string',
-				'active:tinyint[1]',
 			));
-
-			static::generate(array(
-				'users_role',
-				'user_id:int',
-				'role_id:int',
-			));
-
-			static::generate($authentication_model);
 		}
 	}
 
-	protected static function generator($data)
+	/**
+	 * Add migration script to queue
+	 *
+	 * @static
+	 * @access  protected
+	 * @param   array      $data 
+	 * @return  void
+	 */
+	protected static function queue($data)
 	{
 		if ( ! empty($data))
 		{
-			Generate::model($data);
-			Generate::$create_files = array();
+			array_push(static::$queries, $data);
+			$name = array_unshift($data);
+
+			\Cli::write("Add script for {$name}", 'green');
+		}
+	}
+
+	/**
+	 * Execute all available migration
+	 *
+	 * @static
+	 * @access  protected
+	 * @return  void
+	 */
+	protected static function execute()
+	{
+		if ('y' === \Cli::prompt("Confirm Generate Model and Migration?", array('y', 'n')))
+		{
+
+			foreach (static::$queries as $data)
+			{
+				Generate::model($data);
+				Generate::$create_files = array();
+			}
 		}
 	}
 		
