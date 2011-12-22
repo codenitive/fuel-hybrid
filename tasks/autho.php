@@ -15,6 +15,7 @@
 
 namespace Fuel\Tasks;
 
+use Oil\Exception;
 use Oil\Generate;
 
 /**
@@ -94,6 +95,7 @@ HELP;
 	 */
 	public static function test()
 	{
+		\Package::load('orm');
 		\Config::load('autho', 'autho');
 		
 		$has_error = false;
@@ -135,33 +137,44 @@ HELP;
 	 * @access  public
 	 * @return  void
 	 */
-	public static function install($install = true)
+	public static function install($install = null)
 	{
+		\Package::load('orm');
 		\Cli::write("Start Installation", "green");
 
-		if (in_array($install, array(true, 'config')))
+		if (true === $install or 'all' === $install)
+		{
+			$install = array('config', 'user', 'role', 'social');
+		}
+		else {
+			$install = array($install);
+		}
+
+		if (in_array('config', $install))
 		{
 			static::install_config('autho');
 			static::install_config('app');
 		}
 
-		if (in_array($install, array(true, 'user')))
+		if (in_array('user', $install))
 		{
 			static::install_user();
 		}
 
-		if (in_array($install, array(true, 'role')))
+		if (in_array('role', $install))
 		{
 			static::install_role();
 		}
 
-		if (in_array($install, array(true, 'authentication')))
+		if (in_array('social', $install))
 		{
-			static::install_authentication();
+			static::install_social();
 		}
+
+		static::execute();
 	}
 
-	protected static $query = array();
+	protected static $queries = array();
 
 	/**
 	 * Install configuration file
@@ -189,7 +202,7 @@ HELP;
 				}
 				catch (\File_Exception $e)
 				{
-					throw new \FuelException("APPPATH/config/{$file}.php could not be written.");
+					throw new Exception("APPPATH/config/{$file}.php could not be written.");
 				}
 			break;
 
@@ -210,7 +223,7 @@ HELP;
 	{
 		if (true === class_exists("\Model_User") or true === class_exists("\Model\User"))
 		{
-			throw new \FuelException("Model User already exist, skipping this process");
+			throw new Exception("Model User already exist, skipping this process");
 		}
 
 		$user_model = array(
@@ -258,6 +271,11 @@ HELP;
 	 */
 	protected static function install_role()
 	{
+		if (true === class_exists("\Model_Role") or true === class_exists("\Model\Role"))
+		{
+			throw new Exception("Model Role already exist, skipping this process");
+		}
+
 		if ('y' === \Cli::prompt("Would you like to install `roles` table?", array('y', 'n')))
 		{
 			static::queue(array(
@@ -281,11 +299,11 @@ HELP;
 	 * @access  protected
 	 * @return  void
 	 */
-	protected static function install_authentication()
+	protected static function install_social()
 	{
 		if (true === class_exists("\Model_Authentication") or true === class_exists("\Model\Authentication"))
 		{
-			throw new \FuelException("Model Authentication already exist, skipping this process");
+			throw new Exception("Model Authentication already exist, skipping this process");
 		}
 
 		if ('y' === \Cli::prompt("Would you like to install `authentications` table?", array('y', 'n')))
@@ -316,7 +334,7 @@ HELP;
 		if ( ! empty($data))
 		{
 			array_push(static::$queries, $data);
-			$name = array_unshift($data);
+			$name = array_shift($data);
 
 			\Cli::write("Add script for {$name}", 'green');
 		}
@@ -331,9 +349,12 @@ HELP;
 	 */
 	protected static function execute()
 	{
-		if ('y' === \Cli::prompt("Confirm Generate Model and Migration?", array('y', 'n')))
+		if (empty(static::$queries))
 		{
-
+			\Cli::write("Nothing to generate", "red");
+		}
+		elseif ('y' === \Cli::prompt("Confirm Generate Model and Migration?", array('y', 'n')))
+		{
 			foreach (static::$queries as $data)
 			{
 				Generate::model($data);
