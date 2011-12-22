@@ -30,5 +30,39 @@ namespace Hybrid;
 
 class Registry 
 {
+	protected $instances = array();
+
+	public static function forge($name = null)
+	{
+		return static::make($name);	
+	}
+
+	public static function make($name = null)
+	{
+		
+	}
+
+	protected $data = array();
+
+	protected function __construct()
+	{
+		
+	}
+
+	public function get($key = null)
+	{
+		
+	}
+
+	public function __get($key)
+	{
+		
+	}
+
+	public function __set($key, $value)
+	{
+		
+	}
+
 
 }
