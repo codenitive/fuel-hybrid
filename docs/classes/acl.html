@@ -523,6 +523,176 @@ $acl->deny('guest', array('page', 'setting'));</pre>
 	<hr />
 
 	<div class="row">
+		<h3 id="unauthorized()">unauthorized($resource, $rest = false)</h3>
+
+		<p>
+			Unauthorized an action, this should be called from within a controller (included in all <code>Hybrid\Controller</code> classes). By default it would return <code>\HttpNotFoundException</code> or a rest response with HTTP status 401.
+		</p>
+
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$resource</kbd></th>
+							<td><em>Required</em></td>
+							<td>A string of resource name.</td>
+						</tr>
+						<tr>
+							<th><kbd>$rest</kbd></th>
+							<td><code>false</code></td>
+							<td>Boolean value to define weither it's a restful call or a normal http call.</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>void</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">$acl->unauthorized('post', false);</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+
+		<div class="alert-message block-message warning">
+			<p>Other than using the default <code>\HttpNotFoundException</code>, custom callback can be added to certain resources using <a href="#set_action()">Hybrid\Acl::set_action()</a>.
+		</div>
+
+	</div>
+
+	<hr />
+
+	<div class="row">
+		<h3 id="set_action()">set_action($resource, $action = false)</h3>
+
+		<p>
+			Add a callback action if a ACL return access to resource as unavailable.
+		</p>
+
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$resource</kbd></th>
+							<td><em>Required</em></td>
+							<td>A string or an array of resource name.</td>
+						</tr>
+						<tr>
+							<th><kbd>$action</kbd></th>
+							<td><i>Mixed</i></td>
+							<td>Either a Closure or null.</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>void</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">$redirect_to_login = function()
+{
+	return \Response::redirect('login');
+}
+
+// set to single resource
+$acl->set_action('post', $redirect_to_login);
+
+// set to multiple resources
+$acl->set_action(array(
+	'post' => $redirect_to_login,
+	'account' => $redirect_to_login,
+));</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<hr />
+
+	<div class="row">
+		<h3 id="delete_action()">delete_action($resource)</h3>
+
+		<p>
+			Remove a callback action.
+		</p>
+
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>No</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$resource</kbd></th>
+							<td><em>Required</em></td>
+							<td>A string or an array of resource name.</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>void</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">
+// delete action for a single resource
+$acl->delete_action('post');
+
+// delete action for multiple resources
+$acl->delete_action(array('post', 'account'));</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<hr />
+
+	<div class="row">
 		<h3 id="has_roles()">has_roles($check_roles)</h3>
 
 		<div class="alert-message block-message warning">

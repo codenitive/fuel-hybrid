@@ -35,7 +35,7 @@ abstract class Controller extends \Fuel\Core\Controller
 	 * @access  protected
 	 * @var     bool
 	 */
-	protected $is_rest_call = true;
+	protected $rest = true;
 
 	/**
 	 * Rest format to be used
@@ -80,23 +80,14 @@ abstract class Controller extends \Fuel\Core\Controller
 	 */
 	final protected function acl($resource, $type = null, $name = null) 
 	{
-		$status = Acl::make($name)->access_status($resource, $type);
+		$acl    = Acl::make($name);
+		$status = $acl->access_status($resource, $type);
 		
 		switch ($status) 
 		{
 			case 401 :
-				if (true === $this->is_rest_call)
-				{
-					\Lang::load('autho', 'autho');
-					$this->response(array('text' => \Lang::get('autho.no_privilege')), 401);
-					$this->response->send($this->set_content_type);
-					\Event::shutdown();
-					exit();
-				}
-				else
-				{
-					throw new \HttpNotFoundException();
-				}
+				$acl->unauthorized($resource, $this->rest);
+				exit();
 			break;
 		}
 	}
@@ -109,18 +100,13 @@ abstract class Controller extends \Fuel\Core\Controller
 	 */
 	public function before() 
 	{
-		$this->is_rest_call = Restserver::is_rest_call();
-		$this->language     = Factory::get_language();
-		$this->user         = Auth::make('user')->get();
-
-		if (true === $this->is_rest_call)
-		{
-			\Fuel::$profiling = false;
-		}
+		$this->rest     = Restserver::is_rest();
+		$this->language = Factory::get_language();
+		$this->user     = Auth::make('user')->get();
 
 		\Event::trigger('controller_before');
 
-		if (false === $this->is_rest_call)
+		if (false === $this->rest)
 		{
 			$this->prepare_template();
 		}
@@ -143,7 +129,7 @@ abstract class Controller extends \Fuel\Core\Controller
 	{
 		\Event::trigger('controller_after');
 		
-		if (false === $this->is_rest_call)
+		if (false === $this->rest)
 		{
 			$response = $this->render_template($response);
 		}
@@ -174,13 +160,13 @@ abstract class Controller extends \Fuel\Core\Controller
 		// If they call user, go to $this->post_user();
 		$controller_method = strtolower(Input::method()).'_'.$resource;
 		
-		if (method_exists($this, $controller_method) and true === $this->is_rest_call) 
+		if (method_exists($this, $controller_method) and true === $this->rest) 
 		{
 			return call_user_func(array($this, $controller_method));
 		}
 		elseif (method_exists($this, 'action_'.$resource)) 
 		{
-			if (true === $this->is_rest_call)
+			if (true === $this->rest)
 			{
 				$this->response->status = 404;
 				return;
@@ -190,7 +176,7 @@ abstract class Controller extends \Fuel\Core\Controller
 		}
 		else 
 		{
-			if (true === $this->is_rest_call)
+			if (true === $this->rest)
 			{
 				$this->response->status = 404;
 				return;
@@ -212,7 +198,7 @@ abstract class Controller extends \Fuel\Core\Controller
 	 */
 	protected function response($data = array(), $http_code = 200) 
 	{
-		if (true === $this->is_rest_call)
+		if (true === $this->rest)
 		{
 			$rest_server = Restserver::make($data, $http_code)
 				->format($this->rest_format)

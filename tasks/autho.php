@@ -15,6 +15,9 @@
 
 namespace Fuel\Tasks;
 
+use Oil\Exception;
+use Oil\Generate;
+
 /**
  * Setup commandline:
  *      php oil refine autho
@@ -35,25 +38,52 @@ class Autho {
 	 */
 	public static function run()
 	{
-		$install = \Cli::option('i') or \Cli::option('install');
-		$help    = \Cli::option('h') or \Cli::option('help');
-		$test    = \Cli::option('t') or \Cli::option('test');
+		$install = \Cli::option('i', \Cli::option('install'));
+		$help    = \Cli::option('h', \Cli::option('help'));
+		$test    = \Cli::option('t', \Cli::option('test'));
 
 		switch (true)
 		{
-			case $install :
-				static::install();
+			case null !== $install :
+				static::install($install);
 			break;
 
-			case $test :
+			case null !== $test :
 				static::test();
 			break;
 
-			case $help :
+			case null !== $help :
 			default :
 				static::help();
 			break;
 		}
+	}
+
+	/**
+	 * Show help menu
+	 *
+	 * @static
+	 * @access  public
+	 * @return  void
+	 */
+	public static function help()
+	{
+		echo <<<HELP
+
+Usage:
+	php oil refine autho
+
+Runtime options:
+	-h, [--help]      # Show option
+	-i, [--install]   # Install configuration file and user model/migrations script
+	-t, [--test]      # Test installation to match configuration
+
+Description:
+	The 'oil refine autho' command can be used in several ways to facilitate quick development, help with
+	user database generation and installation
+
+HELP;
+
 	}
 
 	/**
@@ -65,6 +95,7 @@ class Autho {
 	 */
 	public static function test()
 	{
+		\Package::load('orm');
 		\Config::load('autho', 'autho');
 		
 		$has_error = false;
@@ -100,47 +131,51 @@ class Autho {
 	}
 
 	/**
-	 * Show help menu
-	 *
-	 * @static
-	 * @access  public
-	 * @return  void
-	 */
-	public static function help()
-	{
-		echo <<<HELP
-
-Usage:
-	php oil refine autho
-
-Runtime options:
-	-h, [--help]      # Show option
-	-i, [--install]   # Install configuration file and user model/migrations script
-	-t, [--test]      # Test installation to match configuration
-
-Description:
-	The 'oil refine autho' command can be used in several ways to facilitate quick development, help with
-	user database generation and installation
-
-HELP;
-
-	}
-
-	/**
 	 * Run all installation
 	 *
 	 * @static
 	 * @access  public
 	 * @return  void
 	 */
-	public static function install()
+	public static function install($install = null)
 	{
+		\Package::load('orm');
 		\Cli::write("Start Installation", "green");
 
-		static::install_config('autho');
-		static::install_config('app');
-		static::install_user();
+		if (true === $install or 'all' === $install)
+		{
+			$install = array('config', 'user', 'role', 'social');
+		}
+		else {
+			$install = array($install);
+		}
+
+		if (in_array('config', $install))
+		{
+			static::install_config('autho');
+			static::install_config('app');
+		}
+
+		if (in_array('user', $install))
+		{
+			static::install_user();
+		}
+
+		if (in_array('role', $install))
+		{
+			static::install_role();
+		}
+
+		if (in_array('social', $install))
+		{
+			static::install_social();
+		}
+
+		static::execute();
 	}
+
+	protected static $queries = array();
+
 	/**
 	 * Install configuration file
 	 *
@@ -167,7 +202,7 @@ HELP;
 				}
 				catch (\File_Exception $e)
 				{
-					throw new \FuelException("APPPATH/config/{$file}.php could not be written.");
+					throw new Exception("APPPATH/config/{$file}.php could not be written.");
 				}
 			break;
 
@@ -178,7 +213,7 @@ HELP;
 	}
 
 	/**
-	 * Install user table
+	 * Install users table
 	 *
 	 * @static
 	 * @access  protected
@@ -188,7 +223,7 @@ HELP;
 	{
 		if (true === class_exists("\Model_User") or true === class_exists("\Model\User"))
 		{
-			throw new \FuelException("Model User already exist, skipping this process");
+			throw new Exception("Model User already exist, skipping this process");
 		}
 
 		$user_model = array(
@@ -220,49 +255,111 @@ HELP;
 
 		$user_model[] = 'status:enum[unverified,verified,banned,deleted]';
 
-		if ('y' === \Cli::prompt("Confirm Generate Model and Migration for User?", array('y', 'n')))
+		static::queue($user_model);
+
+		static::queue($auth_model);
+
+		static::queue($meta_model);
+	}
+
+	/**
+	 * Install roles related table
+	 *
+	 * @static
+	 * @access  protected
+	 * @return  void
+	 */
+	protected static function install_role()
+	{
+		if (true === class_exists("\Model_Role") or true === class_exists("\Model\Role"))
 		{
+			throw new Exception("Model Role already exist, skipping this process");
+		}
 
-			\Oil\Generate::model($user_model);
-			\Oil\Generate::$create_files = array();
-
-			if (!empty($auth_model))
-			{
-				\Oil\Generate::model($auth_model);
-				\Oil\Generate::$create_files = array();
-			}
-
-			if (!empty($meta_model))
-			{
-				\Oil\Generate::model($meta_model);
-				\Oil\Generate::$create_files = array();
-			}
-
-			\Oil\Generate::model(array(
+		if ('y' === \Cli::prompt("Would you like to install `roles` table?", array('y', 'n')))
+		{
+			static::queue(array(
 				'role',
 				'name:string',
 				'active:tinyint[1]',
 			));
-			\Oil\Generate::$create_files = array();
 
-			\Oil\Generate::model(array(
+			static::queue(array(
 				'users_role',
 				'user_id:int',
 				'role_id:int',
 			));
-			\Oil\Generate::$create_files = array();
+		}
+	}
 
-			\Oil\Generate::model(array(
+	/**
+	 * Install authentications table
+	 *
+	 * @static
+	 * @access  protected
+	 * @return  void
+	 */
+	protected static function install_social()
+	{
+		if (true === class_exists("\Model_Authentication") or true === class_exists("\Model\Authentication"))
+		{
+			throw new Exception("Model Authentication already exist, skipping this process");
+		}
+
+		if ('y' === \Cli::prompt("Would you like to install `authentications` table?", array('y', 'n')))
+		{
+			static::queue(array(
 				'authentication',
 				'user_id:int',
 				'provider:string[50]',
 				'uid:string',
-				'access_token:string',
-				'expires:int[12]',
-				'refresh_token:string',
-				'secret:string',
+				'access_token:string:null',
+				'expires:int[12]:null',
+				'refresh_token:string:null',
+				'secret:string:null',
 			));
-			\Oil\Generate::$create_files = array();
+		}
+	}
+
+	/**
+	 * Add migration script to queue
+	 *
+	 * @static
+	 * @access  protected
+	 * @param   array      $data 
+	 * @return  void
+	 */
+	protected static function queue($data)
+	{
+		if ( ! empty($data))
+		{
+			array_push(static::$queries, $data);
+			$name = array_shift($data);
+
+			\Cli::write("Add script for {$name}", 'green');
+		}
+	}
+
+	/**
+	 * Execute all available migration
+	 *
+	 * @static
+	 * @access  protected
+	 * @return  void
+	 */
+	protected static function execute()
+	{
+		if (empty(static::$queries))
+		{
+			\Cli::write("Nothing to generate", "red");
+		}
+		elseif ('y' === \Cli::prompt("Confirm Generate Model and Migration?", array('y', 'n')))
+		{
+			foreach (static::$queries as $data)
+			{
+				Generate::model($data);
+				Generate::$create_files = array();
+			}
 		}
 	}
 		

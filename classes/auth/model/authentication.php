@@ -27,28 +27,32 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Auth_Model_Authentication extends \Fuel\Core\Model_Crud
+class Auth_Model_Authentication extends \Model_Crud
 {
 	protected static $_table_name = 'authentications';
 
-	protected static function _timestamp()
-	{
-		$date = \Date::time();
+	protected static $_mysql_timestamp;
 
-		switch (\Config::get('autho.mysql_timestamp'))
-		{ 
+	protected static $_created_at;
+
+	protected static $_updated_at;
+
+	public static function _init()
+	{
+		$config = \Config::get('autho.mysql_timestamp');
+
+		switch ($config)
+		{
+			case true :
+			case false :
+				static::$_created_at      = 'created_at';
+				static::$_updated_at      = 'updated_at';
+				static::$_mysql_timestamp = $config;
+			break;
+
 			case null :
 			default :
-				$date = null;
-			break;
-
-			case false :
-				$date = $date->get_timestamp();
-			break;
-
-			case true :
-				$date = $date->format('mysql');
-			break;
+				// don't do anything
 		}
 	}
 
@@ -73,31 +77,6 @@ class Auth_Model_Authentication extends \Fuel\Core\Model_Crud
 
 
 		return $this->post_update($result);
-	}
-
-	protected function pre_save($query)
-	{
-		if (($date = static::_timestamp()) !== null)
-		{
-			$query->set(array(
-				'created_at' => $date,
-				'updated_at' => $date,
-			));		
-		}
-
-		return $query;
-	}
-
-	protected function pre_update($query)
-	{
-		if (($date = static::_timestamp()) !== null)
-		{
-			$query->set(array(
-				'updated_at' => $date,
-			));		
-		}
-
-		return $query;
 	}
 
 }

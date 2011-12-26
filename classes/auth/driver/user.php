@@ -143,6 +143,21 @@ class Auth_Driver_User extends Auth_Driver
 	 * 
 	 * Usage:
 	 * 
+	 * <code>false === \Hybrid\Auth::make('user')->check()</code>
+	 *
+	 * @access  public
+	 * @return  bool
+	 */
+	public function check()
+	{
+		return ($this->provider->data['id'] >= 1 ? true : false);
+	}
+
+	/**
+	 * Return TRUE/FALSE whether visitor is logged in to the system (planned for deprecated in 1.2.0 and remove in 1.3.0)
+	 * 
+	 * Usage:
+	 * 
 	 * <code>false === \Hybrid\Auth::make('user')->is_logged()</code>
 	 *
 	 * @access  public
@@ -150,7 +165,7 @@ class Auth_Driver_User extends Auth_Driver
 	 */
 	public function is_logged()
 	{
-		return ($this->provider->data['id'] >= 1 ? true : false);
+		return $this->check();
 	}
 
 	/**

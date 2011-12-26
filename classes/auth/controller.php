@@ -52,6 +52,7 @@ class Auth_Controller extends \Controller
 		parent::before();
 
 		// Load the configuration for this provider
+		\Config::load('app', 'app');
 		\Config::load('autho', 'autho');
 	}
 

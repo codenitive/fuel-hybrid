@@ -120,7 +120,7 @@ class Restserver
 	 * @access  public
 	 * @return  bool
 	 */
-	public static function is_rest_call()
+	public static function is_rest()
 	{
 		$pattern  = static::$pattern;
 		$resource = \Request::active()->action;
@@ -425,7 +425,7 @@ class Restserver
 
 		// Otherwise, check the HTTP_ACCEPT (if it exists and we are allowed)
 		$http_accept = Input::server('HTTP_ACCEPT');
-		if (\Config::get('rest.ignore_http_accept') === true and $http_accept)
+		if (\Config::get('rest.ignore_http_accept') !== true and $http_accept)
 		{
 
 			// Check all formats against the HTTP_ACCEPT header

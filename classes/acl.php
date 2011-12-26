@@ -13,6 +13,7 @@
 
 namespace Hybrid;
 
+
 /**
  * Hybrid 
  * 
@@ -155,6 +156,14 @@ class Acl
 	 * @var     array
 	 */
 	protected $resources = array();
+
+	/**
+	 * List of default actions
+	 * 
+	 * @access  protected
+	 * @var     array
+	 */
+	protected $actions = array();
 	 
 	/**
 	 * List of ACL map between roles, resources and types
@@ -169,7 +178,7 @@ class Acl
 	 * on available type of access.
 	 *
 	 * @access  public
-	 * @param   mixed   $resource
+	 * @param   mixed   $resource   A string of resource name
 	 * @param   string  $type       need to be any one of deny, view, create, edit, delete or all
 	 * @return  bool
 	 */
@@ -221,9 +230,9 @@ class Acl
 	 * on available type of access.
 	 *
 	 * @access  public
-	 * @param   mixed   $resource
+	 * @param   mixed   $resource   A string of resource name
 	 * @param   string  $type       need to be any one of static::$type
-	 * @return  bool
+	 * @return  int					http status
 	 * @see     self::access()
 	 */
 	public function access_status($resource, $type = 'view') 
@@ -242,9 +251,9 @@ class Acl
 	}
 
 	/**
-	 * Check if user has any of provided roles, deprecated and will be removed in v1.3.0
+	 * Check if user has any of provided roles, deprecated and will be removed in v1.2.0
 	 * 
-	 * @deprecated
+	 * @deprecated  v1.2.0
 	 * @static
 	 * @access  public
 	 * @param   mixed   $check_roles
@@ -252,14 +261,16 @@ class Acl
 	 */
 	public static function has_roles($check_roles) 
 	{
-	   return Auth::has_roles($check_roles);
+	   \Log::warning('This method is deprecated. Please use a \Hybrid\Auth::has_roles() instead.', __METHOD__);
+		
+		return Auth::has_roles($check_roles);
 	}
 
 	/**
 	 * Add new user roles to the this instance
 	 * 
 	 * @access  public
-	 * @param   mixed   $roles
+	 * @param   mixed   $roles      A string or an array of roles
 	 * @return  bool
 	 * @throws  \FuelException
 	 */
@@ -297,7 +308,7 @@ class Acl
 	 * Add new resource to this instance
 	 * 
 	 * @access  public
-	 * @param   mixed   $resources
+	 * @param   mixed   $resources      A string of resource name
 	 * @return  bool
 	 * @throws  \FuelException
 	 */
@@ -316,13 +327,20 @@ class Acl
 
 		if (is_array($resources)) 
 		{
-			foreach ($resources as $resource)
+			foreach ($resources as $resource => $action)
 			{
+				if (is_numeric($resource))
+				{
+					$resource = $action;
+					$action   = null;
+				}
+
 				$resource = trim(\Inflector::friendly_title($resource, '-', true));
 				
 				if ( ! in_array($resource, $this->resources))
 				{
 					array_push($this->resources, $resource);
+					$this->add_action(array("{$resource}" => $action));
 				}
 			}
 
@@ -333,11 +351,129 @@ class Acl
 	}
 
 	/**
+	 * Add a callback action if a ACL return access to resource as unavailable
+	 *
+	 * @access  public
+	 * @param   mixed   $resources      A string of resource name
+	 * @param   mixed   $action			A closure or null
+	 * @return  bool
+	 */
+	public function set_action($resources, $action = null)
+	{
+		if ( ! is_array($resources))
+		{
+			$resources = array("{$resources}" => $action);
+		}
+
+		if (is_array($resources))
+		{
+			foreach ($resources as $resource => $action)
+			{
+				if ( ! $action instanceof \Closure)
+				{
+					$action = null;
+				}
+
+				if (in_array($resource, $this->resources))
+				{
+					$this->actions[$resource] = $action;
+				}
+			}
+			
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Remove a callback action
+	 *
+	 * @access  public
+	 * @param   mixed     $resources    A string of resource name
+	 * @return  bool
+	 */
+	public function delete_action($resources)
+	{
+		if ( ! is_array($resources))
+		{
+			$resources = array("{$resources}");
+		}
+
+		if (is_array($resources))
+		{
+			foreach ($resources as $resource)
+			{
+				if (in_array($resource, $this->resources))
+				{
+					$this->actions[$resource] = null;
+				}
+			}
+			
+			return true;
+		}
+
+		return false;
+	}
+
+
+	/**
+	 * Unauthorized an action, this should be called from within a controller (included in all Hybrid\Controller classes).
+	 *
+	 * @access  public
+	 * @param   string   $resource    A string of resource name
+	 * @param   bool     $rest        Boolean value to define weither it's a restful call or a normal http call
+	 * @return  Closure
+	 * @throws  \FuelException
+	 */
+	public function unauthorized($resource, $rest = false)
+	{
+		\Lang::load('autho', 'autho');
+
+		if ( ! array_key_exists($resource, $this->actions))
+		{
+			throw new \FuelException(__METHOD__.": Can't fetch NULL resources.");
+		}
+
+		$set_content_type = true;
+		$action           = $this->actions[$resource];
+		$response         = \Response::forge(\Lang::get('autho.unauthorized', array(), 'Unauthorized'), 401);
+
+		// run the callback action
+		if ($action instanceof \Closure and true !== $rest)
+		{
+			$callback = $action();
+
+			if ($callback instanceof \Response)
+			{
+				$response = $callback;
+			}
+		}
+		else
+		{
+			if ($rest === true)
+			{
+				if (true === \Request::is_hmvc())
+				{
+					$set_content_type = false;
+				}
+			}
+			else 
+			{
+				throw new \HttpNotFoundException();
+			}
+		}
+
+		\Event::shutdown();
+		$response->send($set_content_type);
+	}
+
+	/**
 	 * Assign single or multiple $roles + $resources to have $type access
 	 * 
 	 * @access  public
-	 * @param   mixed   $roles
-	 * @param   mixed   $resources
+	 * @param   mixed   $roles          A string or an array of roles
+	 * @param   mixed   $resources      A string or an array of resource name
 	 * @param   string  $type
 	 * @return  bool
 	 * @throws  \FuelException
@@ -394,8 +530,8 @@ class Acl
 	 * Shorthand function to deny access for single or multiple $roles and $resouces
 	 * 
 	 * @access  public
-	 * @param   mixed   $roles
-	 * @param   mixed   $resources
+	 * @param   mixed   $roles          A string or an array of roles
+	 * @param   mixed   $resources      A string or an array of resource name
 	 * @return  bool
 	 */
 	public function deny($roles, $resources) 

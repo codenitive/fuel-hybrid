@@ -55,15 +55,13 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 	 */
 	final protected function acl($resource, $type = null, $name = null) 
 	{
-		$status = Acl::make($name)->access_status($resource, $type);
+		$acl    = Acl::make($name);
+		$status = $acl->access_status($resource, $type);
 
 		switch ($status) 
 		{
 			case 401 :
-				\Lang::load('autho', 'autho');
-				$this->response(array('text' => \Lang::get('autho.no_privilege')), 401);
-				$this->response->send($this->set_content_type);
-				\Event::shutdown();
+				$acl->unauthorized($resource, true);
 				exit();
 			break;
 		}
@@ -77,9 +75,8 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 	 */
 	public function before() 
 	{
-		$this->language   = Factory::get_language();
-		$this->user       = Auth::make('user')->get();
-		\Fuel::$profiling = false;
+		$this->language = Factory::get_language();
+		$this->user     = Auth::make('user')->get();
 
 		\Event::trigger('controller_before');
 		

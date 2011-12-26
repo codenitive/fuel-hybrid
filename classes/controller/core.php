@@ -29,56 +29,58 @@ namespace Hybrid;
 
 abstract class Controller_Core extends \Fuel\Core\Controller 
 {
-    /**
-     * Run ACL check and redirect user automatically if user doesn't have the privilege
-     * 
-     * @final
-     * @access  protected
-     * @param   mixed   $resource
-     * @param   string  $type 
-     * @param   string  $name
-     * @throws  HttpNotFoundException
-     */
-    final protected function acl($resource, $type = null, $name = null) 
-    {
-        $status = Acl::make($name)->access_status($resource, $type);
+	/**
+	 * Run ACL check and redirect user automatically if user doesn't have the privilege
+	 * 
+	 * @final
+	 * @access  protected
+	 * @param   mixed   $resource
+	 * @param   string  $type 
+	 * @param   string  $name
+	 * @throws  HttpNotFoundException
+	 */
+	final protected function acl($resource, $type = null, $name = null) 
+	{
+		$acl    = Acl::make($name);
+		$status = $acl->access_status($resource, $type);
 
-        switch ($status) 
-        {
-            case 401 :
-                throw new \HttpNotFoundException();
-            break;
-        }
-    }
+		switch ($status) 
+		{
+			case 401 :
+				$acl->unauthorized($resource, false);
+				exit();
+			break;
+		}
+	}
 
-    /**
-     * This method will be called after we route to the destinated method
-     * 
-     * @access  public
-     * @return  void
-     */
-    public function before() 
-    {
-        $this->language = Factory::get_language();
-        $this->user     = Auth::make('user')->get();
+	/**
+	 * This method will be called after we route to the destinated method
+	 * 
+	 * @access  public
+	 * @return  void
+	 */
+	public function before() 
+	{
+		$this->language = Factory::get_language();
+		$this->user     = Auth::make('user')->get();
 
-        \Event::trigger('controller_before');
+		\Event::trigger('controller_before');
 
-        return parent::before();
-    }
+		return parent::before();
+	}
 
-    /**
-     * This method will be called after we route to the destinated method
-     * 
-     * @access  public
-     * @param   mixed      $response
-     * @return  Response
-     */
-    public function after($response) 
-    {
-        \Event::trigger('controller_after');
+	/**
+	 * This method will be called after we route to the destinated method
+	 * 
+	 * @access  public
+	 * @param   mixed      $response
+	 * @return  Response
+	 */
+	public function after($response) 
+	{
+		\Event::trigger('controller_after');
 
-        return parent::after($response);
-    }
+		return parent::after($response);
+	}
 
 }
