@@ -35,20 +35,58 @@
 	</header>
 
 	<p>
-		<code>Controller_Template</code> allow template rendering using either <code>Hybrid\Template_Normal</code> and <code>Hybrid\Template_Frontend</code>.
+		<code>Hybrid\Controller_Template</code> allow template rendering using either <code>Hybrid\Template_Normal</code> and <code>Hybrid\Template_Frontend</code>.
 	</p>
 
 	<hr />
 
 	<div class="row">
-		<div class="span4">
-			<h2>Template Normal</h2>
-		</div>
+		<h3 id="response()">response($data = array(), $status = 200);</h3>
 
-		<div class="span12">
-			<p>Nothing special, except defining the path support <code>'_default_'</code> and use <code>.</code> separated.</p>
-			
-		</div>
+		<p>A unified response method to handle both standard Template and REST request.</p>
+
+		<table class="method">
+			<tbody>
+			<tr>
+				<th class="legend">Static</th>
+				<td>Yes</td>
+			</tr>
+			<tr>
+				<th>Parameters</th>
+				<td>
+					<table class="parameters">
+						<tbody><tr>
+							<th>Param</th>
+							<th>Default</th>
+							<th class="description">Description</th>
+						</tr>
+						<tr>
+							<th><kbd>$data</kbd></th>
+							<td><code>array()</code></td>
+							<td>An array of data to be parse to view</td>
+						</tr>
+						<tr>
+							<th><kbd>$status</kbd></th>
+							<td><code>200</code></td>
+							<td>An integer of HTTP status.</td>
+						</tr>
+					</tbody></table>
+				</td>
+			</tr>
+			<tr>
+				<th>Returns</th>
+				<td>void</td>
+			</tr>
+			<tr>
+				<th>Example</th>
+				<td>
+					<pre class="prettyprint lang-php">return $this->response(array(
+	'content' => \View::forge('login'),
+), 200);</pre>
+				</td>
+			</tr>
+			</tbody>
+		</table>
 	</div>
 
 	<footer>
