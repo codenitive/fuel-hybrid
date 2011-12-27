@@ -39,12 +39,14 @@ class Swiftmail
 	 * @return  Swiftmail
 	 * @throws  \FuelException
 	 */
-	public static function __callStatic($method, $config = array())
+	public static function __callStatic($method, $arguments)
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
 			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
+
+		$config = $arguments[0] ?: array();
 
 		$initconfig = \Config::load('swiftmail', 'switftmail', true);
 		

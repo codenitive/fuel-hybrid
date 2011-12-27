@@ -71,12 +71,12 @@ class Input
 	 * @access  public
 	 * @return  mixed
 	 */
-	public static function __callStatic($name, $args) 
+	public static function __callStatic($name, $arguments) 
 	{
 		// If $request is null, it's a request from \Fuel\Core\Request so use it instead
 		if (in_array(strtolower($name), array('is_ajax', 'protocol', 'real_ip', 'referrer', 'server', 'uri', 'user_agent'))) 
 		{
-			return call_user_func_array(array("Fuel\Core\Input", $name), $args);
+			return call_user_func_array(array("Fuel\Core\Input", $name), $arguments);
 		}
 		
 		// Check whether this request is from \Fuel\Core\Request or \Hybrid\Request
@@ -97,10 +97,10 @@ class Input
 
 		switch (true) 
 		{
-			case count($args) > 1 :
-				$default = $args[1];
-			case count($args) > 0 :
-				$index   = $args[0];
+			case count($arguments) > 1 :
+				$default = $arguments[1];
+			case count($arguments) > 0 :
+				$index   = $arguments[0];
 			break;
 		}
 

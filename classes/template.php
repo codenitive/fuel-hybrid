@@ -65,12 +65,14 @@ class Template
 	 * @return  Template_Driver
 	 * @throws  \FuelException
 	 */
-	public static function __callStatic($method, $name = null)
+	public static function __callStatic($method, $arguments)
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
 			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
+
+		$name = $arguments[0] ?: null;
 
 		if (null === $name)
 		{
@@ -82,7 +84,6 @@ class Template
 		$folder   = null;
 		$filename = null;
 		$type     = explode('.', strval($name));
-
 
 		if (count($type) > 1) 
 		{

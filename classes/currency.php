@@ -149,12 +149,16 @@ class Currency
 	 * @param   int     $round      automatic round the currency, defaults to 2 digits
 	 * @return  Currency
 	 */
-	public static function __callStatic($amount, $from = null, $round = 2)
+	public static function __callStatic($method, $arguments)
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
 			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
+
+		$amount = $arguments[0] ?: 0;
+		$from   = $arguments[1] ?: null;
+		$round  = $arguments[2] ?: 2;
 
 		return new static($amount, $from, $round);
 	}

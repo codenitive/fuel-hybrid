@@ -48,12 +48,14 @@ class Chart
 	 * @return  Chart_Driver 
 	 * @throws  \FuelException
 	 */
-	public static function __callStatic($method, $name = null) 
+	public static function __callStatic($method, $arguments) 
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
 			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
+
+		$name = $arguments[0] ?: null;
 
 		if (null === $name)
 		{

@@ -61,12 +61,15 @@ class Pagination
 	 * @return  Pagination
 	 * @throws  \FuelException
 	 */
-	public static function __callStatic($method, $name = null, $config = array())
+	public static function __callStatic($method, $arguments)
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
 			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
+
+		$name   = $arguments[0] ?: null;
+		$config = $arguments[1] ?: array();
 
 		if (is_array($name))
 		{

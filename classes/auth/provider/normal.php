@@ -116,7 +116,7 @@ class Auth_Provider_Normal
 	 * @return  object  Auth_Provider_Normal
 	 * @throws  \FuelException
 	 */
-	public static function __callStatic($method)
+	public static function __callStatic($method, $arguments)
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{

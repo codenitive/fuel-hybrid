@@ -113,12 +113,14 @@ abstract class Auth_Strategy
 	 * @throws  Auth_Strategy_Exception
 	 * @throws  \FuelException
 	 */
-	public static function __callStatic($method, $provider)
+	public static function __callStatic($method, $arguments)
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
 			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
+
+		$provider = $arguments[0] ?: null;
 
 		$strategy = \Config::get("autho.providers.{$provider}.strategy") ?: \Arr::get(static::$providers, $provider);
 		
