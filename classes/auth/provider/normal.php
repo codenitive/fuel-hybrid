@@ -54,7 +54,7 @@ class Auth_Provider_Normal
 	 * @access  protected
 	 * @var     array
 	 */
-	protected $optional_fields = array('status', 'full_name');
+	protected $optionals = array('status', 'full_name');
 	 
 	/**
 	 * Allow status to login based on `users`.`status`
@@ -139,7 +139,7 @@ class Auth_Provider_Normal
 		// load Auth configuration
 		$config            = \Config::get('autho.normal', array());
 		
-		$reserved_property = array('optional_fields');
+		$reserved_property = array('optionals', 'optionals');
 		
 		foreach ($config as $key => $value)
 		{
@@ -157,14 +157,20 @@ class Auth_Provider_Normal
 			\Config::set("autho.normal.{$key}", $value);
 		}
 
+		// backward compatibility
 		if ( ! isset($config['optional_fields']) or ! is_array($config['optional_fields']))
 		{
 			$config['optional_fields'] = array();
 		}
-		
-		$this->optional_fields = array_merge($config['optional_fields'], $this->optional_fields);
 
-		foreach ($this->optional_fields as $field)
+		if ( ! isset($config['optionals']) or ! is_array($config['optionals']))
+		{
+			$config['optionals'] = $config['optional_fields'];
+		}
+		
+		$this->optionals = array_merge($config['optionals'], $this->optional_fields);
+
+		foreach ($this->optionals as $field)
 		{
 			if (is_string($field) and !isset($this->items[$field]))
 			{
@@ -551,7 +557,7 @@ class Auth_Provider_Normal
 		$this->data[$email]      = $user->{$email};
 		$this->data['password']  = $user->password_token;
 		
-		foreach ($this->optional_fields as $property)
+		foreach ($this->optionals as $property)
 		{
 			if ( ! property_exists($user, $property))
 			{

@@ -18,7 +18,7 @@ return array(
 		'enabled'         => true,
 		
 		// List of user fields to be used (default to array('status', 'full_name'))
-		'optional_fields' => null,
+		'optionals'       => null,
 		
 		// Allow status to login based on `users`.`status` (default to ('verified'))
 		'allowed_status'  => null,
