@@ -38,15 +38,19 @@ class Curl
 	 * @param   array   $dataset
 	 * @return  static 
 	 */
-	public static function __callStatic($method, $arguments)
+	public static function __callStatic($method, array $arguments)
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
 			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
-		$uri     = $arguments[0] ?: '';
-		$dataset = $arguments[1] ?: array();
+		foreach (array('', array()) as $key => $default)
+		{
+			isset($arguments[$key]) or $arguments[$key] = $default;
+		}
+
+		list($uri, $dataset) = $arguments;
 
 		$segments = explode(' ', $uri);
 		$type     = 'GET';

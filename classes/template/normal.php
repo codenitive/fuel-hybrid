@@ -40,14 +40,14 @@ class Template_Normal extends Template_Driver
 	 * @return  Template_Normal
 	 * @throws  \FuelException
 	 */
-	public static function __callStatic($method, $arguments)
+	public static function __callStatic($method, array $arguments)
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
 			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
-		$name   = $arguments[0] ?: '';
+		$name   = empty($arguments) ? null : $arguments[0];
 
 		$driver = 'normal';
 		$name   = strtolower($name);

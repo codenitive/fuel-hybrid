@@ -79,7 +79,7 @@ class Auth_Driver_User extends Auth_Driver
 	 * @access  public
 	 * @return  self
 	 */
-	public static function __callStatic($method, $arguments)
+	public static function __callStatic($method, array $arguments)
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{

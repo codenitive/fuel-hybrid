@@ -78,15 +78,19 @@ class Restserver
 	 * @return  Restserver
 	 * @throws  \FuelException
 	 */
-	public static function __callStatic($method, $arguments)
+	public static function __callStatic($method, array $arguments)
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
 			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
-		$data      = $arguments[0] ?: array();
-		$http_code = $arguments[1] ?: 200;
+		foreach (array(array(), 200) as $key => $default)
+		{
+			isset($arguments[$key]) or $arguments[$key] = $default;
+		}
+
+		list($data, $http_code) = $arguments;
 		
 		return new static($data, $http_code);
 	}

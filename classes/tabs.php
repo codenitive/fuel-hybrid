@@ -59,20 +59,21 @@ class Tabs
 	 * @return  Tabs
 	 * @throws  \FuelException
 	 */
-	public static function __callStatic($method, $arguments)
+	public static function __callStatic($method, array $arguments)
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
 			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
-		$name   = $arguments[0] ?: null;
-		$config = $arguments[1] ?: array();
-
-		if (null === $name)
+		foreach (array(null, array()) as $key => $default)
 		{
-			$name = 'default';
+			isset($arguments[$key]) or $arguments[$key] = $default;
 		}
+
+		list($name, $config) = $arguments;
+
+		$name = $name ?: 'default';
 
 		if ( ! isset(static::$instances[$name]))
 		{
