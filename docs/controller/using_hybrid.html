@@ -35,12 +35,12 @@
 	</header>
 
 	<p>
-		<code>Controller_Hybrid</code> is the easier way to combine both the functionality of <code>Controller_Template</code> and <code>Controller_Rest</code> using the same controller.
+		<code>Hybrid\Controller</code> is the easier way to combine both the functionality of <code>Controller</code>, <code>Controller_Template</code> and <code>Controller_Rest</code> using the same controller.
 	</p>
 
 	<div class="alert-message block-message info">
 		<p>
-			All template feature available in <code>Controller_Template</code> is available in <code>Crontroller_Hybrid</code>.
+			All template feature available in <code>Controller_Template</code> is available in <code>Hybrid\Controller</code>.
 		</p>
 	</div>
 
@@ -50,14 +50,14 @@
 		<div class="span4">
 			<h2 id="example">Example</h2>
 
-			<p>Here's an example of <code>Controller_Hybrid</code>.</p>
+			<p>A basic <code>Hybrid\Controller</code> using <code>\Hybrid\Template_Normal</code>.</p>
 		</div>
 
 		<div class="span12">
 			
 			<pre class="prettyprint lang-php">&lt;?php
 
-class Controller_Login extends Hybrid\Controller_Hybrid
+class Controller_Login extends Hybrid\Controller
 {
 	public $template = 'normal';
 

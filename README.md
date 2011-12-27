@@ -33,4 +33,5 @@ Hybrid for FuelPHP documentation is available at <http://codenitive.github.com/f
 * [Bug and Feature Request](https://github.com/codenitive/fuel-hybrid/issues)
 * Roadmaps:
   * [Release 1.1.1](http://roadma.ps/1FS)
+  * [Release 1.1.2](http://roadma.ps/1IH)
 * IRC Discussion: join #fuel-hybrid on irc.freenode.net

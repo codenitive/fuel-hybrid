@@ -37,6 +37,10 @@
 		Controllers are classes that can be reached through the URL and take care of handling the request. A controller calls models and other classes to fetch the information. Finally, it will pass everything to a view for output. If a URL like www.yoursite.com/example/index is requested, the first segment ("example") will be the controller that is called and the second segment ("index") will be the method of that controller that is called.
 	</p>
 
+	<p>
+		
+	</p>
+
 	<hr />
 	<div class="row">
 		<div class="span4">
@@ -50,6 +54,8 @@
 
 class Controller_Welcome extends \Hybrid\Controller 
 {
+	public $template = null; // not to use template
+
 	public function before()
 	{
 		parent::before();
@@ -61,7 +67,7 @@ class Controller_Welcome extends \Hybrid\Controller
 	public function action_index()
 	{
 		// redirect based on user authentication (different from ACL)
-		if ($this->user->id < 1)
+		if ($this->user->id &lt; 1)
 		{
 			return \Response::redirect('login');
 		}
@@ -77,7 +83,7 @@ class Controller_Welcome extends \Hybrid\Controller
 	<div class="row">
 		<h3 id="acl()">acl($resource, $type = null, $name = null)</h3>
 
-		<p>Validate user authorization to given resource with access level using <a href="../classes/acl.html">\Hybrid\Acl</a> class, exception <code>\HttpNotFoundException</code> or equivalent response will be given if there no authorization.</p>
+		<p>Validate user authorization to given resource with access level using <a href="../classes/acl.html">\Hybrid\Acl</a> class, All unauthorized request will be handled by <a href="../classes/acl.html#unauthorized()">Hybrid\Acl::unauthorized()</a> if there no authorization.</p>
 
 		<table class="method">
 			<tbody>
@@ -126,7 +132,7 @@ class Controller_Welcome extends \Hybrid\Controller
 		</table>
 
 		<div class="alert-message block-message info">
-			<p>This method can be called from <code>before()</code> or any of the <code>action_</code> method.</p>
+			<p>This method can be called from <code>before()</code> or any of the <code>action</code> method.</p>
 		</div>
 	</div>
 

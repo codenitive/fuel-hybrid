@@ -56,27 +56,4 @@ class Auth_Model_Authentication extends \Model_Crud
 		}
 	}
 
-	public static function update($config = array())
-	{
-		extract($config);
-
-		$query = \DB::update(static::$_table_name);
-
-		if ( ! empty($set))
-		{
-			$query->set($set);
-		}
-		
-		if ( ! empty($where))
-		{
-			$query->where($where);
-		}
-
-		$query = $this->pre_update($query);
-		$result = $query->execute(isset(static::$_connection) ? static::$_connection : null);
-
-
-		return $this->post_update($result);
-	}
-
 }
