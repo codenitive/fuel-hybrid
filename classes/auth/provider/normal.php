@@ -168,7 +168,7 @@ class Auth_Provider_Normal
 			$config['optionals'] = $config['optional_fields'];
 		}
 		
-		$this->optionals = array_merge($config['optionals'], $this->optional_fields);
+		$this->optionals = array_merge($config['optionals'], $this->optionals);
 
 		foreach ($this->optionals as $field)
 		{
