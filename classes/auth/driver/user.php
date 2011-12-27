@@ -70,23 +70,7 @@ class Auth_Driver_User extends Auth_Driver
 
 		return $this->acl;
 	}
-
-	/**
-	 * Get self instance from cache instead of initiating a new object if time 
-	 * we need to use this object
-	 *
-	 * @static
-	 * @deprecated  1.2.0
-	 * @access  public
-	 * @return  self
-	 */
-	public static function instance()
-	{
-		\Log::warning('This method is deprecated. Please use make() instead.', __METHOD__);
-		
-		return static::make();
-	}
-
+	
 	/**
 	 * Get self instance from cache instead of initiating a new object if time 
 	 * we need to use this object
@@ -95,8 +79,13 @@ class Auth_Driver_User extends Auth_Driver
 	 * @access  public
 	 * @return  self
 	 */
-	public static function make()
+	public static function __callStatic($method)
 	{
+		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
+		{
+			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+		}
+
 		return Auth::make('user');
 	}
 

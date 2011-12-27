@@ -65,62 +65,21 @@ class Acl
 	}
 
 	/**
-	 * Shortcode to self::make().
-	 *
-	 * @deprecated  1.2.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  object  Acl
-	 * @see     self::make()
-	 */
-	public static function factory($name = null)
-	{
-		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
-		
-		return static::make($name);
-	}
-	
-	/**
-	 * Shortcode to self::make().
-	 * 
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  self::make()
-	 */
-	public static function forge($name = null)
-	{
-		return static::make($name);
-	}
-
-	/**
-	 * Get cached instance, or generate new if currently not available.
-	 *
-	 * @deprecated  1.2.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  object  Acl
-	 * @see     self::make()
-	 */
-	public static function instance($name = null)
-	{
-		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
-		
-		return static::make($name);
-	}
-
-	/**
 	 * Initiate a new Acl instance.
 	 * 
 	 * @static
 	 * @access  public
 	 * @param   string  $name
 	 * @return  Acl
+	 * @throws  \FuelException
 	 */
-	public static function make($name = null)
+	public static function __callStatic($method, $name = null)
 	{
+		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
+		{
+			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+		}
+
 		if (null === $name)
 		{
 			$name = 'default';

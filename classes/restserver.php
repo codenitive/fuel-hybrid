@@ -69,47 +69,22 @@ class Restserver
 	}
 
 	/**
-	 * Shortcode to self::make().
-	 *
-	 * @deprecated  1.2.0
-	 * @static
-	 * @access  public
-	 * @param   array   $data
-	 * @param   int     $http_code
-	 * @return  self::make()
-	 */
-	public static function factory($data = array(), $http_code = 200)
-	{
-		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
-		
-		return static::make($data, $http_code);
-	}
-	
-	/**
-	 * Shortcode to self::make().
-	 * 
-	 * @static
-	 * @access  public
-	 * @param   array   $data
-	 * @param   int     $http_code
-	 * @return  self::make()
-	 */
-	public static function forge($data = array(), $http_code = 200)
-	{
-		return static::make($data, $http_code);
-	}
-
-	/**
 	 * Initiate this class as a new object
 	 * 
 	 * @static
 	 * @access  public
 	 * @param   array   $data
 	 * @param   int     $http_code
-	 * @return  Restserver 
+	 * @return  Restserver
+	 * @throws  \FuelException
 	 */
-	public static function make($data = array(), $http_code = 200)
+	public static function __callStatic($method, $data = array(), $http_code = 200)
 	{
+		if ( ! in_array($method, array('factory', 'forge', 'make')))
+		{
+			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+		}
+
 		return new static($data, $http_code);
 	}
 	

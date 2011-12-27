@@ -52,37 +52,6 @@ class Pagination
 	}
 
 	/**
-	 * Shortcode to self::make().
-	 *
-	 * @deprecated  1.2.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @param   array   $config
-	 * @return  self::make()
-	 */
-	public static function factory($name = null, $config = array())
-	{
-		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
-		
-		return static::make($name, $config);
-	}
-
-	/**
-	 * Shortcode to self::make().
-	 *
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @param   array   $config
-	 * @return  self::make()
-	 */
-	public static function forge($name = null, $config = array())
-	{
-		return static::make($name, $config);
-	}
-
-	/**
 	 * Initiate a new Pagination instance.
 	 * 
 	 * @static
@@ -90,9 +59,15 @@ class Pagination
 	 * @param   string  $name
 	 * @param   array   $config
 	 * @return  Pagination
+	 * @throws  \FuelException
 	 */
-	public static function make($name = null, $config = array())
+	public static function __callStatic($method, $name = null, $config = array())
 	{
+		if ( ! in_array($method, array('factory', 'forge', 'make')))
+		{
+			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+		}
+
 		if (is_array($name))
 		{
 			$config = $name;

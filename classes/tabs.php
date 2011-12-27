@@ -50,36 +50,6 @@ class Tabs
 	}
 
 	/**
-	 * Shortcut to self::make()
-	 * 
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @param   array   $config
-	 * @return  self::make()
-	 */
-	public static function forge($name = null, $config = array())
-	{
-		return static::make($name, $config);
-	}
-
-	/**
-	 * Get cached instance, or generate new if currently not available.
-	 *
-	 * @static
-	 * @access  public
-	 * @return  Tabs
-	 * @param   string  $name
-	 * @see     self::make()
-	 */
-	public static function instance($name)
-	{
-		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
-		
-		return static::make($name);
-	}
-
-	/**
 	 * Initiate a new Tabs instance.
 	 * 
 	 * @static
@@ -87,9 +57,15 @@ class Tabs
 	 * @param   string  $name
 	 * @param   array   $config
 	 * @return  Tabs
+	 * @throws  \FuelException
 	 */
-	public static function make($name = null, $config = array())
+	public static function __callStatic($method, $name = null, $config = array())
 	{
+		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
+		{
+			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+		}
+
 		if (null === $name)
 		{
 			$name = 'default';

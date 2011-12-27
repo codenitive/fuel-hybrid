@@ -28,38 +28,7 @@ namespace Hybrid;
 
 class Curl 
 {
-	/**
-	 * Shortcode to self::make().
-	 *
-	 * @deprecated  1.2.0
-	 * @static
-	 * @access  public
-	 * @param   string  $uri
-	 * @param   array   $dataset
-	 * @return  self::make()
-	 */
-	public static function factory($uri, $dataset = array())
-	{
-		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
-		
-		return static::make($uri, $dataset);
-	}
-
-	/**
-	 * Initiate this class as a new object
-	 * 
-	 * @static
-	 * @access  public
-	 * @param   string  $uri
-	 * @param   array   $dataset
-	 * @return  self::make() 
-	 */
-	public static function forge($uri, $dataset = array())
-	{
-		return static::make($uri, $dataset);
-	}
 	
-
 	/**
 	 * Initiate this class as a new object
 	 * 
@@ -69,8 +38,13 @@ class Curl
 	 * @param   array   $dataset
 	 * @return  static 
 	 */
-	public static function make($uri, $dataset = array())
+	public static function __callStatic($method, $uri, $dataset = array())
 	{
+		if ( ! in_array($method, array('factory', 'forge', 'make')))
+		{
+			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+		}
+
 		$uri_segments = explode(' ', $uri);
 		$type         = 'GET';
 
