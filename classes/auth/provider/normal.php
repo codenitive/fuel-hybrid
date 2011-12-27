@@ -323,7 +323,7 @@ class Auth_Provider_Normal
 		}
 
 		$result = $query->where_open()
-			->where('users.'.\Arr::get(static::$aliases, 'user_name', 'user_name'), '=', $username)
+			->where('users.'.\Arr::get($this->aliases, 'user_name', 'user_name'), '=', $username)
 			->or_where('users.email', '=', $username)
 			->where_close()
 			->limit(1)
@@ -468,7 +468,7 @@ class Auth_Provider_Normal
 			$this->data['expired_at'] = $values['expired_at'] = $expired_at;
 		}
 
-		foreach (static::$aliases as $key => $alias)
+		foreach ($this->aliases as $key => $alias)
 		{
 			// no point making an alias of the same key
 			if ($key === $alias)
@@ -550,8 +550,8 @@ class Auth_Provider_Normal
 			$this->data['id'] = $user->user_id;
 		}
 		
-		$user_name = \Arr::get(static::$aliases, 'user_name', 'user_name');
-		$email     = \Arr::get(static::$aliases, 'email', 'email');
+		$user_name = \Arr::get($this->aliases, 'user_name', 'user_name');
+		$email     = \Arr::get($this->aliases, 'email', 'email');
 
 		$this->data[$user_name]  = $user->{$user_name};
 		$this->data[$email]      = $user->{$email};
