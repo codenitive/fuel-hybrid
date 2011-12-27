@@ -38,6 +38,17 @@ class Auth_Provider_Normal
 	public $data = null;
 
 	/**
+	 * Aliases
+	 *
+	 * @access  protected
+	 * @var     array
+	 */
+	protected $aliases = array(
+		'user_name' => 'user_name',
+		'email'     => 'email',
+	);
+
+	/**
 	 * List of user fields to be used
 	 *
 	 * @access  protected
@@ -327,7 +338,7 @@ class Auth_Provider_Normal
 		}
 
 		$result = $query->where_open()
-			->where('users.user_name', '=', $username)
+			->where('users.'.\Arr::get(static::$aliases, 'user_name', 'user_name'), '=', $username)
 			->or_where('users.email', '=', $username)
 			->where_close()
 			->limit(1)
@@ -471,6 +482,17 @@ class Auth_Provider_Normal
 
 			$this->data['expired_at'] = $values['expired_at'] = $expired_at;
 		}
+
+		foreach (static::$aliases as $key => $alias)
+		{
+			// no point making an alias of the same key
+			if ($key === $alias)
+			{
+				continue;
+			}
+
+			$this->data[$alias] = $this->data[$key];
+		}
 		
 		\Cookie::delete('_users');
 		\Cookie::set('_users', \Crypt::encode(serialize((object) $values)), $values['expired_at']);
@@ -543,8 +565,11 @@ class Auth_Provider_Normal
 			$this->data['id'] = $user->user_id;
 		}
 		
-		$this->data['user_name'] = $user->user_name;
-		$this->data['email']     = $user->email;
+		$user_name = \Arr::get(static::$aliases, 'user_name', 'user_name');
+		$email     = \Arr::get(static::$aliases, 'email', 'email');
+
+		$this->data[$user_name]  = $user->{$user_name};
+		$this->data[$email]      = $user->{$email};
 		$this->data['password']  = $user->password_token;
 		
 		foreach ($this->optional_fields as $property)
