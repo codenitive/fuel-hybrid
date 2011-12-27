@@ -340,7 +340,7 @@ class Acl
 				if ( ! in_array($resource, $this->resources))
 				{
 					array_push($this->resources, $resource);
-					$this->add_action(array("{$resource}" => $action));
+					$this->set_action(array("{$resource}" => $action));
 				}
 			}
 
