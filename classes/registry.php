@@ -39,7 +39,7 @@ class Registry
 	 */
 	protected static $instances = array();
 
-	protected static function _init()
+	public static function _init()
 	{
 		\Config::load('hybrid', 'hybrid');
 	}
@@ -102,7 +102,7 @@ class Registry
 	 * @param   mixed   $default    Default value if key doesn't exist.
 	 * @return  mixed
 	 */
-	public function get($key, $default = null)
+	public function get($key = null, $default = null)
 	{
 		return \Arr::get($this->data, $key, $default);
 	}
@@ -117,7 +117,7 @@ class Registry
 	 */
 	public function set($key, $value = '')
 	{
-		\Arr::set($this->data, $key, $value);
+		\Arr::set($arr, $key, $value);
 	}
 
 	/**
@@ -127,7 +127,7 @@ class Registry
 	 * @param   string  $key        A string of key to delete.
 	 * @return  bool
 	 */
-	public function delete($key)
+	public function delete($key = null)
 	{
 		return \Arr::delete($this->data, $key);
 	}
