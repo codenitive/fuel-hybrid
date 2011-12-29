@@ -127,7 +127,7 @@ class Registry
 	 */
 	public function set($key, $value = '')
 	{
-		\Arr::set($arr, $key, $value);
+		\Arr::set($this->data, $key, $value);
 	}
 
 	/**
