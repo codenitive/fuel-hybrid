@@ -263,7 +263,7 @@ class Auth_Provider_Normal
 		{
 			$query->select(array($this->tables['auth'].'.password', 'password_token'))
 				->join($this->tables['auth'])
-				->on($this->tables['auth'].'.user_id', '=', 'users.id');
+				->on($this->tables['auth'].'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');
 		}
 		else
 		{
@@ -274,7 +274,7 @@ class Auth_Provider_Normal
 		{
 			$query->select($this->tables['meta'].'.*')
 				->join($this->tables['meta'])
-				->on($this->tables['meta'].'.user_id', '=', 'users.id');    
+				->on($this->tables['meta'].'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');    
 		}
 		
 		$result = $query->as_object()->execute();
@@ -317,7 +317,7 @@ class Auth_Provider_Normal
 		{
 			$query->select(array($this->tables['auth'].'.password', 'password_token'))
 				->join($this->tables['auth'])
-				->on($this->tables['auth'].'.user_id', '=', 'users.id');
+				->on($this->tables['auth'].'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');
 		}
 		else
 		{
@@ -328,7 +328,7 @@ class Auth_Provider_Normal
 		{
 			$query->select($this->tables['meta'].'.*')
 				->join($this->tables['meta'])
-				->on($this->tables['meta'].'.user_id', '=', 'users.id');    
+				->on($this->tables['meta'].'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');    
 		}
 
 		$result = $query->where_open()
@@ -389,14 +389,14 @@ class Auth_Provider_Normal
 		$query = \DB::select($this->tables['user'].'.*')
 			->from($this->tables['user'])
 			->join($social_table)
-			->on($social_table.'.user_id', '=', $this->tables['user'].'.id')
+			->on($social_table.'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id')
 			->where($social_table.'.uid', '=', $uid);
 
 		if (true === $this->use_auth)
 		{
 			$query->select(array($this->tables['auth'].'.password', 'password_token'))
 				->join($this->tables['auth'])
-				->on($this->tables['auth'].'.user_id', '=', $this->tables['user'].'.id');
+				->on($this->tables['auth'].'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');
 		}
 		else
 		{
@@ -407,7 +407,7 @@ class Auth_Provider_Normal
 		{
 			$query->select($this->tables['meta'].'.*')
 				->join($this->tables['meta'])
-				->on($this->tables['meta'].'.user_id', '=', $this->tables['user'].'.id');    
+				->on($this->tables['meta'].'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');    
 		}
 
 		$result = $query->limit(1)
@@ -559,7 +559,8 @@ class Auth_Provider_Normal
 		}
 		else
 		{
-			$this->data['id'] = $user->user_id;
+			$user_id_field = \Inflector::singularize($this->tables['user']).'_id';
+			$this->data['id'] = $user->{$user_id_field};
 		}
 		
 		$user_name = \Arr::get($this->aliases, 'user_name', 'user_name');
@@ -596,8 +597,8 @@ class Auth_Provider_Normal
 		$roles = \DB::select($group_table.'.id', $group_table.'.name')
 			->from($group_table)
 			->join($link_table)
-			->on($link_table.'.role_id', '=', $group_table.'.id')
-			->where($link_table.'.user_id', '=', $this->data['id'])
+			->on($link_table.'.'.\Inflector::singularize($group_table).'_id', '=', $group_table.'.id')
+			->where($link_table.'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->data['id'])
 			->as_object()
 			->execute();
 
@@ -630,7 +631,7 @@ class Auth_Provider_Normal
 		
 		$accounts = \DB::select('provider', 'uid', 'access_token', 'secret')
 			->from(\Config::get('hybrid.tables.social', 'authentications'))
-			->where('user_id', '=', $this->data['id'])
+			->where(\Inflector::singularize($this->tables['user']).'_id', '=', $this->data['id'])
 			->as_object()
 			->execute();
 

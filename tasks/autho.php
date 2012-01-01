@@ -107,13 +107,17 @@ HELP;
 			$has_error = true;
 		}
 
-		if ((true === class_exists("\Model_Users_Metum") or true === class_exists("\Model\Users_Metum")) and false === \Config::get('autho.normal.use_meta', false))
+		$class_name = \Inflector::classify(\Config::get('hybrid.tables.users.meta', 'users_meta'), true);
+
+		if ((true === class_exists("\Model_{$class_name}") or true === class_exists("\Model\{$class_name}")) and false === \Config::get('autho.normal.use_meta', false))
 		{
 			\Cli::write('Please set autho.normal.use_meta to TRUE in APPPATH/config/autho.php', 'red');
 			$has_error = true;
 		}
 
-		if ((true === class_exists("\Model_Users_Auth") or true === class_exists("\Model\Users_Auth")) and false === \Config::get('autho.normal.use_auth', false))
+		$class_name = \Inflector::classify(\Config::get('hybrid.tables.users.auth', 'users_auths'), true);
+
+		if ((true === class_exists("\Model_{$class_name}") or true === class_exists("\Model\{$class_name}")) and false === \Config::get('autho.normal.use_auth', false))
 		{
 			\Cli::write('Please set app.auth.use_auth to TRUE in APPPATH/config/autho.php', 'red');
 			$has_error = true;
@@ -245,7 +249,7 @@ HELP;
 		if ('y' === \Cli::prompt("Would you like to install `user.auth` table?", array('y', 'n')))
 		{
 			$auth_model[] = \Inflector::singularize(\Config::get('hybrid.tables.users.auth', 'users_auths'));
-			$auth_model[] = 'user_id:int';
+			$auth_model[] = \Inflector::singularize(\Config::get('hybrid.tables.users.user', 'users')).'_id:int';
 			$auth_model[] = 'password:string[50]';
 		}
 		else
@@ -256,7 +260,7 @@ HELP;
 		if ('y' === \Cli::prompt("Would you like to install `user.meta` table?", array('y', 'n')))
 		{
 			$meta_model[] = \Inflector::singularize(\Config::get('hybrid.tables.users.meta', 'users_meta'));
-			$meta_model[] = 'user_id:int';
+			$meta_model[] = \Inflector::singularize(\Config::get('hybrid.tables.users.user', 'users')).'_id:int';
 		}
 
 		$user_model[] = 'status:enum[unverified,verified,banned,deleted]';
@@ -294,8 +298,8 @@ HELP;
 
 			static::queue(array(
 				\Inflector::singularize(\Config::get('hybrid.tables.users.group', 'users_roles')),
-				'user_id:int',
-				'role_id:int',
+				\Inflector::singularize(\Config::get('hybrid.tables.users.user', 'users')).'_id:int',
+				\Inflector::singularize(\Config::get('hybrid.tables.group', 'roles')).'_id:int',
 			));
 		}
 	}
@@ -320,7 +324,7 @@ HELP;
 		{
 			static::queue(array(
 				\Inflector::singularize(\Config::get('hybrid.tables.social', 'authentications')),
-				'user_id:int',
+				\Inflector::singularize(\Config::get('hybrid.tables.users.user', 'users')).'_id:int',
 				'provider:string[50]',
 				'uid:string',
 				'access_token:string:null',
