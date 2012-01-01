@@ -38,12 +38,23 @@ class Auth_Provider_Normal
 	public $data = null;
 
 	/**
+	 * Aliases
+	 *
+	 * @access  protected
+	 * @var     array
+	 */
+	protected $aliases = array(
+		'user_name' => 'user_name',
+		'email'     => 'email',
+	);
+
+	/**
 	 * List of user fields to be used
 	 *
 	 * @access  protected
 	 * @var     array
 	 */
-	protected $optional_fields = array('status', 'full_name');
+	protected $optionals = array('status', 'full_name');
 	 
 	/**
 	 * Allow status to login based on `users`.`status`
@@ -98,41 +109,20 @@ class Auth_Provider_Normal
 	}
 
 	/**
-	 * Shortcode to self::make().
-	 *
-	 * @deprecated  1.2.0
-	 * @static
-	 * @access  public
-	 * @return  self::make()
-	 */
-	public static function factory()
-	{
-		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
-		
-		return static::make();
-	}
-
-	/**
-	 * Shortcode to self::make().
-	 *
-	 * @static
-	 * @access  public
-	 * @return  self::make()
-	 */
-	public static function forge()
-	{
-		return static::make();
-	}
-
-	/**
 	 * Initiate a new Auth_Provider_Normal instance.
 	 * 
 	 * @static
 	 * @access  public
 	 * @return  object  Auth_Provider_Normal
+	 * @throws  \FuelException
 	 */
-	public static function make()
+	public static function __callStatic($method, array $arguments)
 	{
+		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
+		{
+			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+		}
+
 		return new static();
 	}
 
@@ -149,7 +139,7 @@ class Auth_Provider_Normal
 		// load Auth configuration
 		$config            = \Config::get('autho.normal', array());
 		
-		$reserved_property = array('optional_fields');
+		$reserved_property = array('optionals', 'optionals');
 		
 		foreach ($config as $key => $value)
 		{
@@ -167,14 +157,20 @@ class Auth_Provider_Normal
 			\Config::set("autho.normal.{$key}", $value);
 		}
 
+		// backward compatibility
 		if ( ! isset($config['optional_fields']) or ! is_array($config['optional_fields']))
 		{
 			$config['optional_fields'] = array();
 		}
-		
-		$this->optional_fields = array_merge($config['optional_fields'], $this->optional_fields);
 
-		foreach ($this->optional_fields as $field)
+		if ( ! isset($config['optionals']) or ! is_array($config['optionals']))
+		{
+			$config['optionals'] = $config['optional_fields'];
+		}
+		
+		$this->optionals = array_merge($config['optionals'], $this->optionals);
+
+		foreach ($this->optionals as $field)
 		{
 			if (is_string($field) and !isset($this->items[$field]))
 			{
@@ -327,7 +323,7 @@ class Auth_Provider_Normal
 		}
 
 		$result = $query->where_open()
-			->where('users.user_name', '=', $username)
+			->where('users.'.\Arr::get($this->aliases, 'user_name', 'user_name'), '=', $username)
 			->or_where('users.email', '=', $username)
 			->where_close()
 			->limit(1)
@@ -471,6 +467,17 @@ class Auth_Provider_Normal
 
 			$this->data['expired_at'] = $values['expired_at'] = $expired_at;
 		}
+
+		foreach ($this->aliases as $key => $alias)
+		{
+			// no point making an alias of the same key
+			if ($key === $alias)
+			{
+				continue;
+			}
+
+			$this->data[$alias] = $this->data[$key];
+		}
 		
 		\Cookie::delete('_users');
 		\Cookie::set('_users', \Crypt::encode(serialize((object) $values)), $values['expired_at']);
@@ -543,11 +550,14 @@ class Auth_Provider_Normal
 			$this->data['id'] = $user->user_id;
 		}
 		
-		$this->data['user_name'] = $user->user_name;
-		$this->data['email']     = $user->email;
+		$user_name = \Arr::get($this->aliases, 'user_name', 'user_name');
+		$email     = \Arr::get($this->aliases, 'email', 'email');
+
+		$this->data[$user_name]  = $user->{$user_name};
+		$this->data[$email]      = $user->{$email};
 		$this->data['password']  = $user->password_token;
 		
-		foreach ($this->optional_fields as $property)
+		foreach ($this->optionals as $property)
 		{
 			if ( ! property_exists($user, $property))
 			{

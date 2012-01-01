@@ -57,6 +57,21 @@ abstract class Auth_Driver
 	 * 
 	 * Usage:
 	 * 
+	 * <code>false === \Hybrid\Auth::make()->check()</code>
+	 *
+	 * @access  public
+	 * @return  bool
+	 */
+	public function check()
+	{
+		return ($this->data['id'] > 0 ? true : false);
+	}
+
+	/**
+	 * Return TRUE/FALSE whether visitor is logged in to the system
+	 * 
+	 * Usage:
+	 * 
 	 * <code>false === \Hybrid\Auth::make()->is_logged()</code>
 	 *
 	 * @access  public

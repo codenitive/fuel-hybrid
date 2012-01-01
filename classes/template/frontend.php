@@ -29,38 +29,6 @@ namespace Hybrid;
 class Template_Frontend extends Template_Driver 
 {
 	/**
-	 * Shortcode to self::make().
-	 *
-	 * @deprecated  1.2.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  self::make()
-	 */
-	public static function factory($name = null)
-	{
-		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
-		
-		return static::make($name);
-	}
-
-	/**
-	 * Initiate a new template using forge
-	 *
-	 * Example:
-	 * <code>$template = \Hybrid\Template_Frontend::forge();</code>
-	 *
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  self::make()
-	 */
-	public static function forge($name = null)
-	{
-		return static::make($name);
-	}
-
-	/**
 	 * Initiate a new template using make
 	 *
 	 * Example:
@@ -70,9 +38,17 @@ class Template_Frontend extends Template_Driver
 	 * @access  public
 	 * @param   string  $name
 	 * @return  Template_Frontend
+	 * @throws  \FuelException
 	 */
-	public static function make($name = null)
+	public static function __callStatic($method, array $arguments)
 	{
+		if ( ! in_array($method, array('factory', 'forge', 'make')))
+		{
+			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+		}
+
+		$name   = empty($arguments) ? null : $arguments[0];
+
 		$driver = 'frontend';
 		$name   = strtolower($name);
 

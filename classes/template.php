@@ -57,42 +57,23 @@ class Template
 	}
 
 	/**
-	 * Shortcode to self::make().
-	 *
-	 * @deprecated  1.2.0
-	 * @static
-	 * @access  public
-	 * @param   string  $name
-	 * @return  self::make()
-	 */
-	public static function factory($name = null)
-	{
-		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
-		
-		return static::make($name);
-	}
-
-	/**
-	 * Shortcut to self::make().
-	 * 
-	 * @static
-	 * @access  public
-	 * @return  self::make()
-	 */
-	public static function forge($name = null)
-	{
-		return static::make($name);
-	}
-
-	/**
 	 * Initiate a new Template instance
 	 * 
 	 * @static
 	 * @access  public
+	 * @param   string  $name
 	 * @return  Template_Driver
+	 * @throws  \FuelException
 	 */
-	public static function make($name = null)
+	public static function __callStatic($method, array $arguments)
 	{
+		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
+		{
+			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+		}
+
+		$name = empty($arguments) ? null : $arguments[0];
+
 		if (null === $name)
 		{
 			$name = \Config::get('hybrid.template.default', self::DEFAULT_TEMPLATE);   
@@ -103,7 +84,6 @@ class Template
 		$folder   = null;
 		$filename = null;
 		$type     = explode('.', strval($name));
-
 
 		if (count($type) > 1) 
 		{

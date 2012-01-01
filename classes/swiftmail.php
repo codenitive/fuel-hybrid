@@ -31,44 +31,23 @@ Factory::import('swift/swift_required', 'vendor');
 class Swiftmail 
 {
 	/**
-	 * Shortcode to self::make().
-	 *
-	 * @deprecated  1.2.0
-	 * @static
-	 * @access  public
-	 * @param   array   $config     An array to overwrite default config from config/email.php.
-	 * @return  self::make()
-	 */
-	public static function factory($config = array())
-	{
-		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
-		
-		return static::make($config);
-	}
-
-	/**
-	 * Shortcode to self::make().
-	 *
-	 * @static
-	 * @access  public
-	 * @param   array   $config     An array to overwrite default config from config/email.php.
-	 * @return  self::make()
-	 */
-	public static function forge($config = array())
-	{
-		return static::make($config);
-	}
-
-	/**
 	 * Creates a new instance of the email driver.
 	 *
 	 * @static
 	 * @access  public
 	 * @param   array   $config     An array to overwrite default config from config/email.php.
 	 * @return  Swiftmail
+	 * @throws  \FuelException
 	 */
-	public static function make($config = array())
+	public static function __callStatic($method, array $arguments)
 	{
+		if ( ! in_array($method, array('factory', 'forge', 'make')))
+		{
+			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+		}
+
+		$config = empty($arguments) ? array() : $arguments[0];
+
 		$initconfig = \Config::load('swiftmail', 'switftmail', true);
 		
 		if (is_array($config) and is_array($initconfig))

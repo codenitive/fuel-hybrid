@@ -28,38 +28,7 @@ namespace Hybrid;
 
 class Curl 
 {
-	/**
-	 * Shortcode to self::make().
-	 *
-	 * @deprecated  1.2.0
-	 * @static
-	 * @access  public
-	 * @param   string  $uri
-	 * @param   array   $dataset
-	 * @return  self::make()
-	 */
-	public static function factory($uri, $dataset = array())
-	{
-		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
-		
-		return static::make($uri, $dataset);
-	}
-
-	/**
-	 * Initiate this class as a new object
-	 * 
-	 * @static
-	 * @access  public
-	 * @param   string  $uri
-	 * @param   array   $dataset
-	 * @return  self::make() 
-	 */
-	public static function forge($uri, $dataset = array())
-	{
-		return static::make($uri, $dataset);
-	}
 	
-
 	/**
 	 * Initiate this class as a new object
 	 * 
@@ -69,15 +38,27 @@ class Curl
 	 * @param   array   $dataset
 	 * @return  static 
 	 */
-	public static function make($uri, $dataset = array())
+	public static function __callStatic($method, array $arguments)
 	{
-		$uri_segments = explode(' ', $uri);
-		$type         = 'GET';
-
-		if (in_array(strtoupper($uri_segments[0]), array('DELETE', 'POST', 'PUT', 'GET'))) 
+		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
-			$uri  = $uri_segments[1];
-			$type = $uri_segments[0];
+			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+		}
+
+		foreach (array('', array()) as $key => $default)
+		{
+			isset($arguments[$key]) or $arguments[$key] = $default;
+		}
+
+		list($uri, $dataset) = $arguments;
+
+		$segments = explode(' ', $uri);
+		$type     = 'GET';
+
+		if (in_array(strtoupper($segments[0]), array('DELETE', 'POST', 'PUT', 'GET'))) 
+		{
+			$uri  = $segments[1];
+			$type = $segments[0];
 		}
 		else
 		{

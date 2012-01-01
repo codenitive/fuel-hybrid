@@ -138,39 +138,6 @@ class Currency
 		\Config::load('hybrid', 'hybrid');
 		static::$default = \Config::get('hybrid.currency.default', static::$default);
 	}
-	
-	/**
-	 * Shortcode to self::make().
-	 *
-	 * @deprecated  1.2.0
-	 * @static
-	 * @access  public
-	 * @param   float   $amount     amount to convert
-	 * @param   string  $from       Currency to convert from
-	 * @param   int     $round      automatic round the currency, defaults to 2 digits
-	 * @return  self::make()
-	 */
-	public static function factory($amount, $from = null, $round = 2)
-	{
-		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
-		
-		return static::make($amount, $from, $round);
-	}
-	
-	/**
-	 * Shortcode to self::make().
-	 * 
-	 * @static
-	 * @access  public
-	 * @param   float   $amount     amount to convert
-	 * @param   string  $from       Currency to convert from
-	 * @param   int     $round      automatic round the currency, defaults to 2 digits
-	 * @return  self::make()
-	 */
-	public static function forge($amount, $from = null, $round = 2)
-	{
-		return static::make($amount, $from, $round);
-	}
 
 	/**
 	 * Initiate a new Currency class
@@ -182,8 +149,20 @@ class Currency
 	 * @param   int     $round      automatic round the currency, defaults to 2 digits
 	 * @return  Currency
 	 */
-	public static function make($amount, $from = null, $round = 2)
+	public static function __callStatic($method, array $arguments)
 	{
+		if ( ! in_array($method, array('factory', 'forge', 'make')))
+		{
+			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+		}
+
+		foreach (array(0, null, 2) as $key => $default)
+		{
+			isset($arguments[$key]) or $arguments[$key] = $default;
+		}
+
+		list($amount, $from, $round) = $arguments;
+
 		return new static($amount, $from, $round);
 	}
 
@@ -354,7 +333,7 @@ class Currency
 	{
 		if ( ! strpos(strtolower($method), 'to_') === 0)
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.' does not exist, use ::to_{currency}().');
+			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist, use ::to_{currency}().');
 		}
 		
 		$currency = strtoupper(str_replace('to_', '', $method));
