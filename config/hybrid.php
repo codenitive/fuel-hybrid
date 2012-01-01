@@ -15,7 +15,7 @@
 return array(
 	// DB Table List
 	'tables'          => array(
-		'user' => array(
+		'users' => array(
 			'user'  => 'users',
 			'meta'  => 'users_meta',
 			'auth'  => 'users_auths',
