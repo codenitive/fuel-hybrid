@@ -37,6 +37,8 @@ class Auth_Provider_Normal
 {
 	public $data = null;
 
+	protected $tables = array();
+
 	/**
 	 * Aliases
 	 *
@@ -181,6 +183,11 @@ class Auth_Provider_Normal
 
 		$this->verify_user_agent = \Config::get('autho.verify_user_agent', $this->verify_user_agent);
 		$this->expiration        = \Config::get('autho.expiration', $this->expiration);
+		$this->tables            = \Config::get('hybrid.tables.users', array(
+			'user' => 'users',
+			'meta' => 'users_meta',
+			'auth' => 'users_auths',
+		));
 	}
 
 	/**
@@ -247,27 +254,27 @@ class Auth_Provider_Normal
 			$data['id'] = 0;
 		}
 
-		$query = \DB::select(\Config::get('hybrid.tables.users.user', 'users').'.*')
-			->from(\Config::get('hybrid.tables.users.user', 'users'))
-			->where(\Config::get('hybrid.tables.users.user', 'users').'.id', '=', $data['id'])
+		$query = \DB::select($this->tables['user'].'.*')
+			->from($this->tables['user'])
+			->where($this->tables['user'].'.id', '=', $data['id'])
 			->limit(1);
 		
 		if (true === $this->use_auth)
 		{
-			$query->select(array(\Config::get('hybrid.tables.users.auth', 'users_auths').'.password', 'password_token'))
-				->join(\Config::get('hybrid.tables.users.auth', 'users_auths'))
-				->on(\Config::get('hybrid.tables.users.auth', 'users_auths').'.user_id', '=', 'users.id');
+			$query->select(array($this->tables['auth'].'.password', 'password_token'))
+				->join($this->tables['auth'])
+				->on($this->tables['auth'].'.user_id', '=', 'users.id');
 		}
 		else
 		{
-			$query->select(array(\Config::get('hybrid.tables.users.user', 'users').'.password', 'password_token'));
+			$query->select(array($this->tables['user'].'.password', 'password_token'));
 		}
 		
 		if (true === $this->use_meta)
 		{
-			$query->select(\Config::get('hybrid.tables.users.meta', 'users_meta').'.*')
-				->join(\Config::get('hybrid.tables.users.meta', 'users_meta'))
-				->on(\Config::get('hybrid.tables.users.meta', 'users_meta').'.user_id', '=', 'users.id');    
+			$query->select($this->tables['meta'].'.*')
+				->join($this->tables['meta'])
+				->on($this->tables['meta'].'.user_id', '=', 'users.id');    
 		}
 		
 		$result = $query->as_object()->execute();
@@ -303,30 +310,30 @@ class Auth_Provider_Normal
 			$this->expiration = -1;
 		}
 
-		$query = \DB::select(\Config::get('hybrid.tables.users.user', 'users').'.*')
-				->from(\Config::get('hybrid.tables.users.user', 'users'));
+		$query = \DB::select($this->tables['user'].'.*')
+				->from($this->tables['user']);
 		
 		if (true === $this->use_auth)
 		{
-			$query->select(array(\Config::get('hybrid.tables.users.auth', 'users_auths').'.password', 'password_token'))
-				->join(\Config::get('hybrid.tables.users.auth', 'users_auths'))
-				->on(\Config::get('hybrid.tables.users.auth', 'users_auths').'.user_id', '=', 'users.id');
+			$query->select(array($this->tables['auth'].'.password', 'password_token'))
+				->join($this->tables['auth'])
+				->on($this->tables['auth'].'.user_id', '=', 'users.id');
 		}
 		else
 		{
-			$query->select(array(\Config::get('hybrid.tables.users.user', 'users').'.password', 'password_token'));
+			$query->select(array($this->tables['user'].'.password', 'password_token'));
 		}
 
 		if (true === $this->use_meta)
 		{
-			$query->select(\Config::get('hybrid.tables.users.meta', 'users_meta').'.*')
-				->join(\Config::get('hybrid.tables.users.meta', 'users_meta'))
-				->on(\Config::get('hybrid.tables.users.meta', 'users_meta').'.user_id', '=', 'users.id');    
+			$query->select($this->tables['meta'].'.*')
+				->join($this->tables['meta'])
+				->on($this->tables['meta'].'.user_id', '=', 'users.id');    
 		}
 
 		$result = $query->where_open()
-			->where(\Config::get('hybrid.tables.users.user', 'users').'.'.\Arr::get($this->aliases, 'user_name', 'user_name'), '=', $username)
-			->or_where(\Config::get('hybrid.tables.users.user', 'users').'.email', '=', $username)
+			->where($this->tables['user'].'.'.\Arr::get($this->aliases, 'user_name', 'user_name'), '=', $username)
+			->or_where($this->tables['user'].'.email', '=', $username)
 			->where_close()
 			->limit(1)
 			->as_object()
@@ -377,28 +384,30 @@ class Auth_Provider_Normal
 
 		$uid = $info['uid'];
 
-		$query = \DB::select(\Config::get('hybrid.tables.users.user', 'users').'.*')
-			->from(\Config::get('hybrid.tables.users.user', 'users'))
-			->join('authentications')
-			->on('authentications.user_id', '=', \Config::get('hybrid.tables.users.user', 'users').'.id')
-			->where('authentications.uid', '=', $uid);
+		$social_table = \Config::get('hybrid.tables.social', 'authentications');
+
+		$query = \DB::select($this->tables['user'].'.*')
+			->from($this->tables['user'])
+			->join($social_table)
+			->on($social_table.'.user_id', '=', $this->tables['user'].'.id')
+			->where($social_table.'.uid', '=', $uid);
 
 		if (true === $this->use_auth)
 		{
-			$query->select(array(\Config::get('hybrid.tables.users.auth', 'users_auths').'.password', 'password_token'))
-				->join(\Config::get('hybrid.tables.users.auth', 'users_auths'))
-				->on(\Config::get('hybrid.tables.users.auth', 'users_auths').'.user_id', '=', \Config::get('hybrid.tables.users.user', 'users').'.id');
+			$query->select(array($this->tables['auth'].'.password', 'password_token'))
+				->join($this->tables['auth'])
+				->on($this->tables['auth'].'.user_id', '=', $this->tables['user'].'.id');
 		}
 		else
 		{
-			$query->select(array(\Config::get('hybrid.tables.users.user', 'users').'.password', 'password_token'));
+			$query->select(array($this->tables['user'].'.password', 'password_token'));
 		}
 
 		if (true === $this->use_meta)
 		{
-			$query->select(\Config::get('hybrid.tables.users.meta', 'users_meta').'.*')
-				->join(\Config::get('hybrid.tables.users.meta', 'users_meta'))
-				->on(\Config::get('hybrid.tables.users.meta', 'users_meta').'.user_id', '=', \Config::get('hybrid.tables.users.user', 'users').'.id');    
+			$query->select($this->tables['meta'].'.*')
+				->join($this->tables['meta'])
+				->on($this->tables['meta'].'.user_id', '=', $this->tables['user'].'.id');    
 		}
 
 		$result = $query->limit(1)
@@ -579,13 +588,16 @@ class Auth_Provider_Normal
 	 */
 	protected function fetch_linked_roles()
 	{
-		$data  = array();
+		$data        = array();
 		
-		$roles = \DB::select(\Config::get('hybrid.tables.group', 'roles').'.id', \Config::get('hybrid.tables.group', 'roles').'.name')
-			->from(\Config::get('hybrid.tables.group', 'roles'))
-			->join(\Config::get('hybrid.tables.users.group', 'users_roles'))
-			->on(\Config::get('hybrid.tables.users.group', 'users_roles').'.role_id', '=', \Config::get('hybrid.tables.group', 'roles').'.id')
-			->where(\Config::get('hybrid.tables.users.group', 'users_roles').'.user_id', '=', $this->data['id'])
+		$group_table = \Config::get('hybrid.tables.group', 'roles');
+		$link_table  = \Config::get('hybrid.tables.users.group', 'users_roles');
+		
+		$roles = \DB::select($group_table.'.id', $group_table.'.name')
+			->from($group_table)
+			->join($link_table)
+			->on($link_table.'.role_id', '=', $group_table.'.id')
+			->where($link_table.'.user_id', '=', $this->data['id'])
 			->as_object()
 			->execute();
 
