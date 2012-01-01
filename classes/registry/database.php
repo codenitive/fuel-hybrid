@@ -77,7 +77,7 @@ class Registry_Database extends Registry_Driver
 
 			$value = serialize($option_value);
 
-			if ($checksum === $value)
+			if ($checksum === md5($value))
 			{
 				continue;
 			}
