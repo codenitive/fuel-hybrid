@@ -36,13 +36,16 @@ class Registry_Database extends Registry_Driver
 	 */
 	protected $storage = 'database';
 
+	protected $table_name = null;
+
 	protected $key_map = array();
 
-	public function inititate() 
+	public function initiate() 
 	{
+		$this->table_name = \Arr::get($this->config, 'table_name', $this->name);
 		
 		$registries = \DB::select('*')
-			->from($this->name)
+			->from($this->table_name)
 			->as_object()
 			->execute();
 
@@ -51,9 +54,9 @@ class Registry_Database extends Registry_Driver
 			$value = unserialize($registry->value);
 
 			$this->set($registry->name, $value);
-			$this->key_map[$option->name] = array(
-				'id'       => $option->id,
-				'checksum' => md5($option->value),
+			$this->key_map[$registry->name] = array(
+				'id'       => $registry->id,
+				'checksum' => md5($registry->value),
 			);
 		}
 	}
@@ -79,16 +82,18 @@ class Registry_Database extends Registry_Driver
 				continue;
 			}
 
-			if (true === $is_new)
+			\DB::select('name')->from($this->table_name)->where('name', '=', $option_key)->execute();
+
+			if (true === $is_new and \DB::count_last_query() < 1)
 			{
-				\DB::insert($this->name)->set(array(
+				\DB::insert($this->table_name)->set(array(
 					'name' => $option_key,
 					'value' => $value,
 				))->execute();
 			}
 			else
 			{
-				\DB::update($this->name)->set(array(
+				\DB::update($this->table_name)->set(array(
 					'value' => $value,
 				))->where('id', '=', $id)->execute(); 
 			}

@@ -36,7 +36,7 @@ class Registry_Runtime extends Registry_Driver
 	 */
 	protected $storage = 'runtime';
 
-	public function inititate() {}
+	public function initiate() {}
 
 	public function shutdown() {}
 	

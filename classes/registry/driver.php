@@ -44,15 +44,15 @@ abstract class Registry_Driver
 	 * @access  protected
 	 * @var     string  storage configuration, currently only support runtime.
 	 */
-	protected abstract $storage; = 'runtime';
+	protected abstract $storage;
 
 	/**
 	 * Construct an instance.
 	 *
-	 * @access  protected
+	 * @access  public
 	 * @param   string  $storage    set storage configuration (default to 'runtime').
 	 */
-	protected function __construct($name = 'default', $config = array()) 
+	public function __construct($name = 'default', $config = array()) 
 	{
 		$this->name   = $name;
 		$this->config = is_array($config) ? $config : array(); 
