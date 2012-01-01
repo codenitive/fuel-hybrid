@@ -26,7 +26,6 @@ namespace Hybrid;
  * it not defining how you structure your database but instead try to be as generic 
  * as possible so that we can support the most basic structure available
  * 
- * 
  * @package     Fuel
  * @subpackage  Hybrid
  * @category    Acl
