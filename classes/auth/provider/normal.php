@@ -38,6 +38,18 @@ class Auth_Provider_Normal
 	public $data = null;
 
 	/**
+	 * Table Aliases
+	 *
+	 * @access  protected
+	 * @var     array
+	 */
+	protected $tables = array(
+		'user' => 'users',
+		'meta' => 'users_meta',
+		'auth' => 'users_auths',
+	);
+
+	/**
 	 * Aliases
 	 *
 	 * @access  protected
@@ -228,6 +240,7 @@ class Auth_Provider_Normal
 	 */
 	public function access_token($data)
 	{
+		$tables              = $this->tables;
 		$this->data['_hash'] = '';
 
 		if (array_key_exists('_hash', $data) or null === $data['_hash'])
@@ -246,27 +259,27 @@ class Auth_Provider_Normal
 			$data['id'] = 0;
 		}
 
-		$query = \DB::select('users.*')
-			->from('users')
-			->where('users.id', '=', $data['id'])
+		$query = \DB::select($tables['user'].'.*')
+			->from($tables['user'])
+			->where($tables['user'].'.id', '=', $data['id'])
 			->limit(1);
 		
 		if (true === $this->use_auth)
 		{
-			$query->select(array('users_auths.password', 'password_token'))
-				->join('users_auths')
-				->on('users_auths.user_id', '=', 'users.id');
+			$query->select(array($tables['auth'].'.password', 'password_token'))
+				->join($tables['auth'])
+				->on($tables['auth'].'.user_id', '=', 'users.id');
 		}
 		else
 		{
-			$query->select(array('users.password', 'password_token'));
+			$query->select(array($tables['user'].'.password', 'password_token'));
 		}
 		
 		if (true === $this->use_meta)
 		{
-			$query->select('users_meta.*')
-				->join('users_meta')
-				->on('users_meta.user_id', '=', 'users.id');    
+			$query->select($tables['meta'].'.*')
+				->join($tables['meta'])
+				->on($tables['meta'].'.user_id', '=', 'users.id');    
 		}
 		
 		$result = $query->as_object()->execute();
@@ -293,7 +306,9 @@ class Auth_Provider_Normal
 	 */
 	public function login($username, $password, $remember_me = false)
 	{
+		$tables              = $this->tables;
 		$this->data['_hash'] = null;
+		
 		unset($this->data['expired_at']);
 
 		if ( !! $remember_me)
@@ -301,30 +316,30 @@ class Auth_Provider_Normal
 			$this->expiration = -1;
 		}
 
-		$query = \DB::select('users.*')
-				->from('users');
+		$query = \DB::select($tables['user'].'.*')
+				->from($tables['user']);
 		
 		if (true === $this->use_auth)
 		{
-			$query->select(array('users_auths.password', 'password_token'))
-				->join('users_auths')
-				->on('users_auths.user_id', '=', 'users.id');
+			$query->select(array($tables['auth'].'.password', 'password_token'))
+				->join($tables['auth'])
+				->on($tables['auth'].'.user_id', '=', 'users.id');
 		}
 		else
 		{
-			$query->select(array('users.password', 'password_token'));
+			$query->select(array($tables['user'].'.password', 'password_token'));
 		}
 
 		if (true === $this->use_meta)
 		{
-			$query->select('users_meta.*')
-				->join('users_meta')
-				->on('users_meta.user_id', '=', 'users.id');    
+			$query->select($tables['meta'].'.*')
+				->join($tables['meta'])
+				->on($tables['meta'].'.user_id', '=', 'users.id');    
 		}
 
 		$result = $query->where_open()
-			->where('users.'.\Arr::get($this->aliases, 'user_name', 'user_name'), '=', $username)
-			->or_where('users.email', '=', $username)
+			->where($tables['user'].'.'.\Arr::get($this->aliases, 'user_name', 'user_name'), '=', $username)
+			->or_where($tables['user'].'.email', '=', $username)
 			->where_close()
 			->limit(1)
 			->as_object()
@@ -362,7 +377,9 @@ class Auth_Provider_Normal
 	 */
 	public function login_token($user_data, $remember_me = false)
 	{
+		$tables              = $this->tables;
 		$this->data['_hash'] = null;
+
 		unset($this->data['expired_at']);
 
 		if ( !! $remember_me)
@@ -374,28 +391,28 @@ class Auth_Provider_Normal
 
 		$uid = $info['uid'];
 
-		$query = \DB::select('users.*')
-			->from('users')
+		$query = \DB::select($tables['user'].'.*')
+			->from($tables['user'])
 			->join('authentications')
-			->on('authentications.user_id', '=', 'users.id')
+			->on('authentications.user_id', '=', $tables['user'].'.id')
 			->where('authentications.uid', '=', $uid);
 
 		if (true === $this->use_auth)
 		{
-			$query->select(array('users_auths.password', 'password_token'))
-				->join('users_auths')
-				->on('users_auths.user_id', '=', 'users.id');
+			$query->select(array($tables['auth'].'.password', 'password_token'))
+				->join($tables['auth'])
+				->on($tables['auth'].'.user_id', '=', $tables['user'].'.id');
 		}
 		else
 		{
-			$query->select(array('users.password', 'password_token'));
+			$query->select(array($tables['user'].'.password', 'password_token'));
 		}
 
 		if (true === $this->use_meta)
 		{
-			$query->select('users_meta.*')
-				->join('users_meta')
-				->on('users_meta.user_id', '=', 'users.id');    
+			$query->select($tables['meta'].'.*')
+				->join($tables['meta'])
+				->on($tables['meta'].'.user_id', '=', $tables['user'].'.id');    
 		}
 
 		$result = $query->limit(1)
@@ -600,7 +617,6 @@ class Auth_Provider_Normal
 		}
 			
 		$this->data['roles'] = $data;
-
 		return true;
 	}
 
