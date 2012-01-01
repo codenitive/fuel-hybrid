@@ -94,6 +94,5 @@ class Registry_Database extends Registry_Driver
 			}
 		}
 	}
-	}
 
 }
