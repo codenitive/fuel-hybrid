@@ -22,12 +22,12 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Auth_Model_Authentication
+ * @category    Auth_Model_Social
  * @deprecated
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Auth_Model_Authentication extends \Model_Crud
+class Auth_Model_Social extends \Model_Crud
 {
 	protected static $_table_name = 'authentications';
 
@@ -39,7 +39,11 @@ class Auth_Model_Authentication extends \Model_Crud
 
 	public static function _init()
 	{
-		$config = \Config::get('autho.mysql_timestamp');
+		\Config::load('autho', 'autho');
+		\Config::load('hybrid', 'hybrid');
+
+		$config              = \Config::get('autho.mysql_timestamp');
+		static::$_table_name = \Config::get('hybrid.tables.social', static::$_table_name);
 
 		switch ($config)
 		{

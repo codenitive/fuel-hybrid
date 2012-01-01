@@ -329,7 +329,7 @@ class Auth
 			throw new AuthException("Missing required information: access_token");	
 		}
 
-		$auth = Auth_Model_Authentication::find(array(
+		$auth = Auth_Model_Social::find(array(
 			'where' => array(
 				array('user_id', '=', $user_id),
 				array('provider', '=', $provider)
@@ -358,7 +358,7 @@ class Auth
 				'provider' => $provider,
 			) + $values;
 
-			$auth = Auth_Model_Authentication::forge($values);
+			$auth = Auth_Model_Social::forge($values);
 		}
 
 		$auth->save();

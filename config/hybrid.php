@@ -13,6 +13,18 @@
 
 
 return array(
+	// DB Table List
+	'tables'          => array(
+		'user' => array(
+			'user'  => 'users',
+			'meta'  => 'users_meta',
+			'auth'  => 'users_auths',
+			'group' => 'users_roles',
+		),
+		'group'  => 'roles',
+		'social' => 'authentications',
+	),
+
 	// Alway profiling trigger using ?profiler=1 and disable with ?profiler=0
 	'profiling' => false,
 
