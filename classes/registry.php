@@ -39,9 +39,19 @@ class Registry
 	 */
 	protected static $instances = array();
 
+	protected static $initiated = false;
+
 	public static function _init()
 	{
+		if (true === static::$initiated)
+		{
+			return ;
+		}
+
 		\Config::load('hybrid', 'hybrid');
+		\Event::register('shutdown', "\Hybrid\Registry::shutdown");
+
+		static::$initiated = true;
 	}
 
 	/**
@@ -60,86 +70,39 @@ class Registry
 			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
-		foreach (array(null, 'runtime') as $key => $default)
+		foreach (array(null, 'runtime', array()) as $key => $default)
 		{
 			isset($arguments[$key]) or $arguments[$key] = $default;
 		}
 
-		list($name, $storage) = $arguments;
+		list($name, $storage, $config) = $arguments;
 
-		$name = empty($arguments) ? null : $arguments[0];
 		$name = $name ?: 'default';
 		
 		if ( ! isset(static::$instances[$name]))
 		{
-			static::$instances[$name] = new static($name, $storage);
+			$driver = "\Hybrid\Registry_".ucfirst($storage);
+
+			// instance has yet to be initiated
+			if (class_exists($driver))
+			{
+				static::$instances[$name] = new $driver($name, $config);
+			}
+			else
+			{
+				throw new \FuelException("Requested {$driver} does not exist.");
+			}
 		}
 
 		return static::$instances[$name];
 	}
 
-	protected $name = null;
-
-	/**
-	 * @access  protected
-	 * @var     array   collection of key-value pair of either configuration or data
-	 */
-	protected $data = array();
-
-	/**
-	 * @access  protected
-	 * @var     string  storage configuration, currently only support runtime.
-	 */
-	protected $storage = 'runtime';
-
-	/**
-	 * Construct an instance.
-	 *
-	 * @access  protected
-	 * @param   string  $storage    set storage configuration (default to 'runtime').
-	 */
-	protected function __construct($name = 'default', $storage = 'runtime') 
+	public static function shutdown()
 	{
-		$this->name    = $name;
-		$this->storage = $storage;
-	}
-
-	/**
-	 * Get value of a key
-	 *
-	 * @access  public
-	 * @param   string  $key        A string of key to search.
-	 * @param   mixed   $default    Default value if key doesn't exist.
-	 * @return  mixed
-	 */
-	public function get($key = null, $default = null)
-	{
-		return \Arr::get($this->data, $key, $default);
-	}
-
-	/**
-	 * Set a value from a key
-	 *
-	 * @access  public
-	 * @param   string  $key        A string of key to add the value.
-	 * @param   mixed   $value      The value.
-	 * @return  void
-	 */
-	public function set($key, $value = '')
-	{
-		\Arr::set($this->data, $key, $value);
-	}
-
-	/**
-	 * Delete value of a key
-	 *
-	 * @access  public
-	 * @param   string  $key        A string of key to delete.
-	 * @return  bool
-	 */
-	public function delete($key = null)
-	{
-		return \Arr::delete($this->data, $key);
+		foreach (static::$instances as $name => $class)
+		{
+			$class->shutdown();
+		}
 	}
 
 }
