@@ -21,8 +21,9 @@ return array(
 			'auth'  => 'users_auths',
 			'group' => 'users_roles',
 		),
-		'group'  => 'roles',
-		'social' => 'authentications',
+		'group'    => 'roles',
+		'registry' => 'options',
+		'social'   => 'authentications',
 	),
 
 	// Alway profiling trigger using ?profiler=1 and disable with ?profiler=0

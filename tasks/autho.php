@@ -305,7 +305,7 @@ HELP;
 	}
 
 	/**
-	 * Install authentications table
+	 * Install socials table
 	 *
 	 * @static
 	 * @access  protected

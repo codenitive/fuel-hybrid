@@ -42,7 +42,7 @@ class Registry_Database extends Registry_Driver
 
 	public function initiate() 
 	{
-		$this->table_name = \Arr::get($this->config, 'table_name', $this->name);
+		$this->table_name = \Arr::get($this->config, 'table_name', \Config::get('hybrid.tables.registry', $this->name));
 		
 		$registries = \DB::select('*')
 			->from($this->table_name)
