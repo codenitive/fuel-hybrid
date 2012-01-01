@@ -77,13 +77,19 @@ class Acl
 		{
 			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
+		
+		foreach (array(null, null) as $key => $default)
+		{
+			isset($arguments[$key]) or $arguments[$key] = $default;
+		}
 
-		$name = empty($arguments) ? null : $arguments[0];
+		list($name, $registry) = $arguments;
+
 		$name = $name ?: 'default';
 
 		if ( ! isset(static::$instances[$name]))
 		{
-			static::$instances[$name] = new static();
+			static::$instances[$name] = new static($name, $registry);
 		}
 
 		return static::$instances[$name];
@@ -94,7 +100,30 @@ class Acl
 	 *
 	 * @access  protected
 	 */
-	protected function __construct() {}
+	protected function __construct($name = null, $registry = null) 
+	{
+		$this->name = $name;
+
+		if ($registry instanceof Registry_Database)
+		{
+			$this->registry = $registry;
+
+			foreach ($this->registry->get("acl_".$this->name, array()) as $role => $resources)
+			{
+				$this->add_roles($role);
+
+				foreach ($resources as $name => $type)
+				{
+					$this->add_resources($name);
+
+					$this->allow($role, $name, $type);
+				}
+			}
+		}
+	}
+
+	protected $name = null;
+	protected $registry = null;
 
 	/**
 	 * List of roles
@@ -475,6 +504,16 @@ class Acl
 				$id = $role.'/'.$resource;
 
 				$this->acl[$id] = $type;
+
+				if ($this->registry instanceof Registry_Database)
+				{
+					$value = \Arr::merge(
+						$this->registry->get("acl_".$this->name, array()), 
+						array("{$role}" => array("{$resource}" => $type))
+					);
+					
+					$this->registry->set("acl_".$this->name, $value);
+				}
 			}
 		}
 

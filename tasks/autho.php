@@ -24,8 +24,8 @@ use Oil\Generate;
  *
  * @package  hybrid
  */
-class Autho {
-
+class Autho 
+{
 	/**
 	 * Send command with runtime option:
 	 *      php oil refine autho --install
