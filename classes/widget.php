@@ -72,7 +72,7 @@ class Widget
 
 		list($instance_name, $config) = $arguments;
 		
-		$instance_name = $instance_name ?: '.default';
+		$instance_name = $instance_name ?: 'default';
 		$instance_name = strtolower($instance_name);
 
 		if (false === strpos($instance_name, '.'))
