@@ -44,7 +44,7 @@ abstract class Registry_Driver
 	 * @access  protected
 	 * @var     string  storage configuration, currently only support runtime.
 	 */
-	protected abstract $storage;
+	protected $storage;
 
 	/**
 	 * Construct an instance.

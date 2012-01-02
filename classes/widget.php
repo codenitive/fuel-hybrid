@@ -74,6 +74,11 @@ class Widget
 		
 		$instance_name = $instance_name ?: '.default';
 		$instance_name = strtolower($instance_name);
+
+		if (false === strpos($instance_name, '.'))
+		{
+			$instance_name = '.'.$instance_name;
+		}
 		
 		list($type, $name) = explode('.', $instance_name, 2);
 
