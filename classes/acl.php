@@ -248,6 +248,8 @@ class Acl
 	 */
 	public function __call($method, $arguments)
 	{
+		$arguments = is_array($arguments) ? $arguments[0] : $arguments;
+		
 		switch ($method)
 		{
 			case 'add_resources' :
@@ -336,7 +338,7 @@ class Acl
 				}
 				else
 				{
-					throw new AclException(__METHOD__": Role {$role} already exist.");
+					throw new AclException(__METHOD__.": Role {$role} already exist.");
 				}
 			}
 
@@ -385,7 +387,7 @@ class Acl
 				}
 				else
 				{
-					throw new AclException(__METHOD__": Resource {$resource} already exist.");
+					throw new AclException(__METHOD__.": Resource {$resource} already exist.");
 				}
 			}
 
