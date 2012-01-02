@@ -22,15 +22,15 @@ namespace Hybrid;
  * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Tabs
+ * @category    Tab
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Tabs 
+class Tab 
 {
 	
 	/**
-	 * Cache Tabs instance so we can reuse it on multiple request.
+	 * Cache Tab instance so we can reuse it on multiple request.
 	 * 
 	 * @static
 	 * @access  protected
@@ -50,13 +50,13 @@ class Tabs
 	}
 
 	/**
-	 * Initiate a new Tabs instance.
+	 * Initiate a new Tab instance.
 	 * 
 	 * @static
 	 * @access  public
 	 * @param   string  $name
 	 * @param   array   $config
-	 * @return  Tabs
+	 * @return  Tab
 	 * @throws  \FuelException
 	 */
 	public static function __callStatic($method, array $arguments)
@@ -117,7 +117,7 @@ class Tabs
 	 */
 	protected function __construct($name, $config)
 	{
-		$this->config = \Config::get('hybrid.tabs');
+		$this->config = \Config::get('hybrid.tab');
 		$this->name   = $name;
 		$this->config = array_merge($config, $this->config);
 	}
@@ -201,7 +201,7 @@ class Tabs
 	}
 
 	/**
-	 * Render Tabs as a view
+	 * Render Tab as a view
 	 *
 	 * @access  public
 	 * @return  string
@@ -223,7 +223,7 @@ class Tabs
 		$title   .= $template['title_close'];
 		$content .= $template['content_close'];
 		
-		$prefix  = \Config::get('hybrid.tabs.prefix', '');
+		$prefix  = \Config::get('hybrid.tab.prefix', '');
 
 		return \Str::tr($template['wrapper_open'], array('id' => $prefix.ltrim($this->name, $prefix))).$title.$content.$template['wrapper_close'];
 	}

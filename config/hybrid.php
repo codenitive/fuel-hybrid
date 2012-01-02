@@ -76,8 +76,8 @@ return array(
 		),
 	),
 
-	// Tabs class configuration
-	'tabs' => array(
+	// Tab class configuration
+	'tab' => array(
 		'prefix'   => 'tabs_',
 		'template' => array(
 			'wrapper_open'  => '<div id=":id">',
