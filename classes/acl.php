@@ -240,35 +240,6 @@ class Acl
 	}
 
 	/**
-	 * Shorthand to some common method
-	 *
-	 * @access  public
-	 * @param   mixed
-	 * @return  mixed
-	 */
-	public function __call($method, $arguments)
-	{
-		$arguments = is_array($arguments) ? $arguments[0] : $arguments;
-		
-		switch ($method)
-		{
-			case 'add_resources' :
-			case 'add' :
-				return $this->add_resource($arguments);
-			break;
-			case 'add_roles' :
-				return $this->add_role($arguments);
-			break;
-			case 'has' :
-				return $this->has_resource($arguments[0]);
-			break;
-			default :
-				throw new \FuelException(__CLASS__."::{$method}() doesn't exist.");
-			break;
-		}
-	}
-
-	/**
 	 * Check if given role is available
 	 *
 	 * @access  public
@@ -285,6 +256,70 @@ class Acl
 		}
 
 		return false;
+	}
+
+	/**
+	 * Add new user role(s) to the this instance
+	 * 
+	 * @access  public
+	 * @param   mixed   $roles      A string or an array of roles
+	 * @return  bool
+	 * @throws  AclException
+	 */
+	public function add_roles($roles = null)
+	{
+		if (is_string($roles)) 
+		{
+			$roles = func_get_args();
+		}
+		
+		if (is_array($roles)) 
+		{
+			foreach ($roles as $role)
+			{
+				try
+				{
+					$this->add_role($role);
+				}
+				catch (AclException $e)
+				{
+					continue;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Add new user role to the this instance
+	 * 
+	 * @access  public
+	 * @param   mixed   $role       A string or an array of roles
+	 * @return  bool
+	 * @throws  AclException
+	 */
+	public function add_role($role)
+	{
+		if (null === $role) 
+		{
+			throw new AclException(__METHOD__.": Can't add NULL role.");
+		}
+
+		$role = trim(\Inflector::friendly_title($role, '-', true));
+
+		if ( ! $this->has_role($role))
+		{
+			array_push($this->roles, $role);
+
+			return true;
+		}
+		else
+		{
+			throw new AclException(__METHOD__.": Role {$role} already exist.");
+		}
 	}
 
 	/**
@@ -307,38 +342,37 @@ class Acl
 	}
 
 	/**
-	 * Add new user roles to the this instance
+	 * Add new resource(s) to this instance
 	 * 
 	 * @access  public
-	 * @param   mixed   $roles      A string or an array of roles
+	 * @param   mixed   $resources      A string of resource name
 	 * @return  bool
 	 * @throws  AclException
 	 */
-	public function add_role($roles = null)
+	public function add_resources($resources = null) 
 	{
-		if (null === $roles) 
+		if (is_string($resources)) 
 		{
-			throw new AclException(__METHOD__.": Can't add NULL roles.");
-		}
-
-		if (is_string($roles)) 
-		{
-			$roles = func_get_args();
+			$resources = func_get_args();
 		}
 		
-		if (is_array($roles)) 
+		if (is_array($resources)) 
 		{
-			foreach ($roles as $role)
+			foreach ($resources as $resource => $action)
 			{
-				$role = trim(\Inflector::friendly_title($role, '-', true));
-
-				if ( ! $this->has_role($role))
+				if (is_numeric($resource))
 				{
-					array_push($this->roles, $role);
+					$resource = $action;
+					$action   = null;
 				}
-				else
+
+				try
 				{
-					throw new AclException(__METHOD__.": Role {$role} already exist.");
+					$this->add_resource($resource, $action);
+				}
+				catch (AclException $e)
+				{
+					continue;
 				}
 			}
 
@@ -356,45 +390,26 @@ class Acl
 	 * @return  bool
 	 * @throws  AclException
 	 */
-	public function add_resource($resources = null) 
+	public function add_resource($resource, $action = null) 
 	{
-		if (null === $resources) 
+		if (null === $resource) 
 		{
 			throw new AclException(__METHOD__.": Can't add NULL resources.");
 		}
 
-		if ( ! is_array($resources)) 
+		$resource = trim(\Inflector::friendly_title($resource, '-', true));
+		
+		if ( ! $this->has_resource($resource))
 		{
-			$resources = func_get_args();
-		}
-
-		if (is_array($resources)) 
-		{
-			foreach ($resources as $resource => $action)
-			{
-				if (is_numeric($resource))
-				{
-					$resource = $action;
-					$action   = null;
-				}
-
-				$resource = trim(\Inflector::friendly_title($resource, '-', true));
-				
-				if ( ! $this->has_resource($resource))
-				{
-					array_push($this->resources, $resource);
-					$this->add_action(array("{$resource}" => $action));
-				}
-				else
-				{
-					throw new AclException(__METHOD__.": Resource {$resource} already exist.");
-				}
-			}
+			array_push($this->resources, $resource);
+			$this->add_action(array("{$resource}" => $action));
 
 			return true;
 		}
-
-		return false;
+		else
+		{
+			throw new AclException(__METHOD__.": Resource {$resource} already exist.");
+		}
 	}
 
 	/**
