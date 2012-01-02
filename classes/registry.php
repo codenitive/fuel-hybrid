@@ -70,23 +70,38 @@ class Registry
 			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
-		foreach (array(null, 'runtime', array()) as $key => $default)
+		foreach (array(null, array()) as $key => $default)
 		{
 			isset($arguments[$key]) or $arguments[$key] = $default;
 		}
 
-		list($name, $storage, $config) = $arguments;
+		list($name, $config) = $arguments;
 
-		$name = $name ?: 'default';
+		list($instance_name, $config) = $arguments;
 		
-		if ( ! isset(static::$instances[$name]))
+		$instance_name = $instance_name ?: '.default';
+		$instance_name = strtolower($instance_name);
+
+		list($storage, $name) = explode('.', $instance_name, 2);
+
+		switch ($storage)
+		{
+			case 'database' :
+			case 'db' :
+				$storage = 'database';
+			break;
+		}
+
+		$instance_name = $storage.'.'.$name;
+		
+		if ( ! isset(static::$instances[$instance_name]))
 		{
 			$driver = "\Hybrid\Registry_".ucfirst($storage);
 
 			// instance has yet to be initiated
 			if (class_exists($driver))
 			{
-				static::$instances[$name] = new $driver($name, $config);
+				static::$instances[$instance_name] = new $driver($name, $config);
 			}
 			else
 			{
@@ -94,7 +109,7 @@ class Registry
 			}
 		}
 
-		return static::$instances[$name];
+		return static::$instances[$instance_name];
 	}
 
 	public static function shutdown()

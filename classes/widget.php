@@ -75,7 +75,7 @@ class Widget
 		$instance_name = $instance_name ?: '.default';
 		$instance_name = strtolower($instance_name);
 		
-		list($type, $name) = explode('.', $instance_name);
+		list($type, $name) = explode('.', $instance_name, 2);
 
 		if ( ! isset(static::$instances[$instance_name]))
 		{
