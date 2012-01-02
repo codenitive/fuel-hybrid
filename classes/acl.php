@@ -330,9 +330,13 @@ class Acl
 			{
 				$role = trim(\Inflector::friendly_title($role, '-', true));
 
-				if ( ! in_array($role, $this->roles))
+				if ( ! $this->has_role($role))
 				{
 					array_push($this->roles, $role);
+				}
+				else
+				{
+					throw new AclException(__METHOD__": Role {$role} already exist.");
 				}
 			}
 
@@ -374,10 +378,14 @@ class Acl
 
 				$resource = trim(\Inflector::friendly_title($resource, '-', true));
 				
-				if ( ! in_array($resource, $this->resources))
+				if ( ! $this->has_resource($resource))
 				{
 					array_push($this->resources, $resource);
 					$this->add_action(array("{$resource}" => $action));
+				}
+				else
+				{
+					throw new AclException(__METHOD__": Resource {$resource} already exist.");
 				}
 			}
 
