@@ -90,6 +90,9 @@ class Registry
 			case 'db' :
 				$storage = 'database';
 			break;
+			default :
+				$storage = 'runtime';
+			break;
 		}
 
 		$instance_name = $storage.'.'.$name;
