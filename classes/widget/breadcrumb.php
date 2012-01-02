@@ -51,7 +51,7 @@ class Widget_Breadcrumb extends Widget_Driver
 	{
 		if (empty($title))
 		{
-			throw new \FuelException(__METHOD__.": Unable to add empty tab.");
+			throw new \FuelException(__METHOD__.": Unable to add empty breadcrumb.");
 		}
 
 		if (empty($content) or ! strval($content))
