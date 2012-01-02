@@ -235,19 +235,41 @@ class Acl
 	}
 
 	/**
-	 * Check if user has any of provided roles, deprecated and will be removed in v1.2.0
-	 * 
-	 * @deprecated  v1.2.0
-	 * @static
+	 * Check if given role is available
+	 *
 	 * @access  public
-	 * @param   mixed   $check_roles
-	 * @return  bool 
+	 * @param   string  $role
+	 * @return  bool
 	 */
-	public static function has_roles($check_roles) 
+	public function has_role($role)
 	{
-	   \Log::warning('This method is deprecated. Please use a \Hybrid\Auth::has_roles() instead.', __METHOD__);
-		
-		return Auth::has_roles($check_roles);
+		$role = strval($role);
+
+		if ( ! empty($role) and in_array($role, $this->roles))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if given resource is available
+	 *
+	 * @access  public
+	 * @param   string  $resource
+	 * @return  bool
+	 */
+	public function has($resource)
+	{
+		$resource = strval($resource);
+
+		if ( ! empty($resource) and in_array($resource, $this->resources))
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -287,6 +309,8 @@ class Acl
 
 		return false;
 	}
+
+
 
 	/**
 	 * Add new resource to this instance
