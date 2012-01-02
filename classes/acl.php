@@ -32,6 +32,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
+class AclException extends \FuelException {}
+
 class Acl 
 {
 	/**
@@ -69,13 +71,13 @@ class Acl
 	 * @access  public
 	 * @param   string  $name
 	 * @return  Acl
-	 * @throws  \FuelException
+	 * @throws  AclException
 	 */
 	public static function __callStatic($method, array $arguments)
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new AclException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 		
 		foreach (array(null, null) as $key => $default)
@@ -114,7 +116,10 @@ class Acl
 
 				foreach ($resources as $name => $type)
 				{
-					$this->add_resources($name);
+					if ( ! $this->has_resource($name))
+					{
+						$this->add_resources($name);
+					}
 
 					$this->allow($role, $name, $type);
 				}
@@ -165,6 +170,7 @@ class Acl
 	 * @param   mixed   $resource   A string of resource name
 	 * @param   string  $type       need to be any one of deny, view, create, edit, delete or all
 	 * @return  bool
+	 * @throws  AclException
 	 */
 	public function access($resource, $type = 'view') 
 	{
@@ -172,7 +178,7 @@ class Acl
 
 		if ( ! in_array($resource, $this->resources)) 
 		{
-			throw new \FuelException(__METHOD__.": Unable to verify unknown resource {$resource}.");
+			throw new AclException(__METHOD__.": Unable to verify unknown resource {$resource}.");
 		}
 
 		$user    = Auth::make('user')->get();
@@ -221,7 +227,6 @@ class Acl
 	 */
 	public function access_status($resource, $type = 'view') 
 	{
-
 		switch ($this->access($resource, $type)) 
 		{
 			case true :
@@ -230,6 +235,33 @@ class Acl
 
 			case false :
 				return 401;
+			break;
+		}
+	}
+
+	/**
+	 * Shorthand to some common method
+	 *
+	 * @access  public
+	 * @param   mixed
+	 * @return  mixed
+	 */
+	public function __call($method, $arguments)
+	{
+		switch ($method)
+		{
+			case 'add_resources' :
+			case 'add' :
+				return $this->add_resource($arguments);
+			break;
+			case 'add_roles' :
+				return $this->add_role($arguments);
+			break;
+			case 'has' :
+				return $this->has_resource($arguments[0]);
+			break;
+			default :
+				throw new \FuelException(__CLASS__."::{$method}() doesn't exist.");
 			break;
 		}
 	}
@@ -260,7 +292,7 @@ class Acl
 	 * @param   string  $resource
 	 * @return  bool
 	 */
-	public function has($resource)
+	public function has_resource($resource)
 	{
 		$resource = strval($resource);
 
@@ -278,13 +310,13 @@ class Acl
 	 * @access  public
 	 * @param   mixed   $roles      A string or an array of roles
 	 * @return  bool
-	 * @throws  \FuelException
+	 * @throws  AclException
 	 */
-	public function add_roles($roles = null) 
+	public function add_role($roles = null)
 	{
 		if (null === $roles) 
 		{
-			throw new \FuelException(__METHOD__.": Can't add NULL roles.");
+			throw new AclException(__METHOD__.": Can't add NULL roles.");
 		}
 
 		if (is_string($roles)) 
@@ -310,23 +342,20 @@ class Acl
 		return false;
 	}
 
-
-
 	/**
 	 * Add new resource to this instance
 	 * 
 	 * @access  public
 	 * @param   mixed   $resources      A string of resource name
 	 * @return  bool
-	 * @throws  \FuelException
+	 * @throws  AclException
 	 */
-	public function add_resources($resources = null) 
+	public function add_resource($resources = null) 
 	{
 		if (null === $resources) 
 		{
-			throw new \FuelException(__METHOD__.": Can't add NULL resources.");
+			throw new AclException(__METHOD__.": Can't add NULL resources.");
 		}
-
 
 		if ( ! is_array($resources)) 
 		{
@@ -348,7 +377,7 @@ class Acl
 				if ( ! in_array($resource, $this->resources))
 				{
 					array_push($this->resources, $resource);
-					$this->set_action(array("{$resource}" => $action));
+					$this->add_action(array("{$resource}" => $action));
 				}
 			}
 
@@ -366,7 +395,7 @@ class Acl
 	 * @param   mixed   $action			A closure or null
 	 * @return  bool
 	 */
-	public function set_action($resources, $action = null)
+	public function add_action($resources, $action = null)
 	{
 		if ( ! is_array($resources))
 		{
@@ -432,7 +461,7 @@ class Acl
 	 * @param   string   $resource    A string of resource name
 	 * @param   bool     $rest        Boolean value to define weither it's a restful call or a normal http call
 	 * @return  Closure
-	 * @throws  \FuelException
+	 * @throws  AclException
 	 */
 	public function unauthorized($resource, $rest = false)
 	{
@@ -440,7 +469,7 @@ class Acl
 
 		if ( ! array_key_exists($resource, $this->actions))
 		{
-			throw new \FuelException(__METHOD__.": Can't fetch NULL resources.");
+			throw new AclException(__METHOD__.": Can't fetch NULL resources.");
 		}
 
 		$set_content_type = true;
@@ -484,13 +513,13 @@ class Acl
 	 * @param   mixed   $resources      A string or an array of resource name
 	 * @param   string  $type
 	 * @return  bool
-	 * @throws  \FuelException
+	 * @throws  AclException
 	 */
 	public function allow($roles, $resources, $type = 'view') 
 	{
 		if ( ! in_array($type, static::$types)) 
 		{
-			throw new \FuelException(__METHOD__.": Type {$type} does not exist.");
+			throw new AclException(__METHOD__.": Type {$type} does not exist.");
 		}
 
 		if ( ! is_array($roles)) 
@@ -507,22 +536,18 @@ class Acl
 		{
 			$role = \Inflector::friendly_title($role, '-', true);
 
-			if ( ! in_array($role, $this->roles)) 
+			if ( ! $this->has_role($role)) 
 			{
-				throw new \FuelException(__METHOD__.": Role {$role} does not exist.");
-
-				continue;
+				throw new AclException(__METHOD__.": Role {$role} does not exist.");
 			}
 
 			foreach ($resources as $resource) 
 			{
 				$resource = \Inflector::friendly_title($resource, '-', true);
 
-				if ( ! in_array($resource, $this->resources)) 
+				if ( ! $this->has_resource($resource)) 
 				{
-					throw new \FuelException(__METHOD__.": Resource {$resource} does not exist.");
-
-					continue;
+					throw new AclException(__METHOD__.": Resource {$resource} does not exist.");
 				}
 
 				$id = $role.'/'.$resource;
