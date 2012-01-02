@@ -65,7 +65,7 @@ class Widget_Tab extends Widget_Driver
 
 		if (true === $prepend)
 		{
-			array_shift($this->items, $data);
+			array_unshift($this->items, $data);
 		}
 		else
 		{

@@ -61,12 +61,13 @@ class Widget_Breadcrumb extends Widget_Driver
 
 		$data = (object) array(
 			'title'   => $title,
-			'content' => \Ur::create($content),
+			'slug'    => \Inflector::friendly_title($title, '-', true),
+			'content' => \Uri::create($content),
 		);
 
 		if (true === $prepend)
 		{
-			array_shift($this->items, $data);
+			array_unshift($this->items, $data);
 		}
 		else
 		{
@@ -87,12 +88,19 @@ class Widget_Breadcrumb extends Widget_Driver
 		$template = $this->config['template'];
 		$content  = '';
 
-		$active_breadcrumb = (count($this->items) - 1);
+		$last_breadcrumb = (count($this->items) - 1);
 
 		foreach ($this->items as $count => $item)
 		{
-			$active  = ($count === $active_breadcrumb ? 'class="active"' : '');
-			$content .= \Str::tr($template['item'], array('active' => $active, 'content' => $item->content, 'title' => $item->title));
+			$active  = ($count === $last_breadcrumb ? 'class="active"' : '');
+			$divider = ($count !== $last_breadcrumb ? $template['divider'] : '');
+
+			$content .= \Str::tr($template['item'], array(
+				'active' => $active, 
+				'content' => $item->content, 
+				'title' => $item->title,
+				'divider' => $divider
+			));
 		}
 		
 		$prefix  = \Config::get('hybrid.widget.breadcrumb.prefix', '');

@@ -94,10 +94,10 @@ return array(
 		'breadcrumb' => array(
 			'prefix'   => 'breadcrumb_',
 			'template' => array(
-				'wrapper_start' => '<ul id=":id" class="breadcrumb">',
-				'wrapper_end'   => '</ul>',
-				'item'          => '<li :active><a href=":content">:title</a></li>',
-				'divider'       => '<span class="divider">/</span>'
+				'wrapper_open'  => '<ul id=":id" class="breadcrumb">',
+				'wrapper_close' => '</ul>',
+				'item'          => '<li :active><a href=":content">:title</a>:divider</li>',
+				'divider'       => '<span class="divider">/</span>',
 			),
 		),
 	),

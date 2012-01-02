@@ -63,12 +63,12 @@ abstract class Widget_Driver
 	/**
 	 * Construct a new instance
 	 *
-	 * @access  protected
+	 * @access  public
 	 * @param   string  $name
 	 * @param   array   $config
 	 * @return  void
 	 */
-	protected function __construct($name, $config)
+	public function __construct($name, $config)
 	{
 		$this->config = \Config::get('hybrid.widget.'.$this->type, array());
 		$this->name   = $name;

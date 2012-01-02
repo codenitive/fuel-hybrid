@@ -77,7 +77,7 @@ class Widget
 
 		if (false === strpos($instance_name, '.'))
 		{
-			$instance_name = '.'.$instance_name;
+			$instance_name = $instance_name.'.default';
 		}
 		
 		list($type, $name) = explode('.', $instance_name, 2);
