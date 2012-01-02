@@ -20,18 +20,16 @@ namespace Hybrid;
  * affecting the standard workflow when the application doesn't actually 
  * utilize Hybrid feature.
  * 
- * Registry Class
- * 
  * @package     Fuel
  * @subpackage  Hybrid
- * @category    Registry
+ * @category    Widget
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Registry 
+class Widget 
 {
 	/**
-	 * Cache registry instance so we can reuse it
+	 * Cache Tab instance so we can reuse it on multiple request.
 	 * 
 	 * @static
 	 * @access  protected
@@ -39,28 +37,25 @@ class Registry
 	 */
 	protected static $instances = array();
 
-	protected static $initiated = false;
-
+	/**
+	 * Load the configuration before anything else.
+	 *
+	 * @static
+	 * @access  public
+	 */
 	public static function _init()
 	{
-		if (true === static::$initiated)
-		{
-			return ;
-		}
-
 		\Config::load('hybrid', 'hybrid');
-		\Event::register('shutdown', "\Hybrid\Registry::shutdown");
-
-		static::$initiated = true;
 	}
 
 	/**
-	 * Initiate a new Registry instance
+	 * Initiate a new Tab instance.
 	 * 
 	 * @static
 	 * @access  public
-	 * @param   string  $name       instance name
-	 * @return  object
+	 * @param   string  $name
+	 * @param   array   $config
+	 * @return  Tab
 	 * @throws  \FuelException
 	 */
 	public static function __callStatic($method, array $arguments)
@@ -75,39 +70,22 @@ class Registry
 			isset($arguments[$key]) or $arguments[$key] = $default;
 		}
 
-		list($name, $config) = $arguments;
-
 		list($instance_name, $config) = $arguments;
 		
-		$instance_name = $instance_name ?: 'runtime.default';
+		$instance_name = $instance_name ?: 'default';
 		$instance_name = strtolower($instance_name);
 
 		if (false === strpos($instance_name, '.'))
 		{
 			$instance_name = $instance_name.'.default';
 		}
-
-		list($storage, $name) = explode('.', $instance_name, 2);
-
-		switch ($storage)
-		{
-			case 'database' :
-			case 'db' :
-				$storage = 'database';
-			break;
-			case 'runtime' :
-			default :
-				$storage = 'runtime';
-			break;
-		}
-
-		$instance_name = $storage.'.'.$name;
 		
+		list($type, $name) = explode('.', $instance_name, 2);
+
 		if ( ! isset(static::$instances[$instance_name]))
 		{
-			$driver = "\Hybrid\Registry_".ucfirst($storage);
+			$driver = "\Hybrid\Widget_".ucfirst($type);
 
-			// instance has yet to be initiated
 			if (class_exists($driver))
 			{
 				static::$instances[$instance_name] = new $driver($name, $config);
@@ -120,13 +98,4 @@ class Registry
 
 		return static::$instances[$instance_name];
 	}
-
-	public static function shutdown()
-	{
-		foreach (static::$instances as $name => $class)
-		{
-			$class->shutdown();
-		}
-	}
-
 }

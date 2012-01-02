@@ -28,8 +28,8 @@ namespace Hybrid;
 
 class Factory 
 {
-	private static $identity = null;
-	private static $language = 'en';
+	protected static $identity = null;
+	protected static $language = 'en';
 
 	/**
 	 * Initiate application configuration

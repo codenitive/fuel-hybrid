@@ -243,9 +243,14 @@ class Auth
 	 * @return  bool
 	 * @throws  \FuelException
 	 */
-	public static function login($username, $password, $driver = 'user')
+	public static function login($username, $password, $remember_me = false, $driver = 'user')
 	{
-		return static::make($driver)->login($username, $password);
+		if ( ! is_bool($remember_me))
+		{
+			$driver      = $remember_me;
+			$remember_me = false;
+		}
+		return static::make($driver)->login($username, $password, $remember_me);
 	}
 
 	/**
@@ -329,7 +334,7 @@ class Auth
 			throw new AuthException("Missing required information: access_token");	
 		}
 
-		$auth = Auth_Model_Authentication::find(array(
+		$auth = Auth_Model_Social::find(array(
 			'where' => array(
 				array('user_id', '=', $user_id),
 				array('provider', '=', $provider)
@@ -358,7 +363,7 @@ class Auth
 				'provider' => $provider,
 			) + $values;
 
-			$auth = Auth_Model_Authentication::forge($values);
+			$auth = Auth_Model_Social::forge($values);
 		}
 
 		$auth->save();

@@ -24,8 +24,8 @@ use Oil\Generate;
  *
  * @package  hybrid
  */
-class Autho {
-
+class Autho 
+{
 	/**
 	 * Send command with runtime option:
 	 *      php oil refine autho --install
@@ -97,6 +97,7 @@ HELP;
 	{
 		\Package::load('orm');
 		\Config::load('autho', 'autho');
+		\Config::load('hybrid', 'hybrid');
 		
 		$has_error = false;
 
@@ -106,13 +107,17 @@ HELP;
 			$has_error = true;
 		}
 
-		if ((true === class_exists("\Model_Users_Metum") or true === class_exists("\Model\Users_Metum")) and false === \Config::get('autho.normal.use_meta', false))
+		$class_name = \Inflector::classify(\Config::get('hybrid.tables.users.meta', 'users_meta'), true);
+
+		if ((true === class_exists("\Model_{$class_name}") or true === class_exists("\Model\{$class_name}")) and false === \Config::get('autho.normal.use_meta', false))
 		{
 			\Cli::write('Please set autho.normal.use_meta to TRUE in APPPATH/config/autho.php', 'red');
 			$has_error = true;
 		}
 
-		if ((true === class_exists("\Model_Users_Auth") or true === class_exists("\Model\Users_Auth")) and false === \Config::get('autho.normal.use_auth', false))
+		$class_name = \Inflector::classify(\Config::get('hybrid.tables.users.auth', 'users_auths'), true);
+
+		if ((true === class_exists("\Model_{$class_name}") or true === class_exists("\Model\{$class_name}")) and false === \Config::get('autho.normal.use_auth', false))
 		{
 			\Cli::write('Please set app.auth.use_auth to TRUE in APPPATH/config/autho.php', 'red');
 			$has_error = true;
@@ -140,6 +145,9 @@ HELP;
 	public static function install($install = null)
 	{
 		\Package::load('orm');
+		\Config::load('autho', 'autho');
+		\Config::load('hybrid', 'hybrid');
+
 		\Cli::write("Start Installation", "green");
 
 		if (true === $install or 'all' === $install)
@@ -221,13 +229,15 @@ HELP;
 	 */
 	protected static function install_user()
 	{
-		if (true === class_exists("\Model_User") or true === class_exists("\Model\User"))
+		$class_name = \Inflector::classify(\Config::get('hybrid.tables.users.user', 'users'), true);
+
+		if (true === class_exists("\Model_{$class_name}") or true === class_exists("\Model\{$class_name}"))
 		{
-			throw new Exception("Model User already exist, skipping this process");
+			throw new Exception("Model {$class_name} already exist, skipping this process");
 		}
 
 		$user_model = array(
-			'user',
+			\Inflector::singularize(\Config::get('hybrid.tables.users.user', 'users')),
 			'user_name:string[100]',
 			'full_name:string[200]',
 			'email:string[150]',
@@ -236,10 +246,10 @@ HELP;
 		$auth_model = array();
 		$meta_model = array();
 
-		if ('y' === \Cli::prompt("Would you like to install `users_auth` table?", array('y', 'n')))
+		if ('y' === \Cli::prompt("Would you like to install `user.auth` table?", array('y', 'n')))
 		{
-			$auth_model[] = 'users_auth';
-			$auth_model[] = 'user_id:int';
+			$auth_model[] = \Inflector::singularize(\Config::get('hybrid.tables.users.auth', 'users_auths'));
+			$auth_model[] = \Inflector::singularize(\Config::get('hybrid.tables.users.user', 'users')).'_id:int';
 			$auth_model[] = 'password:string[50]';
 		}
 		else
@@ -247,10 +257,10 @@ HELP;
 			$user_model[] = 'password:string[50]';
 		}
 
-		if ('y' === \Cli::prompt("Would you like to install `users_meta` table?", array('y', 'n')))
+		if ('y' === \Cli::prompt("Would you like to install `user.meta` table?", array('y', 'n')))
 		{
-			$meta_model[] = 'users_metum';
-			$meta_model[] = 'user_id:int';
+			$meta_model[] = \Inflector::singularize(\Config::get('hybrid.tables.users.meta', 'users_meta'));
+			$meta_model[] = \Inflector::singularize(\Config::get('hybrid.tables.users.user', 'users')).'_id:int';
 		}
 
 		$user_model[] = 'status:enum[unverified,verified,banned,deleted]';
@@ -271,29 +281,31 @@ HELP;
 	 */
 	protected static function install_role()
 	{
-		if (true === class_exists("\Model_Role") or true === class_exists("\Model\Role"))
+		$class_name = \Inflector::classify(\Config::get('hybrid.tables.group', 'roles'), true);
+
+		if (true === class_exists("\Model_{$class_name}") or true === class_exists("\Model\{$class_name}"))
 		{
-			throw new Exception("Model Role already exist, skipping this process");
+			throw new Exception("Model {$class_name} already exist, skipping this process");
 		}
 
-		if ('y' === \Cli::prompt("Would you like to install `roles` table?", array('y', 'n')))
+		if ('y' === \Cli::prompt("Would you like to install `group` table?", array('y', 'n')))
 		{
 			static::queue(array(
-				'role',
+				\Inflector::singularize(\Config::get('hybrid.tables.group', 'roles')),
 				'name:string',
 				'active:tinyint[1]',
 			));
 
 			static::queue(array(
-				'users_role',
-				'user_id:int',
-				'role_id:int',
+				\Inflector::singularize(\Config::get('hybrid.tables.users.group', 'users_roles')),
+				\Inflector::singularize(\Config::get('hybrid.tables.users.user', 'users')).'_id:int',
+				\Inflector::singularize(\Config::get('hybrid.tables.group', 'roles')).'_id:int',
 			));
 		}
 	}
 
 	/**
-	 * Install authentications table
+	 * Install socials table
 	 *
 	 * @static
 	 * @access  protected
@@ -301,16 +313,18 @@ HELP;
 	 */
 	protected static function install_social()
 	{
-		if (true === class_exists("\Model_Authentication") or true === class_exists("\Model\Authentication"))
+		$class_name = \Inflector::classify(\Config::get('hybrid.tables.social', 'authentications'), true);
+
+		if (true === class_exists("\Model_{$class_name}") or true === class_exists("\Model\{$class_name}"))
 		{
-			throw new Exception("Model Authentication already exist, skipping this process");
+			throw new Exception("Model {$class_name} already exist, skipping this process");
 		}
 
-		if ('y' === \Cli::prompt("Would you like to install `authentications` table?", array('y', 'n')))
+		if ('y' === \Cli::prompt("Would you like to install `social` table?", array('y', 'n')))
 		{
 			static::queue(array(
-				'authentication',
-				'user_id:int',
+				\Inflector::singularize(\Config::get('hybrid.tables.social', 'authentications')),
+				\Inflector::singularize(\Config::get('hybrid.tables.users.user', 'users')).'_id:int',
 				'provider:string[50]',
 				'uid:string',
 				'access_token:string:null',

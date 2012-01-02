@@ -13,6 +13,19 @@
 
 
 return array(
+	// DB Table List
+	'tables'          => array(
+		'users' => array(
+			'user'  => 'users',
+			'meta'  => 'users_meta',
+			'auth'  => 'users_auths',
+			'group' => 'users_roles',
+		),
+		'group'    => 'roles',
+		'registry' => 'options',
+		'social'   => 'authentications',
+	),
+
 	// Alway profiling trigger using ?profiler=1 and disable with ?profiler=0
 	'profiling' => false,
 
@@ -63,18 +76,29 @@ return array(
 		),
 	),
 
-	// Tabs class configuration
-	'tabs' => array(
-		'prefix'   => 'tabs_',
-		'template' => array(
-			'wrapper_open'  => '<div id=":id">',
-			'wrapper_close' => '</div>',
-			'title_open'    => '<ul class="tabs">',
-			'title_close'   => '</ul>',
-			'title'         => '<li :active><a href="#:slug">:title</a></li>',
-			'content_open'  => '<div class="pill-content">',
-			'content_close' => '</div>',
-			'content'       => '<div id=":slug" :active>:content</div>',
+	// Tab class configuration
+	'widget' => array(
+		'tab' => array(
+			'prefix'   => 'tab_',
+			'template' => array(
+				'wrapper_open'  => '<div id=":id">',
+				'wrapper_close' => '</div>',
+				'item_open'    => '<ul class="tabs">',
+				'item_close'   => '</ul>',
+				'item'          => '<li :active><a href="#:slug">:title</a></li>',
+				'content_open'  => '<div class="pill-content">',
+				'content_close' => '</div>',
+				'content'       => '<div id=":slug" :active>:content</div>',
+			),
+		),
+		'breadcrumb' => array(
+			'prefix'   => 'breadcrumb_',
+			'template' => array(
+				'wrapper_open'  => '<ul id=":id" class="breadcrumb">',
+				'wrapper_close' => '</ul>',
+				'item'          => '<li :active><a href=":content">:title</a>:divider</li>',
+				'divider'       => '<span class="divider">/</span>',
+			),
 		),
 	),
 

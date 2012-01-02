@@ -16,22 +16,18 @@
 //Autoloader::add_core_namespace('Hybrid');
 
 Autoloader::add_classes(array (
-	'Hybrid\\Acl'              => __DIR__.'/classes/acl.php',
-	'Hybrid\\Curl'             => __DIR__.'/classes/curl.php',
-	'Hybrid\\Currency'         => __DIR__.'/classes/currency.php',
-	'Hybrid\\Cli'              => __DIR__.'/classes/cli.php',
-	'Hybrid\\Factory'          => __DIR__.'/classes/factory.php',
-	'Hybrid\\Input'            => __DIR__.'/classes/input.php',
-	'Hybrid\\Html'             => __DIR__.'/classes/html.php',
-	'Hybrid\\Pagination'       => __DIR__.'/classes/pagination.php',
-	'Hybrid\\Registry'         => __DIR__.'/classes/registry.php',
-	'Hybrid\\Request'          => __DIR__.'/classes/request.php',
-	'Hybrid\\Restserver'       => __DIR__.'/classes/restserver.php',
-	'Hybrid\\Swiftmail'        => __DIR__.'/classes/swiftmail.php',
-	'Hybrid\\Swiftmail_Result' => __DIR__.'/classes/swiftmail/result.php',
-	'Hybrid\\Tabs'             => __DIR__.'/classes/tabs.php',
-	'Hybrid\\Uri'              => __DIR__.'/classes/uri.php',
-	'Hybrid\\View'             => __DIR__.'/classes/view.php',
+	'Hybrid\\Acl'        => __DIR__.'/classes/acl.php',
+	'Hybrid\\Curl'       => __DIR__.'/classes/curl.php',
+	'Hybrid\\Currency'   => __DIR__.'/classes/currency.php',
+	'Hybrid\\Cli'        => __DIR__.'/classes/cli.php',
+	'Hybrid\\Factory'    => __DIR__.'/classes/factory.php',
+	'Hybrid\\Input'      => __DIR__.'/classes/input.php',
+	'Hybrid\\Html'       => __DIR__.'/classes/html.php',
+	'Hybrid\\Pagination' => __DIR__.'/classes/pagination.php',
+	'Hybrid\\Request'    => __DIR__.'/classes/request.php',
+	'Hybrid\\Restserver' => __DIR__.'/classes/restserver.php',
+	'Hybrid\\Uri'        => __DIR__.'/classes/uri.php',
+	'Hybrid\\View'       => __DIR__.'/classes/view.php',
 	
 	'Hybrid\\Auth'                 => __DIR__.'/classes/auth.php',
 	'Hybrid\\AuthException'        => __DIR__.'/classes/auth.php',
@@ -49,7 +45,7 @@ Autoloader::add_classes(array (
 	'Hybrid\\Auth_Strategy_OAuth2'    => __DIR__.'/classes/auth/strategy/oauth2.php',
 	'Hybrid\\Auth_Strategy_OpenId'    => __DIR__.'/classes/auth/strategy/openid.php',
 
-	'Hybrid\\Auth_Model_Authentication' => __DIR__.'/classes/auth/model/authentication.php',
+	'Hybrid\\Auth_Model_Social' => __DIR__.'/classes/auth/model/social.php',
 	
 	'Hybrid\\Chart'          => __DIR__.'/classes/chart.php',
 	'Hybrid\\Chart_Driver'   => __DIR__.'/classes/chart/driver.php',
@@ -74,10 +70,23 @@ Autoloader::add_classes(array (
 	'Hybrid\\Parser_Markdown' => __DIR__.'/classes/parser/markdown.php',
 	'Hybrid\\Parser_Textile'  => __DIR__.'/classes/parser/textile.php',
 	'Hybrid\\Parser_Bbcode'   => __DIR__.'/classes/parser/bbcode.php',
+
+	'Hybrid\\Registry'          => __DIR__.'/classes/registry.php',
+	'Hybrid\\Registry_Driver'   => __DIR__.'/classes/registry/driver.php',
+	'Hybrid\\Registry_Database' => __DIR__.'/classes/registry/database.php',
+	'Hybrid\\Registry_Runtime'  => __DIR__.'/classes/registry/runtime.php',
+	
+	'Hybrid\\Swiftmail'        => __DIR__.'/classes/swiftmail.php',
+	'Hybrid\\Swiftmail_Result' => __DIR__.'/classes/swiftmail/result.php',
 	
 	'Hybrid\\Template'          => __DIR__.'/classes/template.php',
 	'Hybrid\\Template_Driver'   => __DIR__.'/classes/template/driver.php',
 	'Hybrid\\Template_Normal'   => __DIR__.'/classes/template/normal.php',
 	'Hybrid\\Template_Frontend' => __DIR__.'/classes/template/frontend.php',
+
+	'Hybrid\\Widget'            => __DIR__.'/classes/widget.php',
+	'Hybrid\\Widget_Breadcrumb' => __DIR__.'/classes/widget/breadcrumb.php',
+	'Hybrid\\Widget_Driver'     => __DIR__.'/classes/widget/driver.php',
+	'Hybrid\\Widget_Tab'        => __DIR__.'/classes/widget/tab.php',
 ));
 /* End of file bootstrap.php */
