@@ -109,19 +109,28 @@ class Acl
 		if ($registry instanceof Registry_Database)
 		{
 			$this->registry = $registry;
+			
+			$data           = $this->registry->get("acl_".$this->name, array(
+				'acl'       => array(),
+				'resources' => array(),
+				'roles'     => array(),
+			));
 
-			foreach ($this->registry->get("acl_".$this->name, array()) as $role => $resources)
+			foreach ($data['roles'] as $role)
 			{
-				$this->add_roles($role);
+				$this->add_role($role);
+			}
 
-				foreach ($resources as $name => $type)
+			foreach ($data['resources'] as $resource)
+			{
+				$this->add_resource($resource);
+			}
+
+			foreach ($data['acl'] as $role => $resources)
+			{
+				foreach ($resources as $resource => $type)
 				{
-					if ( ! $this->has_resource($name))
-					{
-						$this->add_resources($name);
-					}
-
-					$this->allow($role, $name, $type);
+					$this->allow($role, $resource, $type);
 				}
 			}
 		}
@@ -314,6 +323,13 @@ class Acl
 		{
 			array_push($this->roles, $role);
 
+			$value = \Arr::merge(
+				$this->registry->get("acl_".$this->name.".roles", array()), 
+				array("{$role}")
+			);
+			
+			$this->registry->set("acl_".$this->name.".roles", $value);
+
 			return true;
 		}
 		else
@@ -402,6 +418,14 @@ class Acl
 		if ( ! $this->has_resource($resource))
 		{
 			array_push($this->resources, $resource);
+			
+			$value = \Arr::merge(
+				$this->registry->get("acl_".$this->name.".resources", array()), 
+				array("{$resource}")
+			);
+			
+			$this->registry->set("acl_".$this->name.".resources", $value);
+			
 			$this->add_action(array("{$resource}" => $action));
 
 			return true;
@@ -413,33 +437,82 @@ class Acl
 	}
 
 	/**
-	 * Add a callback action if a ACL return access to resource as unavailable
+	 * Add a/multiple callback action if a ACL return access to resource as unavailable
 	 *
 	 * @access  public
 	 * @param   mixed   $resources      A string of resource name
 	 * @param   mixed   $action			A closure or null
 	 * @return  bool
 	 */
-	public function add_action($resources, $action = null)
+	public function add_actions($resources, $callback = null)
 	{
 		if ( ! is_array($resources))
 		{
-			$resources = array("{$resources}" => $action);
+			$resources = array("{$resources}" => $callback);
 		}
 
 		if (is_array($resources))
 		{
-			foreach ($resources as $resource => $action)
+			foreach ($resources as $resource => $this_callback)
 			{
-				if ( ! $action instanceof \Closure)
+				if (is_numeric($resource))
 				{
-					$action = null;
+					$resource      = $this_callback;
+					$this_callback = $callback;
 				}
 
-				if (in_array($resource, $this->resources))
-				{
-					$this->actions[$resource] = $action;
-				}
+				$this->add_action($resource, $this_callback);
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+	/**
+	 * Add a callback action if a ACL return access to resource as unavailable
+	 *
+	 * @access  public
+	 * @param   mixed   $resource       A string of resource name
+	 * @param   mixed   $action			A closure or null
+	 * @return  bool
+	 */
+	public function add_action($resource, $callback = null)
+	{
+		if ( ! $callback instanceof \Closure)
+		{
+			$callback = null;
+		}
+
+		if (in_array($resource, $this->resources))
+		{
+			$this->actions[$resource] = $callback;
+			
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Remove a/multiple callback action
+	 *
+	 * @access  public
+	 * @param   mixed     $resources    A string of resource name
+	 * @return  bool
+	 */
+	public function delete_actions($resources)
+	{
+		if ( ! is_array($resources))
+		{
+			$resources = array("{$resources}");
+		}
+
+		if (is_array($resources))
+		{
+			foreach ($resources as $resource)
+			{
+				$this->delete_action($resource);
 			}
 			
 			return true;
@@ -452,25 +525,14 @@ class Acl
 	 * Remove a callback action
 	 *
 	 * @access  public
-	 * @param   mixed     $resources    A string of resource name
+	 * @param   mixed     $resource     A string of resource name
 	 * @return  bool
 	 */
-	public function delete_action($resources)
+	public function delete_action($resource)
 	{
-		if ( ! is_array($resources))
+		if (in_array($resource, $this->resources))
 		{
-			$resources = array("{$resources}");
-		}
-
-		if (is_array($resources))
-		{
-			foreach ($resources as $resource)
-			{
-				if (in_array($resource, $this->resources))
-				{
-					$this->actions[$resource] = null;
-				}
-			}
+			$this->actions[$resource] = null;
 			
 			return true;
 		}
@@ -582,11 +644,11 @@ class Acl
 				if ($this->registry instanceof Registry_Database)
 				{
 					$value = \Arr::merge(
-						$this->registry->get("acl_".$this->name, array()), 
+						$this->registry->get("acl_".$this->name.".acl", array()), 
 						array("{$role}" => array("{$resource}" => $type))
 					);
 					
-					$this->registry->set("acl_".$this->name, $value);
+					$this->registry->set("acl_".$this->name.".acl", $value);
 				}
 			}
 		}
