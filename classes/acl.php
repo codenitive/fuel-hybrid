@@ -109,12 +109,16 @@ class Acl
 		if ($registry instanceof Registry_Database)
 		{
 			$this->registry = $registry;
-			
-			$data           = $this->registry->get("acl_".$this->name, array(
+
+			$default = array(
 				'acl'       => array(),
 				'resources' => array(),
 				'roles'     => array(),
-			));
+			);
+			
+			$data = $this->registry->get("acl_".$this->name, $default);
+
+			$data = \Arr::merge($data, $default);
 
 			foreach ($data['roles'] as $role)
 			{
