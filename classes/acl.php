@@ -118,12 +118,18 @@ class Acl
 
 			foreach ($data['roles'] as $role)
 			{
-				$this->add_role($role);
+				if ( ! $this->has_role($role))
+				{
+					$this->add_role($role);
+				}
 			}
 
 			foreach ($data['resources'] as $resource)
 			{
-				$this->add_resource($resource);
+				if ( ! $this->has_resource($resource))
+				{
+					$this->add_resource($resource);
+				}
 			}
 
 			foreach ($data['acl'] as $role => $resources)
@@ -322,13 +328,8 @@ class Acl
 		if ( ! $this->has_role($role))
 		{
 			array_push($this->roles, $role);
-
-			$value = \Arr::merge(
-				$this->registry->get("acl_".$this->name.".roles", array()), 
-				array("{$role}")
-			);
 			
-			$this->registry->set("acl_".$this->name.".roles", $value);
+			$this->registry->set("acl_".$this->name.".roles", $this->roles);
 
 			return true;
 		}
@@ -419,12 +420,7 @@ class Acl
 		{
 			array_push($this->resources, $resource);
 			
-			$value = \Arr::merge(
-				$this->registry->get("acl_".$this->name.".resources", array()), 
-				array("{$resource}")
-			);
-			
-			$this->registry->set("acl_".$this->name.".resources", $value);
+			$this->registry->set("acl_".$this->name.".resources", $this->resources);
 			
 			$this->add_action(array("{$resource}" => $action));
 
