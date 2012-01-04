@@ -27,6 +27,7 @@ Autoloader::add_classes(array (
 	'Hybrid\\Restserver' => __DIR__.'/classes/restserver.php',
 	'Hybrid\\Uri'        => __DIR__.'/classes/uri.php',
 	'Hybrid\\View'       => __DIR__.'/classes/view.php',
+	'Hybrid\\ViewModel'  => __DIR__.'/classes/viewmodel.php',
 
 	'Hybrid\\Acl'          => __DIR__.'/classes/acl.php',
 	'Hybrid\\AclException' => __DIR__.'/classes/acl.php',
