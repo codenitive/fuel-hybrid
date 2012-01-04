@@ -150,8 +150,21 @@ class Swiftmail
 	 * @access  public
 	 * @param   string  $content
 	 * @return  self
+	 * @see     self::body
 	 */
 	public function message($content)
+	{
+		return $this->body($content);
+	}
+
+	/**
+	 * Sets the message of the email, content type is determined by 'mailtype' config
+	 *
+	 * @access  public
+	 * @param   string  $content
+	 * @return  self
+	 */
+	public function body($content)
 	{
 		$this->messager->setBody($content, $this->config['mailtype']);
 
