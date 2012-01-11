@@ -71,13 +71,13 @@ class Acl
 	 * @access  public
 	 * @param   string  $name
 	 * @return  Acl
-	 * @throws  AclException
+	 * @throws  \FuelException
 	 */
 	public static function __callStatic($method, array $arguments)
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new AclException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 		
 		foreach (array(null, null) as $key => $default)
@@ -106,43 +106,10 @@ class Acl
 	{
 		$this->name = $name;
 
-		if ($registry instanceof Registry_Database)
+		// only bind a registry if it's included
+		if (null !== $registry)
 		{
-			$this->registry = $registry;
-
-			$default = array(
-				'acl'       => array(),
-				'resources' => array(),
-				'roles'     => array(),
-			);
-			
-			$data = $this->registry->get("acl_".$this->name, $default);
-
-			$data = \Arr::merge($data, $default);
-
-			foreach ($data['roles'] as $role)
-			{
-				if ( ! $this->has_role($role))
-				{
-					$this->add_role($role);
-				}
-			}
-
-			foreach ($data['resources'] as $resource)
-			{
-				if ( ! $this->has_resource($resource))
-				{
-					$this->add_resource($resource);
-				}
-			}
-
-			foreach ($data['acl'] as $role => $resources)
-			{
-				foreach ($resources as $resource => $type)
-				{
-					$this->allow($role, $resource, $type);
-				}
-			}
+			$this->with($registry);
 		}
 	}
 
@@ -180,6 +147,58 @@ class Acl
 	 * @var     array
 	 */
 	protected $acl = array();
+
+	/**
+	 * Bind current Acl instance with a Registry
+	 *
+	 * @access  public				
+	 * @param   Registry_Database   $registry
+	 * @return  void
+	 * @throws  FuelException
+	 */
+	public function with(Registry_Database $registry)
+	{
+		if (null !== $this->registry)
+		{
+			throw new \FuelException(__METHOD__.": Unable to assign multiple Hybrid\Registry instance.");
+		}
+
+		$this->registry = $registry;
+
+		$default = array(
+			'acl'       => array(),
+			'resources' => array(),
+			'roles'     => array(),
+		);
+		
+		$data = $this->registry->get("acl_".$this->name, $default);
+
+		$data = \Arr::merge($data, $default);
+
+		foreach ($data['roles'] as $role)
+		{
+			if ( ! $this->has_role($role))
+			{
+				$this->add_role($role);
+			}
+		}
+
+		foreach ($data['resources'] as $resource)
+		{
+			if ( ! $this->has_resource($resource))
+			{
+				$this->add_resource($resource);
+			}
+		}
+
+		foreach ($data['acl'] as $role => $resources)
+		{
+			foreach ($resources as $resource => $type)
+			{
+				$this->allow($role, $resource, $type);
+			}
+		}
+	}
 
 	/**
 	 * Verify whether current user has sufficient roles to access the resources based 
