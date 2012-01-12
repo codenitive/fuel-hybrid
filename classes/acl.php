@@ -106,7 +106,7 @@ class Acl
 	{
 		$this->name = $name;
 
-		// only bind a registry if it's included
+		// only bind a registry if it is included
 		if (null !== $registry)
 		{
 			$this->with($registry);
@@ -352,7 +352,7 @@ class Acl
 		{
 			array_push($this->roles, $role);
 			
-			$this->registry->set("acl_".$this->name.".roles", $this->roles);
+			! empty($this->registry) and $this->registry->set("acl_".$this->name.".roles", $this->roles);
 
 			return true;
 		}
@@ -443,9 +443,12 @@ class Acl
 		{
 			array_push($this->resources, $resource);
 			
-			$this->registry->set("acl_".$this->name.".resources", $this->resources);
+			! empty($this->registry) and $this->registry->set("acl_".$this->name.".resources", $this->resources);
 			
-			$this->add_action(array("{$resource}" => $action));
+			if (null !== $action)
+			{
+				$this->add_action($resource, $action);
+			}
 
 			return true;
 		}
@@ -573,13 +576,9 @@ class Acl
 	{
 		\Lang::load('autho', 'autho');
 
-		if ( ! array_key_exists($resource, $this->actions))
-		{
-			throw new AclException(__METHOD__.": Can't fetch NULL resources.");
-		}
-
+		$action           = (array_key_exists($resource, $this->actions) ? $this->actions[$resource] : null);
+		
 		$set_content_type = true;
-		$action           = $this->actions[$resource];
 		$response         = \Response::forge(\Lang::get('autho.unauthorized', array(), 'Unauthorized'), 401);
 
 		// run the callback action
