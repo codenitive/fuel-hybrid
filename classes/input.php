@@ -90,7 +90,7 @@ class Input
 			$using_hybrid = true;
 		}
 
-		if ( ! $using_hybrid and in_array($name, array('method', 'all'))) 
+		if ( ! $using_hybrid and (in_array($name, array('method', 'all')) or 0 === count($arguments)))
 		{
 			return call_user_func(array("Fuel\Core\Input", $name));
 		}
@@ -132,6 +132,11 @@ class Input
 			case strtoupper($name) === static::$request->method :
 			case 'param' === $name :
 			case 'get_post' === $name and in_array(static::$request->method, array('GET', 'POST')) :
+				if (null === $index)
+				{
+					return static::$request->data;
+				}
+
 				return isset(static::$request->data[$index]) ? static::$request->data[$index] : $default;
 			break;
 
