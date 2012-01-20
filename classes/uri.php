@@ -37,13 +37,21 @@ class Uri extends \Fuel\Core\Uri
 	 * @param   string  $start_with     Default string set to ?
 	 * @return  string 
 	 */
-	public static function build_get_query($data, $start_with = '?') 
+	public static function build_get_query($data = null, $start_with = '?') 
 	{
 		$values = array();
+		! is_null($data) or $data = '*';
 
 		if (is_string($data))
 		{
-			$data = array($data);
+			if ('*' === $data)
+			{
+				$data  = Input::get();
+			}
+			else
+			{
+				$data = array($data);
+			}
 		}
 
 		if (null === $data or ! is_array($data))
