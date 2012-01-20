@@ -571,7 +571,7 @@ $acl->deny('guest', array('page', 'setting'));</pre>
 		</table>
 
 		<div class="alert-message block-message warning">
-			<p>Other than using the default <code>\HttpNotFoundException</code>, custom callback can be added to certain resources using <a href="#set_action()">Hybrid\Acl::set_action()</a>.
+			<p>Other than using the default <code>\HttpNotFoundException</code>, custom callback can be added to certain resources using <a href="#add_action()">Hybrid\Acl::add_action()</a>.
 		</div>
 
 	</div>
@@ -579,7 +579,7 @@ $acl->deny('guest', array('page', 'setting'));</pre>
 	<hr />
 
 	<div class="row">
-		<h3 id="set_action()">set_action($resource, $action = false)</h3>
+		<h3 id="add_action()">add_action($resource, $action = false)</h3>
 
 		<p>
 			Add a callback action if a ACL return access to resource as unavailable.
@@ -626,10 +626,10 @@ $acl->deny('guest', array('page', 'setting'));</pre>
 }
 
 // set to single resource
-$acl->set_action('post', $redirect_to_login);
+$acl->add_action('post', $redirect_to_login);
 
 // set to multiple resources
-$acl->set_action(array(
+$acl->add_action(array(
 	'post' => $redirect_to_login,
 	'account' => $redirect_to_login,
 ));</pre>
@@ -688,16 +688,6 @@ $acl->delete_action(array('post', 'account'));</pre>
 			</tr>
 			</tbody>
 		</table>
-	</div>
-
-	<hr />
-
-	<div class="row">
-		<h3 id="has_roles()">has_roles($check_roles)</h3>
-
-		<div class="alert-message block-message warning">
-			<p>Deprecated on scheduled to be remove in Hybrid for FuelPHP v1.2.0, use <a href="../auth/usage.html#has_roles()">\Hybrid\Auth::has_role()</a></p>
-		</div>
 	</div>
 	
 	<footer>

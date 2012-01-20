@@ -32,6 +32,8 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
+class AclException extends \FuelException {}
+
 class Acl 
 {
 	/**
@@ -104,21 +106,10 @@ class Acl
 	{
 		$this->name = $name;
 
-		if ($registry instanceof Registry_Database)
+		// only bind a registry if it is included
+		if (null !== $registry)
 		{
-			$this->registry = $registry;
-
-			foreach ($this->registry->get("acl_".$this->name, array()) as $role => $resources)
-			{
-				$this->add_roles($role);
-
-				foreach ($resources as $name => $type)
-				{
-					$this->add_resources($name);
-
-					$this->allow($role, $name, $type);
-				}
-			}
+			$this->with($registry);
 		}
 	}
 
@@ -158,6 +149,58 @@ class Acl
 	protected $acl = array();
 
 	/**
+	 * Bind current Acl instance with a Registry
+	 *
+	 * @access  public				
+	 * @param   Registry_Database   $registry
+	 * @return  void
+	 * @throws  FuelException
+	 */
+	public function with(Registry_Database $registry)
+	{
+		if (null !== $this->registry)
+		{
+			throw new \FuelException(__METHOD__.": Unable to assign multiple Hybrid\Registry instance.");
+		}
+
+		$this->registry = $registry;
+
+		$default = array(
+			'acl'       => array(),
+			'resources' => array(),
+			'roles'     => array(),
+		);
+		
+		$data = $this->registry->get("acl_".$this->name, $default);
+
+		$data = \Arr::merge($data, $default);
+
+		foreach ($data['roles'] as $role)
+		{
+			if ( ! $this->has_role($role))
+			{
+				$this->add_role($role);
+			}
+		}
+
+		foreach ($data['resources'] as $resource)
+		{
+			if ( ! $this->has_resource($resource))
+			{
+				$this->add_resource($resource);
+			}
+		}
+
+		foreach ($data['acl'] as $role => $resources)
+		{
+			foreach ($resources as $resource => $type)
+			{
+				$this->allow($role, $resource, $type);
+			}
+		}
+	}
+
+	/**
 	 * Verify whether current user has sufficient roles to access the resources based 
 	 * on available type of access.
 	 *
@@ -165,6 +208,7 @@ class Acl
 	 * @param   mixed   $resource   A string of resource name
 	 * @param   string  $type       need to be any one of deny, view, create, edit, delete or all
 	 * @return  bool
+	 * @throws  AclException
 	 */
 	public function access($resource, $type = 'view') 
 	{
@@ -172,7 +216,7 @@ class Acl
 
 		if ( ! in_array($resource, $this->resources)) 
 		{
-			throw new \FuelException(__METHOD__.": Unable to verify unknown resource {$resource}.");
+			throw new AclException(__METHOD__.": Unable to verify unknown resource {$resource}.");
 		}
 
 		$user    = Auth::make('user')->get();
@@ -221,7 +265,6 @@ class Acl
 	 */
 	public function access_status($resource, $type = 'view') 
 	{
-
 		switch ($this->access($resource, $type)) 
 		{
 			case true :
@@ -235,36 +278,34 @@ class Acl
 	}
 
 	/**
-	 * Check if user has any of provided roles, deprecated and will be removed in v1.2.0
-	 * 
-	 * @deprecated  v1.2.0
-	 * @static
+	 * Check if given role is available
+	 *
 	 * @access  public
-	 * @param   mixed   $check_roles
-	 * @return  bool 
+	 * @param   string  $role
+	 * @return  bool
 	 */
-	public static function has_roles($check_roles) 
+	public function has_role($role)
 	{
-	   \Log::warning('This method is deprecated. Please use a \Hybrid\Auth::has_roles() instead.', __METHOD__);
-		
-		return Auth::has_roles($check_roles);
+		$role = strval($role);
+
+		if ( ! empty($role) and in_array($role, $this->roles))
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
-	 * Add new user roles to the this instance
+	 * Add new user role(s) to the this instance
 	 * 
 	 * @access  public
 	 * @param   mixed   $roles      A string or an array of roles
 	 * @return  bool
-	 * @throws  \FuelException
+	 * @throws  AclException
 	 */
-	public function add_roles($roles = null) 
+	public function add_roles($roles = null)
 	{
-		if (null === $roles) 
-		{
-			throw new \FuelException(__METHOD__.": Can't add NULL roles.");
-		}
-
 		if (is_string($roles)) 
 		{
 			$roles = func_get_args();
@@ -274,11 +315,104 @@ class Acl
 		{
 			foreach ($roles as $role)
 			{
-				$role = trim(\Inflector::friendly_title($role, '-', true));
-
-				if ( ! in_array($role, $this->roles))
+				try
 				{
-					array_push($this->roles, $role);
+					$this->add_role($role);
+				}
+				catch (AclException $e)
+				{
+					continue;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Add new user role to the this instance
+	 * 
+	 * @access  public
+	 * @param   mixed   $role       A string or an array of roles
+	 * @return  bool
+	 * @throws  AclException
+	 */
+	public function add_role($role)
+	{
+		if (null === $role) 
+		{
+			throw new AclException(__METHOD__.": Can't add NULL role.");
+		}
+
+		$role = trim(\Inflector::friendly_title($role, '-', true));
+
+		if ( ! $this->has_role($role))
+		{
+			array_push($this->roles, $role);
+			
+			! empty($this->registry) and $this->registry->set("acl_".$this->name.".roles", $this->roles);
+
+			return true;
+		}
+		else
+		{
+			throw new AclException(__METHOD__.": Role {$role} already exist.");
+		}
+	}
+
+	/**
+	 * Check if given resource is available
+	 *
+	 * @access  public
+	 * @param   string  $resource
+	 * @return  bool
+	 */
+	public function has_resource($resource)
+	{
+		$resource = strval($resource);
+
+		if ( ! empty($resource) and in_array($resource, $this->resources))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Add new resource(s) to this instance
+	 * 
+	 * @access  public
+	 * @param   mixed   $resources      A string of resource name
+	 * @return  bool
+	 * @throws  AclException
+	 */
+	public function add_resources($resources = null) 
+	{
+		if (is_string($resources)) 
+		{
+			$resources = func_get_args();
+		}
+		
+		if (is_array($resources)) 
+		{
+			foreach ($resources as $resource => $action)
+			{
+				if (is_numeric($resource))
+				{
+					$resource = $action;
+					$action   = null;
+				}
+
+				try
+				{
+					$this->add_resource($resource, $action);
+				}
+				catch (AclException $e)
+				{
+					continue;
 				}
 			}
 
@@ -294,38 +428,62 @@ class Acl
 	 * @access  public
 	 * @param   mixed   $resources      A string of resource name
 	 * @return  bool
-	 * @throws  \FuelException
+	 * @throws  AclException
 	 */
-	public function add_resources($resources = null) 
+	public function add_resource($resource, $action = null) 
 	{
-		if (null === $resources) 
+		if (null === $resource) 
 		{
-			throw new \FuelException(__METHOD__.": Can't add NULL resources.");
+			throw new AclException(__METHOD__.": Can't add NULL resources.");
 		}
 
-
-		if ( ! is_array($resources)) 
+		$resource = trim(\Inflector::friendly_title($resource, '-', true));
+		
+		if ( ! $this->has_resource($resource))
 		{
-			$resources = func_get_args();
+			array_push($this->resources, $resource);
+			
+			! empty($this->registry) and $this->registry->set("acl_".$this->name.".resources", $this->resources);
+			
+			if (null !== $action)
+			{
+				$this->add_action($resource, $action);
+			}
+
+			return true;
+		}
+		else
+		{
+			throw new AclException(__METHOD__.": Resource {$resource} already exist.");
+		}
+	}
+
+	/**
+	 * Add a/multiple callback action if a ACL return access to resource as unavailable
+	 *
+	 * @access  public
+	 * @param   mixed   $resources      A string of resource name
+	 * @param   mixed   $action			A closure or null
+	 * @return  bool
+	 */
+	public function add_actions($resources, $callback = null)
+	{
+		if ( ! is_array($resources))
+		{
+			$resources = array("{$resources}" => $callback);
 		}
 
-		if (is_array($resources)) 
+		if (is_array($resources))
 		{
-			foreach ($resources as $resource => $action)
+			foreach ($resources as $resource => $this_callback)
 			{
 				if (is_numeric($resource))
 				{
-					$resource = $action;
-					$action   = null;
+					$resource      = $this_callback;
+					$this_callback = $callback;
 				}
 
-				$resource = trim(\Inflector::friendly_title($resource, '-', true));
-				
-				if ( ! in_array($resource, $this->resources))
-				{
-					array_push($this->resources, $resource);
-					$this->set_action(array("{$resource}" => $action));
-				}
+				$this->add_action($resource, $this_callback);
 			}
 
 			return true;
@@ -333,35 +491,50 @@ class Acl
 
 		return false;
 	}
-
 	/**
 	 * Add a callback action if a ACL return access to resource as unavailable
 	 *
 	 * @access  public
-	 * @param   mixed   $resources      A string of resource name
+	 * @param   mixed   $resource       A string of resource name
 	 * @param   mixed   $action			A closure or null
 	 * @return  bool
 	 */
-	public function set_action($resources, $action = null)
+	public function add_action($resource, $callback = null)
+	{
+		if ( ! $callback instanceof \Closure)
+		{
+			$callback = null;
+		}
+
+		if (in_array($resource, $this->resources))
+		{
+			$this->actions[$resource] = $callback;
+			
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Remove a/multiple callback action
+	 *
+	 * @access  public
+	 * @param   mixed     $resources    A string of resource name
+	 * @return  bool
+	 */
+	public function delete_actions($resources)
 	{
 		if ( ! is_array($resources))
 		{
-			$resources = array("{$resources}" => $action);
+			$resources = array("{$resources}");
 		}
 
 		if (is_array($resources))
 		{
-			foreach ($resources as $resource => $action)
+			foreach ($resources as $resource)
 			{
-				if ( ! $action instanceof \Closure)
-				{
-					$action = null;
-				}
-
-				if (in_array($resource, $this->resources))
-				{
-					$this->actions[$resource] = $action;
-				}
+				$this->delete_action($resource);
 			}
 			
 			return true;
@@ -374,25 +547,14 @@ class Acl
 	 * Remove a callback action
 	 *
 	 * @access  public
-	 * @param   mixed     $resources    A string of resource name
+	 * @param   mixed     $resource     A string of resource name
 	 * @return  bool
 	 */
-	public function delete_action($resources)
+	public function delete_action($resource)
 	{
-		if ( ! is_array($resources))
+		if (in_array($resource, $this->resources))
 		{
-			$resources = array("{$resources}");
-		}
-
-		if (is_array($resources))
-		{
-			foreach ($resources as $resource)
-			{
-				if (in_array($resource, $this->resources))
-				{
-					$this->actions[$resource] = null;
-				}
-			}
+			$this->actions[$resource] = null;
 			
 			return true;
 		}
@@ -408,19 +570,15 @@ class Acl
 	 * @param   string   $resource    A string of resource name
 	 * @param   bool     $rest        Boolean value to define weither it's a restful call or a normal http call
 	 * @return  Closure
-	 * @throws  \FuelException
+	 * @throws  AclException
 	 */
 	public function unauthorized($resource, $rest = false)
 	{
 		\Lang::load('autho', 'autho');
 
-		if ( ! array_key_exists($resource, $this->actions))
-		{
-			throw new \FuelException(__METHOD__.": Can't fetch NULL resources.");
-		}
-
+		$action           = (array_key_exists($resource, $this->actions) ? $this->actions[$resource] : null);
+		
 		$set_content_type = true;
-		$action           = $this->actions[$resource];
 		$response         = \Response::forge(\Lang::get('autho.unauthorized', array(), 'Unauthorized'), 401);
 
 		// run the callback action
@@ -460,13 +618,13 @@ class Acl
 	 * @param   mixed   $resources      A string or an array of resource name
 	 * @param   string  $type
 	 * @return  bool
-	 * @throws  \FuelException
+	 * @throws  AclException
 	 */
 	public function allow($roles, $resources, $type = 'view') 
 	{
 		if ( ! in_array($type, static::$types)) 
 		{
-			throw new \FuelException(__METHOD__.": Type {$type} does not exist.");
+			throw new AclException(__METHOD__.": Type {$type} does not exist.");
 		}
 
 		if ( ! is_array($roles)) 
@@ -483,22 +641,18 @@ class Acl
 		{
 			$role = \Inflector::friendly_title($role, '-', true);
 
-			if ( ! in_array($role, $this->roles)) 
+			if ( ! $this->has_role($role)) 
 			{
-				throw new \FuelException(__METHOD__.": Role {$role} does not exist.");
-
-				continue;
+				throw new AclException(__METHOD__.": Role {$role} does not exist.");
 			}
 
 			foreach ($resources as $resource) 
 			{
 				$resource = \Inflector::friendly_title($resource, '-', true);
 
-				if ( ! in_array($resource, $this->resources)) 
+				if ( ! $this->has_resource($resource)) 
 				{
-					throw new \FuelException(__METHOD__.": Resource {$resource} does not exist.");
-
-					continue;
+					throw new AclException(__METHOD__.": Resource {$resource} does not exist.");
 				}
 
 				$id = $role.'/'.$resource;
@@ -508,11 +662,11 @@ class Acl
 				if ($this->registry instanceof Registry_Database)
 				{
 					$value = \Arr::merge(
-						$this->registry->get("acl_".$this->name, array()), 
+						$this->registry->get("acl_".$this->name.".acl", array()), 
 						array("{$role}" => array("{$resource}" => $type))
 					);
 					
-					$this->registry->set("acl_".$this->name, $value);
+					$this->registry->set("acl_".$this->name.".acl", $value);
 				}
 			}
 		}
