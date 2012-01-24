@@ -13,6 +13,9 @@
 
 namespace Hybrid;
 
+use \Config;
+use \FuelException;
+
 /**
  * Hybrid 
  * 
@@ -45,7 +48,7 @@ class Widget
 	 */
 	public static function _init()
 	{
-		\Config::load('hybrid', 'hybrid');
+		Config::load('hybrid', 'hybrid');
 	}
 
 	/**
@@ -62,7 +65,7 @@ class Widget
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		foreach (array(null, array()) as $key => $default)
@@ -92,7 +95,7 @@ class Widget
 			}
 			else
 			{
-				throw new \FuelException("Requested {$driver} does not exist.");
+				throw new FuelException("Requested {$driver} does not exist.");
 			}
 		}
 

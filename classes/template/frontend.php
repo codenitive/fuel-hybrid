@@ -13,6 +13,8 @@
 
 namespace Hybrid;
 
+use \FuelException;
+
 /**
  * Hybrid 
  * 
@@ -44,7 +46,7 @@ class Template_Frontend extends Template_Driver
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		$name   = empty($arguments) ? null : $arguments[0];
@@ -97,7 +99,7 @@ class Template_Frontend extends Template_Driver
 
 		if (empty($available_folders))
 		{
-			throw new \FuelException(__METHOD__.": configuration is not completed");
+			throw new FuelException(__METHOD__.": configuration is not completed");
 		}
 
 		if (null === $theme or '_default_' === $theme)
@@ -111,7 +113,7 @@ class Template_Frontend extends Template_Driver
 		}
 		else
 		{
-			throw new \FuelException(__METHOD__.": Requested {$theme} folder is not available.");
+			throw new FuelException(__METHOD__.": Requested {$theme} folder is not available.");
 		}
 
 		return $this;

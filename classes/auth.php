@@ -13,6 +13,12 @@
 
 namespace Hybrid;
 
+use \Config;
+use \FuelException;
+use \Inflector;
+use \Log;
+use \Response;
+
 /**
  * Hybrid 
  * 
@@ -32,7 +38,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class AuthException extends \FuelException {}
+class AuthException extends FuelException {}
 class AuthCancelException extends AuthException {}
 
 class Auth 
@@ -66,14 +72,14 @@ class Auth
 	 */
 	public static function redirect($type)
 	{
-		$path = \Config::get("autho.urls.{$type}");
+		$path = Config::get("autho.urls.{$type}");
 
 		if (null === $path)
 		{
 			throw new AuthException(__METHOD__.": Unable to redirect using {$type} type.");
 		}
 		
-		\Response::redirect($path);
+		Response::redirect($path);
 
 		return true;
 	}
@@ -86,7 +92,7 @@ class Auth
 	 */
 	public static function _init() 
 	{
-		\Config::load('autho', 'autho');
+		Config::load('autho', 'autho');
 	}
 
 	/**
@@ -102,7 +108,7 @@ class Auth
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		$name = empty($arguments) ? null : $arguments[0];
@@ -119,7 +125,7 @@ class Auth
 			}
 			else
 			{
-				throw new \FuelException("Requested {$driver} does not exist.");
+				throw new FuelException("Requested {$driver} does not exist.");
 			}
 		}
 
@@ -137,7 +143,7 @@ class Auth
 	 */
 	public static function add_salt($string = '')
 	{
-		\Log::warning('This method is deprecated. Please use create_hash() instead.', __METHOD__);
+		Log::warning('This method is deprecated. Please use create_hash() instead.', __METHOD__);
 		
 		return static::create_hash($string, 'sha1');
 	}
@@ -153,12 +159,12 @@ class Auth
 	 */
 	public static function create_hash($string = '', $hash_type = null)
 	{
-		$salt   = \Config::get('autho.salt', \Config::get('crypt.crypto_key'));
+		$salt   = Config::get('autho.salt', Config::get('crypt.crypto_key'));
 		$string = (string) $string;
 
 		if (null === $hash_type or ! in_array($hash_type, array('md5', 'crypt_hash', 'sha1')))
 		{
-			$hash_type = \Config::get('autho.hash_type', 'sha1');
+			$hash_type = Config::get('autho.hash_type', 'sha1');
 		}
 
 		switch ($hash_type)
@@ -194,7 +200,7 @@ class Auth
 
 		null === static::$hasher and static::$hasher = new \PHPSecLib\Crypt_Hash();
 
-		$salt   = \Config::get('autho.salt', \Config::get('crypt.crypto_key'));
+		$salt   = Config::get('autho.salt', Config::get('crypt.crypto_key'));
 		
 		return base64_encode(static::$hasher->pbkdf2($string, $salt, 10000, 32));
 	}
@@ -218,7 +224,7 @@ class Auth
 
 		foreach ($user->roles as $role) 
 		{
-			$role = \Inflector::friendly_title($role, '-', TRUE);
+			$role = Inflector::friendly_title($role, '-', TRUE);
 
 			foreach ($check_roles as $check_against) 
 			{
@@ -241,7 +247,7 @@ class Auth
 	 * @param   string  $password       An unhashed `password` or `token` string from external API.
 	 * @param   string  $driver         Driver type string, default to 'user'.
 	 * @return  bool
-	 * @throws  \FuelException
+	 * @throws  FuelException
 	 */
 	public static function login($username, $password, $remember_me = false, $driver = 'user')
 	{
@@ -250,6 +256,7 @@ class Auth
 			$driver      = $remember_me;
 			$remember_me = false;
 		}
+
 		return static::make($driver)->login($username, $password, $remember_me);
 	}
 
@@ -260,7 +267,7 @@ class Auth
 	 * @access  public
 	 * @param   string  $driver         Driver type string, default to 'user'.
 	 * @return  bool
-	 * @throws  \FuelException
+	 * @throws  FuelException
 	 */
 	public static function reauthenticate($driver = 'user')
 	{

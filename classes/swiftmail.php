@@ -15,6 +15,16 @@ namespace Hybrid;
 
 Factory::import('swift/swift_required', 'vendor');
 
+use \Config;
+use \FuelException;
+use \Inflector;
+use \Swift_Attachment;
+use \Swift_Mailer;
+use \Swift_MailTransport;
+use \Swift_Message;
+use \Swift_SendmailTransport;
+use \Swift_SmtpTransport;
+
 /**
  * Hybrid 
  * 
@@ -43,12 +53,12 @@ class Swiftmail
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		$config = empty($arguments) ? array() : $arguments[0];
 
-		$initconfig = \Config::load('swiftmail', 'switftmail', true);
+		$initconfig = Config::load('swiftmail', 'switftmail', true);
 		
 		if (is_array($config) and is_array($initconfig))
 		{
@@ -107,8 +117,8 @@ class Swiftmail
 		{
 			// set transport, messenger and mailer using Swiftmail
 			$transport      = $this->{$transport}($config);
-			$this->messager = new \Swift_Message();
-			$this->mailer   = new \Swift_Mailer($transport);
+			$this->messager = new Swift_Message();
+			$this->mailer   = new Swift_Mailer($transport);
 
 			$this->messager->setCharset($config['charset']);
 
@@ -127,7 +137,7 @@ class Swiftmail
 		}
 		else
 		{
-			throw new \FuelException(__METHOD__.": Transport protocol ".$config['protocol']." does not exist.");
+			throw new FuelException(__METHOD__.": Transport protocol ".$config['protocol']." does not exist.");
 		}
 	}
 
@@ -230,7 +240,7 @@ class Swiftmail
 		}
 		else
 		{
-			throw new \FuelException(__CLASS__."::{$name}: method does not exist.");
+			throw new FuelException(__CLASS__."::{$name}: method does not exist.");
 		}
 	}
 
@@ -247,7 +257,7 @@ class Swiftmail
 	{
 		if ( ! isset($this->recipients[$type]))
 		{
-			throw new \FuelException(__METHOD__.": Recipient type {$type} does not exist");
+			throw new FuelException(__METHOD__.": Recipient type {$type} does not exist");
 		}
 
 		// add new address to the list
@@ -283,7 +293,7 @@ class Swiftmail
 		{
 			if (count($this->recipients[$type]) > 0)
 			{
-				$method = 'set'.\Inflector::camelize($type);
+				$method = 'set'.Inflector::camelize($type);
 				$this->messager->{$method}($this->recipients[$type]);
 			}
 		}
@@ -331,7 +341,7 @@ class Swiftmail
 	 */
 	public function attach($filename, $disposition)
 	{
-		$attachment = \Swift_Attachment::fromPath($filename)->setDisposition($disposition);
+		$attachment = Swift_Attachment::fromPath($filename)->setDisposition($disposition);
 		$this->messager->attach($attachment);
 		
 		return $this;
@@ -349,7 +359,7 @@ class Swiftmail
 	 */
 	public static function dynamic_attach($contents, $filename, $disposition = 'attachment')
 	{
-		throw new \FuelException(__METHOD__.": Dynamic file attachment has not been implemented yet.");
+		throw new FuelException(__METHOD__.": Dynamic file attachment has not been implemented yet.");
 
 		return $this;
 	}
@@ -363,7 +373,7 @@ class Swiftmail
 	 */
 	protected function transport_sendmail($config)
 	{
-		return new \Swift_SendmailTransport($config['sendmail_path'].' -oi -t');
+		return new Swift_SendmailTransport($config['sendmail_path'].' -oi -t');
 	}
 
 	/**
@@ -375,7 +385,7 @@ class Swiftmail
 	 */
 	protected function transport_mail($config)
 	{
-		return new \Swift_MailTransport();
+		return new Swift_MailTransport();
 	}
 
 	/**
@@ -400,7 +410,7 @@ class Swiftmail
 			$smtp_host  = $matches[2]; 
 		}
 
-		$transport = new \Swift_SmtpTransport($smtp_host, $smtp_port, $ssl);
+		$transport = new Swift_SmtpTransport($smtp_host, $smtp_port, $ssl);
 
 		if ( ! empty($smtp_user))
 		{

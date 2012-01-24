@@ -13,6 +13,11 @@
 
 namespace Hybrid;
 
+use \Config;
+use \FuelException;
+use \Inflector;
+use \Str;
+
 /**
  * Hybrid 
  * 
@@ -49,7 +54,7 @@ class Widget_Tab extends Widget_Driver
 	{
 		if (empty($title))
 		{
-			throw new \FuelException(__METHOD__.": Unable to add empty tab.");
+			throw new FuelException(__METHOD__.": Unable to add empty tab.");
 		}
 
 		if (empty($content) or ! strval($content))
@@ -59,7 +64,7 @@ class Widget_Tab extends Widget_Driver
 
 		$data = (object) array(
 			'title'   => $title,
-			'slug'    => \Inflector::friendly_title($title, '-', true),
+			'slug'    => Inflector::friendly_title($title, '-', true),
 			'content' => $content,
 		);
 
@@ -91,16 +96,16 @@ class Widget_Tab extends Widget_Driver
 		foreach ($this->items as $count => $item)
 		{
 			$active  = ($count === 0 ? 'class="active"' : '');
-			$title   .= \Str::tr($template['item'], array('active' => $active, 'slug' => $item->slug, 'title' => $item->title));
-			$content .= \Str::tr($template['content'], array('active' => $active, 'slug' => $item->slug, 'content' => $item->content));
+			$title   .= Str::tr($template['item'], array('active' => $active, 'slug' => $item->slug, 'title' => $item->title));
+			$content .= Str::tr($template['content'], array('active' => $active, 'slug' => $item->slug, 'content' => $item->content));
 		}
 
 		$title   .= $template['item_close'];
 		$content .= $template['content_close'];
 		
-		$prefix  = \Config::get('hybrid.widget.tab.prefix', '');
+		$prefix  = Config::get('hybrid.widget.tab.prefix', '');
 
-		return \Str::tr($template['wrapper_open'], array('id' => $prefix.ltrim($this->name, $prefix))).$title.$content.$template['wrapper_close'];
+		return Str::tr($template['wrapper_open'], array('id' => $prefix.ltrim($this->name, $prefix))).$title.$content.$template['wrapper_close'];
 	}
 
 }

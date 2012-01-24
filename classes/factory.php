@@ -13,6 +13,13 @@
 
 namespace Hybrid;
 
+use \Config;
+use \Event;
+use \Fuel;
+use \Profiler;
+use \Request;
+use \Session;
+
 /**
  * Hybrid 
  * 
@@ -45,35 +52,35 @@ class Factory
 			return;
 		}
 		
-		\Config::load('app', 'app');
-		\Config::load('hybrid', 'hybrid');
+		Config::load('app', 'app');
+		Config::load('hybrid', 'hybrid');
 
-		static::$identity = \Config::get('app.identity');
+		static::$identity = Config::get('app.identity');
 
-		if (\Fuel::$env !== \Fuel::PRODUCTION and true === \Config::get('hybrid.profiling', false))
+		if (Fuel::$env !== Fuel::PRODUCTION and true === Config::get('hybrid.profiling', false))
 		{
 			static::profiling();
 		}
 
-		if (\Config::get('app.maintenance_mode') == true) 
+		if (Config::get('app.maintenance_mode') == true) 
 		{
 			static::maintenance_mode();
 		}
 
-		$lang = \Session::get(static::$identity.'_lang');
+		$lang = Session::get(static::$identity.'_lang');
 
 		if (null !== $lang) 
 		{
-			\Config::set('language', $lang);
+			Config::set('language', $lang);
 			static::$language = $lang;
 		} 
 		else 
 		{
-			static::$language = \Config::get('language');
+			static::$language = Config::get('language');
 		}
 
-		\Event::trigger('load_language');
-		\Event::trigger('load_acl');
+		Event::trigger('load_language');
+		Event::trigger('load_acl');
 	}
 
 	/**
@@ -91,19 +98,19 @@ class Factory
 
 		if ($call_count > 1) 
 		{
-			throw new \FuelException('It appears your _maintenance_mode_ route is incorrect.  Multiple Recursion has happened.');
+			throw new FuelException('It appears your _maintenance_mode_ route is incorrect.  Multiple Recursion has happened.');
 		}
 
-		if (\Config::get('routes._maintenance_mode_') === null) 
+		if (Config::get('routes._maintenance_mode_') === null) 
 		{
-			throw new \FuelException('It appears your _maintenance_mode_ route is null.');
+			throw new FuelException('It appears your _maintenance_mode_ route is null.');
 		} 
 		else 
 		{
-			$request  = \Request::forge(\Config::get('routes._maintenance_mode_'))->execute();
+			$request  = Request::forge(Config::get('routes._maintenance_mode_'))->execute();
 			$response = $request->response();
 			$response->send(true);
-			\Event::shutdown();
+			Event::shutdown();
 			exit();
 		}
 	}
@@ -158,8 +165,8 @@ class Factory
 	 */
 	protected static function profiling()
 	{
-		$profiler     = \Session::get('_profiler', \Config::get('profiling', false));
-		$get_profiler = \Input::get('profiler', null);
+		$profiler     = Session::get('_profiler', Config::get('profiling', false));
+		$get_profiler = Input::get('profiler', null);
 
 		if (null !== $get_profiler)
 		{
@@ -169,12 +176,12 @@ class Factory
 		switch ($profiler)
 		{
 			case 1 :
-				\Fuel::$profiling = true;
-				\Profiler::init();
+				Fuel::$profiling = true;
+				Profiler::init();
 			break;
 		}
 
-		\Session::set('_profiler', $profiler);
+		Session::set('_profiler', $profiler);
 	}
 	
 }

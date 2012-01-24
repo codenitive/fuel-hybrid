@@ -13,6 +13,13 @@
 
 namespace Hybrid;
 
+use \Arr;
+use \Config;
+use \Event;
+use \FuelException;
+use \Inflector;
+use \Session;
+
 /**
  * Hybrid 
  * 
@@ -89,7 +96,7 @@ abstract class Auth_Strategy
 	{
 		$this->provider = $provider;
 		
-		$this->config   = \Config::get("app.providers.{$provider}", \Config::get("autho.providers.{$provider}"));
+		$this->config   = Config::get("app.providers.{$provider}", Config::get("autho.providers.{$provider}"));
 
 		if (null === $this->config and 'normal' !== $provider)
 		{
@@ -99,7 +106,7 @@ abstract class Auth_Strategy
 		if (null === $this->name)
 		{
 			// Attempt to guess the name from the class name
-			$class_name = \Inflector::denamespace(get_class($this));
+			$class_name = Inflector::denamespace(get_class($this));
 			$this->name = strtolower(str_replace('Auth_Strategy_', '', $class_name));
 		}
 	}
@@ -117,12 +124,12 @@ abstract class Auth_Strategy
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		$provider = empty($arguments) ? null : $arguments[0];
 
-		$strategy = \Config::get("autho.providers.{$provider}.strategy") ?: \Arr::get(static::$providers, $provider);
+		$strategy = Config::get("autho.providers.{$provider}.strategy") ?: Arr::get(static::$providers, $provider);
 		
 		if (null === $strategy)
 		{
@@ -167,13 +174,13 @@ abstract class Auth_Strategy
 			$num_linked = count($accounts);
 		
 			// Allowed multiple providers, or not authed yet?
-			if (0 === $num_linked or true === \Config::get('autho.link_multiple_providers'))
+			if (0 === $num_linked or true === Config::get('autho.link_multiple_providers'))
 			{
 				try 
 				{
 					$user_auth->link_account($user_data);
 					
-					\Event::trigger('link_authentication', $user_data);
+					Event::trigger('link_authentication', $user_data);
 				}
 				catch (AuthException $e)
 				{
@@ -197,14 +204,14 @@ abstract class Auth_Strategy
 			{
 				$user_auth->login_token($user_data);
 
-				\Event::trigger('link_authentication', $user_data);
+				Event::trigger('link_authentication', $user_data);
 
 				// credentials ok, go right in
 				Auth::redirect('logged_in');
 			}
 			catch (AuthException $e)
 			{
-				\Session::set('autho', $user_data);
+				Session::set('autho', $user_data);
 
 				Auth::redirect('registration');
 			}

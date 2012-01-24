@@ -13,6 +13,10 @@
 
 namespace Hybrid;
 
+use \Arr;
+use \Config;
+use \DB;
+
 /**
  * Hybrid 
  * 
@@ -42,9 +46,9 @@ class Registry_Database extends Registry_Driver
 
 	public function initiate() 
 	{
-		$this->table_name = \Arr::get($this->config, 'table_name', \Config::get('hybrid.tables.registry', $this->name));
+		$this->table_name = Arr::get($this->config, 'table_name', Config::get('hybrid.tables.registry', $this->name));
 		
-		$registries = \DB::select('*')
+		$registries = DB::select('*')
 			->from($this->table_name)
 			->as_object()
 			->execute();
@@ -82,18 +86,18 @@ class Registry_Database extends Registry_Driver
 				continue;
 			}
 
-			\DB::select('name')->from($this->table_name)->where('name', '=', $option_key)->execute();
+			DB::select('name')->from($this->table_name)->where('name', '=', $option_key)->execute();
 
-			if (true === $is_new and \DB::count_last_query() < 1)
+			if (true === $is_new and DB::count_last_query() < 1)
 			{
-				\DB::insert($this->table_name)->set(array(
+				DB::insert($this->table_name)->set(array(
 					'name' => $option_key,
 					'value' => $value,
 				))->execute();
 			}
 			else
 			{
-				\DB::update($this->table_name)->set(array(
+				DB::update($this->table_name)->set(array(
 					'value' => $value,
 				))->where('id', '=', $id)->execute(); 
 			}

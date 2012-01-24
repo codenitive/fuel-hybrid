@@ -13,6 +13,10 @@
 
 namespace Hybrid;
 
+use \Config;
+use \Event;
+use \FuelException;
+
 /**
  * Hybrid 
  * 
@@ -48,8 +52,8 @@ class Registry
 			return ;
 		}
 
-		\Config::load('hybrid', 'hybrid');
-		\Event::register('shutdown', "\Hybrid\Registry::shutdown");
+		Config::load('hybrid', 'hybrid');
+		Event::register('shutdown', "\Hybrid\Registry::shutdown");
 
 		static::$initiated = true;
 	}
@@ -67,7 +71,7 @@ class Registry
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		foreach (array(null, array()) as $key => $default)
@@ -114,7 +118,7 @@ class Registry
 			}
 			else
 			{
-				throw new \FuelException("Requested {$driver} does not exist.");
+				throw new FuelException("Requested {$driver} does not exist.");
 			}
 		}
 

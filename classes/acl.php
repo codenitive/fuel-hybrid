@@ -13,6 +13,16 @@
 
 namespace Hybrid;
 
+use \Arr;
+use \Closure;
+use \Event;
+use \FuelException;
+use \HttpNotFoundException;
+use \Inflector;
+use \Lang;
+use \Request;
+use \Response;
+
 /**
  * Hybrid 
  * 
@@ -32,7 +42,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class AclException extends \FuelException {}
+class AclException extends FuelException {}
 
 class Acl 
 {
@@ -71,13 +81,13 @@ class Acl
 	 * @access  public
 	 * @param   string  $name
 	 * @return  Acl
-	 * @throws  \FuelException
+	 * @throws  FuelException
 	 */
 	public static function __callStatic($method, array $arguments)
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 		
 		foreach (array(null, null) as $key => $default)
@@ -160,7 +170,7 @@ class Acl
 	{
 		if (null !== $this->registry)
 		{
-			throw new \FuelException(__METHOD__.": Unable to assign multiple Hybrid\Registry instance.");
+			throw new FuelException(__METHOD__.": Unable to assign multiple Hybrid\Registry instance.");
 		}
 
 		$this->registry = $registry;
@@ -173,7 +183,7 @@ class Acl
 		
 		$data = $this->registry->get("acl_".$this->name, $default);
 
-		$data = \Arr::merge($data, $default);
+		$data = Arr::merge($data, $default);
 
 		foreach ($data['roles'] as $role)
 		{
@@ -346,7 +356,7 @@ class Acl
 			throw new AclException(__METHOD__.": Can't add NULL role.");
 		}
 
-		$role = trim(\Inflector::friendly_title($role, '-', true));
+		$role = trim(Inflector::friendly_title($role, '-', true));
 
 		if ( ! $this->has_role($role))
 		{
@@ -437,7 +447,7 @@ class Acl
 			throw new AclException(__METHOD__.": Can't add NULL resources.");
 		}
 
-		$resource = trim(\Inflector::friendly_title($resource, '-', true));
+		$resource = trim(Inflector::friendly_title($resource, '-', true));
 		
 		if ( ! $this->has_resource($resource))
 		{
@@ -501,7 +511,7 @@ class Acl
 	 */
 	public function add_action($resource, $callback = null)
 	{
-		if ( ! $callback instanceof \Closure)
+		if ( ! $callback instanceof Closure)
 		{
 			$callback = null;
 		}
@@ -574,19 +584,19 @@ class Acl
 	 */
 	public function unauthorized($resource, $rest = false)
 	{
-		\Lang::load('autho', 'autho');
+		Lang::load('autho', 'autho');
 
 		$action           = (array_key_exists($resource, $this->actions) ? $this->actions[$resource] : null);
 		
 		$set_content_type = true;
-		$response         = \Response::forge(\Lang::get('autho.unauthorized', array(), 'Unauthorized'), 401);
+		$response         = Response::forge(Lang::get('autho.unauthorized', array(), 'Unauthorized'), 401);
 
 		// run the callback action
-		if ($action instanceof \Closure and true !== $rest)
+		if ($action instanceof Closure and true !== $rest)
 		{
 			$callback = $action();
 
-			if ($callback instanceof \Response)
+			if ($callback instanceof Response)
 			{
 				$response = $callback;
 			}
@@ -595,18 +605,18 @@ class Acl
 		{
 			if ($rest === true)
 			{
-				if (true === \Request::is_hmvc())
+				if (true === Request::is_hmvc())
 				{
 					$set_content_type = false;
 				}
 			}
 			else 
 			{
-				throw new \HttpNotFoundException();
+				throw new HttpNotFoundException();
 			}
 		}
 
-		\Event::shutdown();
+		Event::shutdown();
 		$response->send($set_content_type);
 	}
 
@@ -639,7 +649,7 @@ class Acl
 
 		foreach ($roles as $role) 
 		{
-			$role = \Inflector::friendly_title($role, '-', true);
+			$role = Inflector::friendly_title($role, '-', true);
 
 			if ( ! $this->has_role($role)) 
 			{
@@ -648,7 +658,7 @@ class Acl
 
 			foreach ($resources as $resource) 
 			{
-				$resource = \Inflector::friendly_title($resource, '-', true);
+				$resource = Inflector::friendly_title($resource, '-', true);
 
 				if ( ! $this->has_resource($resource)) 
 				{
@@ -661,7 +671,7 @@ class Acl
 
 				if ($this->registry instanceof Registry_Database)
 				{
-					$value = \Arr::merge(
+					$value = Arr::merge(
 						$this->registry->get("acl_".$this->name.".acl", array()), 
 						array("{$role}" => array("{$resource}" => $type))
 					);

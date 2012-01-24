@@ -13,6 +13,9 @@
 
 namespace Hybrid;
 
+use \Config;
+use \FuelException;
+
 /**
  * Hybrid 
  * 
@@ -53,7 +56,7 @@ class Template
 	 */
 	public static function _init()
 	{
-		\Config::load('hybrid', 'hybrid');
+		Config::load('hybrid', 'hybrid');
 	}
 
 	/**
@@ -69,14 +72,14 @@ class Template
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		$name = empty($arguments) ? null : $arguments[0];
 
 		if (null === $name)
 		{
-			$name = \Config::get('hybrid.template.default', self::DEFAULT_TEMPLATE);   
+			$name = Config::get('hybrid.template.default', self::DEFAULT_TEMPLATE);   
 		}
 
 		$name     = strtolower($name);
@@ -111,7 +114,7 @@ class Template
 			}
 			else 
 			{
-				throw new \FuelException("Requested {$driver} does not exist.");
+				throw new FuelException("Requested {$driver} does not exist.");
 			}
 		}
 		

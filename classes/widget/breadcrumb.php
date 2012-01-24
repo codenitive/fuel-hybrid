@@ -13,6 +13,12 @@
 
 namespace Hybrid;
 
+use \Config;
+use \FuelException;
+use \Inflector;
+use \Str;
+use \Uri;
+
 /**
  * Hybrid 
  * 
@@ -51,7 +57,7 @@ class Widget_Breadcrumb extends Widget_Driver
 	{
 		if (empty($title))
 		{
-			throw new \FuelException(__METHOD__.": Unable to add empty breadcrumb.");
+			throw new FuelException(__METHOD__.": Unable to add empty breadcrumb.");
 		}
 
 		if (empty($content) or ! strval($content))
@@ -61,8 +67,8 @@ class Widget_Breadcrumb extends Widget_Driver
 
 		$data = (object) array(
 			'title'   => $title,
-			'slug'    => \Inflector::friendly_title($title, '-', true),
-			'content' => \Uri::create($content),
+			'slug'    => Inflector::friendly_title($title, '-', true),
+			'content' => Uri::create($content),
 		);
 
 		if (true === $prepend)
@@ -95,7 +101,7 @@ class Widget_Breadcrumb extends Widget_Driver
 			$active  = ($count === $last_breadcrumb ? 'class="active"' : '');
 			$divider = ($count !== $last_breadcrumb ? $template['divider'] : '');
 
-			$content .= \Str::tr($template['item'], array(
+			$content .= Str::tr($template['item'], array(
 				'active' => $active, 
 				'content' => $item->content, 
 				'title' => $item->title,
@@ -103,9 +109,9 @@ class Widget_Breadcrumb extends Widget_Driver
 			));
 		}
 		
-		$prefix  = \Config::get('hybrid.widget.breadcrumb.prefix', '');
+		$prefix  = Config::get('hybrid.widget.breadcrumb.prefix', '');
 
-		return \Str::tr($template['wrapper_open'], array('id' => $prefix.ltrim($this->name, $prefix))).$content.$template['wrapper_close'];
+		return Str::tr($template['wrapper_open'], array('id' => $prefix.ltrim($this->name, $prefix))).$content.$template['wrapper_close'];
 	}
 
 }

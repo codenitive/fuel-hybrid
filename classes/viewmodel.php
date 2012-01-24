@@ -13,6 +13,13 @@
 
 namespace Hybrid;
 
+use \Exception;
+use \Error;
+use \FuelException;
+use \OutOfBoundsException;
+use \Request;
+
+
 /**
  * Hybrid 
  * 
@@ -40,7 +47,7 @@ abstract class ViewModel
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		foreach (array(null, 'view', null) as $key => $default)
@@ -59,14 +66,14 @@ abstract class ViewModel
 			break;
 		}
 
-		$namespace = \Request::active() ? ucfirst(\Request::active()->module) : '';
+		$namespace = Request::active() ? ucfirst(Request::active()->module) : '';
 		$class = $namespace.'\\View_'.ucfirst(str_replace(array('/', DS), '_', $viewmodel));
 
 		if ( ! class_exists($class))
 		{
 			if ( ! class_exists($class = $viewmodel))
 			{
-				throw new \OutOfBoundsException('ViewModel "View_'.ucfirst(str_replace(array('/', DS), '_', $viewmodel)).'" could not be found.');
+				throw new OutOfBoundsException('ViewModel "View_'.ucfirst(str_replace(array('/', DS), '_', $viewmodel)).'" could not be found.');
 			}
 		}
 
@@ -96,7 +103,7 @@ abstract class ViewModel
 	protected function __construct($viewmodel, $method, $auto_filter = null)
 	{
 		$this->_auto_filter = $auto_filter;
-		class_exists('Request', false) and $this->_active_request = \Request::active();
+		class_exists('Request', false) and $this->_active_request = Request::active();
 
 		! is_string($viewmodel) and $this->_view = $viewmodel;
 
@@ -286,9 +293,9 @@ abstract class ViewModel
 		{
 			return $this->render();
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			\Error::exception_handler($e);
+			Error::exception_handler($e);
 
 			return '';
 		}

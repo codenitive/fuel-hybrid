@@ -13,6 +13,10 @@
 
 namespace Hybrid;
 
+use \Config;
+use \Event;
+use \Response;
+
 /**
  * Hybrid 
  * 
@@ -79,7 +83,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 		$this->language = Factory::get_language();
 		$this->user     = Auth::make('user')->get();
 
-		\Event::trigger('controller_before');
+		Event::trigger('controller_before');
 		
 		$this->prepare_template();
 
@@ -95,7 +99,7 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	 */
 	public function after($response) 
 	{
-		\Event::trigger('controller_after');
+		Event::trigger('controller_after');
 
 		return parent::after($this->render_template($response));
 	}
@@ -138,9 +142,9 @@ abstract class Controller_Template extends \Fuel\Core\Controller
 	protected function render_template($response)
 	{
 		//we dont want to accidentally change our site_name
-		$this->template->set(array('site_name' => \Config::get('app.site_name')));
+		$this->template->set(array('site_name' => Config::get('app.site_name')));
 		
-		if (true === $this->auto_render and ! $response instanceof \Response)
+		if (true === $this->auto_render and ! $response instanceof Response)
 		{
 			$response       = $this->response;
 			$response->body = $this->template->render();

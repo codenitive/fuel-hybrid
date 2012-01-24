@@ -13,6 +13,11 @@
 
 namespace Hybrid;
 
+use \Config;
+use \Event;
+use \HttpNotFoundException;
+use \Response;
+
 /**
  * Hybrid 
  * 
@@ -104,7 +109,7 @@ abstract class Controller extends \Fuel\Core\Controller
 		$this->language = Factory::get_language();
 		$this->user     = Auth::make('user')->get();
 
-		\Event::trigger('controller_before');
+		Event::trigger('controller_before');
 
 		if (false === $this->rest)
 		{
@@ -127,7 +132,7 @@ abstract class Controller extends \Fuel\Core\Controller
 	 */
 	public function after($response) 
 	{
-		\Event::trigger('controller_after');
+		Event::trigger('controller_after');
 		
 		if (false === $this->rest)
 		{
@@ -183,7 +188,7 @@ abstract class Controller extends \Fuel\Core\Controller
 			}
 			else
 			{
-				throw new \HttpNotFoundException();
+				throw new HttpNotFoundException();
 			}
 		}
 	}
@@ -255,10 +260,10 @@ abstract class Controller extends \Fuel\Core\Controller
 		if (null !== $this->template)
 		{
 			//we dont want to accidentally change our site_name
-			$this->template->set(array('site_name' => \Config::get('app.site_name')));
+			$this->template->set(array('site_name' => Config::get('app.site_name')));
 		}
 
-		if (true === $this->auto_render and ! $response instanceof \Response)
+		if (true === $this->auto_render and ! $response instanceof Response)
 		{
 			$response = $this->response;
 
@@ -296,7 +301,7 @@ abstract class Controller extends \Fuel\Core\Controller
 	 */
 	protected function render_rest($response) 
 	{
-		if ( ! $response instanceof \Response)
+		if ( ! $response instanceof Response)
 		{
 			$response = $this->response;    
 		}

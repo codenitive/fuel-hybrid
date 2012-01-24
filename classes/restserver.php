@@ -13,6 +13,12 @@
 
 namespace Hybrid;
 
+use \Config;
+use \Format;
+use \FuelException;
+use \Request;
+use \stdClass;
+
 /**
  * Hybrid 
  * 
@@ -65,7 +71,7 @@ class Restserver
 	public static function _init()
 	{
 		static::$pattern = sprintf('/\.(%s)$/', implode('|', array_keys(static::$supported_formats)));
-		\Config::load('rest', true);
+		Config::load('rest', true);
 	}
 
 	/**
@@ -82,7 +88,7 @@ class Restserver
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		foreach (array(array(), 200) as $key => $default)
@@ -105,7 +111,7 @@ class Restserver
 	public static function is_rest()
 	{
 		$pattern  = static::$pattern;
-		$resource = \Request::active()->action;
+		$resource = Request::active()->action;
 
 		// Check if a file extension is used
 		return preg_match($pattern, $resource, $matches) or '' != static::detect_format();
@@ -137,7 +143,7 @@ class Restserver
 	 */
 	public static function auth()
 	{
-		switch (\Config::get('rest.auth'))
+		switch (Config::get('rest.auth'))
 		{
 			case 'basic' :
 				static::prepare_basic_auth();
@@ -208,7 +214,7 @@ class Restserver
 		}
 		else
 		{
-			throw new \FuelException(__METHOD__.": {$rest_format} is not a valid REST format.");
+			throw new FuelException(__METHOD__.": {$rest_format} is not a valid REST format.");
 		}
 		
 		return $this;
@@ -228,10 +234,10 @@ class Restserver
 		}
 		
 		$pattern          = static::$pattern;
-		$resource         = \Request::active()->action;
+		$resource         = Request::active()->action;
 		
 		$format           = $this->rest_format;
-		$response         = new \stdClass();
+		$response         = new stdClass();
 		$response->status = $this->http_status;
 		
 		// Check if a file extension is used
@@ -254,7 +260,7 @@ class Restserver
 		// If the format method exists, call and return the output in that format
 		if (method_exists('\\Format', 'to_'.$format))
 		{
-			$response->body = \Format::forge($this->data)->{'to_'.$format}();
+			$response->body = Format::forge($this->data)->{'to_'.$format}();
 		}
 
 		// Format not supported, output directly
@@ -282,7 +288,7 @@ class Restserver
 			return false;
 		}
 
-		$valid_logins = \Config::get('rest.valid_logins');
+		$valid_logins = Config::get('rest.valid_logins');
 
 		if ( ! array_key_exists($username, $valid_logins))
 		{
@@ -372,11 +378,11 @@ class Restserver
 			static::force_login($uniqid);
 		}
 
-		$valid_logins   = \Config::get('rest.valid_logins');
+		$valid_logins   = Config::get('rest.valid_logins');
 		$valid_pass     = $valid_logins[$digest['username']];
 
 		// This is the valid response expected
-		$A1             = md5($digest['username'].':'.\Config::get('rest.realm').':'.$valid_pass);
+		$A1             = md5($digest['username'].':'.Config::get('rest.realm').':'.$valid_pass);
 		$A2             = md5(strtoupper(Input::method()).':'.$digest['uri']);
 		$valid_response = md5($A1.':'.$digest['nonce'].':'.$digest['nc'].':'.$digest['cnonce'].':'.$digest['qop'].':'.$A2);
 
@@ -407,7 +413,7 @@ class Restserver
 
 		// Otherwise, check the HTTP_ACCEPT (if it exists and we are allowed)
 		$http_accept = Input::server('HTTP_ACCEPT');
-		if (\Config::get('rest.ignore_http_accept') !== true and $http_accept)
+		if (Config::get('rest.ignore_http_accept') !== true and $http_accept)
 		{
 
 			// Check all formats against the HTTP_ACCEPT header
@@ -489,9 +495,9 @@ class Restserver
 		header('HTTP/1.0 401 Unauthorized');
 		header('HTTP/1.1 401 Unauthorized');
 
-		$realm = \Config::get('rest.realm');
+		$realm = Config::get('rest.realm');
 
-		switch (\Config::get('rest.auth'))
+		switch (Config::get('rest.auth'))
 		{
 			case 'basic' :
 				header('WWW-Authenticate: Basic realm="'.$realm.'"');

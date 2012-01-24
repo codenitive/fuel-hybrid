@@ -13,6 +13,8 @@
 
 namespace Hybrid;
 
+use \Event;
+
 /**
  * Hybrid 
  * 
@@ -64,7 +66,7 @@ abstract class Controller_Core extends \Fuel\Core\Controller
 		$this->language = Factory::get_language();
 		$this->user     = Auth::make('user')->get();
 
-		\Event::trigger('controller_before');
+		Event::trigger('controller_before');
 
 		return parent::before();
 	}
@@ -78,7 +80,7 @@ abstract class Controller_Core extends \Fuel\Core\Controller
 	 */
 	public function after($response) 
 	{
-		\Event::trigger('controller_after');
+		Event::trigger('controller_after');
 
 		return parent::after($response);
 	}

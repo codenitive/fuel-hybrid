@@ -13,6 +13,8 @@
 
 namespace Hybrid;
 
+use \Arr;
+
 /**
  * Hybrid 
  * 
@@ -70,7 +72,7 @@ abstract class Registry_Driver
 	 */
 	public function get($key = null, $default = null)
 	{
-		return \Arr::get($this->data, $key, $default);
+		return Arr::get($this->data, $key, $default);
 	}
 
 	/**
@@ -83,7 +85,7 @@ abstract class Registry_Driver
 	 */
 	public function set($key, $value = '')
 	{
-		\Arr::set($this->data, $key, $value);
+		Arr::set($this->data, $key, $value);
 	}
 
 	/**
@@ -95,7 +97,7 @@ abstract class Registry_Driver
 	 */
 	public function delete($key = null)
 	{
-		return \Arr::delete($this->data, $key);
+		return Arr::delete($this->data, $key);
 	}
 
 	public abstract function initiate();

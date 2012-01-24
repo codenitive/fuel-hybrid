@@ -13,6 +13,11 @@
 
 namespace Hybrid;
 
+use \Config;
+use \Controller;
+use \HttpNotFoundException;
+use \View;
+
 /**
  * Hybrid 
  * 
@@ -39,7 +44,7 @@ namespace Hybrid;
  * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
-class Auth_Controller extends \Controller 
+class Auth_Controller extends Controller 
 {
 	/**
 	 * Load autho configuration
@@ -52,8 +57,8 @@ class Auth_Controller extends \Controller
 		parent::before();
 
 		// Load the configuration for this provider
-		\Config::load('app', 'app');
-		\Config::load('autho', 'autho');
+		Config::load('app', 'app');
+		Config::load('autho', 'autho');
 	}
 
 	/**
@@ -68,7 +73,7 @@ class Auth_Controller extends \Controller
 	{
 		if (empty($provider))
 		{
-			throw new \HttpNotFoundException();
+			throw new HttpNotFoundException();
 		}
 
 		try 
@@ -93,7 +98,7 @@ class Auth_Controller extends \Controller
 	{
 		if (empty($provider))
 		{
-			throw new \HttpNotFoundException();
+			throw new HttpNotFoundException();
 		}
 		
 		try 
@@ -117,7 +122,7 @@ class Auth_Controller extends \Controller
 	 */
 	protected function action_error($provider = array(), $e = '')
 	{
-		return \View::forge('error');
+		return View::forge('error');
 	}
 
 }

@@ -13,6 +13,15 @@
 
 namespace Hybrid;
 
+use \Arr;
+use \Config;
+use \Cookie;
+use \Crypt;
+use \DB;
+use \FuelException;
+use \Inflector;
+use \Lang;
+
 /**
  * Hybrid 
  * 
@@ -36,6 +45,8 @@ namespace Hybrid;
 class Auth_Provider_Normal 
 {
 	public $data = null;
+
+	protected $cached_db_result = null;
 
 	protected $tables = array();
 
@@ -107,8 +118,8 @@ class Auth_Provider_Normal
 	 */
 	public static function _init()
 	{
-		\Config::load('hybrid', 'hybrid');
-		\Lang::load('autho', 'autho');
+		Config::load('hybrid', 'hybrid');
+		Lang::load('autho', 'autho');
 	}
 
 	/**
@@ -123,7 +134,7 @@ class Auth_Provider_Normal
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		return new static();
@@ -140,7 +151,7 @@ class Auth_Provider_Normal
 		$this->reset();
 
 		// load Auth configuration
-		$config            = \Config::get('autho.normal', array());
+		$config            = Config::get('autho.normal', array());
 		
 		$reserved_property = array('optionals', 'optionals');
 		
@@ -157,7 +168,7 @@ class Auth_Provider_Normal
 			}
 
 			$this->{$key} = $value;
-			\Config::set("autho.normal.{$key}", $value);
+			Config::set("autho.normal.{$key}", $value);
 		}
 
 		// backward compatibility
@@ -181,9 +192,9 @@ class Auth_Provider_Normal
 			}
 		}
 
-		$this->verify_user_agent = \Config::get('autho.verify_user_agent', $this->verify_user_agent);
-		$this->expiration        = \Config::get('autho.expiration', $this->expiration);
-		$this->tables            = \Config::get('hybrid.tables.users', array(
+		$this->verify_user_agent = Config::get('autho.verify_user_agent', $this->verify_user_agent);
+		$this->expiration        = Config::get('autho.expiration', $this->expiration);
+		$this->tables            = Config::get('hybrid.tables.users', array(
 			'user' => 'users',
 			'meta' => 'users_meta',
 			'auth' => 'users_auths',
@@ -254,7 +265,7 @@ class Auth_Provider_Normal
 			$data['id'] = 0;
 		}
 
-		$query = \DB::select($this->tables['user'].'.*')
+		$query = DB::select($this->tables['user'].'.*')
 			->from($this->tables['user'])
 			->where($this->tables['user'].'.id', '=', $data['id'])
 			->limit(1);
@@ -263,7 +274,7 @@ class Auth_Provider_Normal
 		{
 			$query->select(array($this->tables['auth'].'.password', 'password_token'))
 				->join($this->tables['auth'])
-				->on($this->tables['auth'].'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');
+				->on($this->tables['auth'].'.'.Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');
 		}
 		else
 		{
@@ -274,7 +285,7 @@ class Auth_Provider_Normal
 		{
 			$query->select($this->tables['meta'].'.*')
 				->join($this->tables['meta'])
-				->on($this->tables['meta'].'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');    
+				->on($this->tables['meta'].'.'.Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');    
 		}
 		
 		$result = $query->as_object()->execute();
@@ -310,14 +321,14 @@ class Auth_Provider_Normal
 			$this->expiration = -1;
 		}
 
-		$query = \DB::select($this->tables['user'].'.*')
+		$query = DB::select($this->tables['user'].'.*')
 				->from($this->tables['user']);
 		
 		if (true === $this->use_auth)
 		{
 			$query->select(array($this->tables['auth'].'.password', 'password_token'))
 				->join($this->tables['auth'])
-				->on($this->tables['auth'].'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');
+				->on($this->tables['auth'].'.'.Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');
 		}
 		else
 		{
@@ -328,11 +339,11 @@ class Auth_Provider_Normal
 		{
 			$query->select($this->tables['meta'].'.*')
 				->join($this->tables['meta'])
-				->on($this->tables['meta'].'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');    
+				->on($this->tables['meta'].'.'.Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');    
 		}
 
 		$result = $query->where_open()
-			->where($this->tables['user'].'.'.\Arr::get($this->aliases, 'user_name', 'user_name'), '=', $username)
+			->where($this->tables['user'].'.'.Arr::get($this->aliases, 'user_name', 'user_name'), '=', $username)
 			->or_where($this->tables['user'].'.email', '=', $username)
 			->where_close()
 			->limit(1)
@@ -347,13 +358,13 @@ class Auth_Provider_Normal
 		if ($this->data['id'] < 1)
 		{
 			$this->reset();
-			throw new AuthException(\Lang::get('autho.user.not_exist', array('username' => $username)));
+			throw new AuthException(Lang::get('autho.user.not_exist', array('username' => $username)));
 		}
 
 		if ($this->data['password'] !== Auth::create_hash($password))
 		{
 			$this->reset();
-			throw new AuthException(\Lang::get('autho.user.bad_combination'));
+			throw new AuthException(Lang::get('autho.user.bad_combination'));
 		}
 		
 		$this->verify_token();
@@ -384,19 +395,19 @@ class Auth_Provider_Normal
 
 		$uid = $info['uid'];
 
-		$social_table = \Config::get('hybrid.tables.social', 'authentications');
+		$social_table = Config::get('hybrid.tables.social', 'authentications');
 
-		$query = \DB::select($this->tables['user'].'.*')
+		$query = DB::select($this->tables['user'].'.*')
 			->from($this->tables['user'])
 			->join($social_table)
-			->on($social_table.'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id')
+			->on($social_table.'.'.Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id')
 			->where($social_table.'.uid', '=', $uid);
 
 		if (true === $this->use_auth)
 		{
 			$query->select(array($this->tables['auth'].'.password', 'password_token'))
 				->join($this->tables['auth'])
-				->on($this->tables['auth'].'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');
+				->on($this->tables['auth'].'.'.Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');
 		}
 		else
 		{
@@ -407,7 +418,7 @@ class Auth_Provider_Normal
 		{
 			$query->select($this->tables['meta'].'.*')
 				->join($this->tables['meta'])
-				->on($this->tables['meta'].'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');    
+				->on($this->tables['meta'].'.'.Inflector::singularize($this->tables['user']).'_id', '=', $this->tables['user'].'.id');    
 		}
 
 		$result = $query->limit(1)
@@ -421,7 +432,7 @@ class Auth_Provider_Normal
 
 		if ($this->data['id'] < 1)
 		{
-			throw new AuthException(\Lang::get('autho.user.not_linked'));
+			throw new AuthException(Lang::get('autho.user.not_linked'));
 		}
 
 		$this->verify_token();
@@ -491,8 +502,8 @@ class Auth_Provider_Normal
 			$this->data[$alias] = $this->data[$key];
 		}
 		
-		\Cookie::delete('_users');
-		\Cookie::set('_users', \Crypt::encode(serialize((object) $values)), $values['expired_at']);
+		Cookie::delete('_users');
+		Cookie::set('_users', Crypt::encode(serialize((object) $values)), $values['expired_at']);
 
 		return true;
 	}
@@ -510,7 +521,7 @@ class Auth_Provider_Normal
 
 		if (true === $delete) 
 		{
-			\Cookie::delete('_users');
+			Cookie::delete('_users');
 		}
 		
 		return true;
@@ -559,12 +570,12 @@ class Auth_Provider_Normal
 		}
 		else
 		{
-			$user_id_field = \Inflector::singularize($this->tables['user']).'_id';
+			$user_id_field = Inflector::singularize($this->tables['user']).'_id';
 			$this->data['id'] = $user->{$user_id_field};
 		}
 		
-		$user_name = \Arr::get($this->aliases, 'user_name', 'user_name');
-		$email     = \Arr::get($this->aliases, 'email', 'email');
+		$user_name = Arr::get($this->aliases, 'user_name', 'user_name');
+		$email     = Arr::get($this->aliases, 'email', 'email');
 
 		$this->data[$user_name]  = $user->{$user_name};
 		$this->data[$email]      = $user->{$email};
@@ -579,6 +590,8 @@ class Auth_Provider_Normal
 				
 			$this->data[$property] = $user->{$property};
 		}
+
+		$this->cached_db_result = $result;
 	}
 
 	/**
@@ -591,14 +604,14 @@ class Auth_Provider_Normal
 	{
 		$data        = array();
 		
-		$group_table = \Config::get('hybrid.tables.group', 'roles');
-		$link_table  = \Config::get('hybrid.tables.users.group', 'users_roles');
+		$group_table = Config::get('hybrid.tables.group', 'roles');
+		$link_table  = Config::get('hybrid.tables.users.group', 'users_roles');
 		
-		$roles = \DB::select($group_table.'.id', $group_table.'.name')
+		$roles = DB::select($group_table.'.id', $group_table.'.name')
 			->from($group_table)
 			->join($link_table)
-			->on($link_table.'.'.\Inflector::singularize($group_table).'_id', '=', $group_table.'.id')
-			->where($link_table.'.'.\Inflector::singularize($this->tables['user']).'_id', '=', $this->data['id'])
+			->on($link_table.'.'.Inflector::singularize($group_table).'_id', '=', $group_table.'.id')
+			->where($link_table.'.'.Inflector::singularize($this->tables['user']).'_id', '=', $this->data['id'])
 			->as_object()
 			->execute();
 
@@ -612,7 +625,7 @@ class Auth_Provider_Normal
 		// link all available roles for this user
 		foreach ($roles as $role) 
 		{
-			$data[strval($role->id)] = \Inflector::friendly_title($role->name, '-', true);
+			$data[strval($role->id)] = Inflector::friendly_title($role->name, '-', true);
 		}
 			
 		$this->data['roles'] = $data;
@@ -629,9 +642,9 @@ class Auth_Provider_Normal
 	{
 		$data = array();
 		
-		$accounts = \DB::select('provider', 'uid', 'access_token', 'secret')
-			->from(\Config::get('hybrid.tables.social', 'authentications'))
-			->where(\Inflector::singularize($this->tables['user']).'_id', '=', $this->data['id'])
+		$accounts = DB::select('provider', 'uid', 'access_token', 'secret')
+			->from(Config::get('hybrid.tables.social', 'authentications'))
+			->where(Inflector::singularize($this->tables['user']).'_id', '=', $this->data['id'])
 			->as_object()
 			->execute();
 

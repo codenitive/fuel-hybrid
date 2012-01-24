@@ -13,6 +13,12 @@
 
 namespace Hybrid;
 
+use \Arr;
+use \Config;
+use \Cookie;
+use \Request;
+use \Response;
+use \Uri;
 use \OAuth\Consumer;
 use \OAuth\Provider;
 
@@ -55,7 +61,7 @@ class Auth_Strategy_OAuth extends Auth_Strategy
 		$provider = Provider::forge($this->provider);
 		
 		// Create the URL to return the user to
-		$callback = \Arr::get($this->config, 'callback') ?: \Uri::create(\Config::get('autho.urls.callback', \Request::active()->route->segments[0].'/callback'));
+		$callback = Arr::get($this->config, 'callback') ?: Uri::create(Config::get('autho.urls.callback', Request::active()->route->segments[0].'/callback'));
 		$callback = rtrim($callback, '/').'/'.$this->provider;
 		
 		// Add the callback URL to the consumer
@@ -65,10 +71,10 @@ class Auth_Strategy_OAuth extends Auth_Strategy
 		$token = $provider->request_token($consumer);
 
 		// Store the token
-		\Cookie::set('oauth_token', base64_encode(serialize($token)));
+		Cookie::set('oauth_token', base64_encode(serialize($token)));
 
 		// Redirect to the twitter login page
-		\Response::redirect($provider->authorize_url($token, array(
+		Response::redirect($provider->authorize_url($token, array(
 			'oauth_callback' => $callback,
 		)));
 	}
@@ -81,7 +87,7 @@ class Auth_Strategy_OAuth extends Auth_Strategy
 		// Load the provider
 		$this->provider = Provider::forge($this->provider);
 		
-		if ($token = \Cookie::get('oauth_token'))
+		if ($token = Cookie::get('oauth_token'))
 		{
 			// Get the token from storage
 			$this->token = unserialize(base64_decode($token));
@@ -90,7 +96,7 @@ class Auth_Strategy_OAuth extends Auth_Strategy
 		if ($this->token and $this->token->access_token !== Input::get_post('oauth_token'))
 		{   
 			// Delete the token, it is not valid
-			\Cookie::delete('oauth_token');
+			Cookie::delete('oauth_token');
 
 			// Send the user back to the beginning
 			throw new Auth_Strategy_Exception('invalid token after coming back to site');

@@ -13,6 +13,8 @@
 
 namespace Hybrid;
 
+use \Event;
+
 /**
  * Hybrid 
  * 
@@ -78,7 +80,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 		$this->language = Factory::get_language();
 		$this->user     = Auth::make('user')->get();
 
-		\Event::trigger('controller_before');
+		Event::trigger('controller_before');
 		
 		if (Request::is_hmvc()) 
 		{
@@ -99,7 +101,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 	 */
 	public function after($response) 
 	{
-		\Event::trigger('controller_after');
+		Event::trigger('controller_after');
 		
 		if ( ! $response instanceof \Response)
 		{

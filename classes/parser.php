@@ -13,6 +13,8 @@
 
 namespace Hybrid;
 
+use \FuelException;
+
 /**
  * Hybrid 
  * 
@@ -50,7 +52,7 @@ class Parser
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		$name = empty($arguments) ? null : $arguments[0];
@@ -68,7 +70,7 @@ class Parser
 			}
 			else
 			{
-				throw new \FuelException("Requested {$driver} does not exist.");
+				throw new FuelException("Requested {$driver} does not exist.");
 			}
 		}
 

@@ -13,6 +13,13 @@
 
 namespace Hybrid;
 
+use \Config;
+use \FuelException;
+use \Lang;
+use \Request;
+use \Str;
+use \Uri;
+
 /**
  * Hybrid 
  * 
@@ -47,8 +54,8 @@ class Pagination
 	 */
 	public static function _init()
 	{
-		\Lang::load('pagination', true);
-		\Config::load('hybrid', 'hybrid');
+		Lang::load('pagination', true);
+		Config::load('hybrid', 'hybrid');
 	}
 
 	/**
@@ -65,7 +72,7 @@ class Pagination
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		foreach (array(null, array()) as $key => $default)
@@ -83,7 +90,7 @@ class Pagination
 
 		if (null === $name)
 		{
-			$name = md5(\Request::active()->route->translation);
+			$name = md5(Request::active()->route->translation);
 		}
 
 		if ( ! isset(static::$instances[$name]))
@@ -107,12 +114,12 @@ class Pagination
 	{
 		if (null === $name)
 		{
-			$name = md5(\Request::active()->route->translation);
+			$name = md5(Request::active()->route->translation);
 		}
 
 		if ( ! isset(static::$instances[$name]))
 		{
-			throw new \FuelException(__METHOD__.": Request to unknown instance {$name}");
+			throw new FuelException(__METHOD__.": Request to unknown instance {$name}");
 		}
 
 		return static::$instances[$name];
@@ -128,8 +135,8 @@ class Pagination
 	 */
 	protected function __construct($config = array()) 
 	{
-		$config = \Config::get('pagination', array()) + $config;
-		$config = \Config::get('hybrid.pagination', array()) + $config;
+		$config = Config::get('pagination', array()) + $config;
+		$config = Config::get('hybrid.pagination', array()) + $config;
 
 		// Bind passed config as instance's properties
 		foreach ($config as $key => $value)
@@ -189,7 +196,7 @@ class Pagination
 					$this->uri_segment = intval($key) + 1;
 				}
 
-				$this->current_page = (int) \Uri::segment($this->uri_segment);
+				$this->current_page = (int) Uri::segment($this->uri_segment);
 			}
 
 			// make sure it's an integer
@@ -198,8 +205,8 @@ class Pagination
 		else
 		{
 			// URI is not given, we need to automatically detect request URI
-			$get      = \Input::get(null, array());
-			$segments = \Uri::segments();
+			$get      = Input::get(null, array());
+			$segments = Uri::segments();
 
 			// use $_GET if uri_segment is specifically set to null
 			if (null === $this->uri_segment)
@@ -224,11 +231,11 @@ class Pagination
 				}
 				else
 				{
-					$this->current_page = (int) \URI::segment($this->uri_segment);
+					$this->current_page = (int) Uri::segment($this->uri_segment);
 				}
 
 				// get the route translation, as comparison to current URI segment
-				$translation = explode('/', \Request::active()->route->translation);
+				$translation = explode('/', Request::active()->route->translation);
 
 				// we need to merge translation when Uri::segments is not enough
 				if ($key >= count($segments))
@@ -243,7 +250,7 @@ class Pagination
 				}
 
 				// add in action index when not available
-				if (null === \Request::active()->route->action and count($translation) <= count($segments))
+				if (null === Request::active()->route->action and count($translation) <= count($segments))
 				{
 					$segments[($key - 1)] = 'index';
 				}
@@ -396,7 +403,7 @@ class Pagination
 				$state = '';
 			}
 
-			$pagination .= \Str::tr($this->template['page_start'].$text.$this->template['page_end'], array(
+			$pagination .= Str::tr($this->template['page_start'].$text.$this->template['page_end'], array(
 				'state' => $state,
 				'url'   => $url,
 			));
@@ -435,7 +442,7 @@ class Pagination
 			$state = $this->template['state']['previous_next']['active'];
 		}
 
-		return \Str::tr($this->template['next_start'].$text.$this->template['next_end'], array(
+		return Str::tr($this->template['next_start'].$text.$this->template['next_end'], array(
 			'state' => $state,
 			'url'   => $url,
 		));
@@ -471,7 +478,7 @@ class Pagination
 			$state = $this->template['state']['previous_next']['active'];
 		}
 
-		return \Str::tr($this->template['previous_start'].$text.$this->template['previous_end'], array(
+		return Str::tr($this->template['previous_start'].$text.$this->template['previous_end'], array(
 			'state' => $state,
 			'url'   => $url,
 		));
@@ -492,7 +499,7 @@ class Pagination
 		}
 		else
 		{
-			throw new \FuelException(__CLASS__."::{$name} is not accessible.");
+			throw new FuelException(__CLASS__."::{$name} is not accessible.");
 		}
 	}
 
@@ -521,9 +528,9 @@ class Pagination
 		}
 
 		$pagination  = $this->template['wrapper_start'];
-		$pagination .= $this->prev_link(\Lang::get('pagination.previous'));
+		$pagination .= $this->prev_link(Lang::get('pagination.previous'));
 		$pagination .= $this->page_links();
-		$pagination .= $this->next_link(\Lang::get('pagination.next'));
+		$pagination .= $this->next_link(Lang::get('pagination.next'));
 		$pagination .= $this->template['wrapper_end'];
 
 		return $pagination;
@@ -538,7 +545,7 @@ class Pagination
 	 */
 	protected function build_url($page_id)
 	{
-		return \Uri::create(\Str::tr($this->uri, array('page' => $page_id)));
+		return Uri::create(Str::tr($this->uri, array('page' => $page_id)));
 	}
 
 }

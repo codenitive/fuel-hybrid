@@ -13,6 +13,9 @@
 
 namespace Hybrid;
 
+use \Config;
+use \FuelException;
+
 /**
  * Hybrid 
  * 
@@ -83,7 +86,7 @@ class Auth_Driver_User extends Auth_Driver
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		return Auth::make('user');
@@ -98,8 +101,8 @@ class Auth_Driver_User extends Auth_Driver
 	 */
 	public static function _init()
 	{
-		\Config::load('autho', 'autho');
-		\Config::load('crypt', true);
+		Config::load('autho', 'autho');
+		Config::load('crypt', true);
 	}
 
 	/**
@@ -116,7 +119,7 @@ class Auth_Driver_User extends Auth_Driver
 	public function __construct() 
 	{
 		// allow to disable user auth, would be useful when database not available
-		if (false === \Config::get('autho.normal.enabled', true))
+		if (false === Config::get('autho.normal.enabled', true))
 		{
 			return;
 		}

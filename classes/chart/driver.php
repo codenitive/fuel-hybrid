@@ -13,6 +13,10 @@
 
 namespace Hybrid;
 
+use \Config;
+use \FuelException;
+use \Log;
+
 /**
  * Hybrid 
  * 
@@ -39,7 +43,7 @@ abstract class Chart_Driver
 	 */
 	public static function _init() 
 	{
-		\Config::load('chart', true);
+		Config::load('chart', true);
 	}
 
 	/**
@@ -52,7 +56,7 @@ abstract class Chart_Driver
 	 */
 	public static function factory()
 	{
-		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
+		Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
 		
 		return static::make();
 	}
@@ -168,7 +172,7 @@ abstract class Chart_Driver
 		}
 		else
 		{
-			throw new \FuelException(__METHOD__.' require \$name to be set.');
+			throw new FuelException(__METHOD__.' require \$name to be set.');
 		}
 
 		return $this;
@@ -262,7 +266,7 @@ abstract class Chart_Driver
 	 */
 	public function generate()
 	{
-		\Log::warning('This method is deprecated. Please use a render() instead.', __METHOD__);
+		Log::warning('This method is deprecated. Please use a render() instead.', __METHOD__);
 
 		return $this->render();
 	}

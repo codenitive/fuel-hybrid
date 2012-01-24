@@ -13,6 +13,8 @@
 
 namespace Hybrid;
 
+use \Config;
+
 /**
  * Hybrid 
  * 
@@ -52,7 +54,7 @@ class Html extends \Fuel\Core\Html
 	 */
 	public static function title($content = '', $attr = array()) 
 	{
-		$title = \Config::get('app.site_name');
+		$title = Config::get('app.site_name');
 
 		if ( ! empty($content) and is_string($content)) 
 		{
