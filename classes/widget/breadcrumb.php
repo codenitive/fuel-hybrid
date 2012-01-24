@@ -17,7 +17,6 @@ use \Config;
 use \FuelException;
 use \Inflector;
 use \Str;
-use \Uri;
 
 /**
  * Hybrid 

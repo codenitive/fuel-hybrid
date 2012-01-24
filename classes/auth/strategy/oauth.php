@@ -16,9 +16,7 @@ namespace Hybrid;
 use \Arr;
 use \Config;
 use \Cookie;
-use \Request;
 use \Response;
-use \Uri;
 use \OAuth\Consumer;
 use \OAuth\Provider;
 
@@ -61,7 +59,7 @@ class Auth_Strategy_OAuth extends Auth_Strategy
 		$provider = Provider::forge($this->provider);
 		
 		// Create the URL to return the user to
-		$callback = Arr::get($this->config, 'callback') ?: Uri::create(Config::get('autho.urls.callback', Request::active()->route->segments[0].'/callback'));
+		$callback = Arr::get($this->config, 'callback') ?: Uri::create(Config::get('autho.urls.callback', \Request::active()->route->segments[0].'/callback'));
 		$callback = rtrim($callback, '/').'/'.$this->provider;
 		
 		// Add the callback URL to the consumer

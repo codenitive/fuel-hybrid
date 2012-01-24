@@ -16,7 +16,6 @@ namespace Hybrid;
 use \Config;
 use \Format;
 use \FuelException;
-use \Request;
 use \stdClass;
 
 /**
@@ -111,7 +110,7 @@ class Restserver
 	public static function is_rest()
 	{
 		$pattern  = static::$pattern;
-		$resource = Request::active()->action;
+		$resource = \Request::active()->action;
 
 		// Check if a file extension is used
 		return preg_match($pattern, $resource, $matches) or '' != static::detect_format();
@@ -234,7 +233,7 @@ class Restserver
 		}
 		
 		$pattern          = static::$pattern;
-		$resource         = Request::active()->action;
+		$resource         = \Request::active()->action;
 		
 		$format           = $this->rest_format;
 		$response         = new stdClass();

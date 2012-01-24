@@ -15,7 +15,6 @@ namespace Hybrid;
 
 use \Finder;
 use \FuelException;
-use \View;
 
 /**
  * Hybrid 
@@ -93,7 +92,7 @@ class Template_Normal extends Template_Driver
 			$this->set_filename(static::$config['default_filename']);
 		}
 
-		$this->view = View::forge();
+		$this->view = \View::forge();
 	}
 
 	/**
@@ -143,7 +142,7 @@ class Template_Normal extends Template_Driver
 	 */
 	public function partial($filename, $data = null)
 	{
-		$view = View::forge();
+		$view = \View::forge();
 		$view->set_filename(rtrim($this->folder, '/').'/'.$filename);
 		$view->auto_filter(static::$config['auto_filter']);
 

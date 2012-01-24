@@ -14,8 +14,6 @@
 namespace Hybrid;
 
 use \Config;
-use \Request;
-use \Uri;
 use \LightOpenID;
 
 /**
@@ -83,7 +81,7 @@ class Auth_Strategy_OpenId extends Auth_Strategy
 		$this->openid->identity  = $identity;
 		$this->openid->required  = Config::get('autho.providers.openid.ax_required');
 		$this->openid->optional  = Config::get('autho.providers.openid.ax_optional');
-		$this->openid->returnUrl = Uri::create(Config::get('autho.urls.callback', Request::active()->route->segments[0].'/callback').'/'.$this->provider);
+		$this->openid->returnUrl = Uri::create(Config::get('autho.urls.callback', \Request::active()->route->segments[0].'/callback').'/'.$this->provider);
 
 		try
 		{

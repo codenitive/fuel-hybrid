@@ -15,8 +15,6 @@ namespace Hybrid;
 
 use \Arr;
 use \Config;
-use \Request;
-use \Uri;
 use OAuth2\Provider;
 
 /**
@@ -58,7 +56,7 @@ class Auth_Strategy_OAuth2 extends Auth_Strategy
 
 		if ($provider->callback === null)
 		{
-			$provider->callback = Uri::create(Config::get('autho.urls.callback', Request::active()->route->segments[0].'/callback'));
+			$provider->callback = Uri::create(Config::get('autho.urls.callback', \Request::active()->route->segments[0].'/callback'));
 			$provider->callback = rtrim($provider->callback, '/').'/'.$this->provider;
 		}
 		

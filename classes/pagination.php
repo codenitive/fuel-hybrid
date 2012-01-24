@@ -16,9 +16,7 @@ namespace Hybrid;
 use \Config;
 use \FuelException;
 use \Lang;
-use \Request;
 use \Str;
-use \Uri;
 
 /**
  * Hybrid 
@@ -90,7 +88,7 @@ class Pagination
 
 		if (null === $name)
 		{
-			$name = md5(Request::active()->route->translation);
+			$name = md5(\Request::active()->route->translation);
 		}
 
 		if ( ! isset(static::$instances[$name]))
@@ -114,7 +112,7 @@ class Pagination
 	{
 		if (null === $name)
 		{
-			$name = md5(Request::active()->route->translation);
+			$name = md5(\Request::active()->route->translation);
 		}
 
 		if ( ! isset(static::$instances[$name]))
@@ -235,7 +233,7 @@ class Pagination
 				}
 
 				// get the route translation, as comparison to current URI segment
-				$translation = explode('/', Request::active()->route->translation);
+				$translation = explode('/', \Request::active()->route->translation);
 
 				// we need to merge translation when Uri::segments is not enough
 				if ($key >= count($segments))
@@ -250,7 +248,7 @@ class Pagination
 				}
 
 				// add in action index when not available
-				if (null === Request::active()->route->action and count($translation) <= count($segments))
+				if (null === \Request::active()->route->action and count($translation) <= count($segments))
 				{
 					$segments[($key - 1)] = 'index';
 				}

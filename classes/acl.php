@@ -20,7 +20,6 @@ use \FuelException;
 use \HttpNotFoundException;
 use \Inflector;
 use \Lang;
-use \Request;
 use \Response;
 
 /**
@@ -605,7 +604,7 @@ class Acl
 		{
 			if ($rest === true)
 			{
-				if (true === Request::is_hmvc())
+				if (true === \Request::is_hmvc())
 				{
 					$set_content_type = false;
 				}

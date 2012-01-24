@@ -17,7 +17,6 @@ use \Exception;
 use \Error;
 use \FuelException;
 use \OutOfBoundsException;
-use \Request;
 
 
 /**
@@ -66,7 +65,7 @@ abstract class ViewModel
 			break;
 		}
 
-		$namespace = Request::active() ? ucfirst(Request::active()->module) : '';
+		$namespace = \Request::active() ? ucfirst(\Request::active()->module) : '';
 		$class = $namespace.'\\View_'.ucfirst(str_replace(array('/', DS), '_', $viewmodel));
 
 		if ( ! class_exists($class))
@@ -103,7 +102,7 @@ abstract class ViewModel
 	protected function __construct($viewmodel, $method, $auto_filter = null)
 	{
 		$this->_auto_filter = $auto_filter;
-		class_exists('Request', false) and $this->_active_request = Request::active();
+		class_exists('Request', false) and $this->_active_request = \Request::active();
 
 		! is_string($viewmodel) and $this->_view = $viewmodel;
 
@@ -267,8 +266,8 @@ abstract class ViewModel
 	{
 		if (class_exists('Request', false))
 		{
-			$current_request = Request::active();
-			Request::active($this->_active_request);
+			$current_request = \Request::active();
+			\Request::active($this->_active_request);
 		}
 
 		$this->{$this->_method}();
@@ -278,7 +277,7 @@ abstract class ViewModel
 
 		if (class_exists('Request', false))
 		{
-			Request::active($current_request);
+			\Request::active($current_request);
 		}
 
 		return $return;

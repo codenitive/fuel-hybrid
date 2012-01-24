@@ -17,7 +17,6 @@ use \Config;
 use \Event;
 use \Fuel;
 use \Profiler;
-use \Request;
 use \Session;
 
 /**
@@ -107,7 +106,7 @@ class Factory
 		} 
 		else 
 		{
-			$request  = Request::forge(Config::get('routes._maintenance_mode_'))->execute();
+			$request  = \Request::forge(Config::get('routes._maintenance_mode_'))->execute();
 			$response = $request->response();
 			$response->send(true);
 			Event::shutdown();
