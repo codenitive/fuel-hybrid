@@ -47,41 +47,19 @@ abstract class Chart_Driver
 	}
 
 	/**
-	 * Shortcode to self::make().
-	 *
-	 * @deprecated  1.2.0
-	 * @static
-	 * @access  public
-	 * @return  self::make()
-	 */
-	public static function factory()
-	{
-		Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
-		
-		return static::make();
-	}
-
-	/**
-	 * Shortcode to self::make().
-	 * 
-	 * @static
-	 * @access  public
-	 * @return  self::make() 
-	 */
-	public static function forge() 
-	{
-		return static::make();
-	}
-
-	/**
 	 * A shortcode to initiate this class as a new object
 	 * 
 	 * @static
 	 * @access  public
 	 * @return  static 
 	 */
-	public static function make() 
+	public static function __callStatic($method, array $arguments)
 	{
+		if ( ! in_array($method, array('factory', 'forge', 'make')))
+		{
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
+		}
+
 		return new static();
 	}
 
