@@ -45,6 +45,13 @@ class Registry
 
 	protected static $initiated = false;
 
+	/**
+	 * Load configuration
+	 * 
+	 * @static
+	 * @access  public
+	 * @return  void
+	 */
 	public static function _init()
 	{
 		if (true === static::$initiated)
@@ -125,6 +132,20 @@ class Registry
 		return static::$instances[$instance_name];
 	}
 
+	/**
+	 * Hybrid\Registry doesn't support a construct method
+	 *
+	 * @access  protected
+	 */
+	protected function __construct() {}
+
+	/**
+	 * Loop every instance and execute shutdown method (if available)
+	 *
+	 * @static
+	 * @access  public
+	 * @return  void
+	 */
 	public static function shutdown()
 	{
 		foreach (static::$instances as $name => $class)

@@ -73,25 +73,25 @@ class Widget
 			isset($arguments[$key]) or $arguments[$key] = $default;
 		}
 
-		list($instance_name, $config) = $arguments;
+		list($name, $config) = $arguments;
 		
-		$instance_name = $instance_name ?: 'default';
-		$instance_name = strtolower($instance_name);
+		$name = $name ?: 'default';
+		$name = strtolower($name);
 
-		if (false === strpos($instance_name, '.'))
+		if (false === strpos($name, '.'))
 		{
-			$instance_name = $instance_name.'.default';
+			$name = $name.'.default';
 		}
 		
-		list($type, $name) = explode('.', $instance_name, 2);
+		list($type, $short_name) = explode('.', $name, 2);
 
-		if ( ! isset(static::$instances[$instance_name]))
+		if ( ! isset(static::$instances[$name]))
 		{
 			$driver = "\Hybrid\Widget_".ucfirst($type);
 
 			if (class_exists($driver))
 			{
-				static::$instances[$instance_name] = new $driver($name, $config);
+				static::$instances[$name] = new $driver($short_name, $config);
 			}
 			else
 			{
@@ -99,6 +99,14 @@ class Widget
 			}
 		}
 
-		return static::$instances[$instance_name];
+		return static::$instances[$name];
 	}
+
+	/**
+	 * Hybrid\Widget doesn't support a construct method
+	 *
+	 * @access  protected
+	 */
+	protected function __construct() {}
+
 }

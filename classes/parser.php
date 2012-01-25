@@ -77,4 +77,11 @@ class Parser
 		return static::$instances[$name];
 	}
 
+	/**
+	 * Hybrid\Parser doesn't support a construct method
+	 *
+	 * @access  protected
+	 */
+	protected function __construct() {}
+
 }

@@ -66,9 +66,7 @@ class Factory
 			static::maintenance_mode();
 		}
 
-		$lang = Session::get(static::$identity.'_lang');
-
-		if (null !== $lang) 
+		if (null !== ($lang = Session::get(static::$identity.'_lang'))) 
 		{
 			Config::set('language', $lang);
 			static::$language = $lang;
@@ -81,6 +79,13 @@ class Factory
 		Event::trigger('load_language');
 		Event::trigger('load_acl');
 	}
+
+	/**
+	 * Hybrid\Factory doesn't support a construct method
+	 *
+	 * @access  protected
+	 */
+	protected function __construct() {}
 
 	/**
 	 * Check for maintenance mode
@@ -164,12 +169,12 @@ class Factory
 	 */
 	protected static function profiling()
 	{
-		$profiler     = Session::get('_profiler', Config::get('profiling', false));
-		$get_profiler = Input::get('profiler', null);
-
-		if (null !== $get_profiler)
+		$session  = Session::instance();
+		$profiler = $session->get('_profiler', Config::get('profiling', false));
+		
+		if (null !== ($input = Input::get('profiler')))
 		{
-			$profiler = (int) $get_profiler === 1 ? true : false;
+			$profiler = (int) $input === 1 ? true : false;
 		}
 
 		switch ($profiler)
@@ -180,7 +185,7 @@ class Factory
 			break;
 		}
 
-		Session::set('_profiler', $profiler);
+		$session->set('_profiler', $profiler);
 	}
 	
 }

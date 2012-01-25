@@ -133,6 +133,13 @@ class Auth
 	}
 
 	/**
+	 * Hybrid\Auth doesn't support a construct method
+	 *
+	 * @access  protected
+	 */
+	protected function __construct() {}
+
+	/**
 	 * Turn string to hash using sha1() hash with salt.
 	 *
 	 * @static

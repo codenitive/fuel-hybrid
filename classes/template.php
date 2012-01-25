@@ -121,4 +121,11 @@ class Template
 		return static::$instances[$name];
 	}
 
+	/**
+	 * Hybrid\Template doesn't support a construct method
+	 *
+	 * @access  protected
+	 */
+	protected function __construct() {}
+
 }

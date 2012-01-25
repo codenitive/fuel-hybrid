@@ -77,6 +77,13 @@ class Chart
 
 		return static::$instances[$name];
 	}
+
+	/**
+	 * Hybrid\Chart doesn't support a construct method
+	 *
+	 * @access  protected
+	 */
+	protected function __construct() {}
 	
 	/**
 	 * Load Google JavaSript API Library
