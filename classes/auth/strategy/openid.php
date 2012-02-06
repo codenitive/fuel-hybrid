@@ -71,7 +71,7 @@ class Auth_Strategy_OpenId extends Auth_Strategy
 	 */
 	public function authenticate()
 	{
-		$identity = Input::post(Config::get('ninjauth.providers.openid.identifier_form_name'))
+		$identity = Input::post(Config::get('autho.providers.openid.identifier_form_name'))
 
 		if (empty($identity))
 		{
