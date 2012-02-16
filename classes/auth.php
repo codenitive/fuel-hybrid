@@ -108,7 +108,7 @@ class Auth
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.' method does not exist.');
 		}
 
 		$name = empty($arguments) ? null : $arguments[0];
@@ -207,7 +207,7 @@ class Auth
 
 		null === static::$hasher and static::$hasher = new \PHPSecLib\Crypt_Hash();
 
-		$salt   = Config::get('autho.salt', Config::get('crypt.crypto_key'));
+		$salt = Config::get('autho.salt', Config::get('crypt.crypto_key'));
 		
 		return base64_encode(static::$hasher->pbkdf2($string, $salt, 10000, 32));
 	}

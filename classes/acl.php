@@ -45,6 +45,8 @@ class AclException extends FuelException {}
 
 class Acl 
 {
+	protected static $_initiated = false;
+
 	/**
 	 * Cache ACL instance so we can reuse it on multiple request. 
 	 * 
@@ -70,7 +72,12 @@ class Acl
 	 */
 	public static function _init() 
 	{
-		\Event::trigger('init_acl');
+		if (false === static::$_initiated)
+		{
+			Event::trigger('init_acl');
+		}
+
+		static::$_initiated = true;
 	}
 
 	/**
