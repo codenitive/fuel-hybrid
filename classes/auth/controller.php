@@ -14,7 +14,9 @@
 namespace Hybrid;
 
 use \Config;
+use \Controller;
 use \HttpNotFoundException;
+use \View;
 
 /**
  * Hybrid 
@@ -42,7 +44,7 @@ use \HttpNotFoundException;
  * @author      Phil Sturgeon <https://github.com/philsturgeon>
  */
 
-class Auth_Controller extends \Controller 
+class Auth_Controller extends Controller 
 {
 	/**
 	 * Load autho configuration
@@ -63,11 +65,11 @@ class Auth_Controller extends \Controller
 	 * Start a session request
 	 *
 	 * @access  public
-	 * @param   array    $provider
+	 * @param   array       $provider
 	 * @return  Response
 	 * @throws  Auth_Strategy_Exception
 	 */
-	public function action_session($provider = array())
+	public function action_session($provider = null)
 	{
 		if (empty($provider))
 		{
@@ -88,12 +90,13 @@ class Auth_Controller extends \Controller
 	 * Get authorization code from callback and fetch user access_token and other information
 	 *
 	 * @access  public
-	 * @param   array    $provider
+	 * @param   string      $provider
 	 * @return  Response
 	 * @throws  Auth_Strategy_Exception
 	 */
-	public function action_callback($provider = array())
+	public function action_callback($provider = null)
 	{
+		// if provider data is somehow empty, it might not came from a provider.
 		if (empty($provider))
 		{
 			throw new HttpNotFoundException();
@@ -114,13 +117,13 @@ class Auth_Controller extends \Controller
 	 * Display error from failed request
 	 *
 	 * @access  protected
-	 * @param   array    $provider
-	 * @param   string   $e
+	 * @param   string      $provider
+	 * @param   string      $e
 	 * @return  Response
 	 */
-	protected function action_error($provider = array(), $e = '')
+	protected function action_error($provider = null, $e = '')
 	{
-		return \View::forge('error');
+		return View::forge('error');
 	}
 
 }
