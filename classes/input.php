@@ -115,16 +115,16 @@ class Input
 			break;
 		}
 
-		// Reach this point but $index is null (which isn't be so we should just return the default value) 
-		if (null === $index) 
-		{
-			return $default;
-		}
-
 		if ( ! $using_hybrid or $name === 'file') 
 		{
 			// Not using \Hybrid\Request, it has to be from \Fuel\Core\Input.
 			return call_user_func_array(array("Fuel\Core\Input", $name), array($index, $default));
+		}
+		
+		// Reach this point but $index is null (which isn't be so we should just return the default value) 
+		if (null === $index) 
+		{
+			return $default;
 		}
 
 		switch (true)
