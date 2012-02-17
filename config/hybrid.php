@@ -15,15 +15,15 @@
 return array(
 	// DB Table List
 	'tables'          => array(
-		'users' => array(
+		'group'    => 'roles',
+		'registry' => 'options',
+		'social'   => 'authentications',
+		'users'    => array(
 			'user'  => 'users',
 			'meta'  => 'users_meta',
 			'auth'  => 'users_auths',
 			'group' => 'users_roles',
 		),
-		'group'    => 'roles',
-		'registry' => 'options',
-		'social'   => 'authentications',
 	),
 
 	// Alway profiling trigger using ?profiler=1 and disable with ?profiler=0
@@ -105,22 +105,26 @@ return array(
 	// Pagination class configuration
 	'pagination' => array(
 		'template' => array(
-			'wrapper_start'  => '<div class="pagination"><ul>',
-			'wrapper_end'    => '</ul></div>',
-			'page_start'     => '<li class=":state"><a href=":url">',
-			'page_end'       => '</a></li>',
+			'wrapper_start' => '<div class="pagination"><ul>',
+			'wrapper_end'   => '</ul></div>',
+			
 			'previous_start' => '<li class="prev :state"><a href=":url">',
 			'previous_end'   => '</a></li>',
 			'previous_mark'  => '&laquo; ',
-			'next_start'     => '<li class="next :state"><a href=":url">',
-			'next_end'       => '</a></li>',
-			'next_mark'      => ' &raquo;',
+
+			'next_start' => '<li class="next :state"><a href=":url">',
+			'next_end'   => '</a></li>',
+			'next_mark'  => ' &raquo;',
+			
+			'page_start' => '<li class=":state"><a href=":url">',
+			'page_end'   => '</a></li>',
+			
 			'state'          => array(
+				'current_page'  => 'active',
 				'previous_next' => array(
 					'active'   => '',
 					'disabled' => 'disabled',
 				),
-				'current_page' => 'active',
 			),
 		),
 	),

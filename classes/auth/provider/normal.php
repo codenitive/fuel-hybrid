@@ -48,7 +48,17 @@ class Auth_Provider_Normal
 
 	protected $cached_db_result = null;
 
-	protected $tables = array();
+	protected $tables = array(
+		'group'    => 'roles',
+		'registry' => 'options',
+		'social'   => 'authentications',
+		'users'    => array(
+			'user'  => 'users',
+			'meta'  => 'users_meta',
+			'auth'  => 'users_auths',
+			'group' => 'users_roles',
+		),
+	);
 
 	/**
 	 * Aliases
@@ -194,11 +204,7 @@ class Auth_Provider_Normal
 
 		$this->verify_user_agent = Config::get('autho.verify_user_agent', $this->verify_user_agent);
 		$this->expiration        = Config::get('autho.expiration', $this->expiration);
-		$this->tables            = Config::get('hybrid.tables.users', array(
-			'user' => 'users',
-			'meta' => 'users_meta',
-			'auth' => 'users_auths',
-		));
+		$this->tables            = Config::get('hybrid.tables.users', $this->tables);
 	}
 
 	/**
@@ -629,6 +635,7 @@ class Auth_Provider_Normal
 		}
 			
 		$this->data['roles'] = $data;
+
 		return true;
 	}
 

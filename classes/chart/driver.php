@@ -35,6 +35,7 @@ use \Log;
 
 abstract class Chart_Driver 
 {
+	protected static $initiated = false;
 	/**
 	 * Load config file
 	 * 

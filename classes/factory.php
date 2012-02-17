@@ -34,6 +34,7 @@ use \Session;
 
 class Factory 
 {
+	protected static $initiated = false;
 	protected static $identity = null;
 	protected static $language = 'en';
 
@@ -46,7 +47,7 @@ class Factory
 	public static function _init() 
 	{
 		// initiate this only once
-		if (null !== static::$identity) 
+		if (true === static::$initiated) 
 		{
 			return;
 		}
@@ -78,6 +79,8 @@ class Factory
 
 		Event::trigger('load_language');
 		Event::trigger('load_acl');
+
+		static::$initiated = true;
 	}
 
 	/**
@@ -154,10 +157,9 @@ class Factory
 	 */
 	public static function import($path, $folder = 'classes')
 	{
-		$dir_path = __DIR__.'/../';
-		$path     = str_replace('/', DIRECTORY_SEPARATOR, $path);
+		$file_path = str_replace('/', DIRECTORY_SEPARATOR, $path);
 		
-		require_once $dir_path.$folder.DIRECTORY_SEPARATOR.$path.'.php';
+		require_once __DIR__.'/../'.$folder.DIRECTORY_SEPARATOR.$file_path.'.php';
 	}
 
 	/**

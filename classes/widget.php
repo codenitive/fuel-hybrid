@@ -31,6 +31,8 @@ use \FuelException;
 
 class Widget 
 {
+	protected static $initiated = false;
+	
 	/**
 	 * Cache Tab instance so we can reuse it on multiple request.
 	 * 

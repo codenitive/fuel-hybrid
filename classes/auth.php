@@ -43,6 +43,7 @@ class AuthCancelException extends AuthException {}
 
 class Auth 
 {
+	protected static $initiated = false;
 	/**
 	 * Cache Auth instance so we can reuse it on multiple request.
 	 * 
@@ -92,7 +93,14 @@ class Auth
 	 */
 	public static function _init() 
 	{
+		if (true === static::$initiated)
+		{
+			return;
+		}
+		
 		Config::load('autho', 'autho');
+
+		static::$initiated = true;
 	}
 
 	/**
@@ -108,7 +116,7 @@ class Auth
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new FuelException(__CLASS__.'::'.$method.' method does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		$name = empty($arguments) ? null : $arguments[0];
