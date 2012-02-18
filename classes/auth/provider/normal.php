@@ -104,6 +104,14 @@ class Auth_Provider_Normal
 	protected $use_auth = true;
 
 	/**
+	 * Use `authentications` table (for social)
+	 *
+	 * @access  protected
+	 * @var     bool
+	 */
+	protected $use_social = true;
+
+	/**
 	 * Total number of seconds before Cookie expired
 	 *
 	 * @access  protected
@@ -647,6 +655,10 @@ class Auth_Provider_Normal
 	 */
 	protected function fetch_linked_accounts()
 	{
+		if (false === $this->use_social)
+		{
+			return true;
+		}
 		$data = array();
 		
 		$accounts = DB::select('provider', 'uid', 'access_token', 'secret')
