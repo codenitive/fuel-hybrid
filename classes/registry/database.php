@@ -65,6 +65,12 @@ class Registry_Database extends Registry_Driver
 		}
 	}
 
+	/**
+	 * Add a shutdown event for DB engine
+	 *
+	 * @access  public
+	 * @return  void
+	 */
 	public function shutdown() 
 	{
 		foreach ($this->data as $option_key => $option_value)
