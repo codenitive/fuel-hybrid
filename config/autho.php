@@ -28,6 +28,9 @@ return array(
 
 		// Auth to use `users_auth` table for user meta information, useful to keep `users` table is simple as possible.
 		'use_auth'        => true,
+
+		// Auth to use `authentication` table for user social information, enable this when your application require OAuth, OAuth2 or OpenID.
+		'use_social'      => false,
 	),
 
 	'urls' => array(

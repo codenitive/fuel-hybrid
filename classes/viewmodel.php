@@ -13,6 +13,12 @@
 
 namespace Hybrid;
 
+use \Exception;
+use \Error;
+use \FuelException;
+use \OutOfBoundsException;
+
+
 /**
  * Hybrid 
  * 
@@ -40,7 +46,7 @@ abstract class ViewModel
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		foreach (array(null, 'view', null) as $key => $default)
@@ -66,7 +72,7 @@ abstract class ViewModel
 		{
 			if ( ! class_exists($class = $viewmodel))
 			{
-				throw new \OutOfBoundsException('ViewModel "View_'.ucfirst(str_replace(array('/', DS), '_', $viewmodel)).'" could not be found.');
+				throw new OutOfBoundsException('ViewModel "View_'.ucfirst(str_replace(array('/', DS), '_', $viewmodel)).'" could not be found.');
 			}
 		}
 
@@ -260,8 +266,8 @@ abstract class ViewModel
 	{
 		if (class_exists('Request', false))
 		{
-			$current_request = Request::active();
-			Request::active($this->_active_request);
+			$current_request = \Request::active();
+			\Request::active($this->_active_request);
 		}
 
 		$this->{$this->_method}();
@@ -271,7 +277,7 @@ abstract class ViewModel
 
 		if (class_exists('Request', false))
 		{
-			Request::active($current_request);
+			\Request::active($current_request);
 		}
 
 		return $return;
@@ -286,9 +292,9 @@ abstract class ViewModel
 		{
 			return $this->render();
 		}
-		catch (\Exception $e)
+		catch (Exception $e)
 		{
-			\Error::exception_handler($e);
+			Error::exception_handler($e);
 
 			return '';
 		}

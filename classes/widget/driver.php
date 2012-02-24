@@ -13,6 +13,8 @@
 
 namespace Hybrid;
 
+use \Config;
+
 /**
  * Hybrid 
  * 
@@ -70,7 +72,7 @@ abstract class Widget_Driver
 	 */
 	public function __construct($name, $config)
 	{
-		$this->config = \Config::get('hybrid.widget.'.$this->type, array());
+		$this->config = Config::get('hybrid.widget.'.$this->type, array());
 		$this->name   = $name;
 		$this->config = array_merge($config, $this->config);
 	}

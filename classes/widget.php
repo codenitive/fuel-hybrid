@@ -13,6 +13,9 @@
 
 namespace Hybrid;
 
+use \Config;
+use \FuelException;
+
 /**
  * Hybrid 
  * 
@@ -28,6 +31,8 @@ namespace Hybrid;
 
 class Widget 
 {
+	protected static $initiated = false;
+	
 	/**
 	 * Cache Tab instance so we can reuse it on multiple request.
 	 * 
@@ -45,7 +50,7 @@ class Widget
 	 */
 	public static function _init()
 	{
-		\Config::load('hybrid', 'hybrid');
+		Config::load('hybrid', 'hybrid');
 	}
 
 	/**
@@ -62,7 +67,7 @@ class Widget
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		foreach (array(null, array()) as $key => $default)
@@ -70,32 +75,40 @@ class Widget
 			isset($arguments[$key]) or $arguments[$key] = $default;
 		}
 
-		list($instance_name, $config) = $arguments;
+		list($name, $config) = $arguments;
 		
-		$instance_name = $instance_name ?: 'default';
-		$instance_name = strtolower($instance_name);
+		$name = $name ?: 'default';
+		$name = strtolower($name);
 
-		if (false === strpos($instance_name, '.'))
+		if (false === strpos($name, '.'))
 		{
-			$instance_name = $instance_name.'.default';
+			$name = $name.'.default';
 		}
 		
-		list($type, $name) = explode('.', $instance_name, 2);
+		list($type, $short_name) = explode('.', $name, 2);
 
-		if ( ! isset(static::$instances[$instance_name]))
+		if ( ! isset(static::$instances[$name]))
 		{
 			$driver = "\Hybrid\Widget_".ucfirst($type);
 
 			if (class_exists($driver))
 			{
-				static::$instances[$instance_name] = new $driver($name, $config);
+				static::$instances[$name] = new $driver($short_name, $config);
 			}
 			else
 			{
-				throw new \FuelException("Requested {$driver} does not exist.");
+				throw new FuelException("Requested {$driver} does not exist.");
 			}
 		}
 
-		return static::$instances[$instance_name];
+		return static::$instances[$name];
 	}
+
+	/**
+	 * Hybrid\Widget doesn't support a construct method
+	 *
+	 * @access  protected
+	 */
+	protected function __construct() {}
+
 }

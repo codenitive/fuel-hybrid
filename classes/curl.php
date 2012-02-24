@@ -13,6 +13,9 @@
 
 namespace Hybrid;
 
+use \FuelException;
+use \stdClass;
+
 /**
  * Hybrid 
  * 
@@ -42,7 +45,7 @@ class Curl
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		foreach (array('', array()) as $key => $default)
@@ -62,7 +65,7 @@ class Curl
 		}
 		else
 		{
-			throw new \FuelException(__METHOD__.": Provided {$uri} can't be processed.");
+			throw new FuelException(__METHOD__.": Provided {$uri} can't be processed.");
 		}
 
 		$dataset = array_merge(static::query_string($uri), $dataset);
@@ -167,7 +170,7 @@ class Curl
 	{
 		if ( ! function_exists('curl_init'))
 		{
-			throw new \FuelException(__METHOD__.": curl_init() is not available.");
+			throw new FuelException(__METHOD__.": curl_init() is not available.");
 		}
 
 		$this->request_uri    = $uri;
@@ -235,7 +238,7 @@ class Curl
 		
 		$info = curl_getinfo($this->adapter);
 		
-		$response         = new \stdClass();
+		$response         = new stdClass();
 		$response->body   = $response->raw_body = curl_exec($this->adapter);
 		$response->status = $info['http_code'];
 		$response->info   = $info;

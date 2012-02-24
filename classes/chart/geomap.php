@@ -13,6 +13,8 @@
 
 namespace Hybrid;
 
+use \Config;
+
 /**
  * Hybrid 
  * 
@@ -32,7 +34,7 @@ class Chart_GeoMap extends Chart_Driver
 	{
 		parent::__construct();
 
-		$this->set_options(\Config::get('chart.geomap', array()));
+		$this->set_options(Config::get('chart.geomap', array()));
 	}
 
 	public function render($width = '100%', $height = '300px') 

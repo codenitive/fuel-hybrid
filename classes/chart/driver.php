@@ -13,6 +13,10 @@
 
 namespace Hybrid;
 
+use \Config;
+use \FuelException;
+use \Log;
+
 /**
  * Hybrid 
  * 
@@ -31,6 +35,7 @@ namespace Hybrid;
 
 abstract class Chart_Driver 
 {
+	protected static $initiated = false;
 	/**
 	 * Load config file
 	 * 
@@ -39,34 +44,7 @@ abstract class Chart_Driver
 	 */
 	public static function _init() 
 	{
-		\Config::load('chart', true);
-	}
-
-	/**
-	 * Shortcode to self::make().
-	 *
-	 * @deprecated  1.2.0
-	 * @static
-	 * @access  public
-	 * @return  self::make()
-	 */
-	public static function factory()
-	{
-		\Log::warning('This method is deprecated. Please use a make() instead.', __METHOD__);
-		
-		return static::make();
-	}
-
-	/**
-	 * Shortcode to self::make().
-	 * 
-	 * @static
-	 * @access  public
-	 * @return  self::make() 
-	 */
-	public static function forge() 
-	{
-		return static::make();
+		Config::load('chart', true);
 	}
 
 	/**
@@ -76,8 +54,13 @@ abstract class Chart_Driver
 	 * @access  public
 	 * @return  static 
 	 */
-	public static function make() 
+	public static function __callStatic($method, array $arguments)
 	{
+		if ( ! in_array($method, array('factory', 'forge', 'make')))
+		{
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
+		}
+
 		return new static();
 	}
 
@@ -168,7 +151,7 @@ abstract class Chart_Driver
 		}
 		else
 		{
-			throw new \FuelException(__METHOD__.' require \$name to be set.');
+			throw new FuelException(__METHOD__.' require \$name to be set.');
 		}
 
 		return $this;
@@ -262,7 +245,7 @@ abstract class Chart_Driver
 	 */
 	public function generate()
 	{
-		\Log::warning('This method is deprecated. Please use a render() instead.', __METHOD__);
+		Log::warning('This method is deprecated. Please use a render() instead.', __METHOD__);
 
 		return $this->render();
 	}

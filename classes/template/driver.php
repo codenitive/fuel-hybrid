@@ -13,6 +13,10 @@
 
 namespace Hybrid;
 
+use \Asset;
+use \Config;
+use \FuelException;
+
 /**
  * Hybrid 
  * 
@@ -48,8 +52,8 @@ abstract class Template_Driver
 	{
 		if (null === static::$config)
 		{
-			\Config::load('hybrid', 'hybrid');
-			static::$config = \Config::get('hybrid.template', array());
+			Config::load('hybrid', 'hybrid');
+			static::$config = Config::get('hybrid.template', array());
 		}
 	}
 
@@ -105,7 +109,7 @@ abstract class Template_Driver
 
 		if ( ! is_dir($folder_path))
 		{
-			throw new \FuelException(__METHOD__.": Unable to load assets at {$folder_path}.");
+			throw new FuelException(__METHOD__.": Unable to load assets at {$folder_path}.");
 		}
 		else
 		{
@@ -113,7 +117,7 @@ abstract class Template_Driver
 
 			if ( ! in_array($folder_path, static::$assets))
 			{
-				\Asset::add_path($folder_path);
+				Asset::add_path($folder_path);
 				array_push(static::$assets, $folder_path);
 			}
 		}
@@ -133,7 +137,7 @@ abstract class Template_Driver
 	{
 		if ( ! is_dir($path))
 		{
-			throw new \FuelException(__METHOD__.": Path {$path} does not appear to a valid folder.");
+			throw new FuelException(__METHOD__.": Path {$path} does not appear to a valid folder.");
 		}
 		else 
 		{

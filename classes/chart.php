@@ -13,6 +13,8 @@
 
 namespace Hybrid;
 
+use \FuelException;
+
 /**
  * Hybrid 
  * 
@@ -52,7 +54,7 @@ class Chart
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		$name = empty($arguments) ? null : $arguments[0];
@@ -69,12 +71,19 @@ class Chart
 			}
 			else 
 			{
-				throw new \FuelException("Requested {$driver} does not exist.");
+				throw new FuelException("Requested {$driver} does not exist.");
 			}
 		}
 
 		return static::$instances[$name];
 	}
+
+	/**
+	 * Hybrid\Chart doesn't support a construct method
+	 *
+	 * @access  protected
+	 */
+	protected function __construct() {}
 	
 	/**
 	 * Load Google JavaSript API Library

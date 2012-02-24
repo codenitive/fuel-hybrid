@@ -13,6 +13,10 @@
 
 namespace Hybrid;
 
+use \Config;
+use \Event;
+use \FuelException;
+
 /**
  * Hybrid 
  * 
@@ -41,6 +45,13 @@ class Registry
 
 	protected static $initiated = false;
 
+	/**
+	 * Load configuration
+	 * 
+	 * @static
+	 * @access  public
+	 * @return  void
+	 */
 	public static function _init()
 	{
 		if (true === static::$initiated)
@@ -48,8 +59,8 @@ class Registry
 			return ;
 		}
 
-		\Config::load('hybrid', 'hybrid');
-		\Event::register('shutdown', "\Hybrid\Registry::shutdown");
+		Config::load('hybrid', 'hybrid');
+		Event::register('shutdown', "\Hybrid\Registry::shutdown");
 
 		static::$initiated = true;
 	}
@@ -67,7 +78,7 @@ class Registry
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'instance', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		foreach (array(null, array()) as $key => $default)
@@ -114,13 +125,27 @@ class Registry
 			}
 			else
 			{
-				throw new \FuelException("Requested {$driver} does not exist.");
+				throw new FuelException("Requested {$driver} does not exist.");
 			}
 		}
 
 		return static::$instances[$instance_name];
 	}
 
+	/**
+	 * Hybrid\Registry doesn't support a construct method
+	 *
+	 * @access  protected
+	 */
+	protected function __construct() {}
+
+	/**
+	 * Loop every instance and execute shutdown method (if available)
+	 *
+	 * @static
+	 * @access  public
+	 * @return  void
+	 */
 	public static function shutdown()
 	{
 		foreach (static::$instances as $name => $class)

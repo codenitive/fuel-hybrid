@@ -13,6 +13,9 @@
 
 namespace Hybrid;
 
+use \Finder;
+use \FuelException;
+
 /**
  * Hybrid 
  * 
@@ -44,7 +47,7 @@ class Template_Normal extends Template_Driver
 	{
 		if ( ! in_array($method, array('factory', 'forge', 'make')))
 		{
-			throw new \FuelException(__CLASS__.'::'.$method.'() does not exist.');
+			throw new FuelException(__CLASS__.'::'.$method.'() does not exist.');
 		}
 
 		$name   = empty($arguments) ? null : $arguments[0];
@@ -101,7 +104,7 @@ class Template_Normal extends Template_Driver
 	 */
 	public function load_assets($forced_load = false)
 	{
-	  throw new \FuelException(__METHOD__.": Asset loading not available.");
+	  throw new FuelException(__METHOD__.": Asset loading not available.");
 	}
 
 	/**
@@ -115,11 +118,11 @@ class Template_Normal extends Template_Driver
 	{
 		// this is not the best way of doing it, the request is not cached and going to be slow
 		// if there's a lot of paths and files
-		$files = \Finder::instance()->list_files(rtrim('views/'.$path, '/'), '*.*');
+		$files = Finder::instance()->list_files(rtrim('views/'.$path, '/'), '*.*');
 
 		if (empty($files))
 		{
-			throw new \FuelException(__METHOD__.": Path {$path} does not appear to a valid folder or contain any View files.");
+			throw new FuelException(__METHOD__.": Path {$path} does not appear to a valid folder or contain any View files.");
 		}
 		else 
 		{

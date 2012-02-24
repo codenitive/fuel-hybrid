@@ -13,6 +13,9 @@
 
 namespace Hybrid;
 
+use \Config;
+use \Model_Crud;
+
 /**
  * Hybrid 
  * 
@@ -27,7 +30,7 @@ namespace Hybrid;
  * @author      Mior Muhammad Zaki <crynobone@gmail.com>
  */
 
-class Auth_Model_Social extends \Model_Crud
+class Auth_Model_Social extends Model_Crud
 {
 	protected static $_table_name = 'authentications';
 
@@ -39,11 +42,11 @@ class Auth_Model_Social extends \Model_Crud
 
 	public static function _init()
 	{
-		\Config::load('autho', 'autho');
-		\Config::load('hybrid', 'hybrid');
+		Config::load('autho', 'autho');
+		Config::load('hybrid', 'hybrid');
 
-		$config              = \Config::get('autho.mysql_timestamp');
-		static::$_table_name = \Config::get('hybrid.tables.social', static::$_table_name);
+		$config              = Config::get('autho.mysql_timestamp');
+		static::$_table_name = Config::get('hybrid.tables.social', static::$_table_name);
 
 		switch ($config)
 		{

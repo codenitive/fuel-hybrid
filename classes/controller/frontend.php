@@ -13,6 +13,8 @@
 
 namespace Hybrid;
 
+use \Log;
+
 /**
  * Hybrid 
  * 
@@ -54,7 +56,7 @@ abstract class Controller_Frontend extends Controller_Template
 	 */
 	public function before() 
 	{
-		\Log::warning('This Class is deprecated. Please use a Hybrid\Controller_Template instead.', __CLASS__);
+		Log::warning('This Class is deprecated. Please use a Hybrid\Controller_Template instead.', __CLASS__);
 		
 		return parent::before();
 	}

@@ -13,6 +13,8 @@
 
 namespace Hybrid;
 
+use \Config;
+
 /**
  * Hybrid 
  * 
@@ -32,7 +34,7 @@ class Chart_Bar extends Chart_Driver
 	{
 		parent::__construct();
 
-		$this->set_options(\Config::get('chart.bar', array()));
+		$this->set_options(Config::get('chart.bar', array()));
 	}
 
 	public function render($width = '100%', $height = '300px') 

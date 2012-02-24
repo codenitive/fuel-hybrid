@@ -13,6 +13,10 @@
 
 namespace Hybrid;
 
+use \Finder;
+use \Fuel;
+use \FuelException;
+
 /**
  * Hybrid 
  * 
@@ -72,14 +76,14 @@ class View extends \Fuel\Core\View
 		// locate the view file
 		switch (true) 
 		{
-			case ($path = \Finder::search('views', static::$file_path.$file.'.'.$this->extension)) : break;
+			case ($path = Finder::search('views', static::$file_path.$file.'.'.$this->extension)) : break;
 			default :
 				// set find_file's one-time-only search paths
-				\Finder::instance()->flash($this->request_paths);
+				Finder::instance()->flash($this->request_paths);
 				
-				if (($path = \Finder::search('views', $file, '.'.$this->extension, false, false)) === false)
+				if (($path = Finder::search('views', $file, '.'.$this->extension, false, false)) === false)
 				{
-					throw new \FuelException(__METHOD__.': The requested view could not be found: '.\Fuel::clean_path($file));
+					throw new FuelException(__METHOD__.': The requested view could not be found: '.Fuel::clean_path($file));
 				}
 			
 		}
