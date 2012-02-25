@@ -15,6 +15,7 @@ namespace Hybrid;
 
 use \Config;
 use \Event;
+use \FuelException;
 use \HttpNotFoundException;
 use \Response;
 
@@ -231,6 +232,24 @@ abstract class Controller extends \Fuel\Core\Controller
 				$this->response->body = $data;
 			}
 		}
+	}
+
+	/**
+	 * An alias to $this->template->partial()
+	 *
+	 * @access protected	
+	 * @param  string   $file
+	 * @param  array    $data
+	 * @return View
+	 */
+	protected function partial($file, $data = array())
+	{
+		if (true === $this->rest)
+		{
+			throw new FuelException(__METHOD__.' is not available with Restful request.');
+		}
+
+		return $this->template->partial($file, $data);
 	}
 	
 	/**
