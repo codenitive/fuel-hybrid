@@ -74,7 +74,7 @@ class Input
 	public static function __callStatic($name, $arguments) 
 	{
 		// If $request is null, it's a request from \Fuel\Core\Request so use it instead
-		if (in_array(strtolower($name), array('is_ajax', 'protocol', 'real_ip', 'referrer', 'server', 'uri', 'user_agent'))) 
+		if (in_array(strtolower($name), array('is_ajax', 'protocol', 'real_ip', 'referrer', 'server', 'uri', 'user_agent', 'extension'))) 
 		{
 			return call_user_func_array(array("Fuel\Core\Input", $name), $arguments);
 		}

@@ -47,6 +47,16 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 	protected $set_content_type = true;
 
 	/**
+	 * @var  integer  status code to return in case a not defined action is called
+	 */
+	protected $no_method_status = 405;
+
+	/**
+	 * @var  integer  status code to return in case the called action doesn't return data
+	 */
+	protected $no_data_status = 204;
+
+	/**
 	 * Run ACL check and redirect user automatically if user doesn't have the privilege
 	 * 
 	 * @final
@@ -135,7 +145,7 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 		}
 		else 
 		{
-			$this->response->status = 404;
+			$this->response->status = $this->no_method_status;
 			return ;
 		}
 	}
@@ -149,6 +159,12 @@ abstract class Controller_Rest extends \Fuel\Core\Controller
 	 */
 	protected function response($data = array(), $http_code = 200) 
 	{
+		if ((is_array($data) and empty($data)) or ($data == ''))
+		{
+			$this->response->status = $this->no_data_status;
+			return;
+		}
+
 		$rest_server = Restserver::make($data, $http_code)
 			->format($this->rest_format)
 			->execute();

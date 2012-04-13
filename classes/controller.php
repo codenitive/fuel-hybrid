@@ -58,6 +58,16 @@ abstract class Controller extends \Fuel\Core\Controller
 	 * @var     bool
 	 */
 	protected $set_content_type = true;
+
+	/**
+	 * @var  integer  status code to return in case a not defined action is called
+	 */
+	protected $no_method_status = 405;
+
+	/**
+	 * @var  integer  status code to return in case the called action doesn't return data
+	 */
+	protected $no_data_status = 204;
 	
 	/**
 	 * Page template
@@ -174,7 +184,7 @@ abstract class Controller extends \Fuel\Core\Controller
 		{
 			if (true === $this->rest)
 			{
-				$this->response->status = 404;
+				$this->response->status = $this->no_method_status;
 				return;
 			}
 
@@ -184,7 +194,7 @@ abstract class Controller extends \Fuel\Core\Controller
 		{
 			if (true === $this->rest)
 			{
-				$this->response->status = 404;
+				$this->response->status = $this->no_method_status;
 				return;
 			}
 			else
@@ -206,6 +216,12 @@ abstract class Controller extends \Fuel\Core\Controller
 	{
 		if (true === $this->rest)
 		{
+			if ((is_array($data) and empty($data)) or ($data == ''))
+			{
+				$this->response->status = $this->no_data_status;
+				return;
+			}
+			
 			$rest_server = Restserver::make($data, $http_code)
 				->format($this->rest_format)
 				->execute();

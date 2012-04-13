@@ -15,6 +15,7 @@ namespace Hybrid;
 
 use \Config;
 use \Format;
+use \Input;
 use \FuelException;
 use \stdClass;
 
@@ -109,11 +110,11 @@ class Restserver
 	 */
 	public static function is_rest()
 	{
-		$pattern  = static::$pattern;
-		$resource = \Request::active()->action;
+		$pattern   = static::$pattern;
+		$extension = Input::extension();
 
 		// Check if a file extension is used
-		return preg_match($pattern, $resource, $matches) or '' != static::detect_format();
+		return preg_match($pattern, $extension, $matches) or '' != static::detect_format();
 	}
 	
 	/**
