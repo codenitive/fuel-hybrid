@@ -15,7 +15,6 @@ namespace Hybrid;
 
 use \Config;
 use \Format;
-use \Input;
 use \FuelException;
 use \stdClass;
 
